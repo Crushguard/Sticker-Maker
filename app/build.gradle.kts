@@ -25,6 +25,10 @@ if (!googleServicesJson.exists()) {
     )
 }
 
+// Debug builds can target the local Firebase emulators instead of the real
+// project: ./gradlew installDebug -PfirebaseEmulatorHost=10.0.2.2
+val firebaseEmulatorHost = (findProperty("firebaseEmulatorHost") as String?).orEmpty()
+
 android {
     namespace = "com.piptechnologies.stickermaker"
     compileSdk = 35
@@ -36,12 +40,18 @@ android {
         versionCode = 1
         versionName = "1.0.0"
 
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "FIREBASE_EMULATOR_HOST", "\"\"")
+
         vectorDrawables {
             useSupportLibrary = true
         }
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "FIREBASE_EMULATOR_HOST", "\"$firebaseEmulatorHost\"")
+        }
         // Debug builds only; no signingConfigs, no release keystore.
         release {
             isMinifyEnabled = false
@@ -75,6 +85,11 @@ android {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
         }
+    }
+
+    sourceSets {
+        // The screen tour imports the design's reference photo in the Create flow.
+        getByName("androidTest").assets.srcDir(rootProject.file("design/assets"))
     }
 
     packaging {
@@ -135,4 +150,15 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.core)
+
+    // Instrumented screen tour (androidTest)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.espresso.intents)
+    androidTestImplementation(libs.uiautomator)
+    debugImplementation(libs.compose.ui.test.manifest)
 }

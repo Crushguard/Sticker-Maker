@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- WhatsApp holds this permission; Love Stickers' StickerContentProvider
+         requires it as its readPermission. -->
+    <permission
+        android:name="com.whatsapp.sticker.READ"
+        android:protectionLevel="normal" />
+    <uses-permission android:name="com.whatsapp.sticker.READ" />
+
+    <queries>
+        <provider android:authorities="com.piptechnologies.stickermaker.stickercontentprovider" />
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:label="WhatsApp stub">
+
+        <activity
+            android:name=".AddStickerPackActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar">
+            <intent-filter>
+                <action android:name="com.whatsapp.intent.action.ENABLE_STICKER_PACK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name=".WhitelistProvider"
+            android:authorities="com.whatsapp.provider.sticker_whitelist_check"
+            android:exported="true" />
+    </application>
+
+</manifest>

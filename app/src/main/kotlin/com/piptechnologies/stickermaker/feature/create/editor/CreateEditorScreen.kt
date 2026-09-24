@@ -58,6 +58,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
@@ -99,6 +100,9 @@ import kotlin.math.roundToInt
 private val UndoDisabled = Color(0xFFB4BAC4)
 private val ToolIdle = Color(0xFFC3C9D2)
 private val CheckerGrey = 0xFFE6E9EE.toInt()
+
+/** Test tag of the cut-out canvas, used by the on-device screen tour. */
+const val EDITOR_CANVAS_TAG = "editorCanvas"
 
 /**
  * Create · step 2 (Cut out): the live editor. The on-device auto cut-out runs
@@ -297,6 +301,7 @@ private fun EditorCanvasCard(
                     .fillMaxSize()
                     .clip(RoundedCornerShape(14.dp))
                     .background(Subtle)
+                    .testTag(EDITOR_CANVAS_TAG)
                     .onSizeChanged { canvasSize = it }
                     .pointerInput(zoomed, paintingTool, activeIndex) {
                         if (zoomed) {
