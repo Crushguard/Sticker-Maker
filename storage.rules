@@ -1,0 +1,15 @@
+rules_version = '2';
+
+// Sticker pack assets are public, immutable downloads. Uploads happen only
+// through the Admin SDK (scripts/upload-pack.js), which bypasses these rules.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /packs/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
