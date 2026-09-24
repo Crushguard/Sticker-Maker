@@ -26,12 +26,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Border
 import com.piptechnologies.stickermaker.core.design.Destructive
 import com.piptechnologies.stickermaker.core.design.Hanken
@@ -69,7 +71,7 @@ fun ConfirmSheet(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    cancelLabel: String = "Keep",
+    cancelLabel: String = stringResource(R.string.common_keep),
     destructive: Boolean = true,
     icon: ImageVector = if (destructive) LoveIcons.Trash2 else LoveIcons.Info,
     sheetState: SheetState = rememberModalBottomSheetState()
@@ -106,7 +108,7 @@ fun ConfirmSheetContent(
     onConfirm: () -> Unit,
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
-    cancelLabel: String = "Keep",
+    cancelLabel: String = stringResource(R.string.common_keep),
     destructive: Boolean = true,
     icon: ImageVector = if (destructive) LoveIcons.Trash2 else LoveIcons.Info
 ) {

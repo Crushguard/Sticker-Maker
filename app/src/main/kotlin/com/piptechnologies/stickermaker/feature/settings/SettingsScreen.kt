@@ -48,6 +48,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -58,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.piptechnologies.stickermaker.BuildConfig
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Border
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Hanken
@@ -79,52 +82,13 @@ import com.piptechnologies.stickermaker.core.design.components.showToast
 import com.piptechnologies.stickermaker.feature.contact.deviceInfoBlock
 import com.piptechnologies.stickermaker.feature.contact.mailtoUri
 import com.piptechnologies.stickermaker.feature.language.AppLanguages
-import java.util.Locale
 import kotlinx.coroutines.launch
 
 /** PLACEHOLDER URL — swap for the real published policy before release. */
 const val PRIVACY_POLICY_URL = "https://piptechnologies.example/privacy"
 
-// ---- Copy (verbatim from design/Prototype.dc.html, settings screen) ---- //
-private const val TITLE = "Settings"
-private const val ALERTS_TITLE = "New pack alerts"
-private const val ALERTS_SUB_ON = "Only when a new pack is added."
-private const val ALERTS_SUB_OFF = "Off. You won't hear about new packs."
-private const val SECTION_PREFERENCES = "PREFERENCES"
-private const val SECTION_ABOUT = "ABOUT"
-private const val ROW_EDIT_THEMES = "Edit themes"
-private const val ROW_LANGUAGE = "Language"
-private const val ROW_CLEAR = "Clear downloaded packs"
-private const val ROW_RATE = "Rate us"
-private const val ROW_CONTACT = "Contact us"
-private const val ROW_MORE_APPS = "More apps"
-private const val AD_BADGE = "AD"
-private const val ROW_PRIVACY = "Privacy policy"
-private const val ROW_VERSION = "Version"
-private const val STORAGE_NONE = "None"
-private const val FREE_CARD =
-    "Love Stickers is free, and always will be. No ads, no account, no tracking. " +
-        "Your photos never leave your phone."
-private const val TOAST_ALERTS_ON = "New pack alerts on"
-private const val TOAST_ALERTS_OFF = "New pack alerts off"
-private const val TOAST_NOTHING_TO_CLEAR = "Nothing to clear"
-private const val TOAST_DOWNLOADS_CLEARED = "Downloads cleared"
-private const val NOTIF_SHEET_TITLE = "Allow Love Stickers to send notifications?"
-private const val NOTIF_SHEET_BODY =
-    "Android asks once. We only notify you when a new pack is added. No promotions, ever."
-private const val NOTIF_SHEET_CANCEL = "Don't allow"
-private const val NOTIF_SHEET_CONFIRM = "Allow"
-private const val CLEAR_SHEET_TITLE = "Clear downloaded packs?"
-private const val CLEAR_SHEET_BODY_TEMPLATE =
-    "Removes the copies stored in this app (%s). Packs already in WhatsApp stay there."
-private const val CLEAR_SHEET_CANCEL = "Keep them"
-private const val CLEAR_SHEET_CONFIRM = "Clear"
-
-// Copy with no prototype equivalent (real-device failure paths).
-private const val TOAST_NO_EMAIL_APP = "No email app on this phone."
-private const val TOAST_LINK_FAILED = "Couldn't open that link."
-
 // Subject line for the low-star feedback mail (mail needs one; not designed).
+// It stays in English: the team reads it, like the device details below it.
 private const val FEEDBACK_MAIL_SUBJECT = "Love Stickers · Feedback"
 
 // ---- External destinations ---- //
@@ -162,6 +126,8 @@ fun SettingsScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+    // A language change recreates the activity, so this is read fresh then.
+    val languageTag = remember { AppLanguages.selectedTag() }
     val scope = rememberCoroutineScope()
     val toastHost = remember { SnackbarHostState() }
 
@@ -176,7 +142,8 @@ fun SettingsScreen(
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             when (event) {
-                SettingsEvent.DownloadsCleared -> toastHost.showToast(TOAST_DOWNLOADS_CLEARED)
+                SettingsEvent.DownloadsCleared ->
+                    toastHost.showToast(context.getString(R.string.settings_toast_cleared))
             }
         }
     }
@@ -186,7 +153,7 @@ fun SettingsScreen(
     ) { granted ->
         if (granted) {
             viewModel.setAlertsEnabled(true)
-            showToast(TOAST_ALERTS_ON)
+            showToast(context.getString(R.string.settings_toast_alerts_on))
         }
         // Denied: the switch stays off — the design's ask ends the same way
         // on "Don't allow", with no extra message.
@@ -199,17 +166,18 @@ fun SettingsScreen(
     ) {
         SettingsContent(
             state = state,
+            languageTag = languageTag,
             onBack = onBack,
             onToggleAlerts = { wantOn ->
                 when {
                     !wantOn -> {
                         viewModel.setAlertsEnabled(false)
-                        showToast(TOAST_ALERTS_OFF)
+                        showToast(context.getString(R.string.settings_toast_alerts_off))
                     }
                     needsNotificationsPermission(context) -> notifPromptVisible = true
                     else -> {
                         viewModel.setAlertsEnabled(true)
-                        showToast(TOAST_ALERTS_ON)
+                        showToast(context.getString(R.string.settings_toast_alerts_on))
                     }
                 }
             },
@@ -217,12 +185,12 @@ fun SettingsScreen(
             onLanguage = onLanguage,
             onClear = {
                 if (state.hasDownloads) clearConfirmVisible = true
-                else showToast(TOAST_NOTHING_TO_CLEAR)
+                else showToast(context.getString(R.string.settings_toast_nothing_to_clear))
             },
             onRate = { rateSheetVisible = true },
             onContact = onContact,
-            onMoreApps = { if (!openLink(context, MORE_APPS_URL)) showToast(TOAST_LINK_FAILED) },
-            onPrivacy = { if (!openLink(context, PRIVACY_POLICY_URL)) showToast(TOAST_LINK_FAILED) },
+            onMoreApps = { if (!openLink(context, MORE_APPS_URL)) showToast(context.getString(R.string.toast_link_failed)) },
+            onPrivacy = { if (!openLink(context, PRIVACY_POLICY_URL)) showToast(context.getString(R.string.toast_link_failed)) },
             modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars)
         )
         ToastHost(
@@ -236,10 +204,10 @@ fun SettingsScreen(
 
     if (notifPromptVisible) {
         ConfirmSheet(
-            title = NOTIF_SHEET_TITLE,
-            body = NOTIF_SHEET_BODY,
-            confirmLabel = NOTIF_SHEET_CONFIRM,
-            cancelLabel = NOTIF_SHEET_CANCEL,
+            title = stringResource(R.string.settings_notif_title),
+            body = stringResource(R.string.settings_notif_body),
+            confirmLabel = stringResource(R.string.settings_notif_allow),
+            cancelLabel = stringResource(R.string.settings_notif_deny),
             destructive = false,
             icon = LoveIcons.Bell,
             onConfirm = {
@@ -252,10 +220,10 @@ fun SettingsScreen(
 
     if (clearConfirmVisible) {
         ConfirmSheet(
-            title = CLEAR_SHEET_TITLE,
-            body = CLEAR_SHEET_BODY_TEMPLATE.format(formatMb(state.downloadedBytes)),
-            confirmLabel = CLEAR_SHEET_CONFIRM,
-            cancelLabel = CLEAR_SHEET_CANCEL,
+            title = stringResource(R.string.settings_clear_title),
+            body = stringResource(R.string.settings_clear_body, sizeLabel(state.downloadedBytes)),
+            confirmLabel = stringResource(R.string.settings_clear_confirm),
+            cancelLabel = stringResource(R.string.settings_clear_keep),
             destructive = true,
             onConfirm = {
                 clearConfirmVisible = false
@@ -269,7 +237,7 @@ fun SettingsScreen(
         RateSheet(
             onDismiss = { rateSheetVisible = false },
             onOpenStore = {
-                if (!openPlayListing(context)) showToast(TOAST_LINK_FAILED)
+                if (!openPlayListing(context)) showToast(context.getString(R.string.toast_link_failed))
             },
             onSendFeedback = { text ->
                 val sent = openMail(
@@ -277,7 +245,7 @@ fun SettingsScreen(
                     subject = FEEDBACK_MAIL_SUBJECT,
                     body = text.trim() + deviceInfoBlock()
                 )
-                if (!sent) showToast(TOAST_NO_EMAIL_APP)
+                if (!sent) showToast(context.getString(R.string.toast_no_email_app))
                 sent
             }
         )
@@ -291,6 +259,7 @@ fun SettingsScreen(
 @Composable
 private fun SettingsContent(
     state: SettingsUiState,
+    languageTag: String,
     onBack: () -> Unit,
     onToggleAlerts: (Boolean) -> Unit,
     onEditThemes: () -> Unit,
@@ -303,7 +272,7 @@ private fun SettingsContent(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        LoveTopBar(title = TITLE, onBack = onBack)
+        LoveTopBar(title = stringResource(R.string.settings_title), onBack = onBack)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -314,25 +283,25 @@ private fun SettingsContent(
             AlertsHeroCard(enabled = state.alertsEnabled, onToggle = onToggleAlerts)
 
             Column {
-                SectionLabel(SECTION_PREFERENCES)
+                SectionLabel(stringResource(R.string.settings_section_preferences))
                 SettingsCard {
                     SettingsRow(
                         icon = SettingsIcons.SlidersHorizontal,
-                        label = ROW_EDIT_THEMES,
-                        value = themesCountLabel(state.themesCount),
+                        label = stringResource(R.string.settings_edit_themes),
+                        value = pluralStringResource(R.plurals.settings_theme_count, state.themesCount, state.themesCount),
                         onClick = onEditThemes
                     )
                     RowDividerLine()
                     SettingsRow(
                         icon = SettingsIcons.Languages,
-                        label = ROW_LANGUAGE,
-                        value = AppLanguages.nativeLabelOf(state.languageTag),
+                        label = stringResource(R.string.settings_language),
+                        value = languageLabel(languageTag),
                         onClick = onLanguage
                     )
                     RowDividerLine()
                     SettingsRow(
                         icon = LoveIcons.Trash2,
-                        label = ROW_CLEAR,
+                        label = stringResource(R.string.settings_clear),
                         value = storageLabel(state),
                         onClick = onClear
                     )
@@ -340,23 +309,23 @@ private fun SettingsContent(
             }
 
             Column {
-                SectionLabel(SECTION_ABOUT)
+                SectionLabel(stringResource(R.string.settings_section_about))
                 SettingsCard {
                     SettingsRow(
                         icon = LoveIcons.Star,
-                        label = ROW_RATE,
+                        label = stringResource(R.string.settings_rate),
                         onClick = onRate
                     )
                     RowDividerLine()
                     SettingsRow(
                         icon = LoveIcons.Mail,
-                        label = ROW_CONTACT,
+                        label = stringResource(R.string.settings_contact),
                         onClick = onContact
                     )
                     RowDividerLine()
                     SettingsRow(
                         icon = SettingsIcons.LayoutGrid,
-                        label = ROW_MORE_APPS,
+                        label = stringResource(R.string.settings_more_apps),
                         showAdBadge = true,
                         trailingIcon = SettingsIcons.ArrowUpRight,
                         onClick = onMoreApps
@@ -364,14 +333,14 @@ private fun SettingsContent(
                     RowDividerLine()
                     SettingsRow(
                         icon = SettingsIcons.ShieldCheck,
-                        label = ROW_PRIVACY,
+                        label = stringResource(R.string.settings_privacy),
                         trailingIcon = SettingsIcons.ArrowUpRight,
                         onClick = onPrivacy
                     )
                     RowDividerLine()
                     SettingsRow(
                         icon = LoveIcons.Info,
-                        label = ROW_VERSION,
+                        label = stringResource(R.string.settings_version),
                         value = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                         valueStyle = VersionValueStyle,
                         trailingIcon = null,
@@ -415,9 +384,9 @@ private fun AlertsHeroCard(
             )
         }
         Column(modifier = Modifier.weight(1f)) {
-            Text(ALERTS_TITLE, style = HeroTitleStyle, color = Ink)
+            Text(stringResource(R.string.settings_alerts_title), style = HeroTitleStyle, color = Ink)
             Text(
-                if (enabled) ALERTS_SUB_ON else ALERTS_SUB_OFF,
+                stringResource(if (enabled) R.string.settings_alerts_on else R.string.settings_alerts_off),
                 style = HeroSubStyle,
                 color = Ink2,
                 modifier = Modifier.padding(top = 2.dp)
@@ -490,7 +459,7 @@ private fun SettingsRow(
             if (showAdBadge) {
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    AD_BADGE,
+                    stringResource(R.string.settings_ad_badge),
                     style = AdBadgeStyle,
                     color = Ink2,
                     modifier = Modifier
@@ -528,7 +497,7 @@ private fun FreeForeverCard() {
                 .size(18.dp),
             tint = Rose
         )
-        Text(FREE_CARD, style = FreeCardStyle, color = RowIconTint)
+        Text(stringResource(R.string.settings_free_card), style = FreeCardStyle, color = RowIconTint)
     }
 }
 
@@ -536,18 +505,20 @@ private fun FreeForeverCard() {
 // Labels and intents
 // ------------------------------------------------------------------ //
 
-/** "1 theme" / "n themes", like the prototype's themesCount. */
-private fun themesCountLabel(count: Int): String =
-    if (count == 1) "1 theme" else "$count themes"
+/** Language row value: the language's own name, or "System default". */
+@Composable
+private fun languageLabel(tag: String): String =
+    AppLanguages.byTag(tag)?.nativeName ?: stringResource(R.string.language_system)
 
 /** Row value: "12.4 MB" while something is stored, otherwise "None". */
+@Composable
 private fun storageLabel(state: SettingsUiState): String =
-    if (!state.hasDownloads) STORAGE_NONE else formatMb(state.downloadedBytes)
+    if (!state.hasDownloads) stringResource(R.string.settings_storage_none) else sizeLabel(state.downloadedBytes)
 
-private fun formatMb(bytes: Long): String {
-    val mb = (bytes / (1024.0 * 1024.0)).coerceAtLeast(0.1)
-    return String.format(Locale.US, "%.1f MB", mb)
-}
+/** "12.4 MB" in the app language's number format. */
+@Composable
+private fun sizeLabel(bytes: Long): String =
+    stringResource(R.string.settings_size_mb, (bytes / (1024.0 * 1024.0)).coerceAtLeast(0.1))
 
 /** True on API 33+ while POST_NOTIFICATIONS still needs the system ask. */
 private fun needsNotificationsPermission(context: Context): Boolean =
@@ -588,10 +559,10 @@ private fun SettingsScreenPreview() {
                 state = SettingsUiState(
                     alertsEnabled = true,
                     themesCount = 6,
-                    languageTag = "en",
                     downloadedBytes = 13_002_342L,
                     hasDownloads = true
                 ),
+                languageTag = "en",
                 onBack = {},
                 onToggleAlerts = {},
                 onEditThemes = {},
@@ -615,10 +586,10 @@ private fun SettingsScreenFreshPreview() {
                 state = SettingsUiState(
                     alertsEnabled = false,
                     themesCount = 3,
-                    languageTag = "system",
                     downloadedBytes = 0L,
                     hasDownloads = false
                 ),
+                languageTag = AppLanguages.SYSTEM,
                 onBack = {},
                 onToggleAlerts = {},
                 onEditThemes = {},

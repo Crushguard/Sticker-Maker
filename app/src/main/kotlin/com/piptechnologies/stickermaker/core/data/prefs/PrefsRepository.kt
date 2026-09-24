@@ -8,7 +8,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,8 +23,9 @@ private val Context.loveDataStore: DataStore<Preferences> by preferencesDataStor
 
 /**
  * Small user preferences in DataStore ("love_prefs"): onboarding flag,
- * selected theme (category) ids, hearts counter, new-pack alerts toggle,
- * app language and clear-downloads bookkeeping.
+ * selected theme (category) ids, hearts counter, new-pack alerts toggle
+ * and clear-downloads bookkeeping. The app language lives with AppCompat's
+ * per-app locale instead (see AppLanguages).
  *
  * Read failures fall back to defaults instead of failing screens.
  */
@@ -58,10 +58,6 @@ class PrefsRepository @Inject constructor(
     /** New-pack alerts toggle from Settings. */
     val alertsEnabled: Flow<Boolean> =
         data.map { it[KEY_ALERTS_ENABLED] ?: true }.distinctUntilChanged()
-
-    /** App language tag, or [LANGUAGE_SYSTEM] to follow the device locale. */
-    val language: Flow<String> =
-        data.map { it[KEY_LANGUAGE] ?: LANGUAGE_SYSTEM }.distinctUntilChanged()
 
     /** Epoch millis of the last "clear downloads" in Settings, 0 when never. */
     val downloadsClearedAt: Flow<Long> =
@@ -97,24 +93,16 @@ class PrefsRepository @Inject constructor(
         dataStore.edit { it[KEY_ALERTS_ENABLED] = value }
     }
 
-    suspend fun setLanguage(tag: String) {
-        dataStore.edit { it[KEY_LANGUAGE] = tag }
-    }
-
     suspend fun markDownloadsCleared(at: Long = System.currentTimeMillis()) {
         dataStore.edit { it[KEY_DOWNLOADS_CLEARED_AT] = at }
     }
 
     companion object {
-        /** Sentinel language value meaning "follow the device locale". */
-        const val LANGUAGE_SYSTEM = "system"
-
         private val KEY_ONBOARDED = booleanPreferencesKey("onboarded")
         private val KEY_SELECTED_THEMES = stringSetPreferencesKey("selected_themes")
         private val KEY_HEARTS_COUNT = intPreferencesKey("hearts_count")
         private val KEY_FAVORITE_PACK_IDS = stringSetPreferencesKey("favorite_pack_ids")
         private val KEY_ALERTS_ENABLED = booleanPreferencesKey("alerts_enabled")
-        private val KEY_LANGUAGE = stringPreferencesKey("language")
         private val KEY_DOWNLOADS_CLEARED_AT = longPreferencesKey("downloads_cleared_at")
     }
 }

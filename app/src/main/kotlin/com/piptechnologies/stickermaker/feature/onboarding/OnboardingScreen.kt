@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -63,21 +64,7 @@ import com.piptechnologies.stickermaker.core.design.Surface
 import com.piptechnologies.stickermaker.core.design.components.HonestyLine
 import com.piptechnologies.stickermaker.core.design.Canvas as CanvasColor
 
-// Exact Prototype copy.
-private const val SKIP_LABEL = "Skip"
-private const val SLIDE1_TITLE = "Say it with a sticker"
-private const val SLIDE1_BODY =
-    "Curated love packs: cute, funny, romantic. One tap adds a pack to WhatsApp."
-private const val SLIDE2_TITLE = "Make your own"
-private const val SLIDE2_BODY =
-    "Turn photos into stickers. Crop, cut out, add a word. Animated packs from short clips too."
-private const val YOUR_PHOTO_LABEL = "YOUR PHOTO"
-private const val CTA_NEXT = "Next"
-private const val CTA_GET_STARTED = "Get started"
-private const val HONESTY_TEXT = "Free · No ads · No account"
-private const val STICKER_ALT =
-    "Finished sticker: woman making a heart with her hands, white die-cut outline"
-private const val PHOTO_ALT = "Original photo"
+// Copy lives in res/values/strings.xml (onboarding_*).
 
 private val TitleInk = Color(0xFF171A20)
 private val BodyInk = Color(0xFF565C67)
@@ -152,11 +139,11 @@ fun OnboardingContent(
                     modifier = Modifier
                         .height(36.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .clickable(role = Role.Button, onClickLabel = SKIP_LABEL, onClick = onSkip)
+                        .clickable(role = Role.Button, onClickLabel = stringResource(R.string.onboarding_skip), onClick = onSkip)
                         .padding(horizontal = 12.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(SKIP_LABEL, style = SkipText, color = SkipInk)
+                    Text(stringResource(R.string.onboarding_skip), style = SkipText, color = SkipInk)
                 }
             }
         }
@@ -169,13 +156,13 @@ fun OnboardingContent(
                 if (p == 0) SlideOneArt() else SlideTwoArt()
                 Spacer(Modifier.height(26.dp))
                 Text(
-                    if (p == 0) SLIDE1_TITLE else SLIDE2_TITLE,
+                    if (p == 0) stringResource(R.string.onboarding_slide1_title) else stringResource(R.string.onboarding_slide2_title),
                     style = TitleText,
                     color = TitleInk,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    if (p == 0) SLIDE1_BODY else SLIDE2_BODY,
+                    if (p == 0) stringResource(R.string.onboarding_slide1_body) else stringResource(R.string.onboarding_slide2_body),
                     style = BodyText,
                     color = BodyInk,
                     textAlign = TextAlign.Center,
@@ -202,9 +189,9 @@ fun OnboardingContent(
                 .clickable(role = Role.Button, onClick = onNext),
             contentAlignment = Alignment.Center
         ) {
-            Text(if (page == 0) CTA_NEXT else CTA_GET_STARTED, style = CtaText, color = Color.White)
+            Text(if (page == 0) stringResource(R.string.onboarding_next) else stringResource(R.string.onboarding_get_started), style = CtaText, color = Color.White)
         }
-        HonestyLine(text = HONESTY_TEXT, modifier = Modifier.padding(top = 14.dp))
+        HonestyLine(text = stringResource(R.string.honesty_line), modifier = Modifier.padding(top = 14.dp))
     }
 }
 
@@ -253,7 +240,7 @@ private fun SlideTwoArt() {
     Box(Modifier.size(width = 280.dp, height = 240.dp)) {
         Image(
             painter = painterResource(R.drawable.ob_sticker),
-            contentDescription = STICKER_ALT,
+            contentDescription = stringResource(R.string.onboarding_sticker_alt),
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .offset(x = 104.dp, y = 0.dp)
@@ -277,13 +264,13 @@ private fun SlideTwoArt() {
         ) {
             Image(
                 painter = painterResource(R.drawable.ob_photo),
-                contentDescription = PHOTO_ALT,
+                contentDescription = stringResource(R.string.onboarding_photo_alt),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
         }
         Text(
-            YOUR_PHOTO_LABEL,
+            stringResource(R.string.onboarding_your_photo),
             style = PhotoChipText,
             color = Muted,
             modifier = Modifier

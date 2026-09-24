@@ -29,6 +29,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.LoveIcons
@@ -46,18 +49,10 @@ import com.piptechnologies.stickermaker.core.design.Surface
 import com.piptechnologies.stickermaker.core.design.components.LoveTopBar
 import com.piptechnologies.stickermaker.core.design.components.ThemeTile
 import com.piptechnologies.stickermaker.core.model.Category
+import com.piptechnologies.stickermaker.core.ui.displayName
 
-// Exact Prototype copy.
-private const val FIRST_RUN_TITLE = "Pick your themes"
-private const val EDIT_TITLE = "Your themes"
-private const val SUBTITLE = "Home shows packs from the themes you choose. Change them anytime in Settings."
-private const val CTA_SAVE = "Save"
-private const val CTA_EMPTY = "Pick at least one theme"
-private const val CTA_ONE_THEME = "Continue · 1 theme"
+// Copy lives in res/values/strings.xml (customize_*, theme_*).
 
-/** "Continue · N themes" for N > 1 (Prototype cz.cta). */
-private fun continueLabel(count: Int): String =
-    if (count == 1) CTA_ONE_THEME else "Continue · $count themes"
 
 private val TitleInk = Color(0xFF171A20)
 private val SubtitleInk = Color(0xFF626873)
@@ -142,7 +137,7 @@ fun CustomizationContent(
             .statusBarsPadding()
     ) {
         if (isEdit) {
-            LoveTopBar(title = EDIT_TITLE, onBack = onBack, height = 52.dp)
+            LoveTopBar(title = stringResource(R.string.customize_edit_title), onBack = onBack, height = 52.dp)
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -155,14 +150,14 @@ fun CustomizationContent(
                 Column {
                     if (!isEdit) {
                         Text(
-                            FIRST_RUN_TITLE,
+                            stringResource(R.string.customize_title),
                             style = TitleText,
                             color = TitleInk,
                             modifier = Modifier.padding(top = 14.dp)
                         )
                     }
                     Text(
-                        SUBTITLE,
+                        stringResource(R.string.customize_subtitle),
                         style = SubtitleText,
                         color = SubtitleInk,
                         modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
@@ -171,7 +166,7 @@ fun CustomizationContent(
             }
             items(categories, key = { it.id }) { category ->
                 ThemeTile(
-                    label = category.name,
+                    label = category.displayName(),
                     icon = themeIcon(category.icon),
                     hue = category.hue,
                     selected = category.id in selected,
@@ -200,9 +195,9 @@ fun CustomizationContent(
             ) {
                 Text(
                     text = when {
-                        isEdit -> CTA_SAVE
-                        enabled -> continueLabel(count)
-                        else -> CTA_EMPTY
+                        isEdit -> stringResource(R.string.customize_save)
+                        enabled -> pluralStringResource(R.plurals.customize_continue, count, count)
+                        else -> stringResource(R.string.customize_pick_one)
                     },
                     style = CtaText,
                     color = Color.White

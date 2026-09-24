@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,6 +54,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.AsyncImage
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.Ink
@@ -76,6 +78,8 @@ import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.TopBarIconButton
 import com.piptechnologies.stickermaker.core.design.components.showToast
 import com.piptechnologies.stickermaker.core.model.AddState
+import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.asString
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import java.io.File
 import kotlinx.coroutines.launch
@@ -108,7 +112,6 @@ private val InfoBg = Color(0xFFF6F7F9)
 private val InfoLine = Color(0xFFEBEEF2)
 
 private const val WHATSAPP_PACKAGE = "com.whatsapp"
-private const val NAV_HOME = "Home"
 
 /**
  * My Packs (design/Screens.dc.html section 07): toolbar with the Saved heart
@@ -145,7 +148,7 @@ fun MyPacksScreen(
                     viewModel.onAddLaunchFailed()
                 }
                 is MyPacksEvent.Toast -> scope.launch {
-                    toastHost.showToast(event.message, event.withCheck)
+                    toastHost.showToast(event.message.asString(context), event.withCheck)
                 }
             }
         }
@@ -186,20 +189,20 @@ fun MyPacksScreen(
             SheetHeader(title = row.name)
             Column(Modifier.padding(start = 12.dp, end = 12.dp, bottom = 20.dp)) {
                 SheetListRow(
-                    label = if (row.whitelisted) MENU_READD else MENU_ADD,
+                    label = stringResource(if (row.whitelisted) R.string.my_packs_menu_readd else R.string.my_packs_menu_add),
                     icon = if (row.whitelisted) LoveIcons.RefreshCw else LoveIcons.MessageCircle,
                     onClick = viewModel::onMenuAddToWhatsApp
                 )
                 if (row.own) {
                     SheetListRow(
-                        label = MENU_DELETE,
+                        label = stringResource(R.string.my_packs_menu_delete),
                         icon = LoveIcons.Trash2,
                         onClick = viewModel::onMenuDelete,
                         destructive = true
                     )
                 } else {
                     SheetListRow(
-                        label = MENU_REMOVE,
+                        label = stringResource(R.string.my_packs_menu_remove),
                         icon = LoveIcons.Trash2,
                         onClick = viewModel::onMenuRemove,
                         destructive = true
@@ -211,18 +214,18 @@ fun MyPacksScreen(
 
     when (val confirm = state.confirm) {
         is MyPacksConfirm.RemoveInstalled -> ConfirmSheet(
-            title = "Remove “${confirm.packName}” from this app?",
-            body = REMOVE_BODY,
-            confirmLabel = REMOVE_CONFIRM,
-            cancelLabel = CONFIRM_KEEP,
+            title = stringResource(R.string.my_packs_remove_title, confirm.packName),
+            body = stringResource(R.string.my_packs_remove_body),
+            confirmLabel = stringResource(R.string.my_packs_remove_confirm),
+            cancelLabel = stringResource(R.string.common_keep),
             onConfirm = viewModel::confirmRemove,
             onDismiss = viewModel::dismissConfirm
         )
         is MyPacksConfirm.DeleteOwn -> ConfirmSheet(
-            title = "Delete “${confirm.packName}”?",
-            body = DELETE_BODY,
-            confirmLabel = DELETE_CONFIRM,
-            cancelLabel = CONFIRM_KEEP,
+            title = stringResource(R.string.my_packs_delete_title, confirm.packName),
+            body = stringResource(R.string.my_packs_delete_body),
+            confirmLabel = stringResource(R.string.my_packs_delete_confirm),
+            cancelLabel = stringResource(R.string.common_keep),
             onConfirm = viewModel::confirmDelete,
             onDismiss = viewModel::dismissConfirm
         )
@@ -231,10 +234,10 @@ fun MyPacksScreen(
 
     if (state.showNoWhatsApp) {
         ConfirmSheet(
-            title = NO_WHATSAPP_TITLE,
-            body = NO_WHATSAPP_BODY,
-            confirmLabel = NO_WHATSAPP_CONFIRM,
-            cancelLabel = NO_WHATSAPP_CANCEL,
+            title = stringResource(R.string.no_whatsapp_title),
+            body = stringResource(R.string.no_whatsapp_body),
+            confirmLabel = stringResource(R.string.no_whatsapp_confirm),
+            cancelLabel = stringResource(R.string.common_not_now),
             destructive = false,
             icon = LoveIcons.MessageCircle,
             onConfirm = {
@@ -275,20 +278,20 @@ internal fun MyPacksContent(
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                TITLE_MY_PACKS,
+                stringResource(R.string.nav_my_packs),
                 style = MyPacksTitleText,
                 color = Ink,
                 modifier = Modifier.weight(1f)
             )
             TopBarIconButton(
                 icon = LoveIcons.Heart,
-                contentDescription = "Saved packs",
+                contentDescription = stringResource(R.string.my_packs_saved),
                 onClick = onOpenSaved,
                 badgeCount = state.savedCount
             )
             TopBarIconButton(
                 icon = LoveIcons.Settings,
-                contentDescription = "Settings",
+                contentDescription = stringResource(R.string.home_settings),
                 onClick = onOpenSettings
             )
         }
@@ -302,11 +305,11 @@ internal fun MyPacksContent(
             ) {
                 EmptyState(
                     icon = LoveIcons.Sticker,
-                    title = EMPTY_TITLE,
-                    body = EMPTY_BODY,
-                    primaryLabel = EMPTY_PRIMARY,
+                    title = stringResource(R.string.my_packs_empty_title),
+                    body = stringResource(R.string.my_packs_empty_body),
+                    primaryLabel = stringResource(R.string.common_browse_packs),
                     onPrimary = onBrowse,
-                    ghostLabel = EMPTY_GHOST,
+                    ghostLabel = stringResource(R.string.my_packs_empty_make_own),
                     onGhost = onCreate,
                     modifier = Modifier.padding(bottom = 70.dp)
                 )
@@ -319,7 +322,7 @@ internal fun MyPacksContent(
                 if (state.installed.isNotEmpty()) {
                     item(key = "eyebrow-installed") {
                         SectionEyebrow(
-                            "$SECTION_IN_WHATSAPP · ${state.installed.size}",
+                            stringResource(R.string.my_packs_section_installed, state.installed.size),
                             topPadding = 4.dp
                         )
                     }
@@ -330,7 +333,7 @@ internal fun MyPacksContent(
                 if (state.own.isNotEmpty()) {
                     item(key = "eyebrow-own") {
                         SectionEyebrow(
-                            "$SECTION_MADE_BY_YOU · ${state.own.size}",
+                            stringResource(R.string.my_packs_section_own, state.own.size),
                             topPadding = 8.dp
                         )
                     }
@@ -350,8 +353,8 @@ internal fun MyPacksContent(
         ) {
             LoveBottomNav(
                 items = listOf(
-                    LoveNavItem(LoveIcons.Home, NAV_HOME, selected = false, onClick = onHome),
-                    LoveNavItem(LoveIcons.Sticker, TITLE_MY_PACKS, selected = true, onClick = {})
+                    LoveNavItem(LoveIcons.Home, stringResource(R.string.nav_home), selected = false, onClick = onHome),
+                    LoveNavItem(LoveIcons.Sticker, stringResource(R.string.nav_my_packs), selected = true, onClick = {})
                 ),
                 onCreate = onCreate
             )
@@ -372,7 +375,7 @@ private fun MyPackCard(
     PackCard(
         title = row.name,
         stickerCount = row.stickerCount,
-        downloadsLabel = row.metaLabel,
+        downloadsLabel = row.metaLabel.asString(),
         animated = row.animated,
         addState = row.addState.toVisual(),
         addProgress = (row.addState as? AddState.Downloading)?.progress ?: 0f,
@@ -405,7 +408,7 @@ private fun PackThumb(file: File) {
 @Composable
 private fun SectionEyebrow(text: String, topPadding: Dp) {
     Text(
-        text.uppercase(),
+        text,
         style = EyebrowText,
         color = Muted,
         modifier = Modifier.padding(top = topPadding)
@@ -431,7 +434,7 @@ private fun RemovalInfoCard() {
             tint = Muted
         )
         Spacer(Modifier.width(9.dp))
-        Text(INFO_REMOVAL, style = InfoBodyText, color = Ink2)
+        Text(stringResource(R.string.my_packs_info_removal), style = InfoBodyText, color = Ink2)
     }
 }
 
@@ -469,7 +472,7 @@ private fun previewRow(
     name = name,
     animated = animated,
     stickerCount = if (own) 26 else 18,
-    metaLabel = if (own) META_YOURS else "96.4K adds",
+    metaLabel = UiText.Raw(if (own) "yours" else "96.4K adds"),
     own = own,
     whitelisted = whitelisted,
     addState = if (whitelisted) AddState.Added else AddState.Idle,

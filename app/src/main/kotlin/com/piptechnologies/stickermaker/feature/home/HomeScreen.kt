@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -58,6 +59,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.Ink
@@ -79,27 +81,12 @@ import com.piptechnologies.stickermaker.core.design.components.PackCard
 import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.TopBarIconButton
 import com.piptechnologies.stickermaker.core.design.components.showToast
+import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.asString
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
 
-// Exact Prototype copy.
-private const val BRAND = "Love Stickers"
-private const val SEARCH_PLACEHOLDER = "Search love packs"
-private const val SEARCH_CANCEL = "Cancel"
-private const val OFFLINE_TITLE = "You're offline"
-private const val OFFLINE_BODY = "Packs stream from the cloud. Check your connection and try again."
-private const val OFFLINE_RETRY = "Retry"
-private const val OFFLINE_FOOTNOTE = "Packs you already added still work in WhatsApp."
-private const val NO_RESULTS_BODY = "Try a theme name, like “cute” or “anime”."
-private const val WA_MISSING_TITLE = "WhatsApp isn't installed"
-private const val WA_MISSING_BODY =
-    "Stickers are added inside WhatsApp. Install it, then come back to add this pack."
-private const val WA_MISSING_CANCEL = "Not now"
-private const val WA_MISSING_CONFIRM = "Get WhatsApp"
-private const val NAV_HOME = "Home"
-private const val NAV_MY_PACKS = "My Packs"
-private const val CD_SEARCH = "Search"
-private const val CD_SETTINGS = "Settings"
+// Copy lives in res/values/strings.xml (home_*, offline_*, no_whatsapp_*).
 
 private val TitleInk = Color(0xFF171A20)
 private val CancelInk = Color(0xFF626873)
@@ -145,7 +132,7 @@ fun HomeScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.toasts.collect { snackbarHostState.showToast(it.message, it.withCheck) }
+        viewModel.toasts.collect { snackbarHostState.showToast(it.message.asString(context), it.withCheck) }
     }
 
     // A finished download hands off to WhatsApp (repository stops at Sent).
@@ -187,10 +174,10 @@ fun HomeScreen(
 
     if (state.whatsAppMissingPackId != null) {
         ConfirmSheet(
-            title = WA_MISSING_TITLE,
-            body = WA_MISSING_BODY,
-            confirmLabel = WA_MISSING_CONFIRM,
-            cancelLabel = WA_MISSING_CANCEL,
+            title = stringResource(R.string.no_whatsapp_title),
+            body = stringResource(R.string.no_whatsapp_body),
+            confirmLabel = stringResource(R.string.no_whatsapp_confirm),
+            cancelLabel = stringResource(R.string.common_not_now),
             destructive = false,
             icon = LoveIcons.MessageCircle,
             onConfirm = {
@@ -234,7 +221,7 @@ fun HomeContent(
                     ChipRow(Modifier.padding(top = 2.dp, bottom = 10.dp)) {
                         items(state.chips, key = { it.id }) { chip ->
                             CategoryChip(
-                                label = chip.label,
+                                label = chip.label.asString(),
                                 selected = chip.id == state.activeChipId,
                                 onClick = { onSelectChip(chip.id) },
                                 leadingIcon = if (chip.showHeart) LoveIcons.HeartFilled else null
@@ -260,11 +247,11 @@ fun HomeContent(
                         EmptyState(
                             icon = LoveIcons.WifiOff,
                             large = true,
-                            title = OFFLINE_TITLE,
-                            body = OFFLINE_BODY,
-                            primaryLabel = OFFLINE_RETRY,
+                            title = stringResource(R.string.offline_title),
+                            body = stringResource(R.string.offline_body),
+                            primaryLabel = stringResource(R.string.common_retry),
                             onPrimary = onRetry,
-                            footnote = OFFLINE_FOOTNOTE
+                            footnote = stringResource(R.string.offline_footnote)
                         )
                     }
                     else -> PackList(
@@ -278,8 +265,8 @@ fun HomeContent(
             Box(Modifier.fillMaxWidth().background(Surface).navigationBarsPadding()) {
                 LoveBottomNav(
                     items = listOf(
-                        LoveNavItem(LoveIcons.Home, NAV_HOME, selected = true, onClick = {}),
-                        LoveNavItem(LoveIcons.Sticker, NAV_MY_PACKS, selected = false, onClick = onMyPacks)
+                        LoveNavItem(LoveIcons.Home, stringResource(R.string.nav_home), selected = true, onClick = {}),
+                        LoveNavItem(LoveIcons.Sticker, stringResource(R.string.nav_my_packs), selected = false, onClick = onMyPacks)
                     ),
                     onCreate = onCreate
                 )
@@ -320,15 +307,15 @@ private fun BrandBar(onOpenSearch: () -> Unit, onSettings: () -> Unit) {
                 Icon(LoveIcons.HeartFilled, null, Modifier.size(15.dp), tint = Color.White)
             }
             Text(
-                BRAND,
+                stringResource(R.string.app_name),
                 style = BrandText,
                 color = TitleInk,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }
-        TopBarIconButton(LoveIcons.Search, CD_SEARCH, onClick = onOpenSearch)
-        TopBarIconButton(LoveIcons.Settings, CD_SETTINGS, onClick = onSettings)
+        TopBarIconButton(LoveIcons.Search, stringResource(R.string.home_search), onClick = onOpenSearch)
+        TopBarIconButton(LoveIcons.Settings, stringResource(R.string.home_settings), onClick = onSettings)
     }
 }
 
@@ -375,7 +362,7 @@ private fun SearchHeader(
                 decorationBox = { innerTextField ->
                     Box(contentAlignment = Alignment.CenterStart) {
                         if (query.isEmpty()) {
-                            Text(SEARCH_PLACEHOLDER, style = FieldText, color = Muted)
+                            Text(stringResource(R.string.home_search_placeholder), style = FieldText, color = Muted)
                         }
                         innerTextField()
                     }
@@ -386,11 +373,11 @@ private fun SearchHeader(
             modifier = Modifier
                 .height(40.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .clickable(role = Role.Button, onClickLabel = SEARCH_CANCEL, onClick = onCancel)
+                .clickable(role = Role.Button, onClickLabel = stringResource(R.string.common_cancel), onClick = onCancel)
                 .padding(horizontal = 10.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(SEARCH_CANCEL, style = CancelText, color = CancelInk)
+            Text(stringResource(R.string.common_cancel), style = CancelText, color = CancelInk)
         }
     }
 }
@@ -411,7 +398,7 @@ private fun PackList(
             PackCard(
                 title = pack.name,
                 stickerCount = pack.stickerCount,
-                downloadsLabel = pack.downloadsLabel,
+                downloadsLabel = pack.downloadsLabel.asString(),
                 animated = pack.animated,
                 addState = pack.addState,
                 addProgress = pack.addProgress,
@@ -426,8 +413,8 @@ private fun PackList(
             item {
                 EmptyState(
                     icon = LoveIcons.Search,
-                    title = state.noResultsTitle,
-                    body = NO_RESULTS_BODY,
+                    title = state.noResultsTitle.asString(),
+                    body = stringResource(R.string.home_no_results_body),
                     modifier = Modifier.padding(top = 60.dp)
                 )
             }
@@ -504,7 +491,7 @@ private fun previewPack(
     id = id,
     name = name,
     stickerCount = count,
-    downloadsLabel = adds,
+    downloadsLabel = UiText.Raw(adds),
     animated = animated,
     hue = hue,
     thumbUrls = emptyList(),
@@ -514,12 +501,12 @@ private fun previewPack(
 )
 
 private val previewChips = listOf(
-    HomeChipUi(CHIP_TRENDING, "Trending"),
-    HomeChipUi(CHIP_SAVED, "Saved · 2", showHeart = true),
-    HomeChipUi(CHIP_ANIMATED, "Animated"),
-    HomeChipUi("couples", "Couples"),
-    HomeChipUi("cute", "Cute"),
-    HomeChipUi("romantic", "Romantic")
+    HomeChipUi(CHIP_TRENDING, UiText.Raw("Trending")),
+    HomeChipUi(CHIP_SAVED, UiText.Raw("Saved · 2"), showHeart = true),
+    HomeChipUi(CHIP_ANIMATED, UiText.Raw("Animated")),
+    HomeChipUi("couples", UiText.Raw("Couples")),
+    HomeChipUi("cute", UiText.Raw("Cute")),
+    HomeChipUi("romantic", UiText.Raw("Romantic"))
 )
 
 private val previewPacks = listOf(
@@ -572,7 +559,7 @@ private fun HomeSearchNoResultsPreview() {
                 searchOpen = true,
                 query = "dinosaur",
                 noResults = true,
-                noResultsTitle = "No packs for “dinosaur”"
+                noResultsTitle = UiText.Raw("No packs for “dinosaur”")
             )
         )
     }

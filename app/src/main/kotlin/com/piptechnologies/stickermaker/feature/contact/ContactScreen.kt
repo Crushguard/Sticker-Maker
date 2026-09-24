@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Border
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Hanken
@@ -64,20 +66,8 @@ import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.showToast
 import kotlinx.coroutines.launch
 
-// ---- Copy (verbatim from design/Prototype.dc.html, contact screen) ---- //
-private const val TITLE = "Contact us"
-private const val INTRO =
-    "A question, a broken pack, a pack you wish existed. We read every message."
-private const val MESSAGE_PLACEHOLDER = "Write your message…"
-private const val EMAIL_LABEL = "Email · optional, only if you want a reply"
-private const val EMAIL_PLACEHOLDER = "you@example.com"
-private const val ATTACH_NOTE = "Sent with the app version and Android version. Nothing else."
-private const val SEND = "Send"
-
-// Copy with no prototype equivalent (real-device failure path).
-private const val TOAST_NO_EMAIL_APP = "No email app on this phone."
-
-// Subject line for the composed mail (mail needs one; not designed).
+// Subject line for the composed mail (mail needs one; not designed). It stays
+// in English: it is read by the team, like the device details under the body.
 private const val CONTACT_MAIL_SUBJECT = "Love Stickers · Contact us"
 
 // ---- Off-token colors from the prototype's contact screen ---- //
@@ -135,7 +125,7 @@ fun ContactScreen(
                         // mail app is in front by then.
                         onBack()
                     } else {
-                        scope.launch { toastHost.showToast(TOAST_NO_EMAIL_APP) }
+                        scope.launch { toastHost.showToast(context.getString(R.string.toast_no_email_app)) }
                     }
                 }
             },
@@ -173,7 +163,7 @@ private fun ContactContent(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        LoveTopBar(title = TITLE, onBack = onBack, height = 52.dp)
+        LoveTopBar(title = stringResource(R.string.settings_contact), onBack = onBack, height = 52.dp)
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -181,7 +171,7 @@ private fun ContactContent(
                 .padding(start = 20.dp, top = 4.dp, end = 20.dp, bottom = 12.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Text(INTRO, style = IntroStyle, color = Ink2)
+            Text(stringResource(R.string.contact_intro), style = IntroStyle, color = Ink2)
 
             // Message box.
             Box(
@@ -204,7 +194,7 @@ private fun ContactContent(
                     modifier = Modifier.fillMaxWidth(),
                     decorationBox = { innerTextField ->
                         if (state.message.isEmpty()) {
-                            Text(MESSAGE_PLACEHOLDER, style = FieldStyle, color = Muted)
+                            Text(stringResource(R.string.contact_message_placeholder), style = FieldStyle, color = Muted)
                         }
                         innerTextField()
                     }
@@ -214,7 +204,7 @@ private fun ContactContent(
             // Optional reply email.
             Column {
                 Text(
-                    EMAIL_LABEL,
+                    stringResource(R.string.contact_email_label),
                     style = EmailLabelStyle,
                     color = Ink2,
                     modifier = Modifier.padding(bottom = 6.dp)
@@ -239,7 +229,7 @@ private fun ContactContent(
                         modifier = Modifier.fillMaxWidth(),
                         decorationBox = { innerTextField ->
                             if (state.email.isEmpty()) {
-                                Text(EMAIL_PLACEHOLDER, style = FieldStyle, color = Muted)
+                                Text(stringResource(R.string.contact_email_placeholder), style = FieldStyle, color = Muted)
                             }
                             innerTextField()
                         }
@@ -265,7 +255,7 @@ private fun ContactContent(
                         .size(16.dp),
                     tint = Muted
                 )
-                Text(ATTACH_NOTE, style = NoteStyle, color = Ink2)
+                Text(stringResource(R.string.contact_attach_note), style = NoteStyle, color = Ink2)
             }
         }
 
@@ -287,12 +277,12 @@ private fun ContactContent(
                     .clickable(
                         enabled = state.canSend,
                         role = Role.Button,
-                        onClickLabel = SEND,
+                        onClickLabel = stringResource(R.string.contact_send),
                         onClick = onSend
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(SEND, style = SendStyle, color = Color.White)
+                Text(stringResource(R.string.contact_send), style = SendStyle, color = Color.White)
             }
         }
     }

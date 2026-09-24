@@ -46,6 +46,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -56,6 +58,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Border
 import com.piptechnologies.stickermaker.core.design.Canvas as CanvasColor
 import com.piptechnologies.stickermaker.core.design.Hanken
@@ -75,6 +78,7 @@ import com.piptechnologies.stickermaker.core.design.components.ConfirmSheet
 import com.piptechnologies.stickermaker.core.design.components.LoveTopBar
 import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.showToast
+import com.piptechnologies.stickermaker.core.ui.asString
 import com.piptechnologies.stickermaker.feature.create.CreateEvent
 import com.piptechnologies.stickermaker.feature.create.CreateFooter
 import com.piptechnologies.stickermaker.feature.create.CreateItemUi
@@ -118,7 +122,7 @@ fun CreatePackDetailsScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                is CreateEvent.ShowToast -> toaster.showToast(event.message, event.check)
+                is CreateEvent.ShowToast -> toaster.showToast(event.message.asString(context), event.check)
                 is CreateEvent.LaunchAddToWhatsApp -> {
                     val intent = AddStickerPackFlow.createBestIntent(
                         context, event.identifier, event.packName
@@ -160,10 +164,10 @@ fun CreatePackDetailsScreen(
 
     if (showNoWhatsApp) {
         ConfirmSheet(
-            title = "WhatsApp isn't installed",
-            body = "Stickers are added inside WhatsApp. Install it, then come back to add this pack.",
-            confirmLabel = "Get WhatsApp",
-            cancelLabel = "Not now",
+            title = stringResource(R.string.no_whatsapp_title),
+            body = stringResource(R.string.no_whatsapp_body),
+            confirmLabel = stringResource(R.string.no_whatsapp_confirm),
+            cancelLabel = stringResource(R.string.common_not_now),
             destructive = false,
             icon = LoveIcons.MessageCircle,
             onConfirm = {
@@ -207,7 +211,7 @@ private fun CreatePackDetailsContent(
 
     Box(Modifier.fillMaxSize().background(CanvasColor)) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
-            LoveTopBar(title = "Pack details", onBack = onBack, height = 52.dp)
+            LoveTopBar(title = stringResource(R.string.create_details_title), onBack = onBack, height = 52.dp)
             Column(
                 Modifier
                     .weight(1f)
@@ -246,13 +250,13 @@ private fun CreatePackDetailsContent(
                         .clip(RoundedCornerShape(12.dp))
                         .clickable(
                             role = Role.Button,
-                            onClickLabel = "Save to My Packs only",
+                            onClickLabel = stringResource(R.string.create_save_only),
                             onClick = onSaveOnly
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "Save to My Packs only",
+                        stringResource(R.string.create_save_only),
                         style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 14.sp),
                         color = Ink2
                     )
@@ -284,12 +288,12 @@ private fun TrayHeader(trayItem: CreateItemUi?) {
         Spacer(Modifier.width(14.dp))
         Column {
             Text(
-                "Tray icon",
+                stringResource(R.string.create_tray_title),
                 style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W700, fontSize = 15.sp),
                 color = Ink
             )
             Text(
-                "Shown in WhatsApp's sticker picker. Tap a sticker below to use it.",
+                stringResource(R.string.create_tray_body),
                 style = TextStyle(
                     fontFamily = Hanken,
                     fontWeight = FontWeight.W400,
@@ -316,7 +320,7 @@ private fun TrayRailTile(item: CreateItemUi, selected: Boolean, onClick: () -> U
                 color = if (selected) Rose else Border,
                 shape = shape
             )
-            .clickable(role = Role.Button, onClickLabel = "Use as tray icon", onClick = onClick),
+            .clickable(role = Role.Button, onClickLabel = stringResource(R.string.create_use_as_tray), onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         StickerPreview(item, Modifier.fillMaxSize().padding(4.dp))
@@ -354,7 +358,7 @@ private fun StickerPreview(item: CreateItemUi?, modifier: Modifier = Modifier) {
 private fun PackNameField(name: String, onNameChange: (String) -> Unit) {
     Column {
         Text(
-            "Pack name",
+            stringResource(R.string.create_name_label),
             style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 12.5.sp),
             color = Ink2,
             modifier = Modifier.padding(bottom = 6.dp)
@@ -385,7 +389,7 @@ private fun PackNameField(name: String, onNameChange: (String) -> Unit) {
                     Box(contentAlignment = Alignment.CenterStart) {
                         if (name.isEmpty()) {
                             Text(
-                                "e.g. Us, always",
+                                stringResource(R.string.create_name_placeholder),
                                 style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W400, fontSize = 15.sp),
                                 color = Muted
                             )
@@ -396,7 +400,7 @@ private fun PackNameField(name: String, onNameChange: (String) -> Unit) {
             )
             Spacer(Modifier.width(9.dp))
             Text(
-                "${name.length}/${CreateSpec.NAME_MAX_CHARS}",
+                stringResource(R.string.create_name_counter, name.length, CreateSpec.NAME_MAX_CHARS),
                 style = TextStyle(fontFamily = Mono, fontWeight = FontWeight.W400, fontSize = 11.sp),
                 color = Muted2
             )
@@ -421,14 +425,21 @@ private fun InfoCard(count: Int, animated: Boolean) {
             tint = Muted
         )
         Spacer(Modifier.width(10.dp))
+        val specs = stringResource(
+            R.string.create_info_specs,
+            pluralStringResource(R.plurals.sticker_count, count, count),
+            stringResource(if (animated) R.string.create_kind_animated else R.string.create_kind_static)
+        )
+        val body = stringResource(R.string.create_info_body)
         Text(
             buildAnnotatedString {
                 withStyle(
                     SpanStyle(fontFamily = Mono, fontWeight = FontWeight.W500, fontSize = 11.5.sp)
                 ) {
-                    append("$count stickers · ${if (animated) "Animated" else "Static"} · 512×512 WebP")
+                    append(specs)
                 }
-                append(" · under 100 KB each, made on this phone. Nothing is uploaded.")
+                append(" · ")
+                append(body)
             },
             style = TextStyle(
                 fontFamily = Hanken,

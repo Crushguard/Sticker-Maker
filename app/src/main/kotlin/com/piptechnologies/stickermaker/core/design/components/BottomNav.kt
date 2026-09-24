@@ -26,12 +26,14 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.LoveIcons
 import com.piptechnologies.stickermaker.core.design.LoveStickersTheme
@@ -63,7 +65,7 @@ fun LoveBottomNav(
     items: List<LoveNavItem>,
     onCreate: () -> Unit,
     modifier: Modifier = Modifier,
-    createContentDescription: String = "Create a pack",
+    createContentDescription: String = stringResource(R.string.nav_create),
     createIcon: ImageVector = LoveIcons.Plus
 ) {
     val leftCount = (items.size + 1) / 2

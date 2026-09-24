@@ -32,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.LoveIcons
 import com.piptechnologies.stickermaker.core.design.LoveStickersTheme
@@ -53,6 +56,8 @@ import com.piptechnologies.stickermaker.core.design.components.PackCard
 import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.showToast
 import com.piptechnologies.stickermaker.core.model.AddState
+import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.asString
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import kotlinx.coroutines.launch
 
@@ -93,7 +98,7 @@ fun SavedScreen(
                     viewModel.onAddLaunchFailed()
                 }
                 is SavedEvent.Toast -> scope.launch {
-                    toastHost.showToast(event.message, event.withCheck)
+                    toastHost.showToast(event.message.asString(context), event.withCheck)
                 }
             }
         }
@@ -118,10 +123,10 @@ fun SavedScreen(
 
     if (state.showNoWhatsApp) {
         ConfirmSheet(
-            title = NO_WHATSAPP_TITLE,
-            body = NO_WHATSAPP_BODY,
-            confirmLabel = NO_WHATSAPP_CONFIRM,
-            cancelLabel = NO_WHATSAPP_CANCEL,
+            title = stringResource(R.string.no_whatsapp_title),
+            body = stringResource(R.string.no_whatsapp_body),
+            confirmLabel = stringResource(R.string.no_whatsapp_confirm),
+            cancelLabel = stringResource(R.string.common_not_now),
             destructive = false,
             icon = LoveIcons.MessageCircle,
             onConfirm = {
@@ -152,13 +157,13 @@ internal fun SavedContent(
             .navigationBarsPadding()
     ) {
         LoveTopBar(
-            title = TITLE_SAVED,
+            title = stringResource(R.string.saved_title),
             onBack = onBack,
             height = 52.dp,
             actions = {
                 if (state.rows.isNotEmpty()) {
                     Text(
-                        countLabel(state.rows.size),
+                        pluralStringResource(R.plurals.saved_pack_count, state.rows.size, state.rows.size),
                         style = CountText,
                         color = Muted,
                         modifier = Modifier.padding(end = 8.dp)
@@ -176,9 +181,9 @@ internal fun SavedContent(
             ) {
                 EmptyState(
                     icon = LoveIcons.Heart,
-                    title = EMPTY_TITLE,
-                    body = EMPTY_BODY,
-                    primaryLabel = EMPTY_PRIMARY,
+                    title = stringResource(R.string.saved_empty_title),
+                    body = stringResource(R.string.saved_empty_body),
+                    primaryLabel = stringResource(R.string.common_browse_packs),
                     onPrimary = onBrowse,
                     modifier = Modifier.padding(bottom = 70.dp)
                 )
@@ -214,7 +219,7 @@ private fun SavedCard(
     PackCard(
         title = row.name,
         stickerCount = row.stickerCount,
-        downloadsLabel = row.metaLabel,
+        downloadsLabel = row.metaLabel.asString(),
         animated = row.animated,
         addState = row.addState.toVisual(),
         addProgress = (row.addState as? AddState.Downloading)?.progress ?: 0f,
@@ -243,10 +248,6 @@ private fun SavedThumb(model: Any) {
         )
     }
 }
-
-/** "1 pack" / "3 packs" for the header's mono count. */
-private fun countLabel(count: Int): String =
-    if (count == 1) "$count pack" else "$count packs"
 
 /** [AddState] -> the visual state the design components render. */
 private fun AddState.toVisual(): AddVisualState = when (this) {
@@ -281,12 +282,12 @@ private fun SavedPreview() {
                 rows = listOf(
                     SavedRow(
                         id = "big-words", name = "Big Words", animated = false,
-                        stickerCount = 18, metaLabel = "71.2K adds", own = false,
+                        stickerCount = 18, metaLabel = UiText.Raw("71.2K adds"), own = false,
                         addState = AddState.Idle, thumbModels = emptyList()
                     ),
                     SavedRow(
                         id = "flirty-shy", name = "Flirty & Shy", animated = false,
-                        stickerCount = 11, metaLabel = "64.8K adds", own = false,
+                        stickerCount = 11, metaLabel = UiText.Raw("64.8K adds"), own = false,
                         addState = AddState.Downloading(0.42f), thumbModels = emptyList()
                     )
                 )

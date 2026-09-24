@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.Ink
 import com.piptechnologies.stickermaker.core.design.Ink2
@@ -60,6 +62,7 @@ fun LoveTopBar(
         fontWeight = FontWeight.W700,
         fontSize = if (height <= 52.dp) 16.sp else 17.sp
     )
+    val backLabel = stringResource(R.string.common_back)
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -73,10 +76,10 @@ fun LoveTopBar(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .clickable(role = Role.Button, onClickLabel = "Back", onClick = onBack),
+                    .clickable(role = Role.Button, onClickLabel = backLabel, onClick = onBack),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(LoveIcons.ArrowLeft, "Back", Modifier.size(22.dp), tint = Ink)
+                Icon(LoveIcons.ArrowLeft, backLabel, Modifier.size(22.dp), tint = Ink)
             }
         }
         Text(

@@ -57,6 +57,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
@@ -84,6 +86,7 @@ import com.piptechnologies.stickermaker.core.design.components.LoveTopBar
 import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.TopBarIconButton
 import com.piptechnologies.stickermaker.core.design.components.showToast
+import com.piptechnologies.stickermaker.core.ui.asString
 import com.piptechnologies.stickermaker.feature.create.CreateEvent
 import com.piptechnologies.stickermaker.feature.create.CreateFooter
 import com.piptechnologies.stickermaker.feature.create.CreatePackViewModel
@@ -130,7 +133,7 @@ fun CreateEditorScreen(
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
-            if (event is CreateEvent.ShowToast) toaster.showToast(event.message, event.check)
+            if (event is CreateEvent.ShowToast) toaster.showToast(event.message.asString(context), event.check)
         }
     }
 
@@ -140,18 +143,18 @@ fun CreateEditorScreen(
     Box(Modifier.fillMaxSize().background(CanvasColor)) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             LoveTopBar(
-                title = "Cut out",
+                title = stringResource(R.string.create_editor_title),
                 onBack = onBack,
                 height = 52.dp,
                 actions = {
                     Text(
-                        if (n > 0) "${state.activeIndex + 1} / $n" else "",
+                        if (n > 0) stringResource(R.string.create_editor_position, state.activeIndex + 1, n) else "",
                         style = MonoCounterText,
                         color = Muted
                     )
                     TopBarIconButton(
                         icon = LoveIcons.Undo2,
-                        contentDescription = "Undo",
+                        contentDescription = stringResource(R.string.create_undo),
                         onClick = viewModel::undo,
                         tint = if (state.canUndo) Ink else UndoDisabled
                     )
@@ -190,7 +193,7 @@ fun CreateEditorScreen(
                 }
                 if (state.tool == EditorTool.Brush || state.tool == EditorTool.Erase) {
                     BrushSizeRow(
-                        label = if (state.tool == EditorTool.Brush) "Brush size" else "Eraser size",
+                        label = stringResource(if (state.tool == EditorTool.Brush) R.string.create_brush_size else R.string.create_eraser_size),
                         brush = state.brush,
                         onBrush = viewModel::setBrush
                     )
@@ -218,7 +221,11 @@ fun CreateEditorScreen(
             }
             CreateFooter {
                 PrimaryButton(
-                    label = if (state.anyPending) "Cutting out…" else "Next · $n stickers",
+                    label = if (state.anyPending) {
+                        stringResource(R.string.create_cutting_out)
+                    } else {
+                        pluralStringResource(R.plurals.create_next_count, n, n)
+                    },
                     enabled = !state.anyPending,
                     onClick = onDone
                 )
@@ -273,15 +280,17 @@ private fun EditorCanvasCard(
     }
 
     val paintingTool = tool == EditorTool.Brush || tool == EditorTool.Erase
-    val hint = when {
-        zoomed -> "Tap Zoom again to fit"
-        tool == EditorTool.Auto ->
-            if (activeCut == CutStatus.Done) "Cut out on this phone. Nothing was uploaded." else "Tap Auto to cut out the subject"
-        tool == EditorTool.Brush -> "Tap the picture to bring parts back"
-        tool == EditorTool.Erase -> "Tap leftovers to erase them"
-        tool == EditorTool.Text -> "Type a word below"
-        else -> "Zoom in to fix edges"
-    }
+    val hint = stringResource(
+        when {
+            zoomed -> R.string.create_hint_zoomed
+            tool == EditorTool.Auto ->
+                if (activeCut == CutStatus.Done) R.string.create_hint_auto_done else R.string.create_hint_auto
+            tool == EditorTool.Brush -> R.string.create_hint_brush
+            tool == EditorTool.Erase -> R.string.create_hint_erase
+            tool == EditorTool.Text -> R.string.create_hint_text
+            else -> R.string.create_hint_default
+        }
+    )
 
     Box(
         Modifier
@@ -391,7 +400,7 @@ private fun EditorCanvasCard(
                             strokeWidth = 2.dp
                         )
                         Text(
-                            "Cutting out on this phone…",
+                            stringResource(R.string.create_cutting_out_on_phone),
                             style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 12.5.sp),
                             color = Ink2,
                             modifier = Modifier.padding(top = 10.dp)
@@ -444,19 +453,19 @@ private fun EditorToolbar(
             .padding(8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        ToolButton("Auto", LoveIcons.Wand2, tool == EditorTool.Auto, Modifier.weight(1f)) {
+        ToolButton(stringResource(R.string.create_tool_auto), LoveIcons.Wand2, tool == EditorTool.Auto, Modifier.weight(1f)) {
             onTool(EditorTool.Auto)
         }
-        ToolButton("Brush", LoveIcons.Brush, tool == EditorTool.Brush, Modifier.weight(1f)) {
+        ToolButton(stringResource(R.string.create_tool_brush), LoveIcons.Brush, tool == EditorTool.Brush, Modifier.weight(1f)) {
             onTool(EditorTool.Brush)
         }
-        ToolButton("Erase", LoveIcons.Eraser, tool == EditorTool.Erase, Modifier.weight(1f)) {
+        ToolButton(stringResource(R.string.create_tool_erase), LoveIcons.Eraser, tool == EditorTool.Erase, Modifier.weight(1f)) {
             onTool(EditorTool.Erase)
         }
-        ToolButton("Text", LoveIcons.Type, tool == EditorTool.Text, Modifier.weight(1f)) {
+        ToolButton(stringResource(R.string.create_tool_text), LoveIcons.Type, tool == EditorTool.Text, Modifier.weight(1f)) {
             onTool(EditorTool.Text)
         }
-        ToolButton("Zoom", LoveIcons.ZoomIn, zoomed, Modifier.weight(1f), onZoom)
+        ToolButton(stringResource(R.string.create_tool_zoom), LoveIcons.ZoomIn, zoomed, Modifier.weight(1f), onZoom)
     }
 }
 
@@ -518,7 +527,7 @@ private fun CaptionField(text: String, onTextChange: (String) -> Unit) {
                 Box(contentAlignment = Alignment.CenterStart) {
                     if (text.isEmpty()) {
                         Text(
-                            "Add a word",
+                            stringResource(R.string.create_caption_placeholder),
                             style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W400, fontSize = 15.sp),
                             color = Muted
                         )
@@ -576,12 +585,12 @@ private fun OutlineRow(checked: Boolean, onToggle: () -> Unit) {
     ) {
         Column(Modifier.weight(1f)) {
             Text(
-                "White outline",
+                stringResource(R.string.create_outline_title),
                 style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 14.sp),
                 color = Ink
             )
             Text(
-                "Reads on any chat background. WhatsApp recommends it.",
+                stringResource(R.string.create_outline_body),
                 style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W400, fontSize = 12.sp),
                 color = Muted,
                 modifier = Modifier.padding(top = 2.dp)
@@ -614,7 +623,11 @@ private fun RailTile(
                 color = if (selected) Rose else Border,
                 shape = shape
             )
-            .clickable(role = Role.Button, onClickLabel = "Edit this sticker", onClick = onClick)
+            .clickable(
+                role = Role.Button,
+                onClickLabel = stringResource(R.string.create_edit_sticker),
+                onClick = onClick
+            )
     ) {
         Box(
             Modifier

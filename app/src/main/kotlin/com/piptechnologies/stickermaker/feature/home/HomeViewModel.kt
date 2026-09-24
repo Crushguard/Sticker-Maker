@@ -3,17 +3,21 @@ package com.piptechnologies.stickermaker.feature.home
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.prefs.PrefsRepository
 import com.piptechnologies.stickermaker.core.data.repo.CatalogRepository
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
 import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.model.Category
 import com.piptechnologies.stickermaker.core.model.StickerPack
+import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.inAppLanguage
+import com.piptechnologies.stickermaker.core.ui.nameText
+import com.piptechnologies.stickermaker.core.ui.themeNameRes
 import com.piptechnologies.stickermaker.feature.customize.FallbackCategories
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
@@ -34,19 +38,11 @@ const val CHIP_TRENDING = "trending"
 const val CHIP_SAVED = "saved"
 const val CHIP_ANIMATED = "animated"
 
-// Exact Prototype copy.
-private const val LABEL_TRENDING = "Trending"
-private const val LABEL_ANIMATED = "Animated"
-private const val TOAST_SAVED = "Saved · find it under ♥ Saved on Home"
-private const val TOAST_ALREADY_ADDED = "Already in WhatsApp"
-private const val TOAST_ADDED = "Added to WhatsApp"
-private const val TOAST_STILL_OFFLINE = "Still offline. Try again in a moment."
-private const val TOAST_OPENING_PLAY_STORE = "Opening Play Store…"
 
 /** One chip in the Home filter row; [showHeart] marks the Saved chip. */
 data class HomeChipUi(
     val id: String,
-    val label: String,
+    val label: UiText,
     val showHeart: Boolean = false
 )
 
@@ -55,7 +51,7 @@ data class HomePackUi(
     val id: String,
     val name: String,
     val stickerCount: Int,
-    val downloadsLabel: String,
+    val downloadsLabel: UiText,
     val animated: Boolean,
     val hue: Int,
     val thumbUrls: List<String>,
@@ -72,7 +68,7 @@ data class PendingWhatsAppAdd(
 
 /** One dark toast queued by the ViewModel; [withCheck] leads with a green check. */
 data class HomeToast(
-    val message: String,
+    val message: UiText,
     val withCheck: Boolean = false
 )
 
@@ -98,7 +94,7 @@ data class HomeUiState(
     val activeChipId: String = CHIP_TRENDING,
     val packs: List<HomePackUi> = emptyList(),
     val noResults: Boolean = false,
-    val noResultsTitle: String = "",
+    val noResultsTitle: UiText = UiText.Raw(""),
     val whatsAppMissingPackId: String? = null,
     val pendingWhatsAppAdd: PendingWhatsAppAdd? = null
 )
@@ -164,7 +160,7 @@ class HomeViewModel @Inject constructor(
                     packsMirror.value = packs
                     if (pendingRetryToast) {
                         pendingRetryToast = false
-                        if (packs.isEmpty()) _toasts.tryEmit(HomeToast(TOAST_STILL_OFFLINE))
+                        if (packs.isEmpty()) _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_still_offline)))
                     }
                 }
             }
@@ -225,7 +221,7 @@ class HomeViewModel @Inject constructor(
         val turningOn = packId !in favoritesMirror.value
         viewModelScope.launch {
             prefsRepository.toggleFavorite(packId)
-            if (turningOn) _toasts.tryEmit(HomeToast(TOAST_SAVED))
+            if (turningOn) _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_saved_heart)))
         }
     }
 
@@ -238,7 +234,7 @@ class HomeViewModel @Inject constructor(
         when (effectiveAddState(packId, controls.value.addStates, installedMirror.value)) {
             is AddState.Downloading, AddState.Sent -> return
             AddState.Added -> {
-                _toasts.tryEmit(HomeToast(TOAST_ALREADY_ADDED))
+                _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_already_in_whatsapp)))
                 return
             }
             else -> Unit
@@ -270,7 +266,7 @@ class HomeViewModel @Inject constructor(
         controls.update { it.copy(pendingWhatsAppAdd = null) }
         setAddState(packId, AddState.Added)
         viewModelScope.launch { catalogRepository.setWhitelisted(packId, true) }
-        _toasts.tryEmit(HomeToast(TOAST_ADDED, withCheck = true))
+        _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_added_to_whatsapp), withCheck = true))
     }
 
     /** WhatsApp's activity result for the pack launched last. */
@@ -281,7 +277,7 @@ class HomeViewModel @Inject constructor(
             AddStickerPackFlow.AddResult.Added -> {
                 setAddState(packId, AddState.Added)
                 viewModelScope.launch { catalogRepository.setWhitelisted(packId, true) }
-                _toasts.tryEmit(HomeToast(TOAST_ADDED, withCheck = true))
+                _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_added_to_whatsapp), withCheck = true))
             }
             is AddStickerPackFlow.AddResult.Cancelled -> {
                 // Prototype cancelWA: back to idle; drop the local copy so a
@@ -298,7 +294,7 @@ class HomeViewModel @Inject constructor(
     /** "Get WhatsApp": the screen opens the store page after this. */
     fun onGetWhatsApp() {
         controls.update { it.copy(whatsAppMissingPackId = null) }
-        _toasts.tryEmit(HomeToast(TOAST_OPENING_PLAY_STORE))
+        _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_opening_play_store)))
     }
 
     // -------------------------------------------------------------- internals //
@@ -336,10 +332,12 @@ class HomeViewModel @Inject constructor(
         val favCount = data.favorites.count { it in catalogIds }
         val selectedCategories = data.categories.filter { it.id in data.themes }
         val chips = buildList {
-            add(HomeChipUi(CHIP_TRENDING, LABEL_TRENDING))
-            if (favCount > 0) add(HomeChipUi(CHIP_SAVED, "Saved · $favCount", showHeart = true))
-            add(HomeChipUi(CHIP_ANIMATED, LABEL_ANIMATED))
-            selectedCategories.forEach { add(HomeChipUi(it.id, it.name)) }
+            add(HomeChipUi(CHIP_TRENDING, UiText.res(R.string.home_chip_trending)))
+            if (favCount > 0) {
+                add(HomeChipUi(CHIP_SAVED, UiText.res(R.string.home_chip_saved, favCount), showHeart = true))
+            }
+            add(HomeChipUi(CHIP_ANIMATED, UiText.res(R.string.home_chip_animated)))
+            selectedCategories.forEach { add(HomeChipUi(it.id, it.nameText())) }
         }
         val chip = effectiveChip(c.chipId, favCount, selectedCategories.mapTo(mutableSetOf()) { it.id })
         val query = c.query.trim()
@@ -350,7 +348,7 @@ class HomeViewModel @Inject constructor(
                 id = pack.id,
                 name = pack.name,
                 stickerCount = pack.stickerCount,
-                downloadsLabel = formatAdds(pack.downloads),
+                downloadsLabel = UiText.res(R.string.pack_adds, UiText.Compact(pack.downloads)),
                 animated = pack.animated,
                 hue = pack.hue,
                 thumbUrls = pack.thumbUrls.take(6),
@@ -369,7 +367,7 @@ class HomeViewModel @Inject constructor(
             activeChipId = chip,
             packs = packsUi,
             noResults = noResults,
-            noResultsTitle = "No packs for “$query”",
+            noResultsTitle = UiText.res(R.string.home_no_results_title, query),
             whatsAppMissingPackId = c.whatsAppMissingPackId,
             pendingWhatsAppAdd = c.pendingWhatsAppAdd
         )
@@ -387,9 +385,10 @@ class HomeViewModel @Inject constructor(
         if (searchOpen) {
             if (query.isNotEmpty()) {
                 val q = query.lowercase()
+                val localized = appContext.inAppLanguage()
                 list = catalog.filter { pack ->
                     pack.name.lowercase().contains(q) ||
-                        themeLabel(pack.category, data.categories).lowercase().contains(q)
+                        themeLabels(pack.category, data.categories, localized).any { it.lowercase().contains(q) }
                 }
             }
         } else {
@@ -406,8 +405,15 @@ class HomeViewModel @Inject constructor(
         return list.sortedByDescending { it.downloads }
     }
 
-    private fun themeLabel(categoryId: String, categories: List<Category>): String =
-        categories.firstOrNull { it.id == categoryId }?.name ?: categoryId
+    /** The theme's published name plus its name in the app language, for search. */
+    private fun themeLabels(
+        categoryId: String,
+        categories: List<Category>,
+        localized: Context
+    ): List<String> = listOfNotNull(
+        categories.firstOrNull { it.id == categoryId }?.name ?: categoryId,
+        themeNameRes(categoryId)?.let { localized.getString(it) }
+    )
 
     private fun effectiveChip(
         chipId: String,
@@ -420,15 +426,6 @@ class HomeViewModel @Inject constructor(
         else -> chipId
     }
 
-    /** Prototype `fmt`: 96400 -> "96.4K", 1000 -> "1K", 640 -> "640". */
-    private fun formatAdds(downloads: Long): String {
-        val number = if (downloads >= 1000) {
-            String.format(Locale.US, "%.1f", downloads / 1000.0).removeSuffix(".0") + "K"
-        } else {
-            downloads.toString()
-        }
-        return "$number adds"
-    }
 
     private fun AddState.toVisual(): AddVisualState = when (this) {
         AddState.Idle -> AddVisualState.Idle

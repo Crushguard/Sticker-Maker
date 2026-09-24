@@ -4,18 +4,19 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.di.IoDispatcher
 import com.piptechnologies.stickermaker.core.data.prefs.PrefsRepository
 import com.piptechnologies.stickermaker.core.data.repo.CatalogRepository
 import com.piptechnologies.stickermaker.core.data.repo.MyPacksRepository
 import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.model.StickerPack
+import com.piptechnologies.stickermaker.core.ui.UiText
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
@@ -32,32 +33,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-// ---- Copy: exact strings from design/Prototype.dc.html ---------------------
-
-internal const val TITLE_SAVED = "Saved"
-internal const val META_YOURS = "yours"
-
-internal const val EMPTY_TITLE = "No saved packs yet"
-internal const val EMPTY_BODY = "Tap the heart on any pack to keep it here for later."
-internal const val EMPTY_PRIMARY = "Browse packs"
-
-internal const val TOAST_ADDED = "Added to WhatsApp"
-internal const val TOAST_ALREADY = "Already in WhatsApp"
-
-internal const val NO_WHATSAPP_TITLE = "WhatsApp isn't installed"
-internal const val NO_WHATSAPP_BODY =
-    "Stickers are added inside WhatsApp. Install it, then come back to add this pack."
-internal const val NO_WHATSAPP_CONFIRM = "Get WhatsApp"
-internal const val NO_WHATSAPP_CANCEL = "Not now"
-
-/** "96.4K adds"-style meta segment: the prototype's fmt() ported one to one. */
-private fun formatAdds(count: Long): String =
-    if (count >= 1000) {
-        String.format(Locale.ROOT, "%.1f", count / 1000.0).removeSuffix(".0") + "K"
-    } else {
-        count.toString()
-    }
-
 // ---- UI state --------------------------------------------------------------
 
 /** One hearted pack, rendered as the same browse card Home uses. */
@@ -67,7 +42,7 @@ data class SavedRow(
     val animated: Boolean,
     val stickerCount: Int,
     /** "96.4K adds" for catalog packs, "yours" for own packs. */
-    val metaLabel: String,
+    val metaLabel: UiText,
     val own: Boolean,
     val addState: AddState,
     /** Coil models: thumb URLs for catalog packs, [File]s for own packs. */
@@ -86,7 +61,7 @@ data class SavedUiState(
 
 sealed interface SavedEvent {
     data class LaunchAddIntent(val intent: Intent) : SavedEvent
-    data class Toast(val message: String, val withCheck: Boolean) : SavedEvent
+    data class Toast(val message: UiText, val withCheck: Boolean) : SavedEvent
 }
 
 /**
@@ -134,7 +109,7 @@ class SavedViewModel @Inject constructor(
                 name = pack.name,
                 animated = pack.animated,
                 stickerCount = pack.stickerCount,
-                metaLabel = "${formatAdds(pack.downloads)} adds",
+                metaLabel = UiText.res(R.string.pack_adds, UiText.Compact(pack.downloads)),
                 own = false,
                 addState = sessions[pack.id]
                     ?: if (pack.id in whitelistedInstalled) AddState.Added else AddState.Idle,
@@ -148,7 +123,7 @@ class SavedViewModel @Inject constructor(
                 name = pack.name,
                 animated = pack.animated,
                 stickerCount = pack.stickerFiles.size,
-                metaLabel = META_YOURS,
+                metaLabel = UiText.res(R.string.my_packs_yours),
                 own = true,
                 addState = sessions[pack.id]
                     ?: if (pack.whitelisted) AddState.Added else AddState.Idle,
@@ -175,7 +150,7 @@ class SavedViewModel @Inject constructor(
         val row = uiState.value.rows.firstOrNull { it.id == id } ?: return
         when (row.addState) {
             is AddState.Downloading, AddState.Sent -> Unit
-            AddState.Added -> toast(TOAST_ALREADY)
+            AddState.Added -> toast(UiText.res(R.string.toast_already_in_whatsapp))
             AddState.Idle, is AddState.Failed -> beginAdd(row)
         }
     }
@@ -219,7 +194,7 @@ class SavedViewModel @Inject constructor(
                     pending = null
                     persistWhitelisted(id, own, whitelisted = true)
                     sessions.update { it - id }
-                    _events.send(SavedEvent.Toast(TOAST_ALREADY, false))
+                    _events.send(SavedEvent.Toast(UiText.res(R.string.toast_already_in_whatsapp), false))
                 }
                 else -> {
                     pending = null
@@ -243,7 +218,7 @@ class SavedViewModel @Inject constructor(
                     persistWhitelisted(current.id, current.own, verified)
                     downloadedIds.remove(current.id)
                     sessions.update { it - current.id }
-                    toast(TOAST_ADDED, withCheck = true)
+                    toast(UiText.res(R.string.toast_added_to_whatsapp), withCheck = true)
                 }
                 is AddStickerPackFlow.AddResult.Cancelled -> {
                     cleanUpAfterUnconfirmedAdd(current)
@@ -293,7 +268,7 @@ class SavedViewModel @Inject constructor(
         }
     }
 
-    private fun toast(message: String, withCheck: Boolean = false) {
+    private fun toast(message: UiText, withCheck: Boolean = false) {
         _events.trySend(SavedEvent.Toast(message, withCheck))
     }
 }
