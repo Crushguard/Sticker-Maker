@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.View
 import androidx.test.core.app.ApplicationProvider
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.feature.language.AppLanguages
 import java.util.Locale
 import org.junit.Assert.assertEquals
@@ -52,8 +53,7 @@ class LocalizedFormattingTest {
         for (language in AppLanguages.entries) {
             val context = inLanguage(language.tag)
             for ((key, english) in source.strings) {
-                val id = context.resources.getIdentifier(key, "string", context.packageName)
-                assertTrue("${language.tag}/$key has no resource id", id != 0)
+                val id = R.string::class.java.getField(key).getInt(null)
                 val text = context.getString(id, *argsFor(english))
                 assertTrue("${language.tag}/$key is blank", text.isNotBlank())
                 assertTrue("${language.tag}/$key left a specifier: $text", !Regex("%\\d*\\$?[ds]").containsMatchIn(text))
@@ -67,8 +67,7 @@ class LocalizedFormattingTest {
         for (language in AppLanguages.entries) {
             val context = inLanguage(language.tag)
             for (key in source.plurals.keys) {
-                val id = context.resources.getIdentifier(key, "plurals", context.packageName)
-                assertTrue("${language.tag}/$key has no resource id", id != 0)
+                val id = R.plurals::class.java.getField(key).getInt(null)
                 for (count in counts) {
                     val text = context.resources.getQuantityString(id, count, count)
                     assertTrue("${language.tag}/$key($count) is blank", text.isNotBlank())
@@ -89,11 +88,11 @@ class LocalizedFormattingTest {
     @Test
     fun translationsResolveForTheirLanguage() {
         // Guards the folder names: values-in for "id", values-iw for "he", values-pt-rBR.
-        val english = inLanguage("en").getString(com.piptechnologies.stickermaker.R.string.nav_home)
+        val english = inLanguage("en").getString(R.string.nav_home)
         for (language in AppLanguages.entries.filter { it.tag != "en" }) {
             val file = L10nFixtures.translation(language.tag)
             val expected = file.strings.getValue("nav_home").replace("\\'", "'").replace("\\\"", "\"")
-            val actual = inLanguage(language.tag).getString(com.piptechnologies.stickermaker.R.string.nav_home)
+            val actual = inLanguage(language.tag).getString(R.string.nav_home)
             assertEquals("${language.tag} resolves its own nav_home", expected, actual)
             if (expected != english) assertTrue(actual != english)
         }
