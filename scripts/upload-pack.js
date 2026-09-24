@@ -40,14 +40,17 @@ if (!ALL && !ONLY) {
   process.exit(2);
 }
 
-const admin = require('firebase-admin');
-admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
+const { initializeApp, applicationDefault } = require('firebase-admin/app');
+const { getFirestore, FieldValue } = require('firebase-admin/firestore');
+const { getStorage } = require('firebase-admin/storage');
+
+initializeApp({
+  credential: applicationDefault(),
   projectId: PROJECT,
   storageBucket: BUCKET,
 });
-const db = admin.firestore();
-const bucket = admin.storage().bucket();
+const db = getFirestore();
+const bucket = getStorage().bucket();
 
 function md5(file) {
   return crypto.createHash('md5').update(fs.readFileSync(file)).digest('base64');
@@ -97,7 +100,7 @@ async function uploadPack(pack) {
     // Keyed by full file name ("01.webp") to match the app's CatalogDataSource.
     // Dots in keys are safe because the map is always set whole, never by FieldPath.
     emojis: Object.fromEntries(contents.stickers.map((s) => [s.image_file, s.emojis])),
-    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
   };
   if (!DRY) await db.collection('packs').doc(pack.id).set(doc, { merge: true });
   console.log(

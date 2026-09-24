@@ -18,3 +18,9 @@ captures/
 
 # OS
 .DS_Store
+
+# Firebase emulator logs
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+storage-debug.log
