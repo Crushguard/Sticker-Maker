@@ -68,7 +68,8 @@ def main():
 
     shots = app.get("shots", [])
     by_frame = {s["frame"]: s for s in shots if s.get("frame") and s.get("status") == "pass"}
-    extras = [s for s in shots if not s.get("frame") and s.get("status") == "pass"]
+    extras = [s for s in shots if not s.get("frame") and not s.get("locale") and s.get("status") == "pass"]
+    locale_shots = [s for s in shots if s.get("locale") and s.get("status") == "pass"]
     failures = [s for s in shots if s.get("status") == "fail"]
     frames = {int(d["n"]): d for d in design}
     numbers = sorted(set(frames) | set(by_frame) | set(range(1, 43)))
@@ -87,8 +88,13 @@ def main():
         "like a user and checks each state before it takes the screenshot.\n"
     )
     status = "passed" if args.outcome == "success" else (args.outcome or "unknown")
+    languages = []
+    for s in locale_shots:
+        if s["locale"] not in [tag for tag, _ in languages]:
+            languages.append((s["locale"], s.get("language", s["locale"])))
     out.append(f"- **Result:** {captured} of {len(numbers)} design frames captured, "
-               f"{len(extras)} extra states, {len(failures)} failed steps · tour {status}")
+               f"{len(extras)} extra states, {len(languages)} languages, "
+               f"{len(failures)} failed steps · tour {status}")
     if args.branch or short:
         out.append(f"- **Source:** `{args.branch}` @ `{short}`")
     if args.run_url:
@@ -146,6 +152,26 @@ def main():
                        f"| `{s.get('route', '')}` · {one_line(s.get('notes'))} |")
         out.append("")
 
+    if locale_shots:
+        screens = []
+        for s in locale_shots:
+            if (s["screen"], s["title"]) not in screens:
+                screens.append((s["screen"], s["title"]))
+        by_key = {(s["locale"], s["screen"]): s for s in locale_shots}
+        out.append("## Every language\n")
+        out.append("The same screens in each language the app ships (`LocaleTourTest`), switched through "
+                   "Android's per-app language like the Language screen does. Right-to-left languages "
+                   "mirror the layout. Half-size captures.\n")
+        out.append("| Language | " + " | ".join(title for _, title in screens) + " |")
+        out.append("|---" * (len(screens) + 1) + "|")
+        for tag, name in languages:
+            cells = []
+            for screen, _ in screens:
+                shot = by_key.get((tag, screen))
+                cells.append(cell_image(os.path.join("app", shot["file"]), root, width=150) if shot else "—")
+            out.append(f"| **{one_line(name)}** `{tag}` | " + " | ".join(cells) + " |")
+        out.append("")
+
     if failures:
         out.append("## Failed steps\n")
         out.append("| Step | Screen at failure | Error |")
@@ -157,7 +183,8 @@ def main():
 
     with open(os.path.join(root, "README.md"), "w", encoding="utf-8") as handle:
         handle.write("\n".join(out))
-    print(f"README.md: {captured}/{len(numbers)} frames, {len(extras)} extras, {len(failures)} failures")
+    print(f"README.md: {captured}/{len(numbers)} frames, {len(extras)} extras, "
+          f"{len(languages)} languages, {len(failures)} failures")
 
 
 if __name__ == "__main__":

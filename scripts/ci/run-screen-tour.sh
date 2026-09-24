@@ -17,7 +17,7 @@ adb logcat -c || true
 
 set +e
 adb shell am instrument -w \
-  -e class "$APP.tour.ScreenTourTest" \
+  -e class "$APP.tour.ScreenTourTest,$APP.tour.LocaleTourTest" \
   "$APP.test/androidx.test.runner.AndroidJUnitRunner" 2>&1 | tee "$OUT/instrument.txt"
 set -e
 
