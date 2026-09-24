@@ -1,0 +1,61 @@
+{
+  "identifier": "heartbeat",
+  "name": "Heartbeat",
+  "publisher": "PIP Technologies",
+  "publisher_email": "aymen@chikhaoui.me",
+  "publisher_website": "",
+  "privacy_policy_website": "",
+  "license_agreement_website": "",
+  "tray_image_file": "tray.png",
+  "image_data_version": "1",
+  "avoid_cache": false,
+  "animated_sticker_pack": true,
+  "category": "romantic",
+  "order": 7,
+  "downloads": 44100,
+  "hue": 10,
+  "stickers": [
+    {
+      "image_file": "01.webp",
+      "emojis": [
+        "❤️",
+        "💓"
+      ]
+    },
+    {
+      "image_file": "02.webp",
+      "emojis": [
+        "💗",
+        "💞"
+      ]
+    },
+    {
+      "image_file": "03.webp",
+      "emojis": [
+        "💘",
+        "💕"
+      ]
+    },
+    {
+      "image_file": "04.webp",
+      "emojis": [
+        "💖",
+        "✨"
+      ]
+    },
+    {
+      "image_file": "05.webp",
+      "emojis": [
+        "💝",
+        "💟"
+      ]
+    },
+    {
+      "image_file": "06.webp",
+      "emojis": [
+        "❣️",
+        "💗"
+      ]
+    }
+  ]
+}

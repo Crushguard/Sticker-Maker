@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#EAECF1}
+a{color:#C23359;text-decoration:none}
+a:hover{color:#A31B45}
+</style>
+</helmet>
+<div style="padding:44px 32px 120px;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1E2128;-webkit-font-smoothing:antialiased;min-width:1240px">
+<header style="max-width:1240px;margin-bottom:30px">
+  <div style="display:flex;align-items:center;gap:11px;margin-bottom:18px;flex-wrap:wrap">
+    <div style="width:38px;height:38px;border-radius:11px;background:#C23359;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 6px 16px -4px rgba(194,51,89,.5);font:800 18px 'Hanken Grotesk'">♥</div>
+    <div style="font:800 20px 'Hanken Grotesk';letter-spacing:-.01em">Love Stickers</div>
+    <div style="font:600 11px 'JetBrains Mono';color:#8b929d;letter-spacing:.04em;padding:4px 9px;background:#fff;border:1px solid #E1E5EB;border-radius:999px">PIP TECHNOLOGIES · ANDROID · V1</div>
+  </div>
+  <h1 style="font:800 34px/1.12 'Hanken Grotesk';letter-spacing:-.025em;color:#171A20;margin:0 0 12px;max-width:760px">Every screen, every state</h1>
+  <p style="font:400 16px/1.6 'Hanken Grotesk';color:#565C67;margin:0 0 18px;max-width:700px;text-wrap:pretty">Thirteen screens, 42 live frames, in flow order. Each frame is the live prototype pinned to one state, so you can tap into any of them. Under each, the system components used.</p>
+  <nav style="display:flex;gap:8px;margin-bottom:26px;flex-wrap:wrap"><a href="./Design%20System.dc.html" style="font:600 13px 'Hanken Grotesk';color:#3d4550;background:#fff;border:1px solid #E1E5EB;padding:8px 16px;border-radius:999px">Design System</a><span style="font:600 13px 'Hanken Grotesk';color:#fff;background:#1E2128;padding:9px 16px;border-radius:999px">Screens</span><a href="./Prototype.dc.html" style="font:600 13px 'Hanken Grotesk';color:#3d4550;background:#fff;border:1px solid #E1E5EB;padding:8px 16px;border-radius:999px">Prototype</a></nav>
+</header>
+<section data-screen-label="Launch" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">00</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">Launch</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:720px;text-wrap:pretty">Shown while Firestore metadata loads. Mark, name, one spinner, the promise. Hands off to Onboarding on first run, Home after that.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="splash" hold="{{ true }}" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Loading screen</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">App mark 88/26 in rose · Display 24/800 · rose spinner · honesty line. In the prototype it advances after 1.6 s.</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Onboarding" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">01</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">Onboarding</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:720px;text-wrap:pretty">Two slides, one promise each. The WhatsApp check is silent until Add is tapped. Skip goes straight to themes.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="onboarding" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Slide 1 · Curated packs, one tap to WhatsApp</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Display 26/800 · body 15 · primary button 52/14 · dot pager · honesty line (heart-handshake 12) · ghost Skip.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="onboarding" slide="{{ 1 }}" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Slide 2 · Make your own, animated too</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Same layout; photo → sticker composition from striped placeholder + white sticker tile. "Get started" opens Customization.</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Customization" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">02</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">Customization</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:720px;text-wrap:pretty">Pick love themes. Home's chip row is built from this list. Minimum one; the button reads the count. Reachable again from Settings › Edit themes.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="customize" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">First run</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Theme tile (card 16 radius, tint icon box 40, check square 22) · selected = rose tint + rose border · footer primary "Continue · 3 themes", disabled at zero.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="customize" edit="{{ true }}" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">From Settings · Edit themes</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Same grid under a 52px back header. Footer becomes "Save"; a toast confirms.</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Home" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">03</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">Home</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:720px;text-wrap:pretty">A slim top bar: wordmark, Search, Settings. Chips below: Trending, ♥ Saved (appears after the first heart), Animated, then your themes. Each pack card: title, animated badge, count and adds in mono, heart, Add, six round previews.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="home" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Home · Trending</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Filter chips (pill 36) · pack card (white, 20 radius, 1px border) · tinted Add pill 36 with WhatsApp-style glyph · heart 20 fills rose · top bar 52 with Search and Settings (44 targets) · 3-slot bottom nav 68: Home · Create 52/16 · My Packs.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="home" preset="active" chip="animated" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Home · Animated</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Second chip after Trending lists only animated packs. Previews are static first frames; motion lines signal the animation. Same card, ANIMATED badge.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="home" preset="active" query="night" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Home › Search</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Field replaces the top bar and chips in place (44 high, rose border when active) · ghost Cancel · results reuse the same cards · searches titles and theme names.</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Stickers" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">04</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">Stickers · pack detail</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:720px;text-wrap:pretty">Back, title, heart. One metadata line, then every sticker in a 3-column grid. The Add bar is pinned to the bottom so it is always one thumb away.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="clingy-mango" preset="browsing" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Clingy Mango · 18 stickers</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">52px back header with heart and share (paper plane opens Android's share sheet with the app's Play Store link) · meta 12 mono · sticker tile (square, 16 radius, pack tint) · footer with primary Add bar 52/14 and a one-line explainer.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="mango-moves" preset="browsing" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Mango Moves · animated</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Animated badge sits after the meta line (mono 9, subtle bg). Grid scrolls under the pinned footer.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="big-words" preset="browsing" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Big Words · 18 stickers</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Type-only pack at full length. Same grid, same pinned Add bar.</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Add states" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">05</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">Add flow · five states</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:720px;text-wrap:pretty">The same control moves through idle → downloading → sent to WhatsApp → added. Progress fills the bar itself; nothing else on the screen changes. The card pill on Home follows the same states in miniature. Tap Add in any frame to run it live.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="sorry-love" preset="browsing" add-state="idle" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">1 · Idle</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Primary bar, filled rose, WhatsApp-style glyph 19 + "Add to WhatsApp". The only filled primary on the screen.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="sorry-love" preset="browsing" add-state="downloading" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">2 · Downloading</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Bar turns to rose tint; a rose fill grows left to right with the percentage in the label. Steady, no fake acceleration.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="sorry-love" preset="browsing" add-state="sent" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">3 · Sent to WhatsApp</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Spinner + "Sent to WhatsApp…" while WhatsApp shows its own confirmation (simulated as a neutral bottom sheet). Cancel returns to idle.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="sorry-love" preset="browsing" add-state="added" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">4 · Added</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Bar flips to white with a green check and "Added to WhatsApp"; dark toast confirms. The pack now lists under My Packs.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="sorry-love" preset="browsing" add-state="failed" scenario="download-fails" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Retry · download failed</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Attention amber outline, "Download failed · Retry". Fill stays where it stopped. Tap retries from zero.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="home" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Card pill · same states, small</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">36px pill: Add → 64% → Sent… → Added (green). Tap Add on any card here to watch it run.</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Create" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">06</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">Create · three steps</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:720px;text-wrap:pretty">The raised Create button opens Import. Photos, camera or video clips (animated pack), 3 to 30 stickers. Tapping Next runs an on-device subject cut-out on every pick, so most users only review. Fix edges with Brush and Erase, add a word, keep the white outline WhatsApp recommends, then name the pack and Add. Export is 512×512 WebP under 100 KB (500 KB animated). Nothing is uploaded.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="create" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Import</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Segmented Photos / Camera / Video · 3-col picker with rose check squares · footer primary reads the count, disabled under 3 · helper line says what Next does.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="editor" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Cut out · auto result</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Dark tool bar (PDF Reader markup pattern): Auto · Brush · Erase · Text · Zoom · transparency checker behind the cut subject · white-outline toggle · undo in the header · rail with a green check per finished sticker.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="editor" tool="brush" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Cut out · fixing edges</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Brush brings parts back, Erase removes leftovers; a size slider appears under the bar. Tap the picture in this frame to try it. Undo steps back one touch.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="packDetails" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Pack details</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Tray icon picker (first sticker, exported at 96×96) · name field 50/12 with counter · info card with the export facts · same Add bar and states · ghost "Save to My Packs only".</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="own-1" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Made by you · Us, always</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">The same woman from onboarding, 26 stickers: plain cut-outs, her puppy ("We love u"), marker doodles (crown, horns, halo), bold captions (ok babe, omw, mine) and motion-line "moves". Same detail screen and Add bar as store packs.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="own-2" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Made by you · Just Us</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">A second pack of the same woman, now with her boyfriend. Six die-cut photo stickers with marker doodles and captions (safe place, my ride, mine), and six round badge stickers with arched titles (Date night?, Sorry babe, Kiss me).</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="My Packs and Saved" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">07</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">My Packs · Saved</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:720px;text-wrap:pretty">My Packs lists what is in WhatsApp and what you made. The heart in its toolbar, with a count, opens Saved: every pack you hearted on Home or a pack page. The ⋯ menu re-adds or removes the app's local copy; WhatsApp keeps its own. Hearted packs are no longer a tab; they sit under the ♥ Saved chip on Home.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="myPacks" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">My Packs</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Toolbar: title 22/800, Saved heart with a rose count badge, Settings gear · mono eyebrows: In WhatsApp, Made by you · green check + ⋯ on added packs · info card explaining removal.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="saved" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">My Packs › Saved</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Opened from the heart in the My Packs toolbar. Back header with a count, the same browse cards as Home (heart + Add). The ♥ Saved chip on Home shows the same list.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="myPacks" preset="active" menu="clingy-mango" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Card menu</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Bottom sheet (24 top radius, 320ms) · rows 50 · Re-add to WhatsApp · Remove from this app (destructive, confirms in a dialog).</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="myPacks" preset="active" dialog="remove" pack-id="clingy-mango" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Confirm · remove from app</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Same confirmation sheet from the ⋯ menu: grey "Keep", red "Remove". WhatsApp keeps its copy, and the sheet says so.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="myPacks" preset="active" dialog="delete-own" pack-id="own-1" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Confirm · delete your pack</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Deleting something you made can't be undone, so it always asks first. Before this, Delete pack ran with no confirmation.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="home" preset="active" chip="saved" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Home · ♥ Saved</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">A filter chip, not a tab. It appears after the first heart, and that first heart's toast says where to find it. Un-hearting removes the card.</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Settings" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">08</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">Settings · rating · confirmations</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:760px;text-wrap:pretty">Mapped from RecoverMe. Settings opens from the gear on Home and My Packs: one hero card for the setting that matters (New pack alerts), grouped rows under mono eyebrows with values on the right, an arrow for anything that leaves the app, and the free-forever card last. Rating is RecoverMe's sheet: tap a star and it moves on by itself. Five stars asks for a Google Play review; anything less opens a private feedback box. Confirmations are bottom sheets with two equal buttons; destructive ones are filled red and say what stays in WhatsApp.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="settings" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Settings</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Header 56 with back · hero card (icon box 46/14, title 16, switch 48×28) · PREFERENCES: Edit themes, Language, Clear downloaded packs · ABOUT: Rate us, Contact us, More apps (labelled AD), Privacy policy, Version · free-forever card in rose tint.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="settings" preset="active" dialog="rate" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Rate · pick a star</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Sheet with handle · icon box 64/19 · title 20 · five 38 px stars in PIP gold #E0A64B · hint line · ghost "Maybe later". No submit button: a tap is the answer.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="settings" preset="active" dialog="rate" rate-stage="store" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Rate · 5 stars → Google Play</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Green party icon, five small gold stars, "Thank you!" · primary 54/15 "Rate on Google Play" with external icon · ghost "Not now".</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="settings" preset="active" dialog="rate" rate-stage="feedback" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Rate · 1 to 4 stars → feedback</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Private note, not a public review · textarea 104/14 · "Send feedback" disabled until there is text · ghost Cancel.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="settings" preset="active" dialog="rate" rate-stage="thanks" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Rate · thanks</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Green check · "Thank you, we hear you" · primary Done.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="contact" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Contact us</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Message, optional email, and a note on what gets attached. Send is disabled until there is text.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="language" preset="active" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Language</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">RecoverMe's list: native name over English name, RTL badge in mono, rose check on the current one. Tapping saves and returns.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="settings" preset="browsing" dialog="notif-perm" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">New pack alerts · permission</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">First switch-on shows Android's one-time prompt (simulated) as a confirmation sheet: grey "Don't allow", rose "Allow".</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="settings" preset="active" dialog="clear" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Confirm · clear downloads</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Red-tint icon box 44/13 · title 18 · body says what stays in WhatsApp · grey "Keep them" + filled red "Clear", equal width · tap outside cancels.</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Errors and empty states" style="margin-bottom:48px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">09</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:6px 0 4px">Errors · empty states</h2>
+  <p style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:0 0 20px;max-width:720px;text-wrap:pretty">Offline is a full screen with Retry because Home has nothing cached to show. A failed download stays inside the button (section 05). WhatsApp missing is a dialog that leads to the store. Empty tabs point back to browsing.</p>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="home" preset="active" scenario="offline" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">No internet</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Empty-state pattern: icon box 64/20, title 18/700, body, primary Retry, reassurance line. Chips stay so themes remain visible.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="detail" pack-id="flirty-shy" preset="browsing" dialog="no-whatsapp" scenario="no-whatsapp" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">WhatsApp not installed</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Shown the moment Add is tapped. Confirmation sheet: grey "Not now", rose "Get WhatsApp" (→ Play Store), equal width.</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="myPacks" empty="{{ true }}" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">My Packs · empty</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Icon box 56/16 (sticker glyph), title 17, body 13.5, primary "Browse packs", ghost "Make your own".</div></div>
+    </div>
+    <div style="width:390px;flex:none">
+      <dc-import name="Prototype" screen="saved" empty="{{ true }}" embedded="{{ true }}" hint-size="390px,844px" style="width:390px;height:844px;display:block"></dc-import>
+      <div style="margin-top:14px"><div style="font:700 14px 'Hanken Grotesk'">Saved · empty</div><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:3px">Heart icon box 56/16, title 17, one line on how to save, primary "Browse packs".</div></div>
+    </div>
+  </div>
+</section>
+</div>
+</x-dc>
+</body>
+</html>

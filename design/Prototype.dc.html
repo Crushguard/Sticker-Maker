@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#EAECF1}
+a{color:#C23359;text-decoration:none}
+a:hover{color:#A31B45}
+input,button{font-family:inherit}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes sheetup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+</style>
+</helmet>
+<div style="display:flex;justify-content:center;align-items:flex-start;flex-wrap:wrap;gap:36px;min-height:100vh;padding:{{ pagePad }};font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1E2128;-webkit-font-smoothing:antialiased">
+<sc-if value="{{ showMap }}" hint-placeholder-val="{{ false }}">
+<div style="width:300px;flex:none;display:flex;flex-direction:column;gap:22px;padding-top:6px">
+  <div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:34px;height:34px;border-radius:10px;background:#C23359;display:flex;align-items:center;justify-content:center;color:#fff">{{ ic.brandHeart }}</div><div><div style="font:800 17px 'Hanken Grotesk';letter-spacing:-.01em">Love Stickers</div><div style="font:400 12px 'Hanken Grotesk';color:#8b929d">Interactive prototype</div></div></div>
+    <div style="font:400 13px/1.5 'Hanken Grotesk';color:#626873;text-wrap:pretty">Tap through the phone, or jump to any screen. Every state on the Screens page is reachable from here.</div>
+  </div>
+  <sc-for list="{{ mapGroups }}" as="g" hint-placeholder-count="4">
+    <div>
+      <div style="font:600 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase;margin-bottom:8px">{{ g.title }}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ g.items }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.go }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+    </div>
+  </sc-for>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+    <button onClick="{{ resetProto }}" style="height:40px;padding:0 16px;border-radius:12px;background:#1E2128;color:#fff;font:600 13px 'Hanken Grotesk';border:none;cursor:pointer;display:flex;align-items:center;gap:8px">{{ ic.reset }}<span>Reset prototype</span></button>
+    <a href="./Screens.dc.html" style="height:40px;padding:0 14px;border-radius:12px;background:#fff;border:1px solid #E1E5EB;color:#3d4550;font:600 13px 'Hanken Grotesk';display:flex;align-items:center">Screens</a>
+    <a href="./Design%20System.dc.html" style="height:40px;padding:0 14px;border-radius:12px;background:#fff;border:1px solid #E1E5EB;color:#3d4550;font:600 13px 'Hanken Grotesk';display:flex;align-items:center">Design System</a>
+  </div>
+  <div style="background:#fff;border:1px solid #E1E5EB;border-radius:16px;padding:14px 16px;display:flex;gap:10px"><span style="color:#2E9E6B;display:flex;flex:none;margin-top:1px">{{ ic.okCircle }}</span><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#626873"><strong style="font-weight:700;color:#1E2128">Simulate</strong> offline, a failed download, or WhatsApp missing from the Tweaks panel. Add runs a real download bar, hands off to a simulated WhatsApp confirm, then lands in My Packs.</div></div>
+</div>
+</sc-if>
+<div data-screen-label="{{ screenLabel }}" style="width:390px;height:844px;flex:none;background:#FAFBFC;border:1px solid #DDE1E8;border-radius:30px;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 1px 3px rgba(20,22,28,.05)">
+
+<div style="height:38px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 26px;font:700 12.5px 'Hanken Grotesk'"><div>9:41</div><div style="display:flex;gap:6px;align-items:center">{{ ic.signal }}{{ ic.wifi }}{{ ic.battery }}</div></div>
+
+<sc-if value="{{ is.splash }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 24px 30px;animation:fade .4s">
+  <div style="width:88px;height:88px;border-radius:26px;background:#C23359;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 14px 34px -12px rgba(194,51,89,.55)">{{ ic.splashHeart }}</div>
+  <div style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;color:#171A20;margin-top:6px">Love Stickers</div>
+  <div style="color:#C23359;display:flex;margin-top:14px">{{ splashSpinner }}</div>
+</div>
+<div style="flex:none;display:flex;align-items:center;justify-content:center;gap:6px;font:400 12px 'Hanken Grotesk';color:#99A0AC;padding-bottom:34px">{{ ic.handshake }}<span>Free · No ads · No account</span></div>
+</sc-if>
+
+<sc-if value="{{ is.onboarding }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;padding:4px 24px 26px;min-height:0">
+  <div style="height:40px;flex:none;display:flex;justify-content:flex-end;align-items:center">
+    <sc-if value="{{ ob.first }}" hint-placeholder-val="{{ true }}"><button onClick="{{ ob.skip }}" style="height:36px;padding:0 12px;border:none;background:none;font:600 13.5px 'Hanken Grotesk';color:#626873;cursor:pointer;border-radius:10px">Skip</button></sc-if>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:26px;min-height:0">
+    <sc-if value="{{ ob.first }}" hint-placeholder-val="{{ true }}">
+      <div style="width:290px;height:250px;position:relative;flex:none">
+        <img src="./assets/stickers/mango-a-1.webp" alt="" style="position:absolute;left:0;top:6px;width:150px;height:150px;transform:rotate(-8deg);filter:drop-shadow(0 10px 14px rgba(30,20,30,.16))">
+        <img src="./assets/stickers/words-a-1.webp" alt="" style="position:absolute;right:0;top:0;width:128px;height:128px;transform:rotate(7deg);filter:drop-shadow(0 10px 14px rgba(30,20,30,.16))">
+        <img src="./assets/stickers/flirty-b-1.webp" alt="" style="position:absolute;left:118px;top:112px;width:140px;height:140px;transform:rotate(-3deg);filter:drop-shadow(0 10px 14px rgba(30,20,30,.16))">
+        <img src="./assets/stickers/gmgn-4.webp" alt="" style="position:absolute;left:8px;top:150px;width:104px;height:104px;transform:rotate(9deg);filter:drop-shadow(0 10px 14px rgba(30,20,30,.16))">
+      </div>
+      <div><div style="font:800 26px/1.15 'Hanken Grotesk';letter-spacing:-.02em;color:#171A20">Say it with a sticker</div><div style="font:400 15px/1.55 'Hanken Grotesk';color:#565C67;margin-top:10px;text-wrap:pretty">Curated love packs: cute, funny, romantic. One tap adds a pack to WhatsApp.</div></div>
+    </sc-if>
+    <sc-if value="{{ ob.second }}" hint-placeholder-val="{{ false }}">
+      <div style="width:280px;height:240px;position:relative;flex:none">
+        <div style="position:absolute;right:0;top:0;width:176px;height:176px;transform:rotate(4deg);filter:drop-shadow(0 12px 18px rgba(30,20,30,.18))"><img src="./assets/ob-sticker.webp" alt="Finished sticker: woman making a heart with her hands, white die-cut outline" style="width:100%;height:100%;display:block;object-fit:contain"></div>
+        <svg width="74" height="58" viewBox="0 0 74 58" fill="none" style="position:absolute;left:66px;top:34px;color:#C23359"><path d="M6 52 C 10 22, 34 8, 64 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7"></path><path d="M55 5 L66 12 L56 20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div style="position:absolute;left:0;bottom:0;width:128px;height:128px;border-radius:50%;overflow:hidden;border:4px solid #fff;box-shadow:0 12px 26px -10px rgba(30,20,30,.35);transform:rotate(-4deg)"><img src="./assets/ob-photo.jpg" alt="Original photo" style="width:100%;height:100%;display:block;object-fit:cover"></div>
+        <div style="position:absolute;left:10px;bottom:120px;font:600 9.5px 'JetBrains Mono';letter-spacing:.06em;color:#8b929d;background:#fff;border:1px solid #E7EAEF;padding:3px 7px;border-radius:6px">YOUR PHOTO</div>
+      </div>
+      <div><div style="font:800 26px/1.15 'Hanken Grotesk';letter-spacing:-.02em;color:#171A20">Make your own</div><div style="font:400 15px/1.55 'Hanken Grotesk';color:#565C67;margin-top:10px;text-wrap:pretty">Turn photos into stickers. Crop, cut out, add a word. Animated packs from short clips too.</div></div>
+    </sc-if>
+  </div>
+  <div style="display:flex;justify-content:center;gap:6px;margin:10px 0 22px;flex:none">
+    <div style="height:8px;border-radius:999px;transition:all .2s;width:{{ ob.dot1w }};background:{{ ob.dot1c }}"></div>
+    <div style="height:8px;border-radius:999px;transition:all .2s;width:{{ ob.dot2w }};background:{{ ob.dot2c }}"></div>
+  </div>
+  <button onClick="{{ ob.next }}" style="height:52px;border-radius:14px;background:#C23359;color:#fff;font:600 16px 'Hanken Grotesk';border:none;cursor:pointer;width:100%;flex:none">{{ ob.cta }}</button>
+  <div style="display:flex;align-items:center;justify-content:center;gap:6px;font:400 12px 'Hanken Grotesk';color:#99A0AC;margin-top:14px;flex:none">{{ ic.handshake }}<span>Free · No ads · No account</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.customize }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <sc-if value="{{ cz.edit }}" hint-placeholder-val="{{ false }}">
+    <div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 12px"><button onClick="{{ back }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#1E2128;cursor:pointer;padding:0">{{ ic.arrowLeft }}</button><div style="font:700 16px 'Hanken Grotesk'">Your themes</div></div>
+  </sc-if>
+  <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:12px 20px 12px">
+    <sc-if value="{{ cz.first }}" hint-placeholder-val="{{ true }}"><div style="font:800 26px/1.15 'Hanken Grotesk';letter-spacing:-.02em;color:#171A20;margin-top:14px">Pick your themes</div></sc-if>
+    <div style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;margin:8px 0 18px;text-wrap:pretty">Home shows packs from the themes you choose. Change them anytime in Settings.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <sc-for list="{{ cz.tiles }}" as="t" hint-placeholder-count="8">
+        <button onClick="{{ t.toggle }}" style="{{ t.style }}">
+          <div style="width:40px;height:40px;border-radius:12px;flex:none;display:flex;align-items:center;justify-content:center;background:{{ t.bg }};color:{{ t.fg }}">{{ t.icon }}</div>
+          <div style="flex:1;min-width:0;text-align:left;font:600 14px 'Hanken Grotesk';color:#1E2128">{{ t.label }}</div>
+          <div style="width:22px;height:22px;flex:none;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;background:{{ t.checkBg }};border:1px solid {{ t.checkBorder }}">{{ t.check }}</div>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+  <div style="flex:none;padding:12px 20px 22px;border-top:1px solid #EEF0F4;background:#fff">
+    <button onClick="{{ cz.done }}" style="{{ cz.ctaStyle }}">{{ cz.cta }}</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.home }}" hint-placeholder-val="{{ true }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:none;display:flex;align-items:center;gap:4px;padding:8px 12px 10px 20px">
+      <div style="flex:1;height:44px;display:flex;align-items:center;gap:9px;padding:0 14px;background:#fff;border:1px solid #C23359;border-radius:12px;color:#8b929d">{{ ic.searchSm }}<input value="{{ query }}" onChange="{{ setQuery }}" autoFocus="{{ true }}" placeholder="Search love packs" style="flex:1;min-width:0;border:none;background:none;outline:none;font:400 15px 'Hanken Grotesk';color:#1E2128;padding:0"></div>
+      <button onClick="{{ closeSearch }}" style="height:40px;padding:0 10px;border:none;background:none;font:600 14px 'Hanken Grotesk';color:#626873;cursor:pointer;border-radius:10px">Cancel</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{ searchClosed }}" hint-placeholder-val="{{ true }}">
+    <div style="height:52px;flex:none;display:flex;align-items:center;gap:2px;padding:0 10px 0 20px">
+      <div style="flex:1;min-width:0;display:flex;align-items:center;gap:9px"><div style="width:28px;height:28px;border-radius:9px;background:#C23359;display:flex;align-items:center;justify-content:center;color:#fff;flex:none">{{ ic.brandHeart }}</div><div style="font:800 19px 'Hanken Grotesk';letter-spacing:-.02em;color:#171A20;white-space:nowrap">Love Stickers</div></div>
+      <button onClick="{{ openSearch }}" aria-label="Search" style="width:44px;height:44px;flex:none;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#3d4550;cursor:pointer;padding:0">{{ ic.search }}</button>
+      <button onClick="{{ openSettings }}" aria-label="Settings" style="width:44px;height:44px;flex:none;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#3d4550;cursor:pointer;padding:0">{{ ic.gear }}</button>
+    </div>
+    <div style="flex:none;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 20px 10px">
+      <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.select }}" style="{{ c.style }}">{{ c.icon }}<span>{{ c.label }}</span></button></sc-for>
+    </div>
+  </sc-if>
+  <sc-if value="{{ offline }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 32px 70px">
+      <div style="width:64px;height:64px;border-radius:20px;background:#F3F5F8;display:flex;align-items:center;justify-content:center;color:#B4BAC4;margin-bottom:16px">{{ ic.wifiOff }}</div>
+      <div style="font:700 18px 'Hanken Grotesk'">You're offline</div>
+      <div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#626873;margin-top:6px;max-width:250px;text-wrap:pretty">Packs stream from the cloud. Check your connection and try again.</div>
+      <button onClick="{{ retryOnline }}" style="margin-top:18px;height:46px;padding:0 24px;border-radius:13px;background:#C23359;color:#fff;font:600 14.5px 'Hanken Grotesk';border:none;cursor:pointer">Retry</button>
+      <div style="font:400 12px/1.5 'Hanken Grotesk';color:#99A0AC;margin-top:16px">Packs you already added still work in WhatsApp.</div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ online }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:2px 20px 20px;display:flex;flex-direction:column;gap:12px">
+      <sc-for list="{{ packs }}" as="p" hint-placeholder-count="3">
+        <div style="background:#fff;border:1px solid #E7EAEF;border-radius:20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(20,22,28,.03);flex:none">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div onClick="{{ p.open }}" style="flex:1;min-width:0;cursor:pointer">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0"><div style="font:700 16px 'Hanken Grotesk';letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.title }}</div><sc-if value="{{ p.animated }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font:600 9px 'JetBrains Mono';letter-spacing:.06em;color:#626873;background:#F3F5F8;border:1px solid #E7EAEF;padding:2px 6px;border-radius:5px">ANIMATED</span></sc-if></div>
+              <div style="font:400 11.5px 'JetBrains Mono';color:#8b929d;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.meta }}</div>
+            </div>
+            <button onClick="{{ p.toggleFav }}" style="width:36px;height:36px;flex:none;border-radius:11px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;color:{{ p.heartColor }}">{{ p.heart }}</button>
+            <button onClick="{{ p.add }}" style="{{ p.addStyle }}"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ p.pct }};background:rgba(194,51,89,.18);transition:width .15s linear"></div><span style="position:relative;display:flex;align-items:center;gap:6px">{{ p.addIcon }}<span>{{ p.addLabel }}</span></span></button>
+          </div>
+          <div onClick="{{ p.open }}" style="display:flex;gap:8px;cursor:pointer">
+            <sc-for list="{{ p.thumbs }}" as="t" hint-placeholder-count="6"><div style="width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:{{ t.bg }};color:{{ t.fg }}">{{ t.glyph }}</div></sc-for>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:60px 24px 0">
+          <div style="width:56px;height:56px;border-radius:16px;background:#F3F5F8;display:flex;align-items:center;justify-content:center;color:#B4BAC4;margin-bottom:14px">{{ ic.searchBig }}</div>
+          <div style="font:700 16px 'Hanken Grotesk'">{{ noResultsTitle }}</div>
+          <div style="font:400 13px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:5px">Try a theme name, like “cute” or “anime”.</div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.detail }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 12px">
+    <button onClick="{{ back }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#1E2128;cursor:pointer;padding:0">{{ ic.arrowLeft }}</button>
+    <div style="flex:1;min-width:0;font:700 16px 'Hanken Grotesk';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ detail.title }}</div>
+    <button onClick="{{ detail.toggleFav }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;color:{{ detail.heartColor }}">{{ detail.heart }}</button>
+    <button onClick="{{ detail.share }}" aria-label="Share Love Stickers" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;color:#626873">{{ ic.share }}</button>
+  </div>
+  <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:2px 20px 20px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap"><span style="font:400 12px 'JetBrains Mono';color:#626873">{{ detail.meta }}</span><sc-if value="{{ detail.animated }}" hint-placeholder-val="{{ false }}"><span style="font:600 9px 'JetBrains Mono';letter-spacing:.06em;color:#626873;background:#F3F5F8;border:1px solid #E7EAEF;padding:2px 6px;border-radius:5px">ANIMATED</span></sc-if></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <sc-for list="{{ detail.stickers }}" as="s" hint-placeholder-count="12"><div style="aspect-ratio:1;border-radius:16px;display:flex;align-items:center;justify-content:center;background:{{ s.bg }};color:{{ s.fg }};transform:rotate({{ s.rot }}deg)">{{ s.glyph }}</div></sc-for>
+    </div>
+  </div>
+  <div style="flex:none;padding:12px 20px 20px;border-top:1px solid #EEF0F4;background:#fff">
+    <button onClick="{{ detail.add }}" style="{{ detail.barStyle }}"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ detail.pct }};background:rgba(194,51,89,.16);transition:width .15s linear"></div><span style="position:relative;display:flex;align-items:center;gap:8px">{{ detail.barIcon }}<span>{{ detail.barLabel }}</span></span></button>
+    <div style="text-align:center;font:400 11.5px 'Hanken Grotesk';color:#99A0AC;margin-top:10px">{{ detail.hint }}</div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.create }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 12px">
+    <button onClick="{{ back }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#1E2128;cursor:pointer;padding:0">{{ ic.arrowLeft }}</button>
+    <div style="flex:1;font:700 16px 'Hanken Grotesk'">New pack</div>
+    <div style="font:500 12px 'JetBrains Mono';color:#8b929d;padding-right:8px">{{ cr.count }}</div>
+  </div>
+  <div style="flex:none;padding:2px 20px 12px">
+    <div style="display:flex;background:#F3F5F8;border-radius:12px;padding:4px;gap:2px">
+      <sc-for list="{{ cr.sources }}" as="s" hint-placeholder-count="3"><button onClick="{{ s.select }}" style="{{ s.style }}">{{ s.icon }}<span>{{ s.label }}</span></button></sc-for>
+    </div>
+  </div>
+  <sc-if value="{{ cr.isCamera }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;display:flex;flex-direction:column;padding:0 20px;min-height:0">
+      <div style="flex:1;border-radius:20px;background:#1E2128;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden"><div style="position:absolute;inset:18px;border:1px dashed rgba(255,255,255,.28);border-radius:16px"></div><div style="font:500 11px 'JetBrains Mono';color:#A2A9B4">viewfinder</div><div style="position:absolute;top:14px;right:16px;font:500 11px 'JetBrains Mono';color:#A2A9B4">{{ cr.shotsLabel }}</div></div>
+      <div style="display:flex;justify-content:center;padding:16px 0 4px;flex:none"><button onClick="{{ cr.shoot }}" style="width:66px;height:66px;border-radius:50%;background:#fff;border:4px solid #C23359;cursor:pointer;padding:0"></button></div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ cr.isGrid }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:0 20px 12px">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <sc-for list="{{ cr.photos }}" as="ph" hint-placeholder-count="12">
+          <button onClick="{{ ph.toggle }}" style="{{ ph.style }}">
+            <span style="position:absolute;left:8px;bottom:6px;font:500 9.5px 'JetBrains Mono';color:#626873">{{ ph.label }}</span>
+            <sc-if value="{{ ph.on }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:6px;top:6px;width:22px;height:22px;border-radius:7px;background:#C23359;display:flex;align-items:center;justify-content:center;color:#fff">{{ ic.checkSm }}</span></sc-if>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+  <div style="flex:none;padding:12px 20px 20px;border-top:1px solid #EEF0F4;background:#fff">
+    <button onClick="{{ cr.next }}" style="{{ cr.nextStyle }}">{{ cr.nextLabel }}</button>
+    <div style="text-align:center;font:400 11.5px 'Hanken Grotesk';color:#99A0AC;margin-top:10px">{{ cr.hint }}</div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.editor }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 12px">
+    <button onClick="{{ back }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#1E2128;cursor:pointer;padding:0">{{ ic.arrowLeft }}</button>
+    <div style="flex:1;font:700 16px 'Hanken Grotesk'">Cut out</div>
+    <div style="font:500 12px 'JetBrains Mono';color:#8b929d">{{ ed.counter }}</div>
+    <button onClick="{{ ed.undo }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;color:{{ ed.undoColor }}">{{ ic.undo }}</button>
+  </div>
+  <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:0 20px 12px;display:flex;flex-direction:column;gap:12px">
+    <div style="width:350px;height:350px;flex:none;border-radius:20px;background:#fff;border:1px solid #E7EAEF;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative">
+      <div onClick="{{ ed.tap }}" style="width:296px;height:296px;position:relative;border-radius:14px;overflow:hidden;transition:transform .25s cubic-bezier(.2,.7,.2,1);cursor:{{ ed.cursor }};transform:scale({{ ed.zoom }});background:{{ ed.canvasBg }}">
+        <sc-if value="{{ ed.showSubject }}" hint-placeholder-val="{{ false }}">{{ ed.cutEl }}</sc-if>
+        <sc-for list="{{ ed.marks }}" as="m" hint-placeholder-count="0"><div style="position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;width:{{ m.w }};height:{{ m.w }};left:{{ m.x }};top:{{ m.y }};background:{{ m.bg }};border:{{ m.border }}"></div></sc-for>
+        <sc-if value="{{ ed.hasText }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:16px;text-align:center;font:800 28px 'Hanken Grotesk';color:#fff;text-shadow:0 2px 0 #1E2128,0 0 8px rgba(0,0,0,.35);letter-spacing:-.01em;padding:0 12px;word-break:break-word;pointer-events:none">{{ ed.text }}</div></sc-if>
+        <span style="position:absolute;left:10px;top:8px;font:500 9.5px 'JetBrains Mono';color:#626873;pointer-events:none">{{ ed.label }}</span>
+        <sc-if value="{{ ed.pending }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background:rgba(250,251,252,.72);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#C23359">{{ ed.spinner }}<span style="font:600 12.5px 'Hanken Grotesk';color:#626873">Cutting out on this phone…</span></div></sc-if>
+      </div>
+      <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;font:500 11px 'Hanken Grotesk';color:#626873;pointer-events:none">{{ ed.toolHint }}</div>
+    </div>
+    <div style="display:flex;gap:4px;background:#1E2128;border-radius:16px;padding:8px;flex:none">
+      <sc-for list="{{ ed.tools }}" as="t" hint-placeholder-count="5"><button onClick="{{ t.select }}" style="{{ t.style }}">{{ t.icon }}<span style="font:600 10px 'Hanken Grotesk'">{{ t.label }}</span></button></sc-for>
+    </div>
+    <sc-if value="{{ ed.textTool }}" hint-placeholder-val="{{ false }}">
+      <div style="height:46px;flex:none;display:flex;align-items:center;gap:9px;padding:0 14px;background:#fff;border:1px solid #E7EAEF;border-radius:12px;color:#8b929d">{{ ic.typeSm }}<input value="{{ ed.text }}" onChange="{{ ed.setText }}" placeholder="Add a word" maxLength="{{ 16 }}" style="flex:1;min-width:0;border:none;background:none;outline:none;font:400 15px 'Hanken Grotesk';color:#1E2128;padding:0"></div>
+    </sc-if>
+    <sc-if value="{{ ed.brushTool }}" hint-placeholder-val="{{ false }}">
+      <div style="height:46px;flex:none;display:flex;align-items:center;gap:12px;padding:0 14px;background:#fff;border:1px solid #E7EAEF;border-radius:12px"><span style="font:600 12.5px 'Hanken Grotesk';color:#626873;flex:none">{{ ed.brushLabel }}</span><input type="range" min="{{ 1 }}" max="{{ 3 }}" step="{{ 1 }}" value="{{ ed.brush }}" onChange="{{ ed.setBrush }}" style="flex:1;accent-color:#C23359;margin:0"></div>
+    </sc-if>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:#fff;border:1px solid #EEF0F4;border-radius:14px;flex:none">
+      <div style="min-width:0"><div style="font:600 14px 'Hanken Grotesk'">White outline</div><div style="font:400 12px 'Hanken Grotesk';color:#8b929d;margin-top:2px">Reads on any chat background. WhatsApp recommends it.</div></div>
+      <button onClick="{{ ed.toggleOutline }}" style="{{ ed.switchStyle }}"><span style="{{ ed.knobStyle }}"></span></button>
+    </div>
+    <div style="display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:4px;flex:none">
+      <sc-for list="{{ ed.rail }}" as="r" hint-placeholder-count="4"><button onClick="{{ r.select }}" style="{{ r.style }}">{{ r.el }}<sc-if value="{{ r.done }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:-5px;top:-5px;width:18px;height:18px;border-radius:6px;background:#2E9E6B;display:flex;align-items:center;justify-content:center;color:#fff;border:2px solid #FAFBFC">{{ ic.checkXs }}</span></sc-if><sc-if value="{{ r.pending }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(250,251,252,.6);border-radius:12px;color:#C23359">{{ ed.spinnerSm }}</span></sc-if></button></sc-for>
+    </div>
+  </div>
+  <div style="flex:none;padding:12px 20px 20px;border-top:1px solid #EEF0F4;background:#fff">
+    <button onClick="{{ ed.done }}" style="{{ ed.doneStyle }}">{{ ed.doneLabel }}</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.packDetails }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 12px">
+    <button onClick="{{ back }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#1E2128;cursor:pointer;padding:0">{{ ic.arrowLeft }}</button>
+    <div style="flex:1;font:700 16px 'Hanken Grotesk'">Pack details</div>
+  </div>
+  <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:4px 20px 12px;display:flex;flex-direction:column;gap:18px">
+    <div style="display:flex;gap:14px;align-items:center">
+      <div style="width:84px;height:84px;border-radius:22px;background:#fff;border:1px solid #E7EAEF;display:flex;align-items:center;justify-content:center;flex:none">{{ pd.trayEl }}</div>
+      <div><div style="font:700 15px 'Hanken Grotesk'">Tray icon</div><div style="font:400 12.5px/1.45 'Hanken Grotesk';color:#8b929d;margin-top:3px;text-wrap:pretty">Shown in WhatsApp's sticker picker. Tap a sticker below to use it.</div></div>
+    </div>
+    <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px"><sc-for list="{{ pd.rail }}" as="r" hint-placeholder-count="4"><button onClick="{{ r.select }}" style="{{ r.style }}">{{ r.el }}</button></sc-for></div>
+    <div>
+      <div style="font:600 12.5px 'Hanken Grotesk';color:#626873;margin-bottom:6px">Pack name</div>
+      <div style="height:50px;display:flex;align-items:center;gap:9px;padding:0 14px;background:#fff;border:1px solid #E7EAEF;border-radius:12px"><input value="{{ pd.name }}" onChange="{{ pd.setName }}" placeholder="e.g. Us, always" maxLength="{{ 30 }}" style="flex:1;min-width:0;border:none;background:none;outline:none;font:400 15px 'Hanken Grotesk';color:#1E2128;padding:0"><span style="font:400 11px 'JetBrains Mono';color:#A2A9B4">{{ pd.nameCount }}</span></div>
+    </div>
+    <div style="background:#F6F7F9;border:1px solid #EBEEF2;border-radius:16px;padding:14px 16px;display:flex;gap:10px"><span style="color:#8b929d;display:flex;flex:none;margin-top:1px">{{ ic.infoSm }}</span><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#626873"><span style="font:500 11.5px 'JetBrains Mono'">{{ pd.meta }}</span> · under 100 KB each, made on this phone. Nothing is uploaded.</div></div>
+  </div>
+  <div style="flex:none;padding:12px 20px 14px;border-top:1px solid #EEF0F4;background:#fff">
+    <button onClick="{{ pd.add }}" style="{{ pd.barStyle }}"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ pd.pct }};background:rgba(194,51,89,.16);transition:width .15s linear"></div><span style="position:relative;display:flex;align-items:center;gap:8px">{{ pd.barIcon }}<span>{{ pd.barLabel }}</span></span></button>
+    <button onClick="{{ pd.save }}" style="height:44px;width:100%;border-radius:12px;background:none;color:#626873;font:600 14px 'Hanken Grotesk';border:none;cursor:pointer;margin-top:6px">Save to My Packs only</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.myPacks }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="height:52px;flex:none;display:flex;align-items:center;gap:2px;padding:0 10px 0 20px"><div style="flex:1;font:800 22px 'Hanken Grotesk';letter-spacing:-.02em">My Packs</div><button onClick="{{ openSaved }}" aria-label="Saved packs" style="position:relative;width:44px;height:44px;flex:none;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#3d4550;cursor:pointer;padding:0">{{ ic.heartTb }}<sc-if value="{{ savedBadgeOn }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:5px;right:4px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#C23359;color:#fff;font:700 10px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center;border:2px solid #FAFBFC">{{ savedCount }}</span></sc-if></button><button onClick="{{ openSettings }}" aria-label="Settings" style="width:44px;height:44px;flex:none;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#3d4550;cursor:pointer;padding:0">{{ ic.gear }}</button></div>
+  <sc-if value="{{ mp.empty }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 32px 70px">
+      <div style="width:56px;height:56px;border-radius:16px;background:#F3F5F8;display:flex;align-items:center;justify-content:center;color:#B4BAC4;margin-bottom:14px">{{ ic.stickerBig }}</div>
+      <div style="font:700 17px 'Hanken Grotesk'">No packs yet</div>
+      <div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:5px;max-width:240px;text-wrap:pretty">Packs you add to WhatsApp show up here, along with the ones you make.</div>
+      <button onClick="{{ goHome }}" style="margin-top:18px;height:46px;padding:0 22px;border-radius:13px;background:#C23359;color:#fff;font:600 14.5px 'Hanken Grotesk';border:none;cursor:pointer">Browse packs</button>
+      <button onClick="{{ goCreate }}" style="margin-top:6px;height:42px;padding:0 16px;border-radius:12px;background:none;color:#626873;font:600 14px 'Hanken Grotesk';border:none;cursor:pointer">Make your own</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{ mp.has }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:0 20px 20px;display:flex;flex-direction:column;gap:12px">
+      <sc-if value="{{ mp.hasAdded }}" hint-placeholder-val="{{ false }}">
+        <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase;margin-top:4px">In WhatsApp · {{ mp.addedCount }}</div>
+        <sc-for list="{{ mp.added }}" as="p" hint-placeholder-count="2">
+          <div style="background:#fff;border:1px solid #E7EAEF;border-radius:20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(20,22,28,.03);flex:none">
+            <div style="display:flex;align-items:center;gap:6px">
+              <div onClick="{{ p.open }}" style="flex:1;min-width:0;cursor:pointer">
+                <div style="display:flex;align-items:center;gap:8px;min-width:0"><div style="font:700 16px 'Hanken Grotesk';letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.title }}</div><sc-if value="{{ p.animated }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font:600 9px 'JetBrains Mono';letter-spacing:.06em;color:#626873;background:#F3F5F8;border:1px solid #E7EAEF;padding:2px 6px;border-radius:5px">ANIMATED</span></sc-if></div>
+                <div style="font:400 11.5px 'JetBrains Mono';color:#8b929d;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.meta }}</div>
+              </div>
+              <button onClick="{{ p.add }}" aria-label="{{ p.addAria }}" style="{{ p.addStyle }}"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ p.pct }};background:rgba(194,51,89,.18);transition:width .15s linear"></div><span style="position:relative;display:flex;align-items:center;gap:6px">{{ p.addIcon }}<sc-if value="{{ p.hasLabel }}" hint-placeholder-val="{{ true }}"><span>{{ p.addLabel }}</span></sc-if></span></button>
+              <button onClick="{{ p.menu }}" style="width:36px;height:36px;flex:none;border-radius:11px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;color:#626873">{{ ic.ellipsis }}</button>
+            </div>
+            <div onClick="{{ p.open }}" style="display:flex;gap:8px;cursor:pointer">
+              <sc-for list="{{ p.thumbs }}" as="t" hint-placeholder-count="6"><div style="width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:{{ t.bg }};color:{{ t.fg }}">{{ t.glyph }}</div></sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </sc-if>
+      <sc-if value="{{ mp.hasOwn }}" hint-placeholder-val="{{ false }}">
+        <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase;margin-top:8px">Made by you · {{ mp.ownCount }}</div>
+        <sc-for list="{{ mp.own }}" as="p" hint-placeholder-count="1">
+          <div style="background:#fff;border:1px solid #E7EAEF;border-radius:20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(20,22,28,.03);flex:none">
+            <div style="display:flex;align-items:center;gap:6px">
+              <div onClick="{{ p.open }}" style="flex:1;min-width:0;cursor:pointer">
+                <div style="display:flex;align-items:center;gap:8px;min-width:0"><div style="font:700 16px 'Hanken Grotesk';letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.title }}</div><sc-if value="{{ p.animated }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font:600 9px 'JetBrains Mono';letter-spacing:.06em;color:#626873;background:#F3F5F8;border:1px solid #E7EAEF;padding:2px 6px;border-radius:5px">ANIMATED</span></sc-if></div>
+                <div style="font:400 11.5px 'JetBrains Mono';color:#8b929d;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.meta }}</div>
+              </div>
+              <button onClick="{{ p.add }}" style="{{ p.addStyle }}"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ p.pct }};background:rgba(194,51,89,.18);transition:width .15s linear"></div><span style="position:relative;display:flex;align-items:center;gap:6px">{{ p.addIcon }}<span>{{ p.addLabel }}</span></span></button>
+              <button onClick="{{ p.menu }}" style="width:36px;height:36px;flex:none;border-radius:11px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;color:#626873">{{ ic.ellipsis }}</button>
+            </div>
+            <div onClick="{{ p.open }}" style="display:flex;gap:8px;cursor:pointer">
+              <sc-for list="{{ p.thumbs }}" as="t" hint-placeholder-count="4"><div style="width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:{{ t.bg }};color:{{ t.fg }}">{{ t.glyph }}</div></sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </sc-if>
+      <div style="display:flex;align-items:flex-start;gap:9px;background:#F6F7F9;border:1px solid #EBEEF2;border-radius:14px;padding:12px 14px;margin-top:4px"><span style="color:#8b929d;display:flex;flex:none;margin-top:1px">{{ ic.infoSm }}</span><div style="font:400 12px/1.5 'Hanken Grotesk';color:#626873">Removing a pack here deletes this app's copy. WhatsApp keeps its own until you remove it there.</div></div>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.saved }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 12px"><button onClick="{{ back }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#1E2128;cursor:pointer;padding:0">{{ ic.arrowLeft }}</button><div style="flex:1;font:700 16px 'Hanken Grotesk'">Saved</div><span style="font:500 12px 'JetBrains Mono';color:#8b929d;padding-right:8px">{{ savedCountLabel }}</span></div>
+  <sc-if value="{{ sv.empty }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 32px 70px">
+      <div style="width:56px;height:56px;border-radius:16px;background:#F3F5F8;display:flex;align-items:center;justify-content:center;color:#B4BAC4;margin-bottom:14px">{{ ic.heartBig }}</div>
+      <div style="font:700 17px 'Hanken Grotesk'">No saved packs yet</div>
+      <div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:5px;max-width:240px;text-wrap:pretty">Tap the heart on any pack to keep it here for later.</div>
+      <button onClick="{{ goHome }}" style="margin-top:18px;height:46px;padding:0 22px;border-radius:13px;background:#C23359;color:#fff;font:600 14.5px 'Hanken Grotesk';border:none;cursor:pointer">Browse packs</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{ sv.has }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:2px 20px 20px;display:flex;flex-direction:column;gap:12px">
+      <sc-for list="{{ sv.packs }}" as="p" hint-placeholder-count="2">
+        <div style="background:#fff;border:1px solid #E7EAEF;border-radius:20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(20,22,28,.03);flex:none">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div onClick="{{ p.open }}" style="flex:1;min-width:0;cursor:pointer">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0"><div style="font:700 16px 'Hanken Grotesk';letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.title }}</div><sc-if value="{{ p.animated }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font:600 9px 'JetBrains Mono';letter-spacing:.06em;color:#626873;background:#F3F5F8;border:1px solid #E7EAEF;padding:2px 6px;border-radius:5px">ANIMATED</span></sc-if></div>
+              <div style="font:400 11.5px 'JetBrains Mono';color:#8b929d;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.meta }}</div>
+            </div>
+            <button onClick="{{ p.toggleFav }}" style="width:36px;height:36px;flex:none;border-radius:11px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;color:{{ p.heartColor }}">{{ p.heart }}</button>
+            <button onClick="{{ p.add }}" style="{{ p.addStyle }}"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ p.pct }};background:rgba(194,51,89,.18);transition:width .15s linear"></div><span style="position:relative;display:flex;align-items:center;gap:6px">{{ p.addIcon }}<span>{{ p.addLabel }}</span></span></button>
+          </div>
+          <div onClick="{{ p.open }}" style="display:flex;gap:8px;cursor:pointer">
+            <sc-for list="{{ p.thumbs }}" as="t" hint-placeholder-count="6"><div style="width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:{{ t.bg }};color:{{ t.fg }}">{{ t.glyph }}</div></sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.settings }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="height:56px;flex:none;display:flex;align-items:center;gap:4px;padding:0 12px"><button onClick="{{ back }}" style="width:40px;height:40px;border-radius:11px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#1E2128;cursor:pointer;padding:0">{{ ic.arrowLeft }}</button><div style="font:700 17px 'Hanken Grotesk'">Settings</div></div>
+  <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:2px 18px 18px;display:flex;flex-direction:column;gap:20px">
+    <div style="background:#fff;border:1px solid #E7EAEF;border-radius:18px;padding:18px;display:flex;align-items:center;gap:13px">
+      <div style="width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:none;background:{{ st.notifIconBg }};color:{{ st.notifIconFg }}">{{ st.notifIcon }}</div>
+      <div style="flex:1;min-width:0"><div style="font:700 16px 'Hanken Grotesk'">New pack alerts</div><div style="font:400 13px/1.4 'Hanken Grotesk';color:#626873;margin-top:2px">{{ st.notifSub }}</div></div>
+      <button onClick="{{ st.toggleNotif }}" aria-label="New pack alerts" style="{{ st.notifSwitch }}"><span style="{{ st.notifKnob }}"></span></button>
+    </div>
+    <div><div style="font:600 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase;margin:0 2px 8px">Preferences</div><div style="background:#fff;border:1px solid #EEF0F4;border-radius:16px;overflow:hidden"><button onClick="{{ st.editThemes }}" style="width:100%;display:flex;align-items:center;gap:13px;padding:15px;border:none;background:none;border-bottom:1px solid #F2F4F7;cursor:pointer;text-align:left"><span style="color:#565C67;display:flex;flex:none">{{ ic.palette }}</span><div style="flex:1;min-width:0;font:600 14.5px 'Hanken Grotesk';color:#1E2128">Edit themes</div><span style="font:400 13.5px 'Hanken Grotesk';color:#8b929d;flex:none">{{ st.themesCount }}</span><span style="color:#B4BAC4;display:flex;flex:none">{{ ic.chevron }}</span></button><button onClick="{{ st.language }}" style="width:100%;display:flex;align-items:center;gap:13px;padding:15px;border:none;background:none;border-bottom:1px solid #F2F4F7;cursor:pointer;text-align:left"><span style="color:#565C67;display:flex;flex:none">{{ ic.languages }}</span><div style="flex:1;min-width:0;font:600 14.5px 'Hanken Grotesk';color:#1E2128">Language</div><span style="font:400 13.5px 'Hanken Grotesk';color:#8b929d;flex:none">{{ st.langLabel }}</span><span style="color:#B4BAC4;display:flex;flex:none">{{ ic.chevron }}</span></button><button onClick="{{ st.clear }}" style="width:100%;display:flex;align-items:center;gap:13px;padding:15px;border:none;background:none;cursor:pointer;text-align:left"><span style="color:#565C67;display:flex;flex:none">{{ ic.trash }}</span><div style="flex:1;min-width:0;font:600 14.5px 'Hanken Grotesk';color:#1E2128">Clear downloaded packs</div><span style="font:400 13.5px 'Hanken Grotesk';color:#8b929d;flex:none">{{ st.storageShort }}</span><span style="color:#B4BAC4;display:flex;flex:none">{{ ic.chevron }}</span></button></div></div>
+    <div><div style="font:600 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase;margin:0 2px 8px">About</div><div style="background:#fff;border:1px solid #EEF0F4;border-radius:16px;overflow:hidden"><button onClick="{{ st.rate }}" style="width:100%;display:flex;align-items:center;gap:13px;padding:15px;border:none;background:none;border-bottom:1px solid #F2F4F7;cursor:pointer;text-align:left"><span style="color:#565C67;display:flex;flex:none">{{ ic.star }}</span><div style="flex:1;min-width:0;font:600 14.5px 'Hanken Grotesk';color:#1E2128">Rate us</div><span style="color:#B4BAC4;display:flex;flex:none">{{ ic.chevron }}</span></button><button onClick="{{ st.contact }}" style="width:100%;display:flex;align-items:center;gap:13px;padding:15px;border:none;background:none;border-bottom:1px solid #F2F4F7;cursor:pointer;text-align:left"><span style="color:#565C67;display:flex;flex:none">{{ ic.mail }}</span><div style="flex:1;min-width:0;font:600 14.5px 'Hanken Grotesk';color:#1E2128">Contact us</div><span style="color:#B4BAC4;display:flex;flex:none">{{ ic.chevron }}</span></button><button onClick="{{ st.more }}" style="width:100%;display:flex;align-items:center;gap:13px;padding:15px;border:none;background:none;border-bottom:1px solid #F2F4F7;cursor:pointer;text-align:left"><span style="color:#565C67;display:flex;flex:none">{{ ic.grid }}</span><div style="flex:1;min-width:0;font:600 14.5px 'Hanken Grotesk';color:#1E2128"><span style="display:inline-flex;align-items:center;gap:8px">More apps<span style="font:600 9px 'JetBrains Mono';letter-spacing:.06em;color:#626873;background:#F3F5F8;border:1px solid #E7EAEF;padding:2px 6px;border-radius:5px">AD</span></span></div><span style="color:#B4BAC4;display:flex;flex:none">{{ ic.arrowUpRight }}</span></button><button onClick="{{ st.privacy }}" style="width:100%;display:flex;align-items:center;gap:13px;padding:15px;border:none;background:none;border-bottom:1px solid #F2F4F7;cursor:pointer;text-align:left"><span style="color:#565C67;display:flex;flex:none">{{ ic.shield }}</span><div style="flex:1;min-width:0;font:600 14.5px 'Hanken Grotesk';color:#1E2128">Privacy policy</div><span style="color:#B4BAC4;display:flex;flex:none">{{ ic.arrowUpRight }}</span></button><div style="display:flex;align-items:center;gap:13px;padding:15px"><span style="color:#565C67;display:flex;flex:none">{{ ic.info }}</span><div style="flex:1;font:600 14.5px 'Hanken Grotesk';color:#1E2128">Version</div><span style="font:400 12px 'JetBrains Mono';color:#8b929d">1.0.0 (1)</span></div></div></div>
+    <div style="background:#FFEEF0;border-radius:14px;padding:14px 15px;display:flex;gap:10px"><span style="color:#C23359;display:flex;flex:none;margin-top:1px">{{ ic.heartHand }}</span><div style="font:400 12.5px/1.5 'Hanken Grotesk';color:#565C67">Love Stickers is free, and always will be. No ads, no account, no tracking. Your photos never leave your phone.</div></div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.contact }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 12px"><button onClick="{{ back }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#1E2128;cursor:pointer;padding:0">{{ ic.arrowLeft }}</button><div style="flex:1;font:700 16px 'Hanken Grotesk'">{{ ct.title }}</div></div>
+  <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:4px 20px 12px;display:flex;flex-direction:column;gap:14px">
+    <div style="font:400 14px/1.5 'Hanken Grotesk';color:#626873;text-wrap:pretty">{{ ct.intro }}</div>
+    <sc-if value="{{ ct.hasStars }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px;margin:-4px 0"><sc-for list="{{ ct.stars }}" as="s" hint-placeholder-count="5"><button onClick="{{ s.pick }}" style="width:40px;height:40px;border-radius:11px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:{{ s.color }}">{{ s.icon }}</button></sc-for></div></sc-if>
+    <div style="background:#fff;border:1px solid #E7EAEF;border-radius:14px;padding:12px 14px"><textarea value="{{ ct.text }}" onChange="{{ ct.setText }}" placeholder="{{ ct.placeholder }}" rows="{{ 6 }}" style="width:100%;display:block;border:none;outline:none;resize:none;background:none;font:400 15px/1.5 'Hanken Grotesk';color:#1E2128;padding:0"></textarea></div>
+    <div>
+      <div style="font:600 12.5px 'Hanken Grotesk';color:#626873;margin-bottom:6px">Email · optional, only if you want a reply</div>
+      <div style="height:50px;display:flex;align-items:center;padding:0 14px;background:#fff;border:1px solid #E7EAEF;border-radius:12px"><input value="{{ ct.email }}" onChange="{{ ct.setEmail }}" type="email" placeholder="you@example.com" style="flex:1;min-width:0;border:none;background:none;outline:none;font:400 15px 'Hanken Grotesk';color:#1E2128;padding:0"></div>
+    </div>
+    <div style="display:flex;gap:9px;background:#F6F7F9;border:1px solid #EBEEF2;border-radius:14px;padding:12px 14px"><span style="color:#8b929d;display:flex;flex:none;margin-top:1px">{{ ic.infoSm }}</span><div style="font:400 12px/1.5 'Hanken Grotesk';color:#626873">Sent with the app version and Android version. Nothing else.</div></div>
+  </div>
+  <div style="flex:none;padding:12px 20px 20px;border-top:1px solid #EEF0F4;background:#fff">
+    <button onClick="{{ ct.send }}" style="{{ ct.sendStyle }}">{{ ct.sendLabel }}</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.language }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="height:52px;flex:none;display:flex;align-items:center;gap:4px;padding:0 12px"><button onClick="{{ back }}" style="width:40px;height:40px;border-radius:12px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:#1E2128;cursor:pointer;padding:0">{{ ic.arrowLeft }}</button><div style="flex:1;font:700 16px 'Hanken Grotesk'">Language</div></div>
+  <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding:4px 20px 20px">
+    <div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#8b929d;margin:0 0 12px">Changes the app. Pack names stay as published.</div>
+    <div style="background:#fff;border:1px solid #EEF0F4;border-radius:16px;overflow:hidden">
+      <sc-for list="{{ langs }}" as="l" hint-placeholder-count="6"><button onClick="{{ l.select }}" style="{{ l.style }}"><div style="flex:1;min-width:0;text-align:left"><div style="font:600 14.5px 'Hanken Grotesk';color:#1E2128">{{ l.native }}</div><div style="font:400 11.5px 'Hanken Grotesk';color:#99A0AC;margin-top:1px">{{ l.name }}</div></div><sc-if value="{{ l.rtl }}" hint-placeholder-val="{{ false }}"><span style="font:600 9px 'JetBrains Mono';color:#8b929d;background:#F3F5F8;padding:3px 6px;border-radius:5px;flex:none">RTL</span></sc-if><sc-if value="{{ l.on }}" hint-placeholder-val="{{ false }}"><span style="color:#C23359;display:flex;flex:none">{{ ic.checkMd }}</span></sc-if></button></sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+<div style="flex:none;height:68px;border-top:1px solid #EBEEF2;background:#fff;display:flex;align-items:stretch;padding:0 6px">
+  <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+    <sc-if value="{{ n.fab }}" hint-placeholder-val="{{ false }}"><div style="flex:none;width:64px;display:flex;justify-content:center;align-items:center"><button onClick="{{ n.go }}" style="width:52px;height:52px;border-radius:16px;border:none;background:#C23359;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 18px -6px rgba(194,51,89,.55);margin-top:-18px;cursor:pointer;padding:0">{{ n.icon }}</button></div></sc-if>
+    <sc-if value="{{ n.tab }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" style="flex:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:0;font:600 10.5px 'Hanken Grotesk';color:{{ n.color }}">{{ n.icon }}<span>{{ n.label }}</span></button></sc-if>
+  </sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:20px;right:20px;display:flex;justify-content:center;pointer-events:none;animation:fadeup .2s;z-index:6;bottom:{{ toastBottom }}"><div style="display:inline-flex;align-items:center;gap:9px;background:#1E2128;color:#fff;font:600 13.5px 'Hanken Grotesk';padding:12px 16px;border-radius:13px;box-shadow:0 10px 28px -8px rgba(20,30,60,.35);max-width:100%">{{ toastIcon }}<span>{{ toast }}</span></div></div>
+</sc-if>
+
+<sc-if value="{{ hasDialog }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ dialog.cancel }}" style="position:absolute;inset:0;background:rgba(20,26,40,.4);display:flex;align-items:flex-end;z-index:5;animation:fade .2s ease">
+  <div onClick="{{ stop }}" style="width:100%;background:#fff;border-radius:26px 26px 30px 30px;padding:24px 22px 22px;animation:sheetup .3s cubic-bezier(.2,.7,.2,1)">
+    <div style="width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;background:{{ dialog.iconBg }};color:{{ dialog.iconFg }}">{{ dialog.icon }}</div>
+    <div style="font:700 18px/1.3 'Hanken Grotesk';color:#1E2128;margin-bottom:6px">{{ dialog.title }}</div>
+    <div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#626873;margin-bottom:20px;text-wrap:pretty">{{ dialog.body }}</div>
+    <div style="display:flex;gap:10px">
+      <button onClick="{{ dialog.cancel }}" style="flex:1;height:50px;border-radius:13px;background:#F3F5F8;border:1px solid #E7EAEF;color:#1E2128;font:600 15px 'Hanken Grotesk';cursor:pointer">{{ dialog.cancelLabel }}</button>
+      <button onClick="{{ dialog.confirm }}" style="flex:1;height:50px;border-radius:13px;border:none;color:#fff;font:600 15px 'Hanken Grotesk';cursor:pointer;background:{{ dialog.confirmBg }}">{{ dialog.confirmLabel }}</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasRate }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ rt.close }}" style="position:absolute;inset:0;background:rgba(20,26,40,.4);display:flex;align-items:flex-end;z-index:5;animation:fade .2s ease">
+  <div onClick="{{ stop }}" style="width:100%;background:#fff;border-radius:26px 26px 30px 30px;padding:10px 22px 24px;animation:sheetup .3s cubic-bezier(.2,.7,.2,1)">
+    <div style="width:38px;height:5px;border-radius:999px;background:#E7EAEF;margin:2px auto 16px"></div>
+    <sc-if value="{{ rt.isStars }}" hint-placeholder-val="{{ true }}">
+      <div style="text-align:center">
+        <div style="width:64px;height:64px;border-radius:19px;margin:0 auto;background:#FFEEF0;display:flex;align-items:center;justify-content:center;color:#C23359">{{ ic.star32 }}</div>
+        <div style="margin-top:14px;font:700 20px 'Hanken Grotesk';letter-spacing:-.01em;color:#1E2128">Enjoying Love Stickers?</div>
+        <div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#626873;max-width:290px;margin:6px auto 0;text-wrap:pretty">Your honest rating helps other people find a sticker app with no ads.</div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:8px;margin:22px 0 6px"><sc-for list="{{ rt.stars }}" as="sr" hint-placeholder-count="5"><button onClick="{{ sr.pick }}" aria-label="{{ sr.label }}" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;color:{{ sr.color }}">{{ sr.icon }}</button></sc-for></div>
+      <div style="text-align:center;font:400 11.5px 'Hanken Grotesk';color:#8b929d;min-height:16px">{{ rt.hint }}</div>
+      <button onClick="{{ rt.close }}" style="margin-top:14px;width:100%;height:46px;border-radius:12px;background:none;color:#626873;font:600 14.5px 'Hanken Grotesk';border:none;cursor:pointer">Maybe later</button>
+    </sc-if>
+    <sc-if value="{{ rt.isStore }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center">
+        <div style="width:64px;height:64px;border-radius:19px;margin:0 auto;background:#E2F3EA;display:flex;align-items:center;justify-content:center;color:#2E9E6B">{{ ic.party }}</div>
+        <div style="display:flex;justify-content:center;gap:5px;margin-top:14px;color:#E0A64B"><sc-for list="{{ rt.five }}" as="fs" hint-placeholder-count="5">{{ fs.icon }}</sc-for></div>
+        <div style="margin-top:14px;font:700 20px 'Hanken Grotesk';letter-spacing:-.01em;color:#1E2128">Thank you!</div>
+        <div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#626873;max-width:290px;margin:6px auto 0;text-wrap:pretty">Would you share that on Google Play? It helps a small, ad-free app grow.</div>
+      </div>
+      <button onClick="{{ rt.store }}" style="margin-top:20px;width:100%;height:54px;border-radius:15px;background:#C23359;border:none;color:#fff;font:600 16px 'Hanken Grotesk';cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px">{{ ic.externalBig }}<span>Rate on Google Play</span></button>
+      <button onClick="{{ rt.close }}" style="margin-top:10px;width:100%;height:46px;border-radius:12px;background:none;color:#626873;font:600 14.5px 'Hanken Grotesk';border:none;cursor:pointer">Not now</button>
+    </sc-if>
+    <sc-if value="{{ rt.isFeedback }}" hint-placeholder-val="{{ false }}">
+      <div style="width:52px;height:52px;border-radius:15px;background:#FFEEF0;display:flex;align-items:center;justify-content:center;color:#C23359;margin-bottom:14px">{{ ic.msgText }}</div>
+      <div style="font:700 19px 'Hanken Grotesk';letter-spacing:-.01em;color:#1E2128">How can we do better?</div>
+      <div style="margin-top:6px;font:400 13.5px/1.5 'Hanken Grotesk';color:#626873;text-wrap:pretty">Tell us what fell short. It goes straight to the team, not a public review, and we read every one.</div>
+      <textarea value="{{ rt.text }}" onChange="{{ rt.setText }}" placeholder="What would have made this a 5-star app?" style="margin-top:14px;width:100%;height:104px;resize:none;border-radius:14px;border:1px solid #E7EAEF;background:#fff;color:#1E2128;padding:13px 14px;font:400 14px/1.5 'Hanken Grotesk';outline:none;display:block"></textarea>
+      <button onClick="{{ rt.send }}" style="{{ rt.sendStyle }}">{{ ic.send }}<span>Send feedback</span></button>
+      <button onClick="{{ rt.close }}" style="margin-top:10px;width:100%;height:46px;border-radius:12px;background:none;color:#626873;font:600 14.5px 'Hanken Grotesk';border:none;cursor:pointer">Cancel</button>
+    </sc-if>
+    <sc-if value="{{ rt.isThanks }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:8px 0 4px">
+        <div style="width:64px;height:64px;border-radius:19px;margin:0 auto;background:#E2F3EA;display:flex;align-items:center;justify-content:center;color:#2E9E6B">{{ ic.checkBig }}</div>
+        <div style="margin-top:14px;font:700 20px 'Hanken Grotesk';letter-spacing:-.01em;color:#1E2128">Thank you, we hear you</div>
+        <div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#626873;max-width:290px;margin:6px auto 0;text-wrap:pretty">Your note is on its way to the team. It shapes what we build next.</div>
+      </div>
+      <button onClick="{{ rt.close }}" style="margin-top:20px;width:100%;height:52px;border-radius:14px;background:#C23359;border:none;color:#fff;font:600 16px 'Hanken Grotesk';cursor:pointer">Done</button>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasSheet }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;background:rgba(20,22,28,.42);display:flex;align-items:flex-end;animation:fade .2s;z-index:5">
+  <div style="background:#fff;border-radius:24px 24px 30px 30px;padding:14px 20px 22px;width:100%;animation:sheetup .32s cubic-bezier(.2,.7,.2,1)">
+    <div style="width:36px;height:4px;border-radius:2px;background:#E1E5EB;margin:0 auto 14px"></div>
+    <div style="font:600 10px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">WhatsApp · its own dialog, simulated</div>
+    <div style="font:700 18px/1.3 'Hanken Grotesk';margin-top:8px">{{ sheet.title }}</div>
+    <div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#626873;margin-top:4px">{{ sheet.body }}</div>
+    <div style="display:flex;gap:8px;margin-top:18px">
+      <button onClick="{{ sheet.cancel }}" style="flex:1;height:48px;border-radius:13px;background:#F3F5F8;border:1px solid #E7EAEF;font:600 14.5px 'Hanken Grotesk';color:#1E2128;cursor:pointer">Cancel</button>
+      <button onClick="{{ sheet.confirm }}" style="flex:1;height:48px;border-radius:13px;background:#1E2128;border:none;font:600 14.5px 'Hanken Grotesk';color:#fff;cursor:pointer">Add</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasMenu }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeMenu }}" style="position:absolute;inset:0;background:rgba(20,22,28,.42);display:flex;align-items:flex-end;animation:fade .2s;z-index:5">
+  <div onClick="{{ stop }}" style="background:#fff;border-radius:24px 24px 30px 30px;padding:14px 12px 20px;width:100%;animation:sheetup .32s cubic-bezier(.2,.7,.2,1)">
+    <div style="width:36px;height:4px;border-radius:2px;background:#E1E5EB;margin:0 auto 12px"></div>
+    <div style="font:700 15px 'Hanken Grotesk';padding:4px 12px 10px">{{ menu.title }}</div>
+    <sc-for list="{{ menu.items }}" as="m" hint-placeholder-count="2"><button onClick="{{ m.run }}" style="{{ m.style }}"><span style="display:flex;flex:none">{{ m.icon }}</span><span>{{ m.label }}</span></button></sc-for>
+  </div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;splash&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;splash&quot;,&quot;onboarding&quot;,&quot;customize&quot;,&quot;home&quot;,&quot;detail&quot;,&quot;create&quot;,&quot;editor&quot;,&quot;packDetails&quot;,&quot;myPacks&quot;,&quot;saved&quot;,&quot;settings&quot;,&quot;contact&quot;,&quot;language&quot;],&quot;section&quot;:&quot;Start&quot;},&quot;preset&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;fresh&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;fresh&quot;,&quot;browsing&quot;,&quot;active&quot;],&quot;section&quot;:&quot;Start&quot;},&quot;scenario&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;normal&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;normal&quot;,&quot;offline&quot;,&quot;download-fails&quot;,&quot;no-whatsapp&quot;],&quot;section&quot;:&quot;Simulate&quot;},&quot;chip&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;trending&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;packId&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;clingy-mango&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;addState&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;slide&quot;:{&quot;editor&quot;:null,&quot;default&quot;:0,&quot;tsType&quot;:&quot;number&quot;},&quot;query&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;empty&quot;:{&quot;editor&quot;:null,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;edit&quot;:{&quot;editor&quot;:null,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;dialog&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;rateStage&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;stars&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;menu&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;embedded&quot;:{&quot;editor&quot;:null,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;hold&quot;:{&quot;editor&quot;:null,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;mode&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;tool&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.timers = [];
+    this.HUE = {10:['#FFDCE1','#B3485F'],45:['#FFDFD0','#B2511E'],85:['#F6E6C7','#966800'],150:['#D4F1D8','#1C8742'],200:['#C6F2F4','#008892'],250:['#D2EBFF','#1F74BF'],300:['#ECE2FF','#7F5BB6'],330:['#FADEF6','#9D4F98']};
+    this.themeList = [
+      {id:'couples',label:'Couples',icon:'heart-handshake',hue:10},
+      {id:'cute',label:'Cute',icon:'rabbit',hue:330},
+      {id:'funny',label:'Funny',icon:'laugh',hue:85},
+      {id:'anime',label:'Anime',icon:'sparkles',hue:300},
+      {id:'romantic',label:'Romantic',icon:'flower-2',hue:45},
+      {id:'flirty',label:'Flirty',icon:'message-circle-heart',hue:200},
+      {id:'goodnight',label:'Good night',icon:'moon',hue:250},
+      {id:'distance',label:'Long distance',icon:'plane',hue:150},
+    ];
+    this.catalog = [{"id":"clingy-mango","title":"Clingy Mango","theme":"cute","dl":96400,"animated":false,"hue":45,"imgs":["./assets/stickers/mango-a-1.webp","./assets/stickers/mango-a-2.webp","./assets/stickers/mango-a-3.webp","./assets/stickers/mango-a-4.webp","./assets/stickers/mango-a-5.webp","./assets/stickers/mango-a-6.webp","./assets/stickers/mango-b-1.webp","./assets/stickers/mango-b-2.webp","./assets/stickers/mango-b-3.webp","./assets/stickers/mango-b-4.webp","./assets/stickers/mango-b-5.webp","./assets/stickers/mango-b-6.webp","./assets/stickers/mango-c-1.webp","./assets/stickers/mango-c-2.webp","./assets/stickers/mango-c-3.webp","./assets/stickers/mango-c-4.webp","./assets/stickers/mango-c-5.webp","./assets/stickers/mango-c-6.webp"],"count":18,"glyphs":["heart"]},{"id":"big-words","title":"Big Words","theme":"romantic","dl":71200,"animated":false,"hue":10,"imgs":["./assets/stickers/words-a-1.webp","./assets/stickers/words-a-2.webp","./assets/stickers/words-a-3.webp","./assets/stickers/words-a-4.webp","./assets/stickers/words-a-5.webp","./assets/stickers/words-a-6.webp","./assets/stickers/words-b-1.webp","./assets/stickers/words-b-2.webp","./assets/stickers/words-b-3.webp","./assets/stickers/words-b-4.webp","./assets/stickers/words-b-5.webp","./assets/stickers/words-b-6.webp","./assets/stickers/words-c-1.webp","./assets/stickers/words-c-2.webp","./assets/stickers/words-c-3.webp","./assets/stickers/words-c-4.webp","./assets/stickers/words-c-5.webp","./assets/stickers/words-c-6.webp"],"count":18,"glyphs":["heart"]},{"id":"flirty-shy","title":"Flirty & Shy","theme":"flirty","dl":64800,"animated":false,"hue":330,"imgs":["./assets/stickers/flirty-a-2.webp","./assets/stickers/flirty-a-3.webp","./assets/stickers/flirty-a-4.webp","./assets/stickers/flirty-a-5.webp","./assets/stickers/flirty-a-6.webp","./assets/stickers/flirty-b-1.webp","./assets/stickers/flirty-b-2.webp","./assets/stickers/flirty-b-3.webp","./assets/stickers/flirty-b-4.webp","./assets/stickers/flirty-b-5.webp","./assets/stickers/flirty-b-6.webp"],"count":11,"glyphs":["heart"]},{"id":"mango-moves","title":"Mango Moves","theme":"cute","dl":58600,"animated":true,"hue":45,"imgs":["./assets/stickers/mango-moves-1.webp","./assets/stickers/mango-moves-2.webp","./assets/stickers/mango-moves-3.webp","./assets/stickers/mango-moves-4.webp","./assets/stickers/mango-moves-5.webp","./assets/stickers/mango-moves-6.webp","./assets/stickers/mango-moves-b-1.webp","./assets/stickers/mango-moves-b-2.webp","./assets/stickers/mango-moves-b-3.webp","./assets/stickers/mango-moves-b-4.webp","./assets/stickers/mango-moves-b-5.webp","./assets/stickers/mango-moves-b-6.webp"],"count":12,"glyphs":["heart"]},{"id":"sorry-love","title":"Sorry, My Love","theme":"couples","dl":52300,"animated":false,"hue":330,"imgs":["./assets/stickers/sorry-1.webp","./assets/stickers/sorry-2.webp","./assets/stickers/sorry-3.webp","./assets/stickers/sorry-4.webp","./assets/stickers/sorry-5.webp","./assets/stickers/sorry-6.webp","./assets/stickers/sorry-b-1.webp","./assets/stickers/sorry-b-2.webp","./assets/stickers/sorry-b-3.webp","./assets/stickers/sorry-b-4.webp","./assets/stickers/sorry-b-5.webp","./assets/stickers/sorry-b-6.webp","./assets/stickers/sorry-c-1.webp","./assets/stickers/sorry-c-2.webp","./assets/stickers/sorry-c-3.webp","./assets/stickers/sorry-c-4.webp","./assets/stickers/sorry-c-5.webp","./assets/stickers/sorry-c-6.webp"],"count":18,"glyphs":["heart"]},{"id":"gm-gn","title":"Good Morning, Good Night","theme":"goodnight","dl":47900,"animated":false,"hue":85,"imgs":["./assets/stickers/gmgn-1.webp","./assets/stickers/gmgn-2.webp","./assets/stickers/gmgn-3.webp","./assets/stickers/gmgn-4.webp","./assets/stickers/gmgn-5.webp","./assets/stickers/gmgn-6.webp"],"count":6,"glyphs":["heart"]},{"id":"heartbeat","title":"Heartbeat","theme":"romantic","dl":44100,"animated":true,"hue":10,"imgs":["./assets/stickers/heartbeat-1.webp","./assets/stickers/heartbeat-2.webp","./assets/stickers/heartbeat-3.webp","./assets/stickers/heartbeat-4.webp","./assets/stickers/heartbeat-5.webp","./assets/stickers/heartbeat-6.webp"],"count":6,"glyphs":["heart"]},{"id":"miles-apart","title":"Miles Apart","theme":"distance","dl":31500,"animated":false,"hue":250,"imgs":["./assets/stickers/miles-1.webp","./assets/stickers/miles-2.webp","./assets/stickers/miles-3.webp","./assets/stickers/miles-4.webp","./assets/stickers/miles-5.webp","./assets/stickers/miles-6.webp"],"count":6,"glyphs":["heart"]},{"id":"couple-doodles","title":"Couple Doodles","theme":"couples","dl":28700,"animated":false,"hue":150,"imgs":["./assets/stickers/doodles-1.webp","./assets/stickers/doodles-2.webp","./assets/stickers/doodles-3.webp","./assets/stickers/doodles-4.webp","./assets/stickers/doodles-5.webp","./assets/stickers/doodles-6.webp"],"count":6,"glyphs":["heart"]},{"id":"bunny-bounce","title":"Bunny Bounce","theme":"flirty","dl":39200,"animated":true,"hue":330,"imgs":["./assets/stickers/bunny-bounce-1.webp","./assets/stickers/bunny-bounce-2.webp","./assets/stickers/bunny-bounce-3.webp","./assets/stickers/bunny-bounce-4.webp","./assets/stickers/bunny-bounce-5.webp","./assets/stickers/bunny-bounce-6.webp"],"count":6,"glyphs":["heart"]},{"id":"pop-words","title":"Pop Words","theme":"romantic","dl":36800,"animated":true,"hue":10,"imgs":["./assets/stickers/pop-words-1.webp","./assets/stickers/pop-words-2.webp","./assets/stickers/pop-words-3.webp","./assets/stickers/pop-words-4.webp","./assets/stickers/pop-words-5.webp","./assets/stickers/pop-words-6.webp"],"count":6,"glyphs":["heart"]},{"id":"dance-w-me","title":"Dance With Me","theme":"couples","dl":33400,"animated":true,"hue":150,"imgs":["./assets/stickers/dance-w-me-1.webp","./assets/stickers/dance-w-me-2.webp","./assets/stickers/dance-w-me-3.webp","./assets/stickers/dance-w-me-4.webp","./assets/stickers/dance-w-me-5.webp","./assets/stickers/dance-w-me-6.webp"],"count":6,"glyphs":["heart"]},{"id":"sorry-wiggle","title":"Sorry Wiggle","theme":"couples","dl":26900,"animated":true,"hue":330,"imgs":["./assets/stickers/sorry-wiggle-1.webp","./assets/stickers/sorry-wiggle-2.webp","./assets/stickers/sorry-wiggle-3.webp","./assets/stickers/sorry-wiggle-4.webp","./assets/stickers/sorry-wiggle-5.webp","./assets/stickers/sorry-wiggle-6.webp"],"count":6,"glyphs":["heart"]},{"id":"sunny-sleepy","title":"Sunny & Sleepy","theme":"goodnight","dl":24100,"animated":true,"hue":85,"imgs":["./assets/stickers/sunny-sleepy-1.webp","./assets/stickers/sunny-sleepy-2.webp","./assets/stickers/sunny-sleepy-3.webp","./assets/stickers/sunny-sleepy-4.webp","./assets/stickers/sunny-sleepy-5.webp","./assets/stickers/sunny-sleepy-6.webp"],"count":6,"glyphs":["heart"]}];
+    this.state = this.initialState(props || {});
+  }
+
+  freshCreate() { return { source:'photos', selected:[], edits:{}, active:0, tool:'auto', name:'', tray:0, ownId:null, shots:0, zoom:false, brush:2 }; }
+  doneEdits(ids, extra) { const e = {}; ids.forEach(id => { e[id] = Object.assign({ cut:'done', marks:[], outline:true }, (extra && extra[id]) || {}); }); return e; }
+  buildOwn(id, name, media, edits, animated) { return { id, title: (name||'').trim() || 'Untitled pack', own:true, count: media.length, dl:0, animated: !!animated, media: media.slice(), edits: edits||{}, hue:10 }; }
+
+  initialState(p) {
+    const scr = p.screen || 'onboarding';
+    const first = scr === 'splash' || scr === 'onboarding' || (scr === 'customize' && !p.edit);
+    const preset = p.preset || (first ? 'fresh' : 'browsing');
+    let stack = [scr];
+    const detailId = p.packId || 'clingy-mango';
+    const create = this.freshCreate();
+    if (scr === 'detail') stack = ['home','detail'];
+    if (scr === 'create') { stack = ['home','create']; create.selected = ['p1','p4','p3','p6']; }
+    if (scr === 'editor' || scr === 'packDetails') {
+      stack = scr === 'editor' ? ['home','create','editor'] : ['home','create','editor','packDetails'];
+      create.selected = ['p1','p4','p3','p6']; create.edits = this.doneEdits(create.selected, { p1:{ text:'miss u' } }); create.active = 0; create.tool = 'auto';
+      if (p.tool === 'brush') { create.tool = 'brush'; create.edits.p1.marks = [{ x:20, y:74, t:'keep', s:44 }, { x:31, y:84, t:'keep', s:44 }, { x:84, y:22, t:'erase', s:44 }]; create.edits.p1.text = ''; }
+      create.name = scr === 'packDetails' ? 'Us, always' : '';
+    }
+    if (scr === 'customize' && p.edit) stack = ['home','settings','customize'];
+    if (scr === 'settings') stack = ['home','settings'];
+    if (scr === 'saved') stack = ['myPacks','saved'];
+    if (scr === 'contact') stack = ['home','settings','contact'];
+    if (scr === 'language') stack = ['home','settings','language'];
+    let themes = first ? (scr === 'customize' ? {couples:true,cute:true,funny:true} : {}) : {couples:true,cute:true,romantic:true,flirty:true,goodnight:true,distance:true};
+    let add = {}, favs = {}, own = [];
+    if (preset === 'active') {
+      add = {'clingy-mango':{state:'added',pct:100}, 'mango-moves':{state:'added',pct:100}};
+      favs = {'big-words':true, 'flirty-shy':true};
+      own = [Object.assign(this.buildOwn('own-1', 'Us, always', ['p1','p4','p3','p6'], this.doneEdits(['p1','p4','p3','p6'], { p1:{ text:'miss u' } }), false), { imgs: ['./assets/ob-sticker.webp', './assets/stickers/us-dog-1.webp'].concat(["./assets/stickers/us-doodle-1.webp","./assets/stickers/us-doodle-2.webp","./assets/stickers/us-doodle-3.webp","./assets/stickers/us-doodle-4.webp","./assets/stickers/us-doodle-5.webp","./assets/stickers/us-doodle-6.webp","./assets/stickers/us-words-1.webp","./assets/stickers/us-words-2.webp","./assets/stickers/us-words-3.webp","./assets/stickers/us-words-4.webp","./assets/stickers/us-words-5.webp","./assets/stickers/us-words-6.webp","./assets/stickers/us-moves-1.webp","./assets/stickers/us-moves-2.webp","./assets/stickers/us-moves-3.webp","./assets/stickers/us-moves-4.webp","./assets/stickers/us-moves-5.webp","./assets/stickers/us-moves-6.webp"]).concat(["./assets/stickers/us-1.webp","./assets/stickers/us-2.webp","./assets/stickers/us-3.webp","./assets/stickers/us-4.webp","./assets/stickers/us-5.webp","./assets/stickers/us-6.webp"]), count: 26 }), Object.assign(this.buildOwn('own-2', 'Just Us', ['p3','p9','p11','p7'], this.doneEdits(['p3','p9','p11','p7']), false), { imgs: ["./assets/stickers/couple-a-1.webp","./assets/stickers/couple-a-2.webp","./assets/stickers/couple-a-3.webp","./assets/stickers/couple-a-4.webp","./assets/stickers/couple-a-5.webp","./assets/stickers/couple-a-6.webp","./assets/stickers/couple-b-1.webp","./assets/stickers/couple-b-2.webp","./assets/stickers/couple-b-3.webp","./assets/stickers/couple-b-4.webp","./assets/stickers/couple-b-5.webp","./assets/stickers/couple-b-6.webp"], count: 12 })];
+    }
+    if (p.empty) { add = {}; favs = {}; own = []; }
+    let sheet = null, dialog = null;
+    if (p.addState) {
+      const st = p.addState;
+      add[detailId] = { state: st, pct: st === 'downloading' ? 64 : st === 'idle' ? 0 : st === 'failed' ? 45 : 100 };
+      if (st === 'sent') sheet = { id: detailId };
+    }
+    if (p.dialog) dialog = { type: p.dialog, id: detailId };
+    let rateOpen = false, rateStage = 'stars', rating0 = 0;
+    if (p.dialog === 'rate') { dialog = null; rateOpen = true; rateStage = p.rateStage || 'stars'; rating0 = rateStage === 'store' ? 5 : rateStage === 'stars' ? 0 : 3; }
+    return { scenarioOverride: p.scenario || null, notif: preset === 'active', notifAsked: preset === 'active', lang: 'en', rating: rating0, rateOpen, rateStage, rateText: '', contact: { mode: p.mode || 'contact', text: '', email: '' }, stack, slide: Number(p.slide) || 0, themes, chip: p.chip || 'trending', searchOpen: !!p.query, query: p.query || '', favs, add, attempts:{}, own, create, detailId, editMode: !!p.edit, toast:null, dialog, sheet, menuFor: p.menu || null, pendingOwn:null, storageMB: preset === 'active' ? 12.4 : 0, ownSeq: 3 };
+  }
+
+  componentDidMount() { this.waitLucide(); this.armSplash(); }
+  armSplash() { if (this.cur() === 'splash' && !(this.props && this.props.hold)) this.later(() => { if (this.cur() === 'splash') this.setState({ stack: ['onboarding'] }); }, 1600); }
+  componentDidUpdate(prev) {
+    const p = this.props || {}, q = prev || {};
+    if (p.screen !== q.screen || p.preset !== q.preset || p.addState !== q.addState || p.empty !== q.empty || p.packId !== q.packId) this.setState(this.initialState(p), () => this.armSplash());
+  }
+  langs = [{ id:'en', native:'English', name:'English' }, { id:'ar', native:'العربية', name:'Arabic', rtl:true }, { id:'es', native:'Español', name:'Spanish' }, { id:'pt', native:'Português', name:'Portuguese' }, { id:'fr', native:'Français', name:'French' }, { id:'hi', native:'हिन्दी', name:'Hindi' }, { id:'id', native:'Bahasa Indonesia', name:'Indonesian' }, { id:'tr', native:'Türkçe', name:'Turkish' }, { id:'ur', native:'اردو', name:'Urdu', rtl:true }, { id:'de', native:'Deutsch', name:'German' }];
+  setContact(patch) { this.setState(s => ({ contact: Object.assign({}, s.contact, patch) })); }
+  starsRow(size) { const r = this.state.rating; return [1, 2, 3, 4, 5].map(v => ({ pick: () => this.setState({ rating: v }), color: v <= r ? '#C23359' : '#D8DCE3', icon: this.icon('star', size, v <= r ? { fill: '#C23359' } : null) })); }
+  componentWillUnmount() { this.timers.forEach(t => { clearTimeout(t); clearInterval(t); }); if (this._lt) clearTimeout(this._lt); }
+  waitLucide() { if (window.lucide) { this.forceUpdate(); return; } this._lt = setTimeout(() => this.waitLucide(), 100); }
+  later(fn, ms) { const t = setTimeout(fn, ms); this.timers.push(t); return t; }
+
+  waGlyph(size, o) {
+    o = o || {};
+    const phone = 'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z';
+    return React.createElement('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: o.sw || 1.9, strokeLinecap: 'round', strokeLinejoin: 'round', style: { display: 'block', flex: 'none' } },
+      React.createElement('path', { key: 'b', d: 'M7.9 20A9 9 0 1 0 4 16.1L2 22Z' }),
+      React.createElement('path', { key: 'p', d: phone, fill: 'currentColor', stroke: 'none', transform: 'translate(6.5 6.5) scale(0.46)' }));
+  }
+  icon(name, size, o) {
+    if (name === 'message-circle') return this.waGlyph(size, o);
+    const L = window.lucide; if (!L) return null;
+    const pas = name.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
+    let node = (L.icons && L.icons[pas]) || L[pas];
+    if (!Array.isArray(node)) node = (L.icons && L.icons.Heart) || L.Heart;
+    if (!Array.isArray(node)) return null;
+    o = o || {};
+    const kids = node.map((n, i) => React.createElement(n[0], Object.assign({}, n[1], { key: i })));
+    return React.createElement('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: o.fill || 'none', stroke: 'currentColor', strokeWidth: o.sw || 1.75, strokeLinecap: 'round', strokeLinejoin: 'round', style: { display: 'block', flex: 'none' } }, kids);
+  }
+  spinner(size) { return React.createElement('span', { style: { width: size, height: size, borderRadius: '50%', border: '2px solid currentColor', borderRightColor: 'transparent', animation: 'spin .9s linear infinite', display: 'inline-block', flex: 'none' } }); }
+  fmt(n) { return n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : String(n); }
+  scenario() { return this.state.scenarioOverride || (this.props && this.props.scenario) || 'normal'; }
+  cur() { const s = this.state.stack; return s[s.length - 1]; }
+  themeLabel(id) { const t = this.themeList.find(x => x.id === id); return t ? t.label : id; }
+
+  media(id) {
+    const kind = id[0]; const n = parseInt(id.slice(1), 10) || 1; const pi = ((n - 1) % 12) + 1; const nn = String(n).padStart(2, '0');
+    const photo = './assets/photos/p' + pi + '.jpg', cut = './assets/cutouts/p' + pi + '.webp';
+    return { id, kind, hue: 10, photo, cut, bg: 'center/cover no-repeat url(' + photo + ')', label: kind === 'v' ? '▶ 0:0' + ((n % 4) + 2) : '' };
+  }
+  findPack(id) { return this.catalog.find(x => x.id === id) || this.state.own.find(x => x.id === id) || null; }
+  img(src, size) { return React.createElement('img', { src, alt: '', draggable: false, style: { width: size, height: size, objectFit: 'contain', display: 'block' } }); }
+  thumbsFor(pk, n) {
+    if (pk.imgs) return pk.imgs.slice(0, n).map(src => ({ bg: '#F3F5F8', fg: '#1E2128', glyph: this.img(src, 42) }));
+    if (pk.own) return pk.media.slice(0, n).map(id => ({ bg: '#F3F5F8', fg: '#1E2128', glyph: this.stickerEl(id, 34, pk.edits[id]) }));
+    const c = this.HUE[pk.hue];
+    return pk.glyphs.slice(0, n).map(g => ({ bg: c[0], fg: c[1], glyph: this.icon(g, 22) }));
+  }
+  stickersFor(pk) {
+    if (pk.imgs) return pk.imgs.map(src => ({ bg: '#F6F7F9', fg: '#1E2128', glyph: this.img(src, '90%'), rot: 0 }));
+    if (pk.own) return pk.media.map(id => ({ bg: '#F3F5F8', fg: '#1E2128', glyph: this.stickerEl(id, 74, pk.edits[id]), rot: 0 }));
+    const c = this.HUE[pk.hue]; const out = [];
+    for (let i = 0; i < pk.count; i++) out.push({ bg: c[0], fg: c[1], glyph: this.icon(pk.glyphs[i % pk.glyphs.length], 34), rot: ((i % 3) - 1) * 5 });
+    return out;
+  }
+
+  jump(spec) {
+    const p = Object.assign({}, this.props || {}, { screen: spec.screen, preset: spec.preset || 'active' }, spec);
+    delete p.hold;
+    this.setState(this.initialState(p), () => this.armSplash());
+  }
+  go = (k) => this.setState(s => ({ stack: [...s.stack, k], menuFor: null }));
+  back = () => this.setState(s => (s.stack.length > 1 ? { stack: s.stack.slice(0, -1) } : {}));
+  tab = (k) => this.setState({ stack: [k], searchOpen: false, query: '', menuFor: null });
+  toast(msg, kind) { this.setState({ toast: { msg, kind: kind || 'info' } }); if (this._tt) clearTimeout(this._tt); this._tt = this.later(() => this.setState({ toast: null }), 2400); }
+  setAdd(id, v) { this.setState(s => ({ add: Object.assign({}, s.add, { [id]: v }) })); }
+  setCreate(patch) { this.setState(s => ({ create: Object.assign({}, s.create, patch) })); }
+  setEdit(id, patch) { this.setState(s => { const edits = Object.assign({}, s.create.edits); edits[id] = Object.assign({}, edits[id] || {}, patch); return { create: Object.assign({}, s.create, { edits }) }; }); }
+
+  openDetail(id) { this.setState(s => ({ detailId: id, stack: [...s.stack, 'detail'], menuFor: null })); }
+  toggleFav(id) { const on = !this.state.favs[id]; this.setState(s => ({ favs: Object.assign({}, s.favs, { [id]: on }) })); if (on) this.toast('Saved · find it under ♥ Saved on Home'); }
+  toggleTheme(id) { this.setState(s => ({ themes: Object.assign({}, s.themes, { [id]: !s.themes[id] }) })); }
+
+  startAdd(id) {
+    const sc = this.scenario();
+    if (sc === 'no-whatsapp') { this.setState({ dialog: { type: 'no-whatsapp', id } }); return; }
+    if (sc === 'offline') { this.toast("You're offline. Connect to download."); return; }
+    const st = this.state.add[id];
+    if (st && (st.state === 'downloading' || st.state === 'sent')) return;
+    if (st && st.state === 'added') { this.toast('Already in WhatsApp'); return; }
+    const attempts = Object.assign({}, this.state.attempts, { [id]: (this.state.attempts[id] || 0) + 1 });
+    this.setState(s => ({ add: Object.assign({}, s.add, { [id]: { state: 'downloading', pct: 0 } }), attempts }));
+    const iv = setInterval(() => {
+      const cur = this.state.add[id];
+      if (!cur || cur.state !== 'downloading') { clearInterval(iv); return; }
+      const pct = Math.min(100, cur.pct + 5 + Math.random() * 8);
+      if (sc === 'download-fails' && attempts[id] === 1 && pct >= 45) { clearInterval(iv); this.setAdd(id, { state: 'failed', pct: 45 }); return; }
+      if (pct >= 100) {
+        clearInterval(iv); this.setAdd(id, { state: 'sent', pct: 100 });
+        this.later(() => { const c = this.state.add[id]; if (c && c.state === 'sent') this.setState({ sheet: { id } }); }, 900);
+        return;
+      }
+      this.setAdd(id, { state: 'downloading', pct });
+    }, 110);
+    this.timers.push(iv);
+  }
+  resend(id) {
+    if (this.scenario() === 'no-whatsapp') { this.setState({ dialog: { type: 'no-whatsapp', id }, menuFor: null }); return; }
+    this.setAdd(id, { state: 'sent', pct: 100 }); this.setState({ menuFor: null });
+    this.later(() => this.setState({ sheet: { id } }), 700);
+  }
+  confirmWA() {
+    const id = this.state.sheet.id; const ownPending = this.state.pendingOwn === id;
+    this.setState(s => ({ add: Object.assign({}, s.add, { [id]: { state: 'added', pct: 100 } }), sheet: null, pendingOwn: null, stack: ownPending ? ['myPacks'] : s.stack, create: ownPending ? this.freshCreate() : s.create, storageMB: +(s.storageMB + 1.8).toFixed(1) }));
+    this.toast('Added to WhatsApp', 'ok');
+  }
+  cancelWA() { const id = this.state.sheet.id; this.setState(s => ({ add: Object.assign({}, s.add, { [id]: { state: 'idle', pct: 0 } }), sheet: null })); }
+
+  ensureOwn() {
+    const c = this.state.create; const id = c.ownId || ('own-' + this.state.ownSeq);
+    const pk = this.buildOwn(id, c.name, c.selected, c.edits, c.selected.some(i => i[0] === 'v'));
+    this.setState(s => ({ own: s.own.filter(o => o.id !== id).concat([pk]), ownSeq: c.ownId ? s.ownSeq : s.ownSeq + 1, create: Object.assign({}, s.create, { ownId: id }) }));
+    return id;
+  }
+  addOwn() { const id = this.ensureOwn(); this.setState({ pendingOwn: id }); this.startAdd(id); }
+  saveOwn() { this.ensureOwn(); this.setState({ stack: ['myPacks'], create: this.freshCreate() }); this.toast('Saved to My Packs'); }
+  useTool(t) {
+    const c = this.state.create; const id = c.selected[c.active]; if (!id) return;
+    if (t === 'auto') { this.setCreate({ tool: 'auto' }); this.runAuto([id], true); return; }
+    if (t === 'zoom') { this.setCreate({ zoom: !c.zoom }); return; }
+    this.setCreate({ tool: t });
+  }
+  runAuto(ids, force) {
+    ids.forEach((id, i) => {
+      const e = this.state.create.edits[id] || {};
+      if (e.cut === 'done' && !force) return;
+      this.setEdit(id, { cut: 'pending', marks: [], outline: e.outline !== false });
+      this.later(() => this.setEdit(id, { cut: 'done' }), 650 + i * 350);
+    });
+  }
+  tapCanvas(ev) {
+    const c = this.state.create; const id = c.selected[c.active]; if (!id) return;
+    if (c.tool !== 'brush' && c.tool !== 'erase') return;
+    const r = ev.currentTarget.getBoundingClientRect();
+    const x = Math.round((ev.clientX - r.left) / r.width * 100), y = Math.round((ev.clientY - r.top) / r.height * 100);
+    const s = [0, 30, 44, 60][c.brush || 2];
+    this.setState(st => { const edits = Object.assign({}, st.create.edits); const e = Object.assign({}, edits[id] || {}); e.marks = (e.marks || []).concat([{ x, y, t: c.tool === 'brush' ? 'keep' : 'erase', s }]); edits[id] = e; return { create: Object.assign({}, st.create, { edits }) }; });
+  }
+  undoEdit() {
+    const c = this.state.create; const id = c.selected[c.active]; if (!id) return;
+    const e = c.edits[id] || {};
+    if (e.marks && e.marks.length) { this.setEdit(id, { marks: e.marks.slice(0, -1) }); return; }
+    if (e.text) { this.setEdit(id, { text: '' }); return; }
+    this.toast('Nothing to undo');
+  }
+  stickerEl(mediaId, size, e, raw) {
+    const m = this.media(mediaId);
+    if (raw) return React.createElement('img', { src: m.photo, alt: '', style: { width: size, height: size, borderRadius: 10, objectFit: 'cover', display: 'block', flex: 'none' } });
+    const outline = !e || e.outline !== false;
+    return React.createElement('img', { src: m.cut, alt: '', style: { width: size, height: size, objectFit: 'contain', display: 'block', flex: 'none', filter: outline ? 'drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)' : 'none' } });
+  }
+  togglePick(id) {
+    const c = this.state.create; const on = c.selected.includes(id);
+    if (!on && c.selected.length >= 30) { this.toast('30 stickers is the maximum'); return; }
+    this.setCreate({ selected: on ? c.selected.filter(x => x !== id) : c.selected.concat([id]) });
+  }
+
+  addPill(id) {
+    const st = this.state.add[id] || { state: 'idle', pct: 0 };
+    const base = "position:relative;overflow:hidden;height:36px;padding:0 13px 0 11px;border-radius:999px;display:flex;align-items:center;gap:6px;font:600 13px 'Hanken Grotesk';cursor:pointer;flex:none;transition:background .2s,color .2s;";
+    const m = {
+      idle: { style: base + 'background:#FFEEF0;color:#C23359;border:1px solid #FFCED5', icon: this.icon('message-circle', 15), label: 'Add' },
+      downloading: { style: base + 'background:#FFEEF0;color:#C23359;border:1px solid #FFCED5;min-width:72px;justify-content:center', icon: null, label: Math.round(st.pct) + '%' },
+      sent: { style: base + 'background:#FFEEF0;color:#C23359;border:1px solid #FFCED5', icon: this.spinner(13), label: 'Sent…' },
+      added: { style: base + 'background:#F3F5F8;color:#2E9E6B;border:1px solid #E7EAEF', icon: this.icon('check', 15, { sw: 2.2 }), label: 'Added' },
+      failed: { style: base + 'background:#FEFBF5;color:#B8792A;border:1px solid #F0DFC4', icon: this.icon('rotate-ccw', 14), label: 'Retry' },
+    }[st.state] || {};
+    return { addStyle: m.style, addIcon: m.icon, addLabel: m.label, pct: st.state === 'downloading' ? Math.round(st.pct) + '%' : '0%', add: () => this.startAdd(id) };
+  }
+  addBar(id) {
+    const st = this.state.add[id] || { state: 'idle', pct: 0 };
+    const base = "position:relative;overflow:hidden;width:100%;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font:600 16px 'Hanken Grotesk';cursor:pointer;transition:background .2s,color .2s;";
+    const m = {
+      idle: { style: base + 'background:#C23359;color:#fff;border:none', icon: this.icon('message-circle', 19), label: 'Add to WhatsApp', hint: 'Downloads to your phone, then opens in WhatsApp.' },
+      downloading: { style: base + 'background:#FFEEF0;color:#C23359;border:1px solid #FFCED5', icon: this.icon('download', 18), label: 'Downloading · ' + Math.round(st.pct) + '%', hint: 'Streaming the pack from the cloud.' },
+      sent: { style: base + 'background:#FFEEF0;color:#C23359;border:1px solid #FFCED5', icon: this.spinner(16), label: 'Sent to WhatsApp…', hint: 'Confirm in WhatsApp to finish.' },
+      added: { style: base + 'background:#fff;color:#2E9E6B;border:1px solid #E7EAEF', icon: this.icon('check', 19, { sw: 2.2 }), label: 'Added to WhatsApp', hint: 'Manage it in My Packs.' },
+      failed: { style: base + 'background:#FEFBF5;color:#B8792A;border:1px solid #F0DFC4', icon: this.icon('rotate-ccw', 17), label: 'Download failed · Retry', hint: 'Check your connection, then tap to try again.' },
+    }[st.state] || {};
+    return { barStyle: m.style, barIcon: m.icon, barLabel: m.label, hint: m.hint, pct: st.state === 'downloading' ? Math.round(st.pct) + '%' : '0%', add: () => this.startAdd(id) };
+  }
+  vmPack(pk) {
+    const fav = !!this.state.favs[pk.id];
+    return Object.assign({
+      id: pk.id, title: pk.title, animated: !!pk.animated,
+      meta: pk.own ? pk.count + ' stickers · yours' : pk.count + ' stickers · ' + this.fmt(pk.dl) + ' adds',
+      open: () => this.openDetail(pk.id),
+      toggleFav: () => this.toggleFav(pk.id),
+      heart: this.icon('heart', 20, fav ? { fill: '#C23359' } : null), heartColor: fav ? '#C23359' : '#B4BAC4',
+      menu: () => this.setState({ menuFor: pk.id }),
+      thumbs: this.thumbsFor(pk, 6),
+    }, this.addPill(pk.id));
+  }
+
+  homePacks() {
+    const th = this.state.themes; const sel = Object.keys(th).filter(k => th[k]);
+    let list = this.catalog.filter(p => sel.length === 0 || sel.includes(p.theme));
+    if (this.state.searchOpen) {
+      const q = this.state.query.trim().toLowerCase();
+      if (q) list = this.catalog.filter(p => p.title.toLowerCase().includes(q) || this.themeLabel(p.theme).toLowerCase().includes(q));
+    } else if (this.state.chip === 'saved') { const sv = this.catalog.concat(this.state.own).filter(p => this.state.favs[p.id]); if (sv.length) list = sv; } else if (this.state.chip === 'animated') list = this.catalog.filter(p => p.animated);
+    else if (this.state.chip !== 'trending') list = list.filter(p => p.theme === this.state.chip);
+    return list.slice().sort((a, b) => b.dl - a.dl);
+  }
+
+  dialogView() {
+    const d = this.state.dialog; if (!d) return null;
+    const ROSE = '#C23359', DANGER = '#C4553D', tint = ['#FFEEF0', ROSE], red = ['#FBEAE5', DANGER];
+    const close = () => this.setState({ dialog: null });
+    const mk = (ic, col, title, body, cancelLabel, confirmLabel, confirmBg, confirm, cancel) => ({ icon: this.icon(ic, 22), iconBg: col[0], iconFg: col[1], title, body, cancelLabel, confirmLabel, confirmBg, cancel: cancel || close, confirm });
+    const pk = d.id ? (this.findPack(d.id) || { title: 'this pack' }) : null;
+    if (d.type === 'no-whatsapp') return mk('message-circle', tint, "WhatsApp isn't installed", 'Stickers are added inside WhatsApp. Install it, then come back to add this pack.', 'Not now', 'Get WhatsApp', ROSE, () => { close(); this.toast('Opening Play Store…'); });
+    if (d.type === 'clear') return mk('trash-2', red, 'Clear downloaded packs?', 'Removes the copies stored in this app (' + this.state.storageMB + ' MB). Packs already in WhatsApp stay there.', 'Keep them', 'Clear', DANGER, () => { this.setState({ dialog: null, storageMB: 0 }); this.toast('Downloads cleared'); });
+    if (d.type === 'remove') return mk('trash-2', red, 'Remove “' + pk.title + '” from this app?', 'Deletes the local copy. WhatsApp keeps the pack until you remove it there.', 'Keep', 'Remove', DANGER, () => { this.setState(s => { const add = Object.assign({}, s.add); delete add[d.id]; return { add, dialog: null, storageMB: Math.max(0, +(s.storageMB - 1.8).toFixed(1)) }; }); this.toast('Removed from this app'); });
+    if (d.type === 'delete-own') return mk('trash-2', red, 'Delete “' + pk.title + '”?', "Deletes the pack and its stickers from this phone. This can't be undone. If you added it, WhatsApp keeps its copy.", 'Keep', 'Delete', DANGER, () => { this.setState(s => { const add = Object.assign({}, s.add); delete add[d.id]; return { own: s.own.filter(o => o.id !== d.id), add, dialog: null }; }); this.toast('Pack deleted'); });
+    if (d.type === 'notif-perm') return mk('bell', tint, 'Allow Love Stickers to send notifications?', 'Android asks once. We only notify you when a new pack is added. No promotions, ever.', "Don't allow", 'Allow', ROSE, () => { this.setState({ dialog: null, notif: true, notifAsked: true }); this.toast('New pack alerts on'); }, () => this.setState({ dialog: null, notifAsked: true }));
+    return null;
+  }
+  menuView() {
+    const id = this.state.menuFor; if (!id) return null;
+    const pk = this.findPack(id); if (!pk) return null;
+    const st = (this.state.add[id] || {}).state;
+    const item = (label, ic, run, destructive) => ({ label, icon: this.icon(ic, 19), run: (ev) => { if (ev && ev.stopPropagation) ev.stopPropagation(); run(); }, style: "width:100%;display:flex;align-items:center;gap:12px;height:50px;padding:0 12px;border:none;background:none;border-radius:12px;font:600 14.5px 'Hanken Grotesk';cursor:pointer;text-align:left;color:" + (destructive ? '#C4553D' : '#1E2128') });
+    const items = [];
+    if (st === 'added') {
+      items.push(item('Re-add to WhatsApp', 'refresh-cw', () => this.resend(id)));
+      items.push(item('Remove from this app', 'trash-2', () => this.setState({ menuFor: null, dialog: { type: 'remove', id } }), true));
+    } else {
+      items.push(item('Add to WhatsApp', 'message-circle', () => { this.setState({ menuFor: null }); this.startAdd(id); }));
+    }
+    if (pk.own) items.push(item('Delete pack', 'trash-2', () => this.setState({ menuFor: null, dialog: { type: 'delete-own', id } }), true));
+    return { title: pk.title, items };
+  }
+
+  renderVals() {
+    const S = this.state; const scr = this.cur(); const p = this.props || {};
+    const ic = (n, s, o) => this.icon(n, s, o);
+    const offline = this.scenario() === 'offline';
+    const isTab = ['home', 'myPacks'].includes(scr);
+    const detailPk = this.findPack(S.detailId) || this.catalog[0];
+    const selThemes = this.themeList.filter(t => S.themes[t.id]);
+    const chipBase = "flex:none;height:36px;padding:0 15px;border-radius:999px;font:600 13px 'Hanken Grotesk';cursor:pointer;white-space:nowrap;transition:background .12s;";
+    const favCount = this.catalog.concat(S.own).filter(pk => S.favs[pk.id]).length;
+    const effChip = S.chip === 'saved' && favCount === 0 ? 'trending' : S.chip;
+    const chipB = chipBase + 'display:flex;align-items:center;gap:6px;';
+    const chips = [{ id: 'trending', label: 'Trending' }].concat(favCount ? [{ id: 'saved', label: 'Saved · ' + favCount, heart: true }] : [], [{ id: 'animated', label: 'Animated' }], selThemes.map(t => ({ id: t.id, label: t.label }))).map(c => ({ label: c.label, icon: c.heart ? ic('heart', 13, { fill: 'currentColor', sw: 2 }) : null, select: () => this.setState({ chip: c.id }), style: chipB + (effChip === c.id ? 'background:#FFEEF0;color:#C23359;border:1px solid #C23359' : 'background:#fff;color:#626873;border:1px solid #E7EAEF') }));
+    const packs = this.homePacks().map(pk => this.vmPack(pk));
+    const nThemes = selThemes.length;
+    const primary = "height:52px;border-radius:14px;background:#C23359;color:#fff;font:600 16px 'Hanken Grotesk';border:none;cursor:pointer;width:100%;transition:opacity .15s;";
+    const labels = { saved: 'My Packs › Saved', splash: 'Launch', contact: S.contact.mode === 'feedback' ? 'Settings › Send feedback' : 'Settings › Contact us', language: 'Settings › Language', onboarding: 'Onboarding', customize: S.editMode ? 'Settings › Edit themes' : 'Customization', home: S.searchOpen ? 'Home › Search' : 'Home', detail: 'Stickers · ' + detailPk.title, create: 'Create › Import', editor: 'Create › Editor', packDetails: 'Create › Pack details', myPacks: 'My Packs', favourites: 'Favourites', settings: 'Settings' };
+    const c = S.create; const cIds = c.selected; const cId = cIds[c.active] || cIds[0]; const cm = cId ? this.media(cId) : null; const ce = (cId && c.edits[cId]) || {};
+    const E = (cId && c.edits[cId]) || {}; const cutState = E.cut || 'none'; const pending = cutState === 'pending'; const anyPending = cIds.some(id => (c.edits[id] || {}).cut === 'pending');
+    const checker = 'linear-gradient(45deg,#E6E9EE 25%,transparent 25%) 0 0/16px 16px,linear-gradient(-45deg,#E6E9EE 25%,transparent 25%) 0 8px/16px 16px,linear-gradient(45deg,transparent 75%,#E6E9EE 75%) 8px -8px/16px 16px,linear-gradient(-45deg,transparent 75%,#E6E9EE 75%) -8px 0/16px 16px #fff';
+    const outlineOn = E.outline !== false;
+    const toolDefs = [{ id: 'auto', label: 'Auto', icon: 'wand-sparkles' }, { id: 'brush', label: 'Brush', icon: 'brush' }, { id: 'erase', label: 'Erase', icon: 'eraser' }, { id: 'text', label: 'Text', icon: 'type' }, { id: 'zoom', label: 'Zoom', icon: 'zoom-in' }];
+    const hints = { auto: cutState === 'done' ? 'Cut out on this phone. Nothing was uploaded.' : 'Tap Auto to cut out the subject', brush: 'Tap the picture to bring parts back', erase: 'Tap leftovers to erase them', text: 'Type a word below', zoom: c.zoom ? 'Tap Zoom again to fit' : 'Zoom in to fix edges' };
+    const railBtn = (on) => 'position:relative;width:56px;height:56px;flex:none;border-radius:14px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;background:#F3F5F8;border:' + (on ? '2px solid #C23359' : '1px solid #E7EAEF');
+    const pool = c.source === 'video' ? ['v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'] : ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11', 'p12'];
+    const n = cIds.length;
+    const addedIds = Object.keys(S.add).filter(k => S.add[k].state !== 'idle' && this.findPack(k) && !this.findPack(k).own);
+    const added = addedIds.map(k => { const v = this.vmPack(this.findPack(k)); const st = (S.add[k] || {}).state; v.hasLabel = st !== 'added'; v.addAria = st === 'added' ? 'In WhatsApp' : v.addLabel; if (st === 'added') { v.addStyle = "position:relative;overflow:hidden;width:36px;height:36px;padding:0;border-radius:999px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;background:#E2F3EA;color:#2E9E6B;border:1px solid #CDEBDC"; } return v; });
+    const own = S.own.map(pk => this.vmPack(pk));
+    const favPacks = this.catalog.concat(S.own).filter(pk => S.favs[pk.id]).map(pk => this.vmPack(pk));
+    const dialog = this.dialogView();
+    const menu = this.menuView();
+    const sheetPk = S.sheet ? (this.findPack(S.sheet.id) || detailPk) : null;
+    const navDefs = [{ key: 'home', label: 'Home', icon: 'house' }, { fab: true }, { key: 'myPacks', label: 'My Packs', icon: 'sticker' }];
+    const trayId = cIds[c.tray] || cIds[0];
+    const pdBar = this.addBar(c.ownId || '__new');
+
+    return {
+      pagePad: p.embedded ? '0' : '28px 16px 60px',
+      screenLabel: labels[scr] || scr,
+      ic: {
+        signal: ic('signal', 14), wifi: ic('wifi', 14), battery: ic('battery-medium', 17), arrowLeft: ic('arrow-left', 22), search: ic('search', 19), searchSm: ic('search', 17), searchBig: ic('search', 26),
+        handshake: ic('heart-handshake', 14), obHeart: ic('heart', 52), obLaugh: ic('laugh', 46), obSparkles: ic('sparkles', 54), obMoon: ic('moon', 38), obArrow: ic('arrow-right', 22),
+        wifiOff: ic('wifi-off', 30), stickerBig: ic('sticker', 28), heartBig: ic('heart', 28), checkSm: ic('check', 14, { sw: 2.4 }), typeSm: ic('type', 17), infoSm: ic('info', 16),
+        palette: ic('sliders-horizontal', 20), trash: ic('trash-2', 20), star: ic('star', 20), grid: ic('layout-grid', 20), shield: ic('shield-check', 20), info: ic('info', 20), chevron: ic('chevron-right', 18), external: ic('external-link', 17), ellipsis: ic('ellipsis-vertical', 18), gear: ic('settings', 21), brandHeart: ic('heart', 15, { fill: '#fff', sw: 2 }), arrowUpRight: ic('arrow-up-right', 18), heartHand: ic('heart-handshake', 18), star32: ic('star', 32), party: ic('party-popper', 32), msgText: ic('message-square-text', 26), send: ic('send', 19), checkBig: ic('check', 32, { sw: 2.2 }), externalBig: ic('external-link', 19), share: ic('send', 20), heartTb: ic('heart', 21), reset: ic('rotate-ccw', 16), okCircle: ic('circle-check', 18), undo: ic('undo-2', 20), checkXs: ic('check', 11, { sw: 3 }), bell: ic('bell', 20), mail: ic('mail', 20), languages: ic('languages', 20), checkMd: ic('check', 19, { sw: 2.4 }), splashHeart: ic('heart', 44, { fill: '#fff', sw: 2 }),
+      },
+      is: { saved: scr === 'saved', splash: scr === 'splash', contact: scr === 'contact', language: scr === 'language', onboarding: scr === 'onboarding', customize: scr === 'customize', home: scr === 'home', detail: scr === 'detail', create: scr === 'create', editor: scr === 'editor', packDetails: scr === 'packDetails', myPacks: scr === 'myPacks', favourites: scr === 'favourites', settings: scr === 'settings' },
+      back: this.back, stop: (ev) => ev.stopPropagation(),
+      goHome: () => this.tab('home'), goCreate: () => this.go('create'),
+
+      ob: {
+        first: S.slide === 0, second: S.slide === 1,
+        dot1w: S.slide === 0 ? '22px' : '8px', dot1c: S.slide === 0 ? '#C23359' : '#D8DCE3', dot2w: S.slide === 1 ? '22px' : '8px', dot2c: S.slide === 1 ? '#C23359' : '#D8DCE3',
+        cta: S.slide === 0 ? 'Next' : 'Get started',
+        next: () => S.slide === 0 ? this.setState({ slide: 1 }) : this.setState({ stack: ['customize'], editMode: false }),
+        skip: () => this.setState({ stack: ['customize'], editMode: false }),
+      },
+      cz: {
+        edit: S.editMode, first: !S.editMode,
+        tiles: this.themeList.map(t => { const on = !!S.themes[t.id]; const col = this.HUE[t.hue]; return { label: t.label, icon: ic(t.icon, 20), bg: col[0], fg: col[1], toggle: () => this.toggleTheme(t.id), style: 'display:flex;align-items:center;gap:11px;padding:12px;border-radius:16px;cursor:pointer;min-height:66px;transition:background .12s,border-color .12s;' + (on ? 'background:#FFEEF0;border:1px solid #C23359' : 'background:#fff;border:1px solid #E7EAEF'), checkBg: on ? '#C23359' : '#fff', checkBorder: on ? '#C23359' : '#D8DCE3', check: on ? ic('check', 14, { sw: 2.4 }) : null }; }),
+        cta: S.editMode ? 'Save' : (nThemes > 0 ? 'Continue · ' + nThemes + (nThemes === 1 ? ' theme' : ' themes') : 'Pick at least one theme'),
+        ctaStyle: primary + (nThemes > 0 ? '' : 'opacity:.45;cursor:default'),
+        done: () => { if (nThemes === 0) return; if (S.editMode) { this.setState(s => ({ stack: s.stack.slice(0, -1), editMode: false, chip: 'trending' })); this.toast('Themes saved'); } else this.setState({ stack: ['home'], chip: 'trending' }); },
+      },
+
+      searchOpen: S.searchOpen, searchClosed: !S.searchOpen, query: S.query,
+      openSearch: () => this.setState({ searchOpen: true }), openSettings: () => this.go('settings'), closeSearch: () => this.setState({ searchOpen: false, query: '' }), setQuery: (ev) => this.setState({ query: ev.target.value }),
+      chips, packs, offline, online: !offline,
+      noResults: S.searchOpen && S.query.trim().length > 0 && packs.length === 0, noResultsTitle: 'No packs for “' + S.query.trim() + '”',
+      retryOnline: () => this.toast('Still offline. Try again in a moment.'),
+
+      detail: Object.assign({
+        title: detailPk.title, animated: !!detailPk.animated,
+        meta: detailPk.own ? detailPk.count + ' stickers · Made by you' : detailPk.count + ' stickers · ' + this.fmt(detailPk.dl) + ' adds',
+        stickers: this.stickersFor(detailPk),
+        share: () => this.toast('Opening share sheet…'), toggleFav: () => this.toggleFav(detailPk.id), heart: ic('heart', 21, S.favs[detailPk.id] ? { fill: '#C23359' } : null), heartColor: S.favs[detailPk.id] ? '#C23359' : '#626873',
+      }, this.addBar(detailPk.id)),
+
+      cr: {
+        count: n > 0 ? n + ' selected' : '',
+        sources: [{ id: 'photos', label: 'Photos', icon: 'images' }, { id: 'camera', label: 'Camera', icon: 'camera' }, { id: 'video', label: 'Video', icon: 'video' }].map(s => ({ label: s.label, icon: ic(s.icon, 16), select: () => this.setCreate({ source: s.id }), style: "flex:1;height:38px;border-radius:9px;border:none;display:flex;align-items:center;justify-content:center;gap:6px;font:600 13px 'Hanken Grotesk';cursor:pointer;" + (c.source === s.id ? 'background:#fff;color:#1E2128;box-shadow:0 1px 2px rgba(0,0,0,.06)' : 'background:none;color:#8b929d') })),
+        isCamera: c.source === 'camera', isGrid: c.source !== 'camera',
+        photos: pool.map(id => { const m = this.media(id); const on = cIds.includes(id); return { label: m.label, on, toggle: () => this.togglePick(id), style: 'position:relative;aspect-ratio:1;border-radius:14px;cursor:pointer;padding:0;background:' + m.bg + ';border:1px solid #E7EAEF;outline:' + (on ? '2px solid #C23359' : 'none') + ';outline-offset:-2px' }; }),
+        shoot: () => { const id = 'c' + (c.shots + 1); if (cIds.length >= 30) { this.toast('30 stickers is the maximum'); return; } this.setCreate({ shots: c.shots + 1, selected: cIds.concat([id]) }); this.toast('Shot added to the pack'); },
+        shotsLabel: c.shots + (c.shots === 1 ? ' shot' : ' shots'),
+        next: () => { if (n >= 3) { this.runAuto(cIds); this.go('editor'); } }, nextStyle: primary + (n >= 3 ? '' : 'opacity:.45;cursor:default'), nextLabel: n >= 3 ? 'Next · ' + n + ' stickers' : 'Next',
+        hint: n >= 3 ? 'Next cuts out each subject on this phone. Up to 30 per pack.' : 'Pick at least 3 (' + n + ' of 3). Up to 30 per pack.',
+      },
+      ed: {
+        counter: n ? (c.active + 1) + ' / ' + n : '', label: cm ? cm.label : '',
+        undo: () => this.undoEdit(), undoColor: ((E.marks && E.marks.length) || E.text) ? '#1E2128' : '#B4BAC4',
+        tap: (ev) => this.tapCanvas(ev), cursor: (c.tool === 'brush' || c.tool === 'erase') ? 'crosshair' : 'default', zoom: c.zoom ? 1.6 : 1,
+        cutEl: cm ? React.createElement('img', { src: cm.cut, alt: '', draggable: false, style: { position: 'absolute', left: '4%', top: '4%', width: '92%', height: '92%', objectFit: 'contain', filter: outlineOn ? 'drop-shadow(4px 0 0 #fff) drop-shadow(-4px 0 0 #fff) drop-shadow(0 4px 0 #fff) drop-shadow(0 -4px 0 #fff) drop-shadow(0 3px 8px rgba(30,20,30,.22))' : 'drop-shadow(0 3px 8px rgba(30,20,30,.18))' } }) : null, outlineFilter: outlineOn ? 'drop-shadow(4px 0 0 #fff) drop-shadow(-4px 0 0 #fff) drop-shadow(0 4px 0 #fff) drop-shadow(0 -4px 0 #fff) drop-shadow(0 3px 8px rgba(30,20,30,.22))' : 'drop-shadow(0 3px 8px rgba(30,20,30,.18))',
+        canvasBg: cutState === 'done' ? checker : (cm ? cm.bg : '#F3F5F8'), showSubject: cutState === 'done', bg: cm ? cm.bg : '#F3F5F8',
+        outlineBorder: outlineOn ? '7px solid #fff' : '0 solid transparent', outlineShadow: outlineOn ? '0 0 0 1px #E1E5EB' : 'none',
+        marks: (E.marks || []).map(m => ({ x: m.x + '%', y: m.y + '%', w: (m.s || 44) + 'px', bg: m.t === 'keep' ? (cm ? cm.bg : '#F3F5F8') : checker, border: m.t === 'keep' ? '2px solid #fff' : 'none' })),
+        text: E.text || '', hasText: !!E.text, pending, spinner: this.spinner(22), spinnerSm: this.spinner(16),
+        toolHint: hints[c.tool] || '',
+        tools: toolDefs.map(t => { const on = t.id === 'zoom' ? !!c.zoom : c.tool === t.id; return { label: t.label, icon: ic(t.icon, 20), select: () => this.useTool(t.id), style: 'flex:1;height:54px;border-radius:11px;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:background .12s;' + (on ? 'background:#C23359;color:#fff' : 'background:none;color:#C3C9D2') }; }),
+        textTool: c.tool === 'text', brushTool: c.tool === 'brush' || c.tool === 'erase', brush: c.brush || 2, brushLabel: (c.tool === 'brush' ? 'Brush' : 'Eraser') + ' size', setBrush: (ev) => this.setCreate({ brush: +ev.target.value }),
+        setText: (ev) => { if (cId) this.setEdit(cId, { text: ev.target.value }); },
+        toggleOutline: () => { if (cId) this.setEdit(cId, { outline: !outlineOn }); },
+        switchStyle: 'width:48px;height:28px;border-radius:999px;border:none;position:relative;cursor:pointer;flex:none;padding:0;transition:background .2s;background:' + (outlineOn ? '#C23359' : '#D8DCE3'),
+        knobStyle: 'position:absolute;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s;left:' + (outlineOn ? '23px' : '3px'),
+        rail: cIds.map((pid, i) => { const e = c.edits[pid] || {}; return { select: () => this.setCreate({ active: i }), el: this.stickerEl(pid, 40, e, e.cut !== 'done'), done: e.cut === 'done', pending: e.cut === 'pending', style: railBtn(i === c.active) }; }),
+        done: () => { if (!anyPending) this.go('packDetails'); }, doneStyle: primary + (anyPending ? 'opacity:.45;cursor:default' : ''), doneLabel: anyPending ? 'Cutting out…' : 'Next · ' + n + ' stickers',
+      },
+      pd: Object.assign({
+        trayEl: trayId ? this.stickerEl(trayId, 60, c.edits[trayId]) : null,
+        rail: cIds.map((pid, i) => ({ select: () => this.setCreate({ tray: i }), el: this.stickerEl(pid, 40, c.edits[pid]), style: railBtn(i === c.tray) })),
+        name: c.name, setName: (ev) => this.setCreate({ name: ev.target.value }), nameCount: c.name.length + '/30',
+        meta: n + ' stickers · ' + (cIds.some(i => i[0] === 'v') ? 'Animated' : 'Static') + ' · 512×512 WebP',
+        save: () => this.saveOwn(),
+      }, pdBar, { add: () => this.addOwn() }),
+
+      mp: (() => { const saved = this.catalog.filter(pk => S.favs[pk.id] && addedIds.indexOf(pk.id) < 0).map(pk => this.vmPack(pk)); const any = added.length + own.length > 0; return { empty: !any, has: any, hasAdded: added.length > 0, addedCount: added.length, added, hasSaved: saved.length > 0, savedCount: saved.length, saved, hasOwn: own.length > 0, ownCount: own.length, own }; })(),
+      fv: { empty: favPacks.length === 0, has: favPacks.length > 0, packs: favPacks },
+      st: {
+        themesSummary: selThemes.length ? selThemes.map(t => t.label).join(', ') : 'No themes picked',
+        storage: S.storageMB > 0 ? S.storageMB + ' MB on this phone' : 'Nothing stored',
+        editThemes: () => this.setState(s => ({ stack: [...s.stack, 'customize'], editMode: true })),
+        clear: () => { if (S.storageMB > 0) this.setState({ dialog: { type: 'clear' } }); else this.toast('Nothing to clear'); },
+        rate: () => this.setState({ rateOpen: true, rateStage: 'stars', rating: 0, rateText: '' }), contact: () => { this.setContact({ mode: 'contact' }); this.go('contact'); }, language: () => this.go('language'),
+        more: () => this.toast('Opening PIP Technologies on Play Store…'), privacy: () => this.toast('Opening privacy policy…'),
+        notifSub: S.notif ? 'Only when a new pack is added.' : "Off. You won't hear about new packs.",
+        notifIcon: ic(S.notif ? 'bell' : 'bell-off', 23), notifIconBg: S.notif ? '#FFEEF0' : '#F3F5F8', notifIconFg: S.notif ? '#C23359' : '#8b929d',
+        themesCount: selThemes.length + (selThemes.length === 1 ? ' theme' : ' themes'), storageShort: S.storageMB > 0 ? S.storageMB + ' MB' : 'None',
+        toggleNotif: () => { if (S.notif) { this.setState({ notif: false }); this.toast('New pack alerts off'); } else if (!S.notifAsked) this.setState({ dialog: { type: 'notif-perm' } }); else { this.setState({ notif: true }); this.toast('New pack alerts on'); } },
+        notifSwitch: 'width:48px;height:28px;border-radius:999px;border:none;position:relative;cursor:pointer;flex:none;padding:0;transition:background .2s;background:' + (S.notif ? '#C23359' : '#D8DCE3'),
+        notifKnob: 'position:absolute;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s;left:' + (S.notif ? '23px' : '3px'),
+        langLabel: (this.langs.find(l => l.id === S.lang) || this.langs[0]).native,
+      },
+      ct: {
+        title: S.contact.mode === 'feedback' ? 'Send feedback' : 'Contact us', hasStars: S.contact.mode === 'feedback', stars: this.starsRow(26),
+        intro: S.contact.mode === 'feedback' ? 'Thanks for the honesty. What should be better?' : 'A question, a broken pack, a pack you wish existed. We read every message.',
+        placeholder: S.contact.mode === 'feedback' ? 'What went wrong, or what is missing…' : 'Write your message…',
+        text: S.contact.text, setText: (ev) => this.setContact({ text: ev.target.value }), email: S.contact.email, setEmail: (ev) => this.setContact({ email: ev.target.value }),
+        sendStyle: primary + (S.contact.text.trim() ? '' : 'opacity:.45;cursor:default'), sendLabel: 'Send',
+        send: () => { if (!S.contact.text.trim()) return; this.setState({ stack: S.stack.indexOf('settings') >= 0 ? S.stack.slice(0, S.stack.indexOf('settings') + 1) : ['home', 'settings'], contact: { mode: 'contact', text: '', email: '' } }); this.toast('Sent. Thank you.', 'ok'); },
+      },
+      langs: this.langs.map(l => ({ native: l.native, name: l.name, rtl: !!l.rtl, on: S.lang === l.id, select: () => { this.setState(s => ({ lang: l.id, stack: s.stack.slice(0, -1) })); this.toast('Language: ' + l.native); }, style: 'width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;border:none;border-bottom:1px solid #F2F4F7;cursor:pointer;text-align:left;background:' + (S.lang === l.id ? '#FFF7F8' : 'none') })),
+      splashSpinner: this.spinner(22),
+      showNav: isTab,
+      nav: navDefs.map(d => d.fab ? { fab: true, tab: false, icon: ic('plus', 26, { sw: 2.2 }), go: () => this.go('create') } : { fab: false, tab: true, label: d.label, icon: ic(d.icon, 21), color: scr === d.key ? '#C23359' : '#A2A9B4', go: () => this.tab(d.key) }),
+
+      openSaved: () => this.go('saved'), savedCount: favPacks.length, savedBadgeOn: favPacks.length > 0, savedCountLabel: favPacks.length ? favPacks.length + (favPacks.length === 1 ? ' pack' : ' packs') : '',
+      sv: { empty: favPacks.length === 0, has: favPacks.length > 0, packs: favPacks },
+      showMap: !p.embedded,
+      mapGroups: [
+        { title: 'First run', items: [['Launch', { screen: 'splash', preset: 'fresh', hold: true }], ['Onboarding 1', { screen: 'onboarding', preset: 'fresh' }], ['Onboarding 2', { screen: 'onboarding', preset: 'fresh', slide: 1 }], ['Pick themes', { screen: 'customize', preset: 'fresh' }]] },
+        { title: 'Browse', items: [['Home', { screen: 'home' }], ['Animated', { screen: 'home', chip: 'animated' }], ['♥ Saved chip', { screen: 'home', chip: 'saved' }], ['Search', { screen: 'home', query: 'night' }], ['Pack detail', { screen: 'detail', packId: 'clingy-mango', preset: 'browsing' }], ['Downloading', { screen: 'detail', packId: 'sorry-love', preset: 'browsing', addState: 'downloading' }], ['Sent to WhatsApp', { screen: 'detail', packId: 'sorry-love', preset: 'browsing', addState: 'sent' }], ['Added', { screen: 'detail', packId: 'sorry-love', preset: 'browsing', addState: 'added' }], ['Retry', { screen: 'detail', packId: 'sorry-love', preset: 'browsing', addState: 'failed', scenario: 'download-fails' }]] },
+        { title: 'Create', items: [['Import', { screen: 'create' }], ['Cut out', { screen: 'editor' }], ['Brush', { screen: 'editor', tool: 'brush' }], ['Pack details', { screen: 'packDetails' }], ['Us, always', { screen: 'detail', packId: 'own-1' }], ['Just Us', { screen: 'detail', packId: 'own-2' }]] },
+        { title: 'My Packs · Settings', items: [['My Packs', { screen: 'myPacks' }], ['Card menu', { screen: 'myPacks', menu: 'clingy-mango' }], ['Saved', { screen: 'saved' }], ['Settings', { screen: 'settings' }], ['Edit themes', { screen: 'customize', edit: true }], ['Rate', { screen: 'settings', dialog: 'rate' }], ['Contact us', { screen: 'contact' }], ['Language', { screen: 'language' }]] },
+        { title: 'Errors · empty', items: [['Offline', { screen: 'home', scenario: 'offline' }], ['No WhatsApp', { screen: 'detail', packId: 'flirty-shy', preset: 'browsing', dialog: 'no-whatsapp', scenario: 'no-whatsapp' }], ['Clear downloads', { screen: 'settings', dialog: 'clear' }], ['My Packs empty', { screen: 'myPacks', empty: true }], ['Saved empty', { screen: 'saved', empty: true }]] },
+      ].map(g => ({ title: g.title, items: g.items.map(([label, spec]) => ({ label, go: () => this.jump(spec), style: "height:34px;padding:0 12px;border-radius:10px;font:600 12.5px 'Hanken Grotesk';cursor:pointer;background:#fff;border:1px solid #E1E5EB;color:#3d4550" })) })),
+      resetProto: () => this.jump({ screen: 'splash', preset: 'fresh' }),
+      hasRate: !!S.rateOpen,
+      rt: {
+        isStars: S.rateStage === 'stars', isStore: S.rateStage === 'store', isFeedback: S.rateStage === 'feedback', isThanks: S.rateStage === 'thanks',
+        stars: [1, 2, 3, 4, 5].map(v => ({ label: v + (v === 1 ? ' star' : ' stars'), color: v <= S.rating ? '#E0A64B' : '#D8DCE3', icon: ic('star', 38, v <= S.rating ? { fill: '#E0A64B', sw: 1.5 } : { sw: 1.5 }), pick: () => { this.setState({ rating: v }); this.later(() => { if (this.state.rateOpen && this.state.rateStage === 'stars') this.setState({ rateStage: v >= 5 ? 'store' : 'feedback' }); }, 380); } })),
+        hint: S.rating === 0 ? 'Tap a star' : S.rating >= 5 ? 'Love it!' : 'Tell us what went wrong',
+        five: [1, 2, 3, 4, 5].map(() => ({ icon: ic('star', 20, { fill: '#E0A64B', sw: 1.5 }) })),
+        close: () => this.setState({ rateOpen: false }), store: () => { this.setState({ rateOpen: false }); this.toast('Opening Google Play…'); },
+        text: S.rateText || '', setText: (ev) => this.setState({ rateText: ev.target.value }),
+        send: () => { if (!(S.rateText || '').trim()) return; this.setState({ rateStage: 'thanks' }); },
+        sendStyle: "margin-top:14px;width:100%;height:54px;border-radius:15px;background:#C23359;border:none;color:#fff;font:600 16px 'Hanken Grotesk';cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:opacity .15s;" + ((S.rateText || '').trim() ? '' : 'opacity:.45;cursor:default'),
+      },
+      hasToast: !!S.toast, toast: S.toast ? S.toast.msg : '', toastIcon: S.toast && S.toast.kind === 'ok' ? React.createElement('span', { style: { color: '#4CB98A', display: 'flex' } }, ic('check', 17, { sw: 2.4 })) : null, toastBottom: isTab ? '84px' : '24px',
+      hasDialog: !!dialog, dialog: dialog || {},
+      hasSheet: !!S.sheet, sheet: S.sheet ? { title: 'Add “' + sheetPk.title + '” to WhatsApp?', body: sheetPk.count + ' stickers' + (sheetPk.animated ? ' · animated' : '') + ' · from Love Stickers', confirm: () => this.confirmWA(), cancel: () => this.cancelWA() } : {},
+      hasMenu: !!menu, menu: menu || {}, closeMenu: () => this.setState({ menuFor: null }),
+    };
+  }
+}
+</script>
+</body>
+</html>

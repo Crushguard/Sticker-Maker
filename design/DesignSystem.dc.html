@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#EAECF1}
+a{color:#C23359;text-decoration:none}
+a:hover{color:#A31B45}
+</style>
+</helmet>
+<div style="padding:44px 32px 120px;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1E2128;-webkit-font-smoothing:antialiased;min-width:1240px">
+
+<header style="max-width:1240px;margin-bottom:30px">
+  <div style="display:flex;align-items:center;gap:11px;margin-bottom:18px;flex-wrap:wrap">
+    <div style="width:38px;height:38px;border-radius:11px;background:#C23359;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 6px 16px -4px rgba(194,51,89,.5);font:800 18px 'Hanken Grotesk'">♥</div>
+    <div style="font:800 20px 'Hanken Grotesk';letter-spacing:-.01em">Love Stickers</div>
+    <div style="font:600 11px 'JetBrains Mono';color:#8b929d;letter-spacing:.04em;padding:4px 9px;background:#fff;border:1px solid #E1E5EB;border-radius:999px">PIP TECHNOLOGIES · ANDROID · V1</div>
+  </div>
+  <h1 style="font:800 34px/1.12 'Hanken Grotesk';letter-spacing:-.025em;color:#171A20;margin:0 0 12px;max-width:760px">Pick a love pack. Tap Add. It's in WhatsApp.</h1>
+  <p style="font:400 16px/1.6 'Hanken Grotesk';color:#565C67;margin:0 0 18px;max-width:700px;text-wrap:pretty">Free, no ads, no account. Packs stream from the cloud; a pack downloads to the phone only when Add is tapped, then WhatsApp takes over. This page is the design system; the screens and the working prototype are one link away.</p>
+  <nav style="display:flex;gap:8px;margin-bottom:26px;flex-wrap:wrap"><span style="font:600 13px 'Hanken Grotesk';color:#fff;background:#1E2128;padding:9px 16px;border-radius:999px">Design System</span><a href="./Screens.dc.html" style="font:600 13px 'Hanken Grotesk';color:#3d4550;background:#fff;border:1px solid #E1E5EB;padding:8px 16px;border-radius:999px">Screens</a><a href="./Prototype.dc.html" style="font:600 13px 'Hanken Grotesk';color:#3d4550;background:#fff;border:1px solid #E1E5EB;padding:8px 16px;border-radius:999px">Prototype</a></nav>
+</header>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:1240px;margin-bottom:44px">
+  <a href="./Screens.dc.html" style="display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid #E1E5EB;border-radius:24px;padding:24px;box-shadow:0 1px 2px rgba(20,22,28,.03);color:#1E2128"><div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#C23359;text-transform:uppercase">Screens</div><div style="font:700 20px 'Hanken Grotesk';letter-spacing:-.015em;color:#171A20">13 screens · 42 frames</div><div style="font:400 14px/1.5 'Hanken Grotesk';color:#626873">Launch through error states, in flow order, each frame live and annotated with the components it uses.</div></a>
+  <a href="./Prototype.dc.html" style="display:flex;flex-direction:column;gap:10px;background:#C23359;border-radius:24px;padding:24px;box-shadow:0 10px 24px -10px rgba(194,51,89,.55);color:#fff"><div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#FFDCE1;text-transform:uppercase">Prototype</div><div style="font:700 20px 'Hanken Grotesk';letter-spacing:-.015em;color:#fff">Tap through the whole app</div><div style="font:400 14px/1.5 'Hanken Grotesk';color:#FFEEF0">Tweaks switch the start screen and simulate offline, a failed download, and WhatsApp missing.</div></a>
+</div>
+<section style="max-width:1240px;margin-bottom:44px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">Foundations</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:7px 0 6px">The PIP system, with a rose accent</h2>
+  <p style="font:400 14.5px/1.55 'Hanken Grotesk';color:#626873;margin:0 0 18px;max-width:720px;text-wrap:pretty">Extracted from RecoverMe and PDF Reader: the same quiet neutral base, Hanken Grotesk with JetBrains Mono for counts, 10 · 14 · 20 · pill radii, 4-based spacing, Lucide at 1.75. PIP apps share everything except the one accent hue (blue, red). Love Stickers takes rose at the same lightness and chroma.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+    <div style="background:#fff;border:1px solid #E1E5EB;border-radius:20px;padding:20px">
+      <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase;margin-bottom:12px">Color</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px">
+        <div><div style="height:40px;border-radius:10px;background:#FAFBFC;border:1px solid #E7EAEF"></div><div style="font:600 11.5px 'Hanken Grotesk';margin-top:5px">Canvas</div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4">#FAFBFC</div></div>
+        <div><div style="height:40px;border-radius:10px;background:#FFFFFF;border:1px solid #E7EAEF"></div><div style="font:600 11.5px 'Hanken Grotesk';margin-top:5px">Surface</div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4">#FFFFFF</div></div>
+        <div><div style="height:40px;border-radius:10px;background:#F3F5F8;border:1px solid #E7EAEF"></div><div style="font:600 11.5px 'Hanken Grotesk';margin-top:5px">Subtle</div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4">#F3F5F8</div></div>
+        <div><div style="height:40px;border-radius:10px;background:#1E2128"></div><div style="font:600 11.5px 'Hanken Grotesk';margin-top:5px">Ink</div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4">#1E2128</div></div>
+        <div><div style="height:40px;border-radius:10px;background:#626873"></div><div style="font:600 11.5px 'Hanken Grotesk';margin-top:5px">Ink 2</div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4">#626873</div></div>
+        <div><div style="height:40px;border-radius:10px;background:#E7EAEF"></div><div style="font:600 11.5px 'Hanken Grotesk';margin-top:5px">Border</div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4">#E7EAEF</div></div>
+        <div><div style="height:40px;border-radius:10px;background:#C23359"></div><div style="font:600 11.5px 'Hanken Grotesk';margin-top:5px">Primary · rose</div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4">oklch .55 .18 10</div></div>
+        <div><div style="height:40px;border-radius:10px;background:#2E9E6B"></div><div style="font:600 11.5px 'Hanken Grotesk';margin-top:5px">Added</div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4">oklch .63 .12 158</div></div>
+        <div><div style="height:40px;border-radius:10px;background:#B8792A"></div><div style="font:600 11.5px 'Hanken Grotesk';margin-top:5px">Attention</div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4">oklch .62 .10 70</div></div>
+      </div>
+      <div style="font:400 11.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:12px">Rose is the one action colour. Green means "in WhatsApp". Amber is a failed download, never red.</div>
+    </div>
+    <div style="background:#fff;border:1px solid #E1E5EB;border-radius:20px;padding:20px">
+      <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase;margin-bottom:12px">Type · shape</div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid #F2F4F7;padding-bottom:8px"><span style="font:800 26px 'Hanken Grotesk';letter-spacing:-.02em">Pick your themes</span><span style="font:400 10px 'JetBrains Mono';color:#A2A9B4">Display 26 / 800</span></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid #F2F4F7;padding-bottom:8px"><span style="font:700 16px 'Hanken Grotesk'">Love Notes</span><span style="font:400 10px 'JetBrains Mono';color:#A2A9B4">Title 16 / 700</span></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid #F2F4F7;padding-bottom:8px"><span style="font:400 15px 'Hanken Grotesk';color:#3d4550">One tap adds a pack to WhatsApp.</span><span style="font:400 10px 'JetBrains Mono';color:#A2A9B4">Body 15 / 400</span></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font:400 11.5px 'JetBrains Mono';color:#626873">24 stickers · 42.5K downloads</span><span style="font:400 10px 'JetBrains Mono';color:#A2A9B4">Meta 11.5 mono</span></div>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:16px">
+        <div style="flex:1"><div style="font:600 11px 'Hanken Grotesk';color:#8b929d;margin-bottom:7px">Radius</div><div style="display:flex;gap:7px;align-items:flex-end"><div style="width:30px;height:30px;background:#FFEEF0;border:1px solid #FFCED5;border-radius:10px"></div><div style="width:30px;height:30px;background:#FFEEF0;border:1px solid #FFCED5;border-radius:14px"></div><div style="width:30px;height:30px;background:#FFEEF0;border:1px solid #FFCED5;border-radius:20px"></div><div style="width:30px;height:30px;background:#FFEEF0;border:1px solid #FFCED5;border-radius:999px"></div></div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4;margin-top:5px">10 · 14 · 20 · pill</div></div>
+        <div style="flex:1"><div style="font:600 11px 'Hanken Grotesk';color:#8b929d;margin-bottom:7px">Sticker tints</div><div style="display:flex;gap:5px"><div style="width:22px;height:22px;border-radius:50%;background:#FFDCE1"></div><div style="width:22px;height:22px;border-radius:50%;background:#FFDFD0"></div><div style="width:22px;height:22px;border-radius:50%;background:#F6E6C7"></div><div style="width:22px;height:22px;border-radius:50%;background:#D4F1D8"></div><div style="width:22px;height:22px;border-radius:50%;background:#C6F2F4"></div><div style="width:22px;height:22px;border-radius:50%;background:#D2EBFF"></div><div style="width:22px;height:22px;border-radius:50%;background:#ECE2FF"></div><div style="width:22px;height:22px;border-radius:50%;background:#FADEF6"></div></div><div style="font:400 9.5px 'JetBrains Mono';color:#A2A9B4;margin-top:5px">oklch .93 .045 · hue only</div></div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E1E5EB;border-radius:20px;padding:20px">
+      <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase;margin-bottom:12px">Components</div>
+      <div style="font:400 13px/1.6 'Hanken Grotesk';color:#3d4550">
+        <div><strong style="font-weight:700">Carried over:</strong> primary / secondary / ghost / destructive buttons, filter chips, segmented control, list rows, white cards, bottom nav with the raised Create (PDF Reader), empty state, dark toast, dialog, bottom sheet, honesty line.</div>
+        <div style="margin-top:8px"><strong style="font-weight:700">New here:</strong> pack card with 6-thumb strip, tinted Add pill with progress fill, full-width Add bar with five states, sticker tile, theme tile.</div>
+        <div style="margin-top:8px;color:#8b929d;font-size:12px;line-height:1.5">Sticker art is a placeholder glyph per pack; real WebP previews stream from Cloud Storage. The phone-in-bubble glyph inside Add reads as WhatsApp while staying in our colours; swap in the official glyph at build if WhatsApp's brand terms allow.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section style="max-width:1240px;margin-bottom:44px">
+  <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">Components</div>
+  <h2 style="font:800 24px 'Hanken Grotesk';letter-spacing:-.02em;margin:7px 0 6px">Every control the app uses</h2>
+  <p style="font:400 14.5px/1.55 'Hanken Grotesk';color:#626873;margin:0 0 18px;max-width:720px;text-wrap:pretty">Static specimens at phone width. Sizes are the ones in the screens; nothing here is decorative.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;font-family:'Hanken Grotesk'">
+
+    <div style="background:#fff;border:1px solid #E1E5EB;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">Buttons</div>
+      <div style="height:52px;border-radius:14px;background:#C23359;color:#fff;font:600 16px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center">Primary · 52 / 14</div>
+      <div style="height:52px;border-radius:14px;background:#C23359;color:#fff;font:600 16px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center;opacity:.45">Primary · disabled</div>
+      <div style="height:48px;border-radius:13px;background:#F3F5F8;border:1px solid #E7EAEF;color:#1E2128;font:600 14.5px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center">Secondary · 48 / 13</div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap"><div style="height:42px;padding:0 14px;border-radius:11px;color:#626873;font:600 14px 'Hanken Grotesk';display:flex;align-items:center">Ghost</div><div style="height:42px;padding:0 16px;border-radius:11px;color:#C4553D;border:1px solid #EEDAD3;font:600 14px 'Hanken Grotesk';display:flex;align-items:center">Destructive</div><div style="height:42px;padding:0 16px;border-radius:11px;background:#C23359;color:#fff;font:600 14px 'Hanken Grotesk';display:flex;align-items:center">Dialog primary</div></div>
+      <div style="display:flex;align-items:center;gap:10px"><div style="width:52px;height:52px;border-radius:16px;background:#C23359;color:#fff;display:flex;align-items:center;justify-content:center;font:300 30px 'Hanken Grotesk';box-shadow:0 8px 18px -6px rgba(194,51,89,.55);flex:none">+</div><div style="font:400 12px/1.5 'Hanken Grotesk';color:#8b929d">Raised Create · 52 / 16 · sits 18 px above the nav, as in PDF Reader</div></div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E1E5EB;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">Add control · five states</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <div style="height:36px;padding:0 13px 0 11px;border-radius:999px;background:#FFEEF0;color:#C23359;border:1px solid #FFCED5;font:600 13px 'Hanken Grotesk';display:flex;align-items:center;gap:6px">Add</div>
+        <div style="position:relative;overflow:hidden;height:36px;min-width:72px;border-radius:999px;background:#FFEEF0;color:#C23359;border:1px solid #FFCED5;font:600 13px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center"><div style="position:absolute;left:0;top:0;bottom:0;width:64%;background:rgba(194,51,89,.18)"></div><span style="position:relative">64%</span></div>
+        <div style="height:36px;padding:0 13px;border-radius:999px;background:#FFEEF0;color:#C23359;border:1px solid #FFCED5;font:600 13px 'Hanken Grotesk';display:flex;align-items:center;gap:6px"><span style="width:13px;height:13px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;display:inline-block"></span>Sent…</div>
+        <div style="height:36px;padding:0 13px 0 11px;border-radius:999px;background:#F3F5F8;color:#2E9E6B;border:1px solid #E7EAEF;font:600 13px 'Hanken Grotesk';display:flex;align-items:center;gap:6px">✓ Added</div>
+        <div style="height:36px;padding:0 13px 0 11px;border-radius:999px;background:#FEFBF5;color:#B8792A;border:1px solid #F0DFC4;font:600 13px 'Hanken Grotesk';display:flex;align-items:center;gap:6px">↺ Retry</div>
+      </div>
+      <div style="height:52px;border-radius:14px;background:#C23359;color:#fff;font:600 16px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center;gap:8px">Add to WhatsApp</div>
+      <div style="position:relative;overflow:hidden;height:52px;border-radius:14px;background:#FFEEF0;color:#C23359;border:1px solid #FFCED5;font:600 16px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center"><div style="position:absolute;left:0;top:0;bottom:0;width:64%;background:rgba(194,51,89,.16)"></div><span style="position:relative">Downloading · 64%</span></div>
+      <div style="height:52px;border-radius:14px;background:#fff;color:#2E9E6B;border:1px solid #E7EAEF;font:600 16px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center;gap:8px">✓ Added to WhatsApp</div>
+      <div style="height:52px;border-radius:14px;background:#FEFBF5;color:#B8792A;border:1px solid #F0DFC4;font:600 16px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center;gap:8px">↺ Download failed · Retry</div>
+      <div style="font:400 12px/1.5 'Hanken Grotesk';color:#8b929d">Pill 36 on cards, bar 52 in detail. Progress is a rose fill inside the control. A phone-in-bubble glyph in the button's own colour says WhatsApp without its green or logo.</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E1E5EB;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">Chips · segmented · switch · fields</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><div style="height:36px;padding:0 15px;border-radius:999px;background:#FFEEF0;color:#C23359;border:1px solid #C23359;font:600 13px 'Hanken Grotesk';display:flex;align-items:center">Trending</div><div style="height:36px;padding:0 15px;border-radius:999px;background:#fff;color:#626873;border:1px solid #E7EAEF;font:600 13px 'Hanken Grotesk';display:flex;align-items:center">Couples</div><div style="height:36px;padding:0 15px;border-radius:999px;background:#fff;color:#626873;border:1px solid #E7EAEF;font:600 13px 'Hanken Grotesk';display:flex;align-items:center">Cute</div></div>
+      <div style="display:flex;background:#F3F5F8;border-radius:12px;padding:4px;gap:2px"><div style="flex:1;height:38px;border-radius:9px;background:#fff;color:#1E2128;box-shadow:0 1px 2px rgba(0,0,0,.06);font:600 13px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center">Photos</div><div style="flex:1;height:38px;border-radius:9px;color:#8b929d;font:600 13px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center">Camera</div><div style="flex:1;height:38px;border-radius:9px;color:#8b929d;font:600 13px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center">Video</div></div>
+      <div style="display:flex;align-items:center;gap:14px"><div style="width:48px;height:28px;border-radius:999px;background:#C23359;position:relative;flex:none"><span style="position:absolute;top:3px;left:23px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span></div><div style="width:48px;height:28px;border-radius:999px;background:#D8DCE3;position:relative;flex:none"><span style="position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span></div><div style="font:400 12px 'Hanken Grotesk';color:#8b929d">Switch 48 × 28</div></div>
+      <div style="height:50px;display:flex;align-items:center;padding:0 14px;background:#fff;border:1px solid #E7EAEF;border-radius:12px;font:400 15px 'Hanken Grotesk';color:#A2A9B4">Text field · 50 / 12</div>
+      <div style="height:44px;display:flex;align-items:center;gap:9px;padding:0 14px;background:#fff;border:1px solid #C23359;border-radius:12px;font:400 15px 'Hanken Grotesk';color:#1E2128">Search · focused<span style="width:1px;height:18px;background:#C23359"></span></div>
+      <div style="display:flex;gap:8px;align-items:center"><div style="width:22px;height:22px;border-radius:7px;background:#C23359;color:#fff;display:flex;align-items:center;justify-content:center;font:700 12px 'Hanken Grotesk'">✓</div><div style="width:22px;height:22px;border-radius:7px;background:#fff;border:1px solid #D8DCE3"></div><div style="font:400 12px 'Hanken Grotesk';color:#8b929d">Check square 22 / 7</div></div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E1E5EB;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">Pack card · tiles</div>
+      <div style="background:#fff;border:1px solid #E7EAEF;border-radius:20px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(20,22,28,.03)">
+        <div style="display:flex;align-items:center;gap:6px"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px"><div style="font:700 16px 'Hanken Grotesk';letter-spacing:-.01em">Love Notes</div><span style="font:600 9px 'JetBrains Mono';letter-spacing:.06em;color:#626873;background:#F3F5F8;border:1px solid #E7EAEF;padding:2px 6px;border-radius:5px">ANIMATED</span></div><div style="font:400 11.5px 'JetBrains Mono';color:#8b929d;margin-top:4px">24 stickers · 42.5K adds</div></div><div style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#C23359;font-size:18px">♥</div><div style="height:36px;padding:0 13px;border-radius:999px;background:#FFEEF0;color:#C23359;border:1px solid #FFCED5;font:600 13px 'Hanken Grotesk';display:flex;align-items:center">Add</div></div>
+        <div style="display:flex;gap:8px"><div style="width:46px;height:46px;border-radius:50%;background:#FFDFD0"></div><div style="width:46px;height:46px;border-radius:50%;background:#FFDFD0"></div><div style="width:46px;height:46px;border-radius:50%;background:#FFDFD0"></div><div style="width:46px;height:46px;border-radius:50%;background:#FFDFD0"></div><div style="width:46px;height:46px;border-radius:50%;background:#FFDFD0"></div><div style="width:46px;height:46px;border-radius:50%;background:#FFDFD0"></div></div>
+      </div>
+      <div style="font:400 12px/1.5 'Hanken Grotesk';color:#8b929d">White, 20 radius, 1 px border. Title 16/700, meta 11.5 mono, animated badge 9 mono, heart 20, Add pill, six 46 px round previews. Same card on Home, Saved and My Packs (⋯ replaces the heart).</div>
+      <div style="display:flex;gap:10px;align-items:center"><div style="width:64px;height:64px;border-radius:16px;background:#ECE2FF;transform:rotate(-5deg);flex:none"></div><div style="width:56px;height:56px;border-radius:14px;background:#F3F5F8;border:2px solid #C23359;display:flex;align-items:center;justify-content:center;flex:none"><div style="width:40px;height:40px;border-radius:48% 52% 46% 54%/55% 45% 55% 45%;background:#D4F1D8;border:3px solid #fff;box-shadow:0 0 0 1px #E1E5EB"></div></div><div style="font:400 12px/1.5 'Hanken Grotesk';color:#8b929d">Sticker tile, 16 radius in the pack tint · editor rail 56 / 14, active = rose border</div></div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E1E5EB;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">Lists · nav · badges</div>
+      <div style="background:#fff;border:1px solid #EEF0F4;border-radius:16px;overflow:hidden"><div style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid #F2F4F7"><span style="width:20px;height:20px;border-radius:5px;background:#E7EAEF;flex:none"></span><div style="flex:1"><div style="font:600 14.5px 'Hanken Grotesk'">List row</div><div style="font:400 12px 'Hanken Grotesk';color:#8b929d;margin-top:2px">Subtitle, one line</div></div><span style="color:#B4BAC4">›</span></div><div style="display:flex;align-items:center;gap:12px;padding:13px 14px"><span style="width:20px;height:20px;border-radius:5px;background:#E7EAEF;flex:none"></span><div style="flex:1;font:600 14.5px 'Hanken Grotesk'">Row with value</div><span style="font:400 12px 'JetBrains Mono';color:#8b929d">1.0.0 (1)</span></div></div>
+      <div style="height:52px;border:1px solid #EBEEF2;border-radius:12px;display:flex;align-items:center;gap:9px;padding:0 12px;background:#fff"><div style="width:28px;height:28px;border-radius:9px;background:#C23359;color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px 'Hanken Grotesk'">♥</div><div style="flex:1;font:800 17px 'Hanken Grotesk';letter-spacing:-.02em">Love Stickers</div><span style="font:400 11px 'JetBrains Mono';color:#8b929d">search · settings</span></div>
+      <div style="height:68px;border-top:1px solid #EBEEF2;border-bottom:1px solid #EBEEF2;display:flex;align-items:center;padding:0 6px;background:#fff"><div style="flex:1;text-align:center;font:600 10.5px 'Hanken Grotesk';color:#C23359">Home</div><div style="width:64px;display:flex;justify-content:center"><div style="width:52px;height:52px;border-radius:16px;background:#C23359;margin-top:-18px;box-shadow:0 8px 18px -6px rgba(194,51,89,.55)"></div></div><div style="flex:1;text-align:center;font:600 10.5px 'Hanken Grotesk';color:#A2A9B4">My Packs</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font:600 9px 'JetBrains Mono';letter-spacing:.06em;color:#626873;background:#F3F5F8;border:1px solid #E7EAEF;padding:2px 6px;border-radius:5px">ANIMATED</span><span style="font:600 9px 'JetBrains Mono';color:#8b929d;background:#F3F5F8;padding:3px 6px;border-radius:5px">RTL</span><span style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">In WhatsApp · 2</span><span style="font:400 12px 'Hanken Grotesk';color:#8b929d">badges and section eyebrows, mono</span></div>
+      <div style="display:flex;align-items:center;gap:6px;font:400 12px 'Hanken Grotesk';color:#99A0AC">♥ Free · No ads · No account <span style="color:#B4BAC4">· honesty line, every entry point</span></div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E1E5EB;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#8b929d;text-transform:uppercase">Feedback surfaces</div>
+      <div style="display:inline-flex;align-self:center;align-items:center;gap:9px;background:#1E2128;color:#fff;font:600 13.5px 'Hanken Grotesk';padding:12px 16px;border-radius:13px;box-shadow:0 10px 28px -8px rgba(20,30,60,.35)"><span style="color:#4CB98A">✓</span>Added to WhatsApp</div>
+      <div style="background:#fff;border:1px solid #E7EAEF;border-radius:22px;padding:18px 16px 14px;box-shadow:0 10px 28px -8px rgba(20,30,60,.12)"><div style="width:44px;height:44px;border-radius:13px;background:#F3F5F8;margin-bottom:10px"></div><div style="font:700 17px 'Hanken Grotesk'">Confirmation sheet · 26 radius</div><div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#626873;margin-top:4px">RecoverMe pattern. Icon box 44/13 (red tint when destructive), title 18, body 13.5, two equal 50/13 buttons: grey keep, filled confirm. Tap outside cancels.</div><div style="display:flex;gap:8px;margin-top:12px"><div style="flex:1;height:40px;border-radius:11px;background:#F3F5F8;border:1px solid #E7EAEF;font:600 13.5px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center">Keep</div><div style="flex:1;height:40px;border-radius:11px;background:#C4553D;color:#fff;font:600 13.5px 'Hanken Grotesk';display:flex;align-items:center;justify-content:center">Remove</div></div></div>
+      <div style="background:#fff;border:1px solid #E7EAEF;border-radius:24px 24px 0 0;padding:14px 16px 16px"><div style="width:36px;height:4px;border-radius:2px;background:#E1E5EB;margin:0 auto 12px"></div><div style="font:700 15px 'Hanken Grotesk'">Bottom sheet · 24 top radius</div><div style="font:400 12.5px 'Hanken Grotesk';color:#8b929d;margin-top:3px">Rows 50, 300 ms ease-out. Card menus, the simulated WhatsApp confirm, and the rating sheet (38 px stars in PIP gold #E0A64B).</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 0 0"><div style="width:56px;height:56px;border-radius:16px;background:#F3F5F8;margin-bottom:10px"></div><div style="font:700 17px 'Hanken Grotesk'">Empty state</div><div style="font:400 13.5px/1.5 'Hanken Grotesk';color:#8b929d;margin-top:4px;max-width:240px">Icon box 56/16, title 17, body 13.5, one primary, optional ghost.</div></div>
+    </div>
+  </div>
+</section>
+</div>
+</x-dc>
+</body>
+</html>
