@@ -62,10 +62,13 @@ import com.piptechnologies.stickermaker.core.design.LoveStickersTheme
 import com.piptechnologies.stickermaker.core.design.Mono
 import com.piptechnologies.stickermaker.core.design.Muted
 import com.piptechnologies.stickermaker.core.design.Subtle
+import com.piptechnologies.stickermaker.core.design.Surface
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
 import com.piptechnologies.stickermaker.core.design.components.ConfirmSheet
 import com.piptechnologies.stickermaker.core.design.components.EmptyState
+import com.piptechnologies.stickermaker.core.design.components.LoveBottomNav
 import com.piptechnologies.stickermaker.core.design.components.LoveBottomSheet
+import com.piptechnologies.stickermaker.core.design.components.LoveNavItem
 import com.piptechnologies.stickermaker.core.design.components.PackCard
 import com.piptechnologies.stickermaker.core.design.components.SheetHeader
 import com.piptechnologies.stickermaker.core.design.components.SheetListRow
@@ -105,6 +108,7 @@ private val InfoBg = Color(0xFFF6F7F9)
 private val InfoLine = Color(0xFFEBEEF2)
 
 private const val WHATSAPP_PACKAGE = "com.whatsapp"
+private const val NAV_HOME = "Home"
 
 /**
  * My Packs (design/Screens.dc.html section 07): toolbar with the Saved heart
@@ -164,6 +168,7 @@ fun MyPacksScreen(
             onPillClicked = viewModel::onPillClicked,
             onMenu = viewModel::openMenu,
             onBrowse = onBack,
+            onHome = onBack,
             onCreate = onCreate,
             onOpenSaved = onOpenSaved,
             onOpenSettings = onOpenSettings
@@ -249,6 +254,7 @@ internal fun MyPacksContent(
     onPillClicked: (String) -> Unit,
     onMenu: (String) -> Unit,
     onBrowse: () -> Unit,
+    onHome: () -> Unit,
     onCreate: () -> Unit,
     onOpenSaved: () -> Unit,
     onOpenSettings: () -> Unit,
@@ -259,7 +265,6 @@ internal fun MyPacksContent(
             .fillMaxSize()
             .background(Canvas)
             .statusBarsPadding()
-            .navigationBarsPadding()
     ) {
         Row(
             modifier = Modifier
@@ -335,6 +340,21 @@ internal fun MyPacksContent(
                 }
                 item(key = "info-removal") { RemovalInfoCard() }
             }
+        }
+        // Same 3-slot tab bar as Home (Prototype showNav on both tabs).
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .background(Surface)
+                .navigationBarsPadding()
+        ) {
+            LoveBottomNav(
+                items = listOf(
+                    LoveNavItem(LoveIcons.Home, NAV_HOME, selected = false, onClick = onHome),
+                    LoveNavItem(LoveIcons.Sticker, TITLE_MY_PACKS, selected = true, onClick = {})
+                ),
+                onCreate = onCreate
+            )
         }
     }
 }
@@ -471,7 +491,7 @@ private fun MyPacksPreview() {
                 savedCount = 2
             ),
             onOpenPack = {}, onPillClicked = {}, onMenu = {},
-            onBrowse = {}, onCreate = {}, onOpenSaved = {}, onOpenSettings = {}
+            onBrowse = {}, onHome = {}, onCreate = {}, onOpenSaved = {}, onOpenSettings = {}
         )
     }
 }
@@ -483,7 +503,7 @@ private fun MyPacksEmptyPreview() {
         MyPacksContent(
             state = MyPacksUiState(loading = false),
             onOpenPack = {}, onPillClicked = {}, onMenu = {},
-            onBrowse = {}, onCreate = {}, onOpenSaved = {}, onOpenSettings = {}
+            onBrowse = {}, onHome = {}, onCreate = {}, onOpenSaved = {}, onOpenSettings = {}
         )
     }
 }
