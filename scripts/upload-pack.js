@@ -94,7 +94,9 @@ async function uploadPack(pack) {
     trayPath: `packs/${pack.id}/tray.png`,
     stickerPaths: stickerFiles.map((f) => `packs/${pack.id}/${f}`),
     thumbPaths: stickerFiles.map((f) => `packs/${pack.id}/thumbs/${f}`),
-    emojis: Object.fromEntries(contents.stickers.map((s) => [s.image_file.replace('.webp', ''), s.emojis])),
+    // Keyed by full file name ("01.webp") to match the app's CatalogDataSource.
+    // Dots in keys are safe because the map is always set whole, never by FieldPath.
+    emojis: Object.fromEntries(contents.stickers.map((s) => [s.image_file, s.emojis])),
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   };
   if (!DRY) await db.collection('packs').doc(pack.id).set(doc, { merge: true });
