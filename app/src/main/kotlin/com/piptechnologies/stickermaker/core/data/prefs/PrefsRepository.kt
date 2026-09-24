@@ -51,6 +51,10 @@ class PrefsRepository @Inject constructor(
     val heartsCount: Flow<Int> =
         data.map { it[KEY_HEARTS_COUNT] ?: 0 }.distinctUntilChanged()
 
+    /** Ids of packs the user hearted (the Saved screen and the ♥ Saved chip). */
+    val favoritePackIds: Flow<Set<String>> =
+        data.map { it[KEY_FAVORITE_PACK_IDS] ?: emptySet() }.distinctUntilChanged()
+
     /** New-pack alerts toggle from Settings. */
     val alertsEnabled: Flow<Boolean> =
         data.map { it[KEY_ALERTS_ENABLED] ?: true }.distinctUntilChanged()
@@ -80,6 +84,15 @@ class PrefsRepository @Inject constructor(
         dataStore.edit { it[KEY_HEARTS_COUNT] = ((it[KEY_HEARTS_COUNT] ?: 0) + by).coerceAtLeast(0) }
     }
 
+    /** Hearts [packId], or un-hearts it when it is already in the set. */
+    suspend fun toggleFavorite(packId: String) {
+        dataStore.edit {
+            val current = it[KEY_FAVORITE_PACK_IDS] ?: emptySet()
+            it[KEY_FAVORITE_PACK_IDS] =
+                if (packId in current) current - packId else current + packId
+        }
+    }
+
     suspend fun setAlertsEnabled(value: Boolean) {
         dataStore.edit { it[KEY_ALERTS_ENABLED] = value }
     }
@@ -99,6 +112,7 @@ class PrefsRepository @Inject constructor(
         private val KEY_ONBOARDED = booleanPreferencesKey("onboarded")
         private val KEY_SELECTED_THEMES = stringSetPreferencesKey("selected_themes")
         private val KEY_HEARTS_COUNT = intPreferencesKey("hearts_count")
+        private val KEY_FAVORITE_PACK_IDS = stringSetPreferencesKey("favorite_pack_ids")
         private val KEY_ALERTS_ENABLED = booleanPreferencesKey("alerts_enabled")
         private val KEY_LANGUAGE = stringPreferencesKey("language")
         private val KEY_DOWNLOADS_CLEARED_AT = longPreferencesKey("downloads_cleared_at")
