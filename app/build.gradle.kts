@@ -60,6 +60,9 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
+        // The design system's sheets and top bars sit on experimental Material 3
+        // APIs; opting in module-wide keeps call sites annotation-free.
+        freeCompilerArgs += "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
     }
 
     buildFeatures {
