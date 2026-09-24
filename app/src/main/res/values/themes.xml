@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Splash theme set in the manifest; installSplashScreen() swaps to
+         postSplashScreenTheme before super.onCreate(). -->
+    <style name="Theme.LoveStickers.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/canvas</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_heart</item>
+        <item name="postSplashScreenTheme">@style/Theme.LoveStickers.Main</item>
+    </style>
+
+    <!-- Main theme: Compose draws everything; AppCompat parent so
+         AppCompatDelegate day/night + per-app locales work. -->
+    <style name="Theme.LoveStickers.Main" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/canvas</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+</resources>
