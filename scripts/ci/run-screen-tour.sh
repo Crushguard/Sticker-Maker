@@ -21,10 +21,14 @@ adb shell am instrument -w \
   "$APP.test/androidx.test.runner.AndroidJUnitRunner" 2>&1 | tee "$OUT/instrument.txt"
 set -e
 
-rm -rf "$OUT/tour"
-adb exec-out run-as "$APP" tar -cf - -C files tour | tar -xf - -C "$OUT"
 adb logcat -d > "$OUT/logcat.txt" 2>/dev/null || true
-echo "Pulled $(ls "$OUT/tour" | wc -l) files from the device."
+rm -rf "$OUT/tour"
+if adb shell run-as "$APP" ls files/tour >/dev/null 2>&1; then
+  adb exec-out run-as "$APP" tar -cf - -C files tour | tar -xf - -C "$OUT"
+  echo "Pulled $(ls "$OUT/tour" | wc -l) files from the device."
+else
+  echo "The tour wrote no output on the device."
+fi
 
 # am instrument exits 0 even when tests fail; read its verdict instead.
 if ! grep -q "^OK (" "$OUT/instrument.txt"; then
