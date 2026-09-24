@@ -28,8 +28,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoveStickers.Starting">
 
-        <!-- The WhatsApp StickerContentProvider is declared in a later phase,
-             once whatsapp/StickerContentProvider.kt exists. -->
+        <!-- Serves installed and own sticker packs to WhatsApp. -->
+        <provider
+            android:name=".whatsapp.StickerContentProvider"
+            android:authorities="com.piptechnologies.stickermaker.stickercontentprovider"
+            android:enabled="true"
+            android:exported="true"
+            android:readPermission="com.whatsapp.sticker.READ" />
 
         <activity
             android:name=".MainActivity"
