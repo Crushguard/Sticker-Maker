@@ -94,7 +94,7 @@ def main():
             languages.append((s["locale"], s.get("language", s["locale"])))
     out.append(f"- **Result:** {captured} of {len(numbers)} design frames captured, "
                f"{len(extras)} extra states, {len(languages)} languages, "
-               f"{len(failures)} failed steps · tour {status}")
+               f"{len(failures)} failed step{'' if len(failures) == 1 else 's'} · tour {status}")
     if args.branch or short:
         out.append(f"- **Source:** `{args.branch}` @ `{short}`")
     if args.run_url:
