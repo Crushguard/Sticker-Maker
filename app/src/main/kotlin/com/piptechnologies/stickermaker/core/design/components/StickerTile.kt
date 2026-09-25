@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Border
 import com.piptechnologies.stickermaker.core.design.Ink
 import com.piptechnologies.stickermaker.core.design.LoveIcons
@@ -68,6 +70,7 @@ fun StickerTile(
     content: @Composable () -> Unit = {}
 ) {
     val shape = RoundedCornerShape(radius)
+    val removeLabel = stringResource(R.string.sticker_remove)
     Box(
         modifier = modifier
             .aspectRatio(1f)
@@ -116,10 +119,10 @@ fun StickerTile(
                     .size(22.dp)
                     .clip(CircleShape)
                     .background(Ink)
-                    .clickable(role = Role.Button, onClickLabel = "Remove sticker", onClick = onDelete),
+                    .clickable(role = Role.Button, onClickLabel = removeLabel, onClick = onDelete),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(LoveIcons.X, "Remove sticker", Modifier.size(12.dp), tint = Color.White)
+                Icon(LoveIcons.X, removeLabel, Modifier.size(12.dp), tint = Color.White)
             }
             selected && showCheckWhenSelected -> Box(
                 modifier = Modifier
@@ -144,7 +147,7 @@ fun StickerTile(
 fun AddStickerTile(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    contentDescription: String = "Add a sticker",
+    contentDescription: String = stringResource(R.string.sticker_add),
     radius: Dp = 14.dp
 ) {
     val shape = RoundedCornerShape(radius)

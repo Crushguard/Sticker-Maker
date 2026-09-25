@@ -33,6 +33,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +44,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Border
 import com.piptechnologies.stickermaker.core.design.Gold
 import com.piptechnologies.stickermaker.core.design.Green
@@ -56,27 +59,6 @@ import com.piptechnologies.stickermaker.core.design.RoseTint
 import com.piptechnologies.stickermaker.core.design.Surface
 import com.piptechnologies.stickermaker.core.design.components.LoveBottomSheet
 import kotlinx.coroutines.delay
-
-// ---- Copy (verbatim from design/Prototype.dc.html, rating sheet) ---- //
-private const val STARS_TITLE = "Enjoying Love Stickers?"
-private const val STARS_BODY = "Your honest rating helps other people find a sticker app with no ads."
-private const val HINT_IDLE = "Tap a star"
-private const val HINT_FIVE = "Love it!"
-private const val HINT_LOW = "Tell us what went wrong"
-private const val MAYBE_LATER = "Maybe later"
-private const val STORE_TITLE = "Thank you!"
-private const val STORE_BODY = "Would you share that on Google Play? It helps a small, ad-free app grow."
-private const val STORE_CTA = "Rate on Google Play"
-private const val NOT_NOW = "Not now"
-private const val FEEDBACK_TITLE = "How can we do better?"
-private const val FEEDBACK_BODY =
-    "Tell us what fell short. It goes straight to the team, not a public review, and we read every one."
-private const val FEEDBACK_PLACEHOLDER = "What would have made this a 5-star app?"
-private const val FEEDBACK_CTA = "Send feedback"
-private const val CANCEL = "Cancel"
-private const val THANKS_TITLE = "Thank you, we hear you"
-private const val THANKS_BODY = "Your note is on its way to the team. It shapes what we build next."
-private const val DONE = "Done"
 
 /** A tap on a star is the answer; the sheet moves on by itself after this. */
 private const val AUTO_ADVANCE_MS = 380L
@@ -196,13 +178,13 @@ private fun RateStarsStage(
             tint = Rose
         )
         Text(
-            STARS_TITLE,
+            stringResource(R.string.rate_title),
             style = StageTitleStyle,
             color = Ink,
             modifier = Modifier.padding(top = 14.dp)
         )
         Text(
-            STARS_BODY,
+            stringResource(R.string.rate_body),
             style = StageBodyStyle,
             color = Ink2,
             textAlign = TextAlign.Center,
@@ -237,17 +219,19 @@ private fun RateStarsStage(
             }
         }
         Text(
-            when {
-                rating == 0 -> HINT_IDLE
-                rating >= 5 -> HINT_FIVE
-                else -> HINT_LOW
-            },
+            stringResource(
+                when {
+                    rating == 0 -> R.string.rate_hint_idle
+                    rating >= 5 -> R.string.rate_hint_five
+                    else -> R.string.rate_hint_low
+                }
+            ),
             style = HintStyle,
             color = Muted,
             textAlign = TextAlign.Center
         )
         GhostButton(
-            label = MAYBE_LATER,
+            label = stringResource(R.string.rate_maybe_later),
             onClick = onLater,
             modifier = Modifier.padding(top = 14.dp)
         )
@@ -255,7 +239,8 @@ private fun RateStarsStage(
 }
 
 /** "1 star" / "n stars", the prototype's aria labels. */
-private fun starLabel(value: Int): String = if (value == 1) "1 star" else "$value stars"
+@Composable
+private fun starLabel(value: Int): String = pluralStringResource(R.plurals.rate_star, value, value)
 
 @Composable
 private fun RateStoreStage(
@@ -283,13 +268,13 @@ private fun RateStoreStage(
             }
         }
         Text(
-            STORE_TITLE,
+            stringResource(R.string.rate_store_title),
             style = StageTitleStyle,
             color = Ink,
             modifier = Modifier.padding(top = 14.dp)
         )
         Text(
-            STORE_BODY,
+            stringResource(R.string.rate_store_body),
             style = StageBodyStyle,
             color = Ink2,
             textAlign = TextAlign.Center,
@@ -298,13 +283,13 @@ private fun RateStoreStage(
                 .widthIn(max = 290.dp)
         )
         RosePrimaryButton(
-            label = STORE_CTA,
+            label = stringResource(R.string.rate_store_cta),
             icon = LoveIcons.ExternalLink,
             onClick = onStore,
             modifier = Modifier.padding(top = 20.dp)
         )
         GhostButton(
-            label = NOT_NOW,
+            label = stringResource(R.string.common_not_now),
             onClick = onNotNow,
             modifier = Modifier.padding(top = 10.dp)
         )
@@ -328,13 +313,13 @@ private fun RateFeedbackStage(
             tint = Rose
         )
         Text(
-            FEEDBACK_TITLE,
+            stringResource(R.string.rate_feedback_title),
             style = FeedbackTitleStyle,
             color = Ink,
             modifier = Modifier.padding(top = 14.dp)
         )
         Text(
-            FEEDBACK_BODY,
+            stringResource(R.string.rate_feedback_body),
             style = StageBodyStyle,
             color = Ink2,
             modifier = Modifier.padding(top = 6.dp)
@@ -357,21 +342,21 @@ private fun RateFeedbackStage(
                 modifier = Modifier.fillMaxWidth(),
                 decorationBox = { innerTextField ->
                     if (text.isEmpty()) {
-                        Text(FEEDBACK_PLACEHOLDER, style = FeedbackFieldStyle, color = Muted)
+                        Text(stringResource(R.string.rate_feedback_placeholder), style = FeedbackFieldStyle, color = Muted)
                     }
                     innerTextField()
                 }
             )
         }
         RosePrimaryButton(
-            label = FEEDBACK_CTA,
+            label = stringResource(R.string.rate_feedback_cta),
             icon = SettingsIcons.Send,
             enabled = text.isNotBlank(),
             onClick = onSend,
             modifier = Modifier.padding(top = 14.dp)
         )
         GhostButton(
-            label = CANCEL,
+            label = stringResource(R.string.common_cancel),
             onClick = onCancel,
             modifier = Modifier.padding(top = 10.dp)
         )
@@ -395,13 +380,13 @@ private fun RateThanksStage(onDone: () -> Unit) {
             tint = Green
         )
         Text(
-            THANKS_TITLE,
+            stringResource(R.string.rate_thanks_title),
             style = StageTitleStyle,
             color = Ink,
             modifier = Modifier.padding(top = 14.dp)
         )
         Text(
-            THANKS_BODY,
+            stringResource(R.string.rate_thanks_body),
             style = StageBodyStyle,
             color = Ink2,
             textAlign = TextAlign.Center,
@@ -410,7 +395,7 @@ private fun RateThanksStage(onDone: () -> Unit) {
                 .widthIn(max = 290.dp)
         )
         RosePrimaryButton(
-            label = DONE,
+            label = stringResource(R.string.common_done),
             onClick = onDone,
             height = 52.dp,
             corner = 14.dp,

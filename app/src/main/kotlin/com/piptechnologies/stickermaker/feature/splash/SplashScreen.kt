@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.LoveIcons
@@ -46,10 +48,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-
-// Exact Prototype copy.
-private const val APP_NAME = "Love Stickers"
-private const val HONESTY_TEXT = "Free · No ads · No account"
 
 /** The prototype advances after 1.6 s (Prototype armSplash). */
 private const val SPLASH_BEAT_MS = 1_600L
@@ -119,7 +117,7 @@ fun SplashContent(modifier: Modifier = Modifier) {
                 Icon(LoveIcons.HeartFilled, null, Modifier.size(44.dp), tint = Color.White)
             }
             Spacer(Modifier.height(20.dp))
-            Text(APP_NAME, style = TitleText, color = TitleInk)
+            Text(stringResource(R.string.app_name), style = TitleText, color = TitleInk)
             Spacer(Modifier.height(28.dp))
             CircularProgressIndicator(
                 modifier = Modifier.size(22.dp),
@@ -128,7 +126,7 @@ fun SplashContent(modifier: Modifier = Modifier) {
             )
         }
         HonestyLine(
-            text = HONESTY_TEXT,
+            text = stringResource(R.string.honesty_line),
             modifier = Modifier.padding(bottom = 34.dp)
         )
     }

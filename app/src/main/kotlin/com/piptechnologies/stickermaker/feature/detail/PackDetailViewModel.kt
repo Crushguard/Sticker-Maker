@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.di.IoDispatcher
 import com.piptechnologies.stickermaker.core.data.prefs.PrefsRepository
 import com.piptechnologies.stickermaker.core.data.repo.CatalogRepository
@@ -12,12 +13,12 @@ import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.model.InstalledPack
 import com.piptechnologies.stickermaker.core.model.OwnPack
 import com.piptechnologies.stickermaker.core.model.StickerPack
+import com.piptechnologies.stickermaker.core.ui.UiText
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,32 +38,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-// ---- Copy: exact strings from design/Prototype.dc.html ---------------------
-
-internal const val TOAST_ADDED_TO_WHATSAPP = "Added to WhatsApp"
-internal const val TOAST_ALREADY_IN_WHATSAPP = "Already in WhatsApp"
-internal const val TOAST_SAVED_HEART = "Saved · find it under ♥ Saved on Home"
-
-internal const val NO_WHATSAPP_TITLE = "WhatsApp isn't installed"
-internal const val NO_WHATSAPP_BODY =
-    "Stickers are added inside WhatsApp. Install it, then come back to add this pack."
-internal const val NO_WHATSAPP_CONFIRM = "Get WhatsApp"
-internal const val NO_WHATSAPP_CANCEL = "Not now"
-
-internal const val OFFLINE_TITLE = "You're offline"
-internal const val OFFLINE_BODY = "Packs stream from the cloud. Check your connection and try again."
-internal const val OFFLINE_RETRY = "Retry"
-internal const val OFFLINE_FOOTNOTE = "Packs you already added still work in WhatsApp."
-
-internal const val META_MADE_BY_YOU = "Made by you"
-
-/** "96.4K adds"-style meta segment: the prototype's fmt() ported one to one. */
-internal fun formatAdds(count: Long): String =
-    if (count >= 1000) {
-        String.format(Locale.ROOT, "%.1f", count / 1000.0).removeSuffix(".0") + "K"
-    } else {
-        count.toString()
-    }
 
 // ---- UI state --------------------------------------------------------------
 
@@ -76,7 +51,7 @@ data class PackDetailUiState(
     val packId: String = "",
     val title: String = "",
     /** "18 stickers · 96.4K adds" / "26 stickers · Made by you". */
-    val metaLine: String = "",
+    val metaLine: UiText = UiText.Raw(""),
     val animated: Boolean = false,
     val own: Boolean = false,
     val stickers: List<DetailSticker> = emptyList(),
@@ -88,7 +63,7 @@ data class PackDetailUiState(
 /** One-shot effects the screen executes (intent launch, dark toasts). */
 sealed interface PackDetailEvent {
     data class LaunchAddIntent(val intent: Intent) : PackDetailEvent
-    data class Toast(val message: String, val withCheck: Boolean) : PackDetailEvent
+    data class Toast(val message: UiText, val withCheck: Boolean) : PackDetailEvent
 }
 
 /** What the grid renders: the remote catalog pack, or a local copy as fallback. */
@@ -198,7 +173,7 @@ class PackDetailViewModel @Inject constructor(
     fun onAddClicked() {
         when (uiState.value.addState) {
             is AddState.Downloading, AddState.Sent -> Unit
-            AddState.Added -> toast(TOAST_ALREADY_IN_WHATSAPP)
+            AddState.Added -> toast(UiText.res(R.string.toast_already_in_whatsapp))
             AddState.Idle, is AddState.Failed -> beginAdd()
         }
     }
@@ -247,7 +222,7 @@ class PackDetailViewModel @Inject constructor(
                     // Nothing to launch: every installed WhatsApp already has the pack.
                     persistWhitelisted(id, true)
                     session.value = AddState.Added
-                    _events.send(PackDetailEvent.Toast(TOAST_ALREADY_IN_WHATSAPP, false))
+                    _events.send(PackDetailEvent.Toast(UiText.res(R.string.toast_already_in_whatsapp), false))
                 }
                 else -> {
                     session.value = AddState.Idle
@@ -268,7 +243,7 @@ class PackDetailViewModel @Inject constructor(
                     }
                     persistWhitelisted(id, verified)
                     session.value = AddState.Added
-                    _events.send(PackDetailEvent.Toast(TOAST_ADDED_TO_WHATSAPP, true))
+                    _events.send(PackDetailEvent.Toast(UiText.res(R.string.toast_added_to_whatsapp), true))
                 }
                 is AddStickerPackFlow.AddResult.Cancelled -> {
                     cleanUpAfterUnconfirmedAdd(id)
@@ -318,7 +293,7 @@ class PackDetailViewModel @Inject constructor(
         val wasFavorite = uiState.value.favorite
         viewModelScope.launch {
             prefsRepository.toggleFavorite(id)
-            if (!wasFavorite) _events.send(PackDetailEvent.Toast(TOAST_SAVED_HEART, false))
+            if (!wasFavorite) _events.send(PackDetailEvent.Toast(UiText.res(R.string.toast_saved_heart), false))
         }
     }
 
@@ -326,7 +301,7 @@ class PackDetailViewModel @Inject constructor(
         showNoWhatsApp.value = false
     }
 
-    private fun toast(message: String, withCheck: Boolean = false) {
+    private fun toast(message: UiText, withCheck: Boolean = false) {
         _events.trySend(PackDetailEvent.Toast(message, withCheck))
     }
 
@@ -355,7 +330,11 @@ class PackDetailViewModel @Inject constructor(
                     loading = false,
                     packId = pack.id,
                     title = pack.name,
-                    metaLine = "${pack.stickerCount} stickers · ${formatAdds(pack.downloads)} adds",
+                    metaLine = UiText.res(
+                        R.string.meta_join,
+                        UiText.plural(R.plurals.sticker_count, pack.stickerCount),
+                        UiText.res(R.string.pack_adds, UiText.Compact(pack.downloads))
+                    ),
                     animated = pack.animated,
                     stickers = pack.stickerUrls.ifEmpty { pack.thumbUrls }
                         .mapIndexed { index, url -> DetailSticker("url-$index", url) },
@@ -370,7 +349,11 @@ class PackDetailViewModel @Inject constructor(
                     loading = false,
                     packId = pack.id,
                     title = pack.name,
-                    metaLine = "${pack.stickerFiles.size} stickers · $META_MADE_BY_YOU",
+                    metaLine = UiText.res(
+                        R.string.meta_join,
+                        UiText.plural(R.plurals.sticker_count, pack.stickerFiles.size),
+                        UiText.res(R.string.detail_made_by_you)
+                    ),
                     animated = pack.animated,
                     own = true,
                     stickers = pack.stickerFiles.mapIndexed { index, file ->
@@ -387,7 +370,7 @@ class PackDetailViewModel @Inject constructor(
                     loading = false,
                     packId = pack.id,
                     title = pack.name,
-                    metaLine = "${pack.stickerFiles.size} stickers",
+                    metaLine = UiText.plural(R.plurals.sticker_count, pack.stickerFiles.size),
                     animated = pack.animated,
                     stickers = pack.stickerFiles.mapIndexed { index, file ->
                         DetailSticker("file-$index", File(pack.stickerFilePath(file)))

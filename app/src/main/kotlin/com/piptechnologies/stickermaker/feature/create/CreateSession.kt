@@ -3,6 +3,7 @@ package com.piptechnologies.stickermaker.feature.create
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.ImageBitmap
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
+import com.piptechnologies.stickermaker.core.ui.UiText
 
 /**
  * Shared types for the Create flow (Import → Cut out → Pack details).
@@ -76,7 +77,7 @@ data class CreateUiState(
 
 /** One-shot effects the screens react to. */
 sealed interface CreateEvent {
-    data class ShowToast(val message: String, val check: Boolean = false) : CreateEvent
+    data class ShowToast(val message: UiText, val check: Boolean = false) : CreateEvent
 
     /** Export finished and the pack is saved; fire the WhatsApp add intent. */
     data class LaunchAddToWhatsApp(val identifier: String, val packName: String) : CreateEvent

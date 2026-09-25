@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Amber
 import com.piptechnologies.stickermaker.core.design.AmberLine
 import com.piptechnologies.stickermaker.core.design.AmberTint
@@ -67,11 +69,10 @@ fun AddBar(
     modifier: Modifier = Modifier,
     progress: Float = 0f,
     hint: String? = defaultAddBarHint(state),
-    idleLabel: String = "Add to WhatsApp",
-    downloadingLabel: String = "Downloading",
-    sentLabel: String = "Sent to WhatsApp…",
-    addedLabel: String = "Added to WhatsApp",
-    failedLabel: String = "Download failed · Retry"
+    idleLabel: String = stringResource(R.string.add_bar_idle),
+    sentLabel: String = stringResource(R.string.add_bar_sent),
+    addedLabel: String = stringResource(R.string.add_bar_added),
+    failedLabel: String = stringResource(R.string.add_bar_failed)
 ) {
     val bg by animateColorAsState(
         targetValue = when (state) {
@@ -131,7 +132,7 @@ fun AddBar(
                         AddVisualState.Downloading -> {
                             Icon(LoveIcons.Download, null, Modifier.size(18.dp), tint = fg)
                             Spacer(Modifier.width(8.dp))
-                            Text("$downloadingLabel · $pct%", style = BarText, color = fg)
+                            Text(stringResource(R.string.add_bar_downloading, pct), style = BarText, color = fg)
                         }
                         AddVisualState.Sent -> {
                             CircularProgressIndicator(Modifier.size(16.dp), color = fg, strokeWidth = 2.dp)
@@ -167,13 +168,16 @@ fun AddBar(
 }
 
 /** The per-state explainer line the detail footer shows under the bar. */
-fun defaultAddBarHint(state: AddVisualState): String = when (state) {
-    AddVisualState.Idle -> "Downloads to your phone, then opens in WhatsApp."
-    AddVisualState.Downloading -> "Streaming the pack from the cloud."
-    AddVisualState.Sent -> "Confirm in WhatsApp to finish."
-    AddVisualState.Added -> "Manage it in My Packs."
-    AddVisualState.Failed -> "Check your connection, then tap to try again."
-}
+@Composable
+fun defaultAddBarHint(state: AddVisualState): String = stringResource(
+    when (state) {
+        AddVisualState.Idle -> R.string.add_bar_hint_idle
+        AddVisualState.Downloading -> R.string.add_bar_hint_downloading
+        AddVisualState.Sent -> R.string.add_bar_hint_sent
+        AddVisualState.Added -> R.string.add_bar_hint_added
+        AddVisualState.Failed -> R.string.add_bar_hint_failed
+    }
+)
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, widthDp = 390)
 @Composable

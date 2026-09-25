@@ -1,6 +1,5 @@
 package com.piptechnologies.stickermaker.feature.language
 
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,21 +20,19 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.LocaleListCompat
-import androidx.compose.runtime.collectAsState
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.piptechnologies.stickermaker.core.data.prefs.PrefsRepository
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.Ink
@@ -47,11 +44,6 @@ import com.piptechnologies.stickermaker.core.design.Rose
 import com.piptechnologies.stickermaker.core.design.Subtle
 import com.piptechnologies.stickermaker.core.design.Surface
 import com.piptechnologies.stickermaker.core.design.components.LoveTopBar
-
-// ---- Copy (verbatim from design/Prototype.dc.html, language screen) ---- //
-private const val TITLE = "Language"
-private const val NOTE = "Changes the app. Pack names stay as published."
-private const val RTL_BADGE = "RTL"
 
 // ---- Off-token colors from the prototype's language list ---- //
 private val CardBorder = Color(0xFFEEF0F4)
@@ -73,38 +65,35 @@ private val BadgeStyle = TextStyle(
 )
 
 /**
- * Settings › Language: the design's list of native names over English names,
- * an RTL badge in mono, and a rose check on the current row. Tapping a row
- * persists the tag, applies it via per-app locales and returns.
+ * Settings › Language: the design's list of native names over their names in
+ * the app language, an RTL badge in mono, and a rose check on the current
+ * row. Tapping a row applies it as the per-app locale and returns.
  */
 @Composable
-fun LanguageScreen(
-    onBack: () -> Unit,
-    viewModel: LanguageViewModel = hiltViewModel()
-) {
-    val state by viewModel.uiState.collectAsState()
+fun LanguageScreen(onBack: () -> Unit) {
+    // A language change recreates the activity, so this is read fresh then.
+    val selectedTag = remember { AppLanguages.selectedTag() }
 
     LanguageContent(
-        selectedTag = state.selectedTag,
+        selectedTag = selectedTag,
         onBack = onBack,
         onSelect = { tag ->
-            viewModel.select(tag)
-            applyAppLocales(tag)
             // Like the prototype, picking a language returns to Settings.
             // setApplicationLocales may recreate the activity right after;
             // the nav stack is saved state, so Settings is what comes back.
+            AppLanguages.apply(tag)
             onBack()
         }
     )
 }
 
-/** Applies [tag] as the per-app locale; the system sentinel clears it. */
-private fun applyAppLocales(tag: String) {
-    val locales =
-        if (tag == PrefsRepository.LANGUAGE_SYSTEM) LocaleListCompat.getEmptyLocaleList()
-        else LocaleListCompat.forLanguageTags(tag)
-    AppCompatDelegate.setApplicationLocales(locales)
-}
+/** One row: the system entry or a shipped language. */
+private data class LanguageRowUi(
+    val tag: String,
+    val title: String,
+    val subtitle: String,
+    val rtl: Boolean
+)
 
 @Composable
 private fun LanguageContent(
@@ -119,7 +108,7 @@ private fun LanguageContent(
             .background(Canvas)
             .windowInsetsPadding(WindowInsets.systemBars)
     ) {
-        LoveTopBar(title = TITLE, onBack = onBack, height = 52.dp)
+        LoveTopBar(title = stringResource(R.string.settings_language), onBack = onBack, height = 52.dp)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -127,7 +116,7 @@ private fun LanguageContent(
                 .padding(start = 20.dp, top = 4.dp, end = 20.dp, bottom = 20.dp)
         ) {
             Text(
-                NOTE,
+                stringResource(R.string.language_note),
                 style = NoteStyle,
                 color = Muted,
                 modifier = Modifier.padding(bottom = 12.dp)
@@ -139,13 +128,28 @@ private fun LanguageContent(
                     .background(Surface)
                     .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
             ) {
-                AppLanguages.entries.forEachIndexed { index, language ->
-                    LanguageRow(
-                        language = language,
-                        selected = language.tag == selectedTag,
-                        onClick = { onSelect(language.tag) }
+                val rows = listOf(
+                    LanguageRowUi(
+                        tag = AppLanguages.SYSTEM,
+                        title = stringResource(R.string.language_system),
+                        subtitle = stringResource(R.string.language_system_sub),
+                        rtl = false
                     )
-                    if (index != AppLanguages.entries.lastIndex) {
+                ) + AppLanguages.entries.map { language ->
+                    LanguageRowUi(
+                        tag = language.tag,
+                        title = language.nativeName,
+                        subtitle = stringResource(language.nameRes),
+                        rtl = language.rtl
+                    )
+                }
+                rows.forEachIndexed { index, row ->
+                    LanguageRow(
+                        row = row,
+                        selected = row.tag == selectedTag,
+                        onClick = { onSelect(row.tag) }
+                    )
+                    if (index != rows.lastIndex) {
                         HorizontalDivider(thickness = 1.dp, color = RowDivider)
                     }
                 }
@@ -156,31 +160,31 @@ private fun LanguageContent(
 
 @Composable
 private fun LanguageRow(
-    language: AppLanguage,
+    row: LanguageRowUi,
     selected: Boolean,
     onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(role = Role.Button, onClickLabel = language.nativeName, onClick = onClick)
+            .clickable(role = Role.Button, onClickLabel = row.title, onClick = onClick)
             .background(if (selected) SelectedRowBg else Color.Transparent)
             .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(language.nativeName, style = NativeNameStyle, color = Ink)
+            Text(row.title, style = NativeNameStyle, color = Ink)
             Text(
-                language.englishName,
+                row.subtitle,
                 style = EnglishNameStyle,
                 color = SecondaryName,
                 modifier = Modifier.padding(top = 1.dp)
             )
         }
-        if (language.rtl) {
+        if (row.rtl) {
             Text(
-                RTL_BADGE,
+                stringResource(R.string.language_rtl_badge),
                 style = BadgeStyle,
                 color = Muted,
                 modifier = Modifier
@@ -212,7 +216,7 @@ private fun LanguageScreenPreview() {
 private fun LanguageScreenSystemPreview() {
     LoveStickersTheme {
         LanguageContent(
-            selectedTag = PrefsRepository.LANGUAGE_SYSTEM,
+            selectedTag = AppLanguages.SYSTEM,
             onBack = {},
             onSelect = {}
         )

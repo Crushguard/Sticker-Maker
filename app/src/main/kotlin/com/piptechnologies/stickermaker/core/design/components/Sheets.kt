@@ -27,12 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Destructive
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.Ink
@@ -40,6 +42,7 @@ import com.piptechnologies.stickermaker.core.design.Ink2
 import com.piptechnologies.stickermaker.core.design.LoveIcons
 import com.piptechnologies.stickermaker.core.design.LoveStickersTheme
 import com.piptechnologies.stickermaker.core.design.Surface
+import com.piptechnologies.stickermaker.core.ui.inLayoutDirection
 
 // Drag handle grey from the sheet spec (between Border and BorderStrong).
 private val HandleColor = Color(0xFFE1E5EB)
@@ -96,22 +99,23 @@ fun SheetHeader(
     modifier: Modifier = Modifier,
     onClose: (() -> Unit)? = null
 ) {
+    val closeLabel = stringResource(R.string.common_close)
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 20.dp, end = 12.dp, bottom = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(title, style = SheetTitleText, color = Ink, modifier = Modifier.weight(1f))
+        Text(title, style = SheetTitleText.inLayoutDirection(), color = Ink, modifier = Modifier.weight(1f))
         if (onClose != null) {
             Box(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .clickable(role = Role.Button, onClickLabel = "Close", onClick = onClose),
+                    .clickable(role = Role.Button, onClickLabel = closeLabel, onClick = onClose),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(LoveIcons.X, "Close", Modifier.size(18.dp), tint = Ink2)
+                Icon(LoveIcons.X, closeLabel, Modifier.size(18.dp), tint = Ink2)
             }
         }
     }

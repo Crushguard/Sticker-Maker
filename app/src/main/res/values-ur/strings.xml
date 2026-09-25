@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Urdu. Mirrors values/strings.xml key for key; StringResourcesTest checks it. Strings that would start with Latin text or a pack name begin with &#x200F; (RLM) so they keep a right-to-left paragraph direction. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">پیچھے</string>
+    <string name="common_close">بند کریں</string>
+    <string name="common_keep">رکھیں</string>
+    <string name="common_cancel">منسوخ کریں</string>
+    <string name="common_not_now">ابھی نہیں</string>
+    <string name="common_retry">دوبارہ کوشش کریں</string>
+    <string name="common_done">ہو گیا</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">&#x200F;%1$s · %2$s</string>
+    <string name="honesty_line">مفت · کوئی اشتہار نہیں · کوئی اکاؤنٹ نہیں</string>
+    <string name="nav_home">ہوم</string>
+    <string name="nav_my_packs">میرے پیکس</string>
+    <string name="nav_create">پیک بنائیں</string>
+    <string name="add_bar_idle">واٹس ایپ میں شامل کریں</string>
+    <string name="add_bar_downloading">ڈاؤن لوڈ ہو رہا ہے · %1$d%%</string>
+    <string name="add_bar_sent">واٹس ایپ کو بھیج دیا گیا…</string>
+    <string name="add_bar_added">واٹس ایپ میں شامل ہو گیا</string>
+    <string name="add_bar_failed">ڈاؤن لوڈ ناکام · دوبارہ کوشش کریں</string>
+    <string name="add_bar_hint_idle">آپ کے فون پر ڈاؤن لوڈ ہو کر واٹس ایپ میں کھلتا ہے۔</string>
+    <string name="add_bar_hint_downloading">پیک کلاؤڈ سے لایا جا رہا ہے۔</string>
+    <string name="add_bar_hint_sent">مکمل کرنے کے لیے واٹس ایپ میں تصدیق کریں۔</string>
+    <string name="add_bar_hint_added">اسے ”میرے پیکس“ میں منظم کریں۔</string>
+    <string name="add_bar_hint_failed">اپنا کنکشن چیک کریں، پھر دوبارہ کوشش کرنے کے لیے تھپتھپائیں۔</string>
+    <string name="add_pill_add">شامل کریں</string>
+    <string name="add_pill_sent">بھیج دیا…</string>
+    <string name="add_pill_added">شامل شدہ</string>
+    <string name="add_pill_retry">دوبارہ کوشش</string>
+    <string name="add_pill_downloading">ڈاؤن لوڈ ہو رہا ہے، %1$d فیصد</string>
+    <plurals name="sticker_count">
+        <item quantity="one">%d اسٹیکر</item>
+        <item quantity="other">%d اسٹیکرز</item>
+    </plurals>
+    <string name="pack_adds">&#x200F;%1$s بار شامل کیا گیا</string>
+    <string name="pack_save">پیک محفوظ کریں</string>
+    <string name="pack_unsave">محفوظ کردہ سے ہٹائیں</string>
+    <string name="pack_options">پیک کے اختیارات</string>
+    <string name="pack_share">&#x200F;Love Stickers کا اشتراک کریں</string>
+    <string name="badge_animated">متحرک</string>
+    <string name="sticker_remove">اسٹیکر ہٹائیں</string>
+    <string name="sticker_add">اسٹیکر شامل کریں</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">چھوڑیں</string>
+    <string name="onboarding_slide1_title">اسٹیکر سے کہہ دیں</string>
+    <string name="onboarding_slide1_body">چنے ہوئے محبت بھرے پیکس: پیارے، مزاحیہ، رومانوی۔ ایک ٹیپ سے پیک واٹس ایپ میں شامل ہو جاتا ہے۔</string>
+    <string name="onboarding_slide2_title">اپنے اسٹیکرز خود بنائیں</string>
+    <string name="onboarding_slide2_body">تصاویر کو اسٹیکرز میں بدلیں۔ کراپ کریں، کٹ آؤٹ کریں، کوئی لفظ شامل کریں۔ مختصر کلپس سے متحرک پیکس بھی۔</string>
+    <string name="onboarding_your_photo">آپ کی تصویر</string>
+    <string name="onboarding_next">اگلا</string>
+    <string name="onboarding_get_started">شروع کریں</string>
+    <string name="onboarding_sticker_alt">تیار اسٹیکر: ہاتھوں سے دل بناتی ہوئی عورت، چاروں طرف سفید کنارہ</string>
+    <string name="onboarding_photo_alt">اصل تصویر</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">جوڑے</string>
+    <string name="theme_cute">پیارے</string>
+    <string name="theme_funny">مزاحیہ</string>
+    <string name="theme_anime">اینیمے</string>
+    <string name="theme_romantic">رومانوی</string>
+    <string name="theme_flirty">شوخ</string>
+    <string name="theme_goodnight">شب بخیر</string>
+    <string name="theme_distance">فاصلوں کی محبت</string>
+    <string name="customize_title">اپنے موضوعات چنیں</string>
+    <string name="customize_edit_title">آپ کے موضوعات</string>
+    <string name="customize_subtitle">”ہوم“ پر آپ کے چنے ہوئے موضوعات کے پیکس دکھائے جاتے ہیں۔ انہیں کسی بھی وقت ”ترتیبات“ میں تبدیل کریں۔</string>
+    <string name="customize_save">محفوظ کریں</string>
+    <string name="customize_pick_one">کم از کم ایک موضوع چنیں</string>
+    <plurals name="customize_continue">
+        <item quantity="one">جاری رکھیں · %d موضوع</item>
+        <item quantity="other">جاری رکھیں · %d موضوعات</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">آپ آف لائن ہیں</string>
+    <string name="offline_body">پیکس کلاؤڈ سے آتے ہیں۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="offline_footnote">جو پیکس آپ پہلے شامل کر چکے ہیں وہ واٹس ایپ میں کام کرتے رہیں گے۔</string>
+    <string name="no_whatsapp_title">واٹس ایپ انسٹال نہیں ہے</string>
+    <string name="no_whatsapp_body">اسٹیکرز واٹس ایپ کے اندر شامل ہوتے ہیں۔ اسے انسٹال کریں، پھر یہ پیک شامل کرنے کے لیے واپس آئیں۔</string>
+    <string name="no_whatsapp_confirm">واٹس ایپ حاصل کریں</string>
+    <string name="toast_added_to_whatsapp">واٹس ایپ میں شامل ہو گیا</string>
+    <string name="toast_already_in_whatsapp">پہلے سے واٹس ایپ میں ہے</string>
+    <string name="toast_saved_heart">محفوظ ہو گیا · اسے ”ہوم“ پر ”♥ محفوظ کردہ“ میں دیکھیں</string>
+
+    <!-- Home -->
+    <string name="home_search">تلاش کریں</string>
+    <string name="home_settings">ترتیبات</string>
+    <string name="home_search_placeholder">محبت کے پیکس تلاش کریں</string>
+    <string name="home_chip_trending">ٹرینڈنگ</string>
+    <string name="home_chip_animated">متحرک</string>
+    <string name="home_chip_saved">محفوظ کردہ · %1$d</string>
+    <string name="home_no_results_title">&#x200F;”%1$s“ کے لیے کوئی پیک نہیں</string>
+    <string name="home_no_results_body">کسی موضوع کا نام آزمائیں، جیسے ”پیارے“ یا ”اینیمے“۔</string>
+    <string name="toast_still_offline">ابھی بھی آف لائن ہیں۔ تھوڑی دیر میں دوبارہ کوشش کریں۔</string>
+    <string name="toast_opening_play_store">&#x200F;Play Store کھل رہا ہے…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">آپ کا بنایا ہوا</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">واٹس ایپ میں · %1$d</string>
+    <string name="my_packs_section_own">آپ کے بنائے ہوئے · %1$d</string>
+    <string name="my_packs_yours">آپ کا</string>
+    <string name="my_packs_menu_readd">واٹس ایپ میں دوبارہ شامل کریں</string>
+    <string name="my_packs_menu_add">واٹس ایپ میں شامل کریں</string>
+    <string name="my_packs_menu_remove">اس ایپ سے ہٹائیں</string>
+    <string name="my_packs_menu_delete">پیک حذف کریں</string>
+    <string name="my_packs_remove_title">&#x200F;”%1$s“ کو اس ایپ سے ہٹائیں؟</string>
+    <string name="my_packs_remove_body">اس سے مقامی کاپی حذف ہو جاتی ہے۔ واٹس ایپ میں پیک تب تک رہے گا جب تک آپ اسے وہاں سے نہ ہٹائیں۔</string>
+    <string name="my_packs_remove_confirm">ہٹائیں</string>
+    <string name="my_packs_delete_title">&#x200F;”%1$s“ حذف کریں؟</string>
+    <string name="my_packs_delete_body">اس سے پیک اور اس کے اسٹیکرز اس فون سے حذف ہو جاتے ہیں۔ یہ عمل واپس نہیں ہو سکتا۔ اگر آپ نے اسے شامل کیا تھا تو واٹس ایپ میں اس کی کاپی رہے گی۔</string>
+    <string name="my_packs_delete_confirm">حذف کریں</string>
+    <string name="my_packs_toast_removed">اس ایپ سے ہٹا دیا گیا</string>
+    <string name="my_packs_toast_deleted">پیک حذف ہو گیا</string>
+    <string name="my_packs_empty_title">ابھی کوئی پیک نہیں</string>
+    <string name="my_packs_empty_body">جو پیکس آپ واٹس ایپ میں شامل کریں گے وہ یہاں نظر آئیں گے، ساتھ ہی آپ کے بنائے ہوئے پیکس بھی۔</string>
+    <string name="common_browse_packs">پیکس دیکھیں</string>
+    <string name="my_packs_empty_make_own">اپنا پیک بنائیں</string>
+    <string name="my_packs_info_removal">یہاں سے پیک ہٹانے پر اس ایپ کی کاپی حذف ہو جاتی ہے۔ واٹس ایپ اپنی کاپی تب تک رکھتا ہے جب تک آپ اسے وہاں سے نہ ہٹائیں۔</string>
+    <string name="my_packs_saved">محفوظ کردہ پیکس</string>
+
+    <!-- Saved -->
+    <string name="saved_title">محفوظ کردہ</string>
+    <plurals name="saved_pack_count">
+        <item quantity="one">%d پیک</item>
+        <item quantity="other">%d پیکس</item>
+    </plurals>
+    <string name="saved_empty_title">ابھی کوئی محفوظ کردہ پیک نہیں</string>
+    <string name="saved_empty_body">کسی بھی پیک پر دل کو تھپتھپائیں تاکہ وہ بعد کے لیے یہاں محفوظ رہے۔</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">نیا پیک</string>
+    <plurals name="create_selected_count">
+        <item quantity="one">%d منتخب</item>
+        <item quantity="other">%d منتخب</item>
+    </plurals>
+    <string name="create_source_photos">تصاویر</string>
+    <string name="create_source_camera">کیمرا</string>
+    <string name="create_source_video">ویڈیو</string>
+    <string name="create_next">اگلا</string>
+    <plurals name="create_next_count">
+        <item quantity="one">اگلا · %d اسٹیکر</item>
+        <item quantity="other">اگلا · %d اسٹیکرز</item>
+    </plurals>
+    <string name="create_import_hint_ready">”اگلا“ اسی فون پر ہر تصویر کا مرکزی حصہ کٹ آؤٹ کرتا ہے۔ فی پیک زیادہ سے زیادہ %1$d۔</string>
+    <string name="create_import_hint_pick">کم از کم %1$d چنیں (%1$d میں سے %2$d)۔ فی پیک زیادہ سے زیادہ %3$d۔</string>
+    <string name="create_item_remove">پیک سے ہٹائیں</string>
+    <string name="create_item_add">پیک میں شامل کریں</string>
+    <string name="create_viewfinder">ویو فائنڈر</string>
+    <plurals name="create_shot_count">
+        <item quantity="one">%d تصویر</item>
+        <item quantity="other">%d تصاویر</item>
+    </plurals>
+    <string name="create_take_picture">تصویر کھینچیں</string>
+    <string name="create_toast_max">زیادہ سے زیادہ %1$d اسٹیکرز</string>
+    <string name="create_toast_shot_added">تصویر پیک میں شامل ہو گئی</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">کٹ آؤٹ</string>
+    <string name="create_undo">کالعدم کریں</string>
+    <string name="create_toast_nothing_to_undo">کالعدم کرنے کو کچھ نہیں</string>
+    <string name="create_tool_auto">خودکار</string>
+    <string name="create_tool_brush">برش</string>
+    <string name="create_tool_erase">مٹائیں</string>
+    <string name="create_tool_text">متن</string>
+    <string name="create_tool_zoom">زوم</string>
+    <string name="create_hint_zoomed">فٹ کرنے کے لیے دوبارہ ”زوم“ پر تھپتھپائیں</string>
+    <string name="create_hint_auto">مرکزی حصہ کٹ آؤٹ کرنے کے لیے ”خودکار“ پر تھپتھپائیں</string>
+    <string name="create_hint_auto_done">اسی فون پر کٹ آؤٹ ہو گیا۔ کچھ بھی اپ لوڈ نہیں ہوا۔</string>
+    <string name="create_hint_brush">حصے واپس لانے کے لیے تصویر پر تھپتھپائیں</string>
+    <string name="create_hint_erase">بچے ہوئے حصے مٹانے کے لیے ان پر تھپتھپائیں</string>
+    <string name="create_hint_text">نیچے کوئی لفظ لکھیں</string>
+    <string name="create_hint_default">کنارے ٹھیک کرنے کے لیے زوم ان کریں</string>
+    <string name="create_cutting_out_on_phone">اسی فون پر کٹ آؤٹ ہو رہا ہے…</string>
+    <string name="create_cutting_out">کٹ آؤٹ ہو رہا ہے…</string>
+    <string name="create_brush_size">برش کا سائز</string>
+    <string name="create_eraser_size">ربڑ کا سائز</string>
+    <string name="create_caption_placeholder">کوئی لفظ شامل کریں</string>
+    <string name="create_outline_title">سفید کنارہ</string>
+    <string name="create_outline_body">ہر چیٹ پس منظر پر صاف پڑھا جاتا ہے۔ واٹس ایپ اس کی سفارش کرتا ہے۔</string>
+    <string name="create_edit_sticker">اس اسٹیکر میں ترمیم کریں</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">پیک کی تفصیلات</string>
+    <string name="create_tray_title">ٹرے آئیکن</string>
+    <string name="create_tray_body">واٹس ایپ کے اسٹیکر سیکشن میں دکھایا جاتا ہے۔ استعمال کرنے کے لیے نیچے کسی اسٹیکر پر تھپتھپائیں۔</string>
+    <string name="create_use_as_tray">ٹرے آئیکن بنائیں</string>
+    <string name="create_name_label">پیک کا نام</string>
+    <string name="create_name_placeholder">مثلاً: ہم تم، ہمیشہ</string>
+    <string name="create_info_specs">&#x200F;%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">متحرک</string>
+    <string name="create_kind_static">ساکن</string>
+    <string name="create_info_body">ہر ایک 100 KB سے کم، اسی فون پر بنا ہوا۔ کچھ بھی اپ لوڈ نہیں ہوتا۔</string>
+    <string name="create_save_only">صرف ”میرے پیکس“ میں محفوظ کریں</string>
+    <string name="create_toast_saved">”میرے پیکس“ میں محفوظ ہو گیا</string>
+    <string name="create_untitled">بے نام پیک</string>
+    <string name="create_publisher">آپ کا بنایا ہوا</string>
+
+    <!-- Settings -->
+    <string name="settings_title">ترتیبات</string>
+    <string name="settings_alerts_title">نئے پیک کے الرٹس</string>
+    <string name="settings_alerts_on">صرف جب کوئی نیا پیک شامل ہو۔</string>
+    <string name="settings_alerts_off">بند ہیں۔ آپ کو نئے پیکس کی خبر نہیں ملے گی۔</string>
+    <string name="settings_section_preferences">ترجیحات</string>
+    <string name="settings_section_about">بارے میں</string>
+    <string name="settings_edit_themes">موضوعات میں ترمیم کریں</string>
+    <plurals name="settings_theme_count">
+        <item quantity="one">%d موضوع</item>
+        <item quantity="other">%d موضوعات</item>
+    </plurals>
+    <string name="settings_language">زبان</string>
+    <string name="settings_clear">ڈاؤن لوڈ کردہ پیکس صاف کریں</string>
+    <string name="settings_storage_none">کوئی نہیں</string>
+    <string name="settings_size_mb">&#x200F;%1$.1f MB</string>
+    <string name="settings_rate">ہمیں ریٹ کریں</string>
+    <string name="settings_contact">ہم سے رابطہ کریں</string>
+    <string name="settings_more_apps">مزید ایپس</string>
+    <string name="settings_ad_badge">اشتہار</string>
+    <string name="settings_privacy">رازداری کی پالیسی</string>
+    <string name="settings_version">ورژن</string>
+    <string name="settings_free_card">&#x200F;Love Stickers مفت ہے اور ہمیشہ مفت رہے گی۔ کوئی اشتہار نہیں، کوئی اکاؤنٹ نہیں، کوئی ٹریکنگ نہیں۔ آپ کی تصاویر کبھی آپ کے فون سے باہر نہیں جاتیں۔</string>
+    <string name="settings_toast_alerts_on">نئے پیک کے الرٹس آن ہیں</string>
+    <string name="settings_toast_alerts_off">نئے پیک کے الرٹس آف ہیں</string>
+    <string name="settings_toast_nothing_to_clear">صاف کرنے کو کچھ نہیں</string>
+    <string name="settings_toast_cleared">ڈاؤن لوڈز صاف ہو گئے</string>
+    <string name="settings_notif_title">&#x200F;Love Stickers کو اطلاعات بھیجنے کی اجازت دیں؟</string>
+    <string name="settings_notif_body">اینڈرائیڈ صرف ایک بار پوچھتا ہے۔ ہم آپ کو صرف تب مطلع کرتے ہیں جب کوئی نیا پیک شامل ہو۔ کوئی پروموشن کبھی نہیں۔</string>
+    <string name="settings_notif_deny">اجازت نہ دیں</string>
+    <string name="settings_notif_allow">اجازت دیں</string>
+    <string name="settings_clear_title">ڈاؤن لوڈ کردہ پیکس صاف کریں؟</string>
+    <string name="settings_clear_body">اس ایپ میں محفوظ کاپیاں (%1$s) ہٹا دی جائیں گی۔ جو پیکس پہلے سے واٹس ایپ میں ہیں وہ وہیں رہیں گے۔</string>
+    <string name="settings_clear_keep">رہنے دیں</string>
+    <string name="settings_clear_confirm">صاف کریں</string>
+    <string name="toast_no_email_app">اس فون پر کوئی ای میل ایپ نہیں ہے۔</string>
+    <string name="toast_link_failed">وہ لنک نہیں کھل سکا۔</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">&#x200F;Love Stickers پسند آ رہی ہے؟</string>
+    <string name="rate_body">آپ کی ایماندارانہ ریٹنگ دوسروں کو بغیر اشتہارات والی اسٹیکر ایپ ڈھونڈنے میں مدد دیتی ہے۔</string>
+    <plurals name="rate_star">
+        <item quantity="one">%d ستارہ</item>
+        <item quantity="other">%d ستارے</item>
+    </plurals>
+    <string name="rate_hint_idle">کسی ستارے پر تھپتھپائیں</string>
+    <string name="rate_hint_five">بہت پسند آئی!</string>
+    <string name="rate_hint_low">ہمیں بتائیں کیا غلط ہوا</string>
+    <string name="rate_maybe_later">شاید بعد میں</string>
+    <string name="rate_store_title">شکریہ!</string>
+    <string name="rate_store_body">کیا آپ یہ بات Google Play پر بھی شیئر کریں گے؟ اس سے ایک چھوٹی، اشتہار سے پاک ایپ کو بڑھنے میں مدد ملتی ہے۔</string>
+    <string name="rate_store_cta">&#x200F;Google Play پر ریٹ کریں</string>
+    <string name="rate_feedback_title">ہم کیسے بہتر ہو سکتے ہیں؟</string>
+    <string name="rate_feedback_body">ہمیں بتائیں کہ کیا کمی رہ گئی۔ یہ سیدھا ٹیم تک پہنچتا ہے، عوامی ریویو نہیں بنتا، اور ہم ہر ایک پڑھتے ہیں۔</string>
+    <string name="rate_feedback_placeholder">کس چیز سے یہ پانچ ستاروں والی ایپ بن جاتی؟</string>
+    <string name="rate_feedback_cta">فیڈ بیک بھیجیں</string>
+    <string name="rate_thanks_title">شکریہ، ہم نے آپ کی بات سن لی</string>
+    <string name="rate_thanks_body">آپ کا پیغام ٹیم کی طرف جا رہا ہے۔ اسی سے طے ہوتا ہے کہ ہم آگے کیا بنائیں گے۔</string>
+
+    <!-- Language -->
+    <string name="language_note">ایپ کی زبان بدلتی ہے۔ پیکس کے نام ویسے ہی رہتے ہیں جیسے شائع ہوئے۔</string>
+    <string name="language_system">سسٹم ڈیفالٹ</string>
+    <string name="language_system_sub">آلے کی زبان</string>
+    <string name="language_rtl_badge">&#x200F;RTL</string>
+    <string name="language_name_en">انگریزی</string>
+    <string name="language_name_ar">عربی</string>
+    <string name="language_name_es">ہسپانوی</string>
+    <string name="language_name_pt">پرتگالی</string>
+    <string name="language_name_pt_br">پرتگالی (برازیل)</string>
+    <string name="language_name_fr">فرانسیسی</string>
+    <string name="language_name_hi">ہندی</string>
+    <string name="language_name_id">انڈونیشیائی</string>
+    <string name="language_name_tr">ترکی</string>
+    <string name="language_name_ur">اردو</string>
+    <string name="language_name_de">جرمن</string>
+    <string name="language_name_ru">روسی</string>
+    <string name="language_name_it">اطالوی</string>
+    <string name="language_name_zh">چینی (آسان)</string>
+    <string name="language_name_fa">فارسی</string>
+    <string name="language_name_he">عبرانی</string>
+    <string name="language_name_ps">پشتو</string>
+    <string name="language_name_ha">ہاؤسا</string>
+    <string name="language_name_my">برمی</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">کوئی سوال، کوئی خراب پیک، یا کوئی ایسا پیک جس کی آپ کو کمی محسوس ہو۔ ہم ہر پیغام پڑھتے ہیں۔</string>
+    <string name="contact_message_placeholder">اپنا پیغام لکھیں…</string>
+    <string name="contact_email_label">ای میل · اختیاری، صرف اگر آپ جواب چاہتے ہیں</string>
+    <string name="contact_attach_note">ایپ ورژن اور اینڈرائیڈ ورژن کے ساتھ بھیجا جاتا ہے۔ اور کچھ نہیں۔</string>
+    <string name="contact_send">بھیجیں</string>
+</resources>

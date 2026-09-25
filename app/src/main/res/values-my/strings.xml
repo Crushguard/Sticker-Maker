@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Burmese. Mirrors values/strings.xml key for key; StringResourcesTest checks it. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">နောက်သို့</string>
+    <string name="common_close">ပိတ်ရန်</string>
+    <string name="common_keep">ဆက်ထားရန်</string>
+    <string name="common_cancel">ပယ်ဖျက်ရန်</string>
+    <string name="common_not_now">အခု မလုပ်သေးပါ</string>
+    <string name="common_retry">ထပ်စမ်းရန်</string>
+    <string name="common_done">ပြီးပြီ</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">%1$s · %2$s</string>
+    <string name="honesty_line">အခမဲ့ · ကြော်ငြာမရှိ · အကောင့်မလို</string>
+    <string name="nav_home">ပင်မ</string>
+    <string name="nav_my_packs">ကျွန်ုပ်၏ အစုံများ</string>
+    <string name="nav_create">အစုံ ဖန်တီးရန်</string>
+    <string name="add_bar_idle">WhatsApp သို့ ထည့်ရန်</string>
+    <string name="add_bar_downloading">ဒေါင်းလုဒ်လုပ်နေပါတယ် · %1$d%%</string>
+    <string name="add_bar_sent">WhatsApp ကို ပို့လိုက်ပါပြီ…</string>
+    <string name="add_bar_added">WhatsApp ထဲ ထည့်ပြီးပါပြီ</string>
+    <string name="add_bar_failed">ဒေါင်းလုဒ် မအောင်မြင်ပါ · ထပ်စမ်းရန်</string>
+    <string name="add_bar_hint_idle">သင့်ဖုန်းထဲ ဒေါင်းလုဒ်လုပ်ပြီး WhatsApp မှာ ဖွင့်ပေးပါမယ်။</string>
+    <string name="add_bar_hint_downloading">အင်တာနက်ကနေ အစုံကို ရယူနေပါတယ်။</string>
+    <string name="add_bar_hint_sent">ပြီးဆုံးဖို့ WhatsApp ထဲမှာ အတည်ပြုပေးပါ။</string>
+    <string name="add_bar_hint_added">“ကျွန်ုပ်၏ အစုံများ” မှာ စီမံနိုင်ပါတယ်။</string>
+    <string name="add_bar_hint_failed">အင်တာနက် ချိတ်ဆက်မှုကို စစ်ပြီး ထပ်စမ်းဖို့ နှိပ်ပါ။</string>
+    <string name="add_pill_add">ထည့်ရန်</string>
+    <string name="add_pill_sent">ပို့ပြီး…</string>
+    <string name="add_pill_added">ထည့်ပြီး</string>
+    <string name="add_pill_retry">ထပ်စမ်းရန်</string>
+    <string name="add_pill_downloading">ဒေါင်းလုဒ်လုပ်နေပါတယ်၊ %1$d ရာခိုင်နှုန်း</string>
+    <plurals name="sticker_count">
+        <item quantity="other">စတစ်ကာ %d ခု</item>
+    </plurals>
+    <string name="pack_adds">ထည့်သူ %1$s</string>
+    <string name="pack_save">အစုံကို သိမ်းရန်</string>
+    <string name="pack_unsave">သိမ်းထားသည်များမှ ဖယ်ရန်</string>
+    <string name="pack_options">အစုံ ရွေးစရာများ</string>
+    <string name="pack_share">Love Stickers ကို မျှဝေရန်</string>
+    <string name="badge_animated">လှုပ်ရှား</string>
+    <string name="sticker_remove">စတစ်ကာ ဖယ်ရန်</string>
+    <string name="sticker_add">စတစ်ကာ ထည့်ရန်</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">ကျော်ရန်</string>
+    <string name="onboarding_slide1_title">စတစ်ကာနဲ့ ပြောလိုက်ပါ</string>
+    <string name="onboarding_slide1_body">ချစ်စရာ၊ ရယ်စရာ၊ ရိုမန်းတစ် အချစ်စတစ်ကာ အစုံတွေကို ရွေးချယ်ထားပါတယ်။ တစ်ချက်နှိပ်ရုံနဲ့ WhatsApp ထဲ ထည့်နိုင်ပါတယ်။</string>
+    <string name="onboarding_slide2_title">ကိုယ်တိုင် ဖန်တီးပါ</string>
+    <string name="onboarding_slide2_body">ဓာတ်ပုံတွေကို စတစ်ကာ ပြောင်းပါ။ ညှပ်၊ ဖြတ်ထုတ်ပြီး စာလုံး ထည့်ပါ။ ဗီဒီယိုတိုတွေကနေ လှုပ်ရှားစတစ်ကာ အစုံတွေလည်း လုပ်နိုင်ပါတယ်။</string>
+    <string name="onboarding_your_photo">သင့်ဓာတ်ပုံ</string>
+    <string name="onboarding_next">ရှေ့သို့</string>
+    <string name="onboarding_get_started">စတင်ရန်</string>
+    <string name="onboarding_sticker_alt">အချောသတ်ပြီး စတစ်ကာ – လက်နှစ်ဖက်နဲ့ နှလုံးပုံ လုပ်ပြနေတဲ့ အမျိုးသမီး၊ ပုံအတိုင်း ဖြတ်ထားတဲ့ အဖြူရောင် ဘောင်</string>
+    <string name="onboarding_photo_alt">မူရင်း ဓာတ်ပုံ</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">စုံတွဲ</string>
+    <string name="theme_cute">ချစ်စရာ</string>
+    <string name="theme_funny">ရယ်စရာ</string>
+    <string name="theme_anime">အန်နီမေး</string>
+    <string name="theme_romantic">ရိုမန်းတစ်</string>
+    <string name="theme_flirty">ကလူကျီစယ်</string>
+    <string name="theme_goodnight">ကောင်းသောည</string>
+    <string name="theme_distance">အဝေးရောက်ချစ်သူ</string>
+    <string name="customize_title">နှစ်သက်ရာ ခေါင်းစဉ်များ ရွေးပါ</string>
+    <string name="customize_edit_title">သင့်ခေါင်းစဉ်များ</string>
+    <string name="customize_subtitle">သင်ရွေးတဲ့ ခေါင်းစဉ်တွေထဲက အစုံတွေကို “ပင်မ” မှာ ပြပေးပါမယ်။ “ဆက်တင်များ” မှာ အချိန်မရွေး ပြောင်းနိုင်ပါတယ်။</string>
+    <string name="customize_save">သိမ်းရန်</string>
+    <string name="customize_pick_one">ခေါင်းစဉ် အနည်းဆုံး တစ်ခု ရွေးပါ</string>
+    <plurals name="customize_continue">
+        <item quantity="other">ဆက်လုပ်ရန် · ခေါင်းစဉ် %d ခု</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">အော့ဖ်လိုင်း ဖြစ်နေပါတယ်</string>
+    <string name="offline_body">အစုံတွေကို အင်တာနက်ကနေ ရယူရပါတယ်။ ချိတ်ဆက်မှုကို စစ်ပြီး ထပ်စမ်းကြည့်ပါ။</string>
+    <string name="offline_footnote">ထည့်ပြီးသား အစုံတွေကိုတော့ WhatsApp မှာ ဆက်သုံးလို့ ရပါတယ်။</string>
+    <string name="no_whatsapp_title">WhatsApp ထည့်သွင်းမထားပါ</string>
+    <string name="no_whatsapp_body">စတစ်ကာတွေကို WhatsApp ထဲမှာ ထည့်ရတာပါ။ WhatsApp ကို ထည့်သွင်းပြီးမှ ဒီအစုံကို ထည့်ဖို့ ပြန်လာခဲ့ပါ။</string>
+    <string name="no_whatsapp_confirm">WhatsApp ရယူရန်</string>
+    <string name="toast_added_to_whatsapp">WhatsApp ထဲ ထည့်ပြီးပါပြီ</string>
+    <string name="toast_already_in_whatsapp">WhatsApp ထဲမှာ ရှိပြီးသားပါ</string>
+    <string name="toast_saved_heart">သိမ်းပြီးပါပြီ · “ပင်မ” ထဲက “♥ သိမ်းထားသည်များ” မှာ ပြန်ရှာနိုင်ပါတယ်</string>
+
+    <!-- Home -->
+    <string name="home_search">ရှာဖွေရန်</string>
+    <string name="home_settings">ဆက်တင်များ</string>
+    <string name="home_search_placeholder">အချစ်စတစ်ကာ အစုံများ ရှာဖွေရန်</string>
+    <string name="home_chip_trending">ခေတ်စား</string>
+    <string name="home_chip_animated">လှုပ်ရှား</string>
+    <string name="home_chip_saved">သိမ်းထားသည်များ · %1$d</string>
+    <string name="home_no_results_title">“%1$s” အတွက် အစုံ မရှိပါ</string>
+    <string name="home_no_results_body">“ချစ်စရာ” ဒါမှမဟုတ် “အန်နီမေး” လို ခေါင်းစဉ်အမည်တစ်ခုနဲ့ ရှာကြည့်ပါ။</string>
+    <string name="toast_still_offline">အော့ဖ်လိုင်း ဖြစ်နေဆဲပါ။ ခဏနေမှ ထပ်စမ်းကြည့်ပါ။</string>
+    <string name="toast_opening_play_store">Play Store ကို ဖွင့်နေပါတယ်…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">သင့်လက်ရာ</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">WhatsApp ထဲမှာ · %1$d</string>
+    <string name="my_packs_section_own">သင့်လက်ရာ · %1$d</string>
+    <string name="my_packs_yours">ကိုယ်ပိုင်</string>
+    <string name="my_packs_menu_readd">WhatsApp သို့ ပြန်ထည့်ရန်</string>
+    <string name="my_packs_menu_add">WhatsApp သို့ ထည့်ရန်</string>
+    <string name="my_packs_menu_remove">ဒီအက်ပ်ထဲက ဖယ်ရှားရန်</string>
+    <string name="my_packs_menu_delete">အစုံကို ဖျက်ရန်</string>
+    <string name="my_packs_remove_title">“%1$s” ကို ဒီအက်ပ်ထဲက ဖယ်ရှားမလား။</string>
+    <string name="my_packs_remove_body">ဒီဖုန်းထဲက မိတ္တူကို ဖျက်ပါမယ်။ WhatsApp ထဲက အစုံကိုတော့ အဲဒီမှာ သင် မဖယ်မချင်း ဆက်ရှိနေပါမယ်။</string>
+    <string name="my_packs_remove_confirm">ဖယ်ရှားရန်</string>
+    <string name="my_packs_delete_title">“%1$s” ကို ဖျက်မလား။</string>
+    <string name="my_packs_delete_body">ဒီအစုံနဲ့ အထဲက စတစ်ကာတွေကို ဒီဖုန်းထဲက ဖျက်ပါမယ်။ ပြန်ယူလို့ မရပါဘူး။ WhatsApp ထဲ ထည့်ထားခဲ့ရင် WhatsApp ထဲက မိတ္တူကတော့ ဆက်ရှိနေပါမယ်။</string>
+    <string name="my_packs_delete_confirm">ဖျက်ရန်</string>
+    <string name="my_packs_toast_removed">ဒီအက်ပ်ထဲက ဖယ်ရှားပြီးပါပြီ</string>
+    <string name="my_packs_toast_deleted">အစုံကို ဖျက်ပြီးပါပြီ</string>
+    <string name="my_packs_empty_title">အစုံ မရှိသေးပါ</string>
+    <string name="my_packs_empty_body">WhatsApp ထဲ သင်ထည့်တဲ့ အစုံတွေနဲ့ သင်ကိုယ်တိုင် ဖန်တီးတဲ့ အစုံတွေ ဒီမှာ ပေါ်လာပါမယ်။</string>
+    <string name="common_browse_packs">အစုံများ ကြည့်ရန်</string>
+    <string name="my_packs_empty_make_own">ကိုယ်တိုင် ဖန်တီးရန်</string>
+    <string name="my_packs_info_removal">ဒီမှာ အစုံကို ဖယ်ရှားရင် ဒီအက်ပ်ထဲက မိတ္တူကိုပဲ ဖျက်တာပါ။ WhatsApp ထဲက မိတ္တူကတော့ အဲဒီမှာ သင် မဖယ်မချင်း ဆက်ရှိနေပါမယ်။</string>
+    <string name="my_packs_saved">သိမ်းထားသည့် အစုံများ</string>
+
+    <!-- Saved -->
+    <string name="saved_title">သိမ်းထားသည်များ</string>
+    <plurals name="saved_pack_count">
+        <item quantity="other">အစုံ %d ခု</item>
+    </plurals>
+    <string name="saved_empty_title">သိမ်းထားသည့် အစုံ မရှိသေးပါ</string>
+    <string name="saved_empty_body">နောက်မှ ပြန်ကြည့်ဖို့ ကြိုက်တဲ့ အစုံရဲ့ နှလုံးပုံကို နှိပ်ပြီး ဒီမှာ သိမ်းထားပါ။</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">အစုံ အသစ်</string>
+    <plurals name="create_selected_count">
+        <item quantity="other">%d ခု ရွေးပြီး</item>
+    </plurals>
+    <string name="create_source_photos">ဓာတ်ပုံများ</string>
+    <string name="create_source_camera">ကင်မရာ</string>
+    <string name="create_source_video">ဗီဒီယို</string>
+    <string name="create_next">ရှေ့သို့</string>
+    <plurals name="create_next_count">
+        <item quantity="other">ရှေ့သို့ · စတစ်ကာ %d ခု</item>
+    </plurals>
+    <string name="create_import_hint_ready">“ရှေ့သို့” ကို နှိပ်ရင် ပုံတစ်ပုံချင်းစီထဲက အဓိကအရာကို ဒီဖုန်းပေါ်မှာ ဖြတ်ထုတ်ပေးပါမယ်။ တစ်အစုံမှာ အများဆုံး %1$d ခု ထည့်နိုင်ပါတယ်။</string>
+    <string name="create_import_hint_pick">အနည်းဆုံး %1$d ခု ရွေးပါ (%2$d/%1$d)။ တစ်အစုံမှာ အများဆုံး %3$d ခု ထည့်နိုင်ပါတယ်။</string>
+    <string name="create_item_remove">အစုံထဲက ဖယ်ရန်</string>
+    <string name="create_item_add">အစုံထဲ ထည့်ရန်</string>
+    <string name="create_viewfinder">မြင်ကွင်း</string>
+    <plurals name="create_shot_count">
+        <item quantity="other">%d ပုံ ရိုက်ပြီး</item>
+    </plurals>
+    <string name="create_take_picture">ဓာတ်ပုံ ရိုက်ရန်</string>
+    <string name="create_toast_max">စတစ်ကာ အများဆုံး %1$d ခုပဲ ရပါတယ်</string>
+    <string name="create_toast_shot_added">ဓာတ်ပုံကို အစုံထဲ ထည့်ပြီးပါပြီ</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">ဖြတ်ထုတ်ရန်</string>
+    <string name="create_undo">နောက်ပြန်ရန်</string>
+    <string name="create_toast_nothing_to_undo">နောက်ပြန်စရာ မရှိပါ</string>
+    <string name="create_tool_auto">အော်တို</string>
+    <string name="create_tool_brush">စုတ်တံ</string>
+    <string name="create_tool_erase">ခဲဖျက်</string>
+    <string name="create_tool_text">စာသား</string>
+    <string name="create_tool_zoom">ချဲ့ကြည့်</string>
+    <string name="create_hint_zoomed">ပုံအပြည့် ပြန်မြင်ဖို့ “ချဲ့ကြည့်” ကို ထပ်နှိပ်ပါ</string>
+    <string name="create_hint_auto">အဓိကအရာကို ဖြတ်ထုတ်ဖို့ “အော်တို” ကို နှိပ်ပါ</string>
+    <string name="create_hint_auto_done">ဒီဖုန်းပေါ်မှာပဲ ဖြတ်ထုတ်ထားတာပါ။ ဘာမှ အပ်လုဒ် မလုပ်ထားပါဘူး။</string>
+    <string name="create_hint_brush">ဖျက်မိတဲ့ နေရာတွေ ပြန်ပေါ်လာဖို့ ပုံပေါ်ကို နှိပ်ပါ</string>
+    <string name="create_hint_erase">ကျန်နေတဲ့ အပိုင်းတွေကို နှိပ်ပြီး ဖျက်ပါ</string>
+    <string name="create_hint_text">အောက်မှာ စာလုံး ရိုက်ထည့်ပါ</string>
+    <string name="create_hint_default">အနားသတ်တွေ ပြင်ဖို့ ချဲ့ကြည့်ပါ</string>
+    <string name="create_cutting_out_on_phone">ဒီဖုန်းပေါ်မှာ ဖြတ်ထုတ်နေပါတယ်…</string>
+    <string name="create_cutting_out">ဖြတ်ထုတ်နေပါတယ်…</string>
+    <string name="create_brush_size">စုတ်တံ အရွယ်အစား</string>
+    <string name="create_eraser_size">ခဲဖျက် အရွယ်အစား</string>
+    <string name="create_caption_placeholder">စာလုံး ထည့်ပါ</string>
+    <string name="create_outline_title">အဖြူရောင် ဘောင်</string>
+    <string name="create_outline_body">ဘယ်လို ချတ်နောက်ခံပေါ်မှာမဆို ထင်ထင်ရှားရှား မြင်ရပါတယ်။ WhatsApp က အကြံပြုထားပါတယ်။</string>
+    <string name="create_edit_sticker">ဒီစတစ်ကာကို ပြင်ရန်</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">အစုံ အသေးစိတ်</string>
+    <string name="create_tray_title">အစုံ အိုင်ကွန်</string>
+    <string name="create_tray_body">WhatsApp ရဲ့ စတစ်ကာ ရွေးတဲ့နေရာမှာ ပြပါမယ်။ အောက်က စတစ်ကာတစ်ခုကို နှိပ်ပြီး အိုင်ကွန်အဖြစ် သုံးပါ။</string>
+    <string name="create_use_as_tray">အစုံ အိုင်ကွန်အဖြစ် သုံးရန်</string>
+    <string name="create_name_label">အစုံ အမည်</string>
+    <string name="create_name_placeholder">ဥပမာ – ငါတို့နှစ်ယောက်</string>
+    <string name="create_info_specs">%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">လှုပ်ရှား</string>
+    <string name="create_kind_static">ရုပ်ငြိမ်</string>
+    <string name="create_info_body">တစ်ခုချင်း ၁၀၀ KB အောက်၊ ဒီဖုန်းပေါ်မှာ လုပ်ထားတာပါ။ ဘာမှ အပ်လုဒ် မလုပ်ပါဘူး။</string>
+    <string name="create_save_only">“ကျွန်ုပ်၏ အစုံများ” မှာပဲ သိမ်းရန်</string>
+    <string name="create_toast_saved">“ကျွန်ုပ်၏ အစုံများ” မှာ သိမ်းပြီးပါပြီ</string>
+    <string name="create_untitled">အမည်မဲ့ အစုံ</string>
+    <string name="create_publisher">သင့်လက်ရာ</string>
+
+    <!-- Settings -->
+    <string name="settings_title">ဆက်တင်များ</string>
+    <string name="settings_alerts_title">အစုံအသစ် သတိပေးချက်များ</string>
+    <string name="settings_alerts_on">အစုံအသစ် ထွက်မှသာ အကြောင်းကြားပါမယ်။</string>
+    <string name="settings_alerts_off">ပိတ်ထားပါတယ်။ အစုံအသစ် ထွက်ရင် သိရမှာ မဟုတ်ပါဘူး။</string>
+    <string name="settings_section_preferences">ရွေးချယ်မှုများ</string>
+    <string name="settings_section_about">အကြောင်း</string>
+    <string name="settings_edit_themes">ခေါင်းစဉ်များ ပြင်ရန်</string>
+    <plurals name="settings_theme_count">
+        <item quantity="other">ခေါင်းစဉ် %d ခု</item>
+    </plurals>
+    <string name="settings_language">ဘာသာစကား</string>
+    <string name="settings_clear">ဒေါင်းလုဒ်လုပ်ထားသည့် အစုံများ ရှင်းရန်</string>
+    <string name="settings_storage_none">မရှိ</string>
+    <string name="settings_size_mb">%1$.1f MB</string>
+    <string name="settings_rate">အဆင့်သတ်မှတ်ပေးရန်</string>
+    <string name="settings_contact">ဆက်သွယ်ရန်</string>
+    <string name="settings_more_apps">နောက်ထပ် အက်ပ်များ</string>
+    <string name="settings_ad_badge">ကြော်ငြာ</string>
+    <string name="settings_privacy">ကိုယ်ရေးအချက်အလက် မူဝါဒ</string>
+    <string name="settings_version">ဗားရှင်း</string>
+    <string name="settings_free_card">Love Stickers က အခမဲ့ပါ၊ အမြဲလည်း အခမဲ့ ဖြစ်နေမှာပါ။ ကြော်ငြာ မရှိ၊ အကောင့် မလို၊ ခြေရာခံတာ မရှိပါဘူး။ သင့်ဓာတ်ပုံတွေက သင့်ဖုန်းထဲကနေ ဘယ်တော့မှ ထွက်မသွားပါဘူး။</string>
+    <string name="settings_toast_alerts_on">အစုံအသစ် သတိပေးချက်များ ဖွင့်ထားပါပြီ</string>
+    <string name="settings_toast_alerts_off">အစုံအသစ် သတိပေးချက်များ ပိတ်ထားပါပြီ</string>
+    <string name="settings_toast_nothing_to_clear">ရှင်းစရာ မရှိပါ</string>
+    <string name="settings_toast_cleared">ဒေါင်းလုဒ်များ ရှင်းပြီးပါပြီ</string>
+    <string name="settings_notif_title">Love Stickers ကို အကြောင်းကြားချက်တွေ ပို့ခွင့် ပေးမလား။</string>
+    <string name="settings_notif_body">Android က တစ်ကြိမ်ပဲ မေးပါမယ်။ အစုံအသစ် ထွက်မှသာ အကြောင်းကြားပါမယ်။ ပရိုမိုးရှင်း ဘယ်တော့မှ မပို့ပါဘူး။</string>
+    <string name="settings_notif_deny">ခွင့်မပြုပါ</string>
+    <string name="settings_notif_allow">ခွင့်ပြုရန်</string>
+    <string name="settings_clear_title">ဒေါင်းလုဒ်လုပ်ထားသည့် အစုံများကို ရှင်းမလား။</string>
+    <string name="settings_clear_body">ဒီအက်ပ်ထဲမှာ သိမ်းထားတဲ့ မိတ္တူတွေ (%1$s) ကို ဖယ်ရှားပါမယ်။ WhatsApp ထဲမှာ ရှိပြီးသား အစုံတွေကတော့ ဆက်ရှိနေပါမယ်။</string>
+    <string name="settings_clear_keep">ဆက်ထားရန်</string>
+    <string name="settings_clear_confirm">ရှင်းရန်</string>
+    <string name="toast_no_email_app">ဒီဖုန်းမှာ အီးမေးလ် အက်ပ် မရှိပါ။</string>
+    <string name="toast_link_failed">အဲဒီလင့်ခ်ကို ဖွင့်လို့ မရပါ။</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">Love Stickers ကို သဘောကျရဲ့လား။</string>
+    <string name="rate_body">သင့်ရဲ့ ရိုးသားတဲ့ အဆင့်သတ်မှတ်ချက်က ကြော်ငြာမပါတဲ့ စတစ်ကာအက်ပ်ကို တခြားသူတွေ ရှာတွေ့ဖို့ ကူညီပေးပါတယ်။</string>
+    <plurals name="rate_star">
+        <item quantity="other">ကြယ် %d ပွင့်</item>
+    </plurals>
+    <string name="rate_hint_idle">ကြယ်တစ်ပွင့်ကို နှိပ်ပါ</string>
+    <string name="rate_hint_five">အရမ်းကြိုက်တယ်။</string>
+    <string name="rate_hint_low">ဘာ အဆင်မပြေခဲ့လဲ ပြောပြပါ</string>
+    <string name="rate_maybe_later">နောက်မှ</string>
+    <string name="rate_store_title">ကျေးဇူးတင်ပါတယ်။</string>
+    <string name="rate_store_body">ဒီအဆင့်သတ်မှတ်ချက်ကို Google Play မှာ မျှဝေပေးမလား။ ကြော်ငြာမပါတဲ့ အက်ပ်လေးတစ်ခု ကြီးထွားလာဖို့ ကူညီရာ ရောက်ပါတယ်။</string>
+    <string name="rate_store_cta">Google Play မှာ အဆင့်သတ်မှတ်ရန်</string>
+    <string name="rate_feedback_title">ဘယ်လို ပိုကောင်းအောင် လုပ်ရမလဲ။</string>
+    <string name="rate_feedback_body">ဘာတွေ လိုနေသေးလဲ ပြောပြပါ။ အများမြင် သုံးသပ်ချက် မဟုတ်ဘဲ ကျွန်ုပ်တို့ အဖွဲ့ဆီ တိုက်ရိုက် ရောက်ပါတယ်။ စာတိုင်းကို ဖတ်ပါတယ်။</string>
+    <string name="rate_feedback_placeholder">ဘာတွေ ပါရင် ကြယ် ၅ ပွင့်တန် အက်ပ် ဖြစ်မလဲ။</string>
+    <string name="rate_feedback_cta">အကြံပြုချက် ပို့ရန်</string>
+    <string name="rate_thanks_title">ကျေးဇူးတင်ပါတယ်၊ နားလည်ပါတယ်</string>
+    <string name="rate_thanks_body">သင့်စာကို ကျွန်ုပ်တို့ အဖွဲ့ဆီ ပို့လိုက်ပါပြီ။ ကျွန်ုပ်တို့ နောက်ထပ် ဘာတွေ ဖန်တီးမလဲဆိုတာကို ဒါက ပုံဖော်ပေးပါတယ်။</string>
+
+    <!-- Language -->
+    <string name="language_note">အက်ပ်ရဲ့ ဘာသာစကားကို ပြောင်းပါမယ်။ အစုံ အမည်တွေကတော့ မူရင်းအတိုင်း ရှိနေပါမယ်။</string>
+    <string name="language_system">စနစ် မူရင်း</string>
+    <string name="language_system_sub">စက်ပစ္စည်း ဘာသာစကား</string>
+    <string name="language_rtl_badge">RTL</string>
+    <string name="language_name_en">အင်္ဂလိပ်</string>
+    <string name="language_name_ar">အာရဗီ</string>
+    <string name="language_name_es">စပိန်</string>
+    <string name="language_name_pt">ပေါ်တူဂီ</string>
+    <string name="language_name_pt_br">ပေါ်တူဂီ (ဘရာဇီး)</string>
+    <string name="language_name_fr">ပြင်သစ်</string>
+    <string name="language_name_hi">ဟိန္ဒီ</string>
+    <string name="language_name_id">အင်ဒိုနီးရှား</string>
+    <string name="language_name_tr">တူရကီ</string>
+    <string name="language_name_ur">အူရဒူ</string>
+    <string name="language_name_de">ဂျာမန်</string>
+    <string name="language_name_ru">ရုရှ</string>
+    <string name="language_name_it">အီတလီ</string>
+    <string name="language_name_zh">တရုတ် (ရိုးရှင်း)</string>
+    <string name="language_name_fa">ပါရှန်</string>
+    <string name="language_name_he">ဟီဘရူး</string>
+    <string name="language_name_ps">ပက်ရှ်တို</string>
+    <string name="language_name_ha">ဟောက်ဆာ</string>
+    <string name="language_name_my">မြန်မာ</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">မေးစရာ ရှိရင်၊ အစုံ ပျက်နေရင်၊ ဒါမှမဟုတ် ရှိစေချင်တဲ့ အစုံ ရှိရင် ပြောပါ။ စာတိုင်းကို ဖတ်ပါတယ်။</string>
+    <string name="contact_message_placeholder">သင့်စာကို ရေးပါ…</string>
+    <string name="contact_email_label">အီးမေးလ် · မထည့်လည်း ရပါတယ်၊ အကြောင်းပြန်စေချင်မှ ထည့်ပါ</string>
+    <string name="contact_attach_note">အက်ပ် ဗားရှင်းနဲ့ Android ဗားရှင်းကိုပါ တွဲပို့ပါမယ်။ တခြား ဘာမှ မပို့ပါဘူး။</string>
+    <string name="contact_send">ပို့ရန်</string>
+</resources>

@@ -19,6 +19,8 @@ import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.di.IoDispatcher
 import com.piptechnologies.stickermaker.core.data.repo.MyPacksRepository
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
+import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.inAppLanguage
 import com.piptechnologies.stickermaker.whatsapp.AnimatedWebpMuxer
 import com.piptechnologies.stickermaker.whatsapp.StickerPackValidator
 import com.piptechnologies.stickermaker.whatsapp.ValidatablePack
@@ -47,9 +49,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-
-/** WhatsApp shows a publisher line; own packs carry the design's phrase for them. */
-private const val PACK_PUBLISHER = "Made by you"
 
 /** The design assigns no per-sticker emoji, so every sticker gets this default pair. */
 private val DEFAULT_EMOJIS = listOf("❤️", "😊")
@@ -185,7 +184,7 @@ class CreatePackViewModel @Inject constructor(
         )
     }
 
-    private fun toast(message: String, check: Boolean = false) {
+    private fun toast(message: UiText, check: Boolean = false) {
         _events.tryEmit(CreateEvent.ShowToast(message, check))
     }
 
@@ -220,7 +219,7 @@ class CreatePackViewModel @Inject constructor(
             }
             items += fresh
             push()
-            if (clamped) toast("30 stickers is the maximum")
+            if (clamped) toast(UiText.res(R.string.create_toast_max, CreateSpec.MAX_STICKERS))
             fresh.filter { it.isVideo }.forEach { item ->
                 launch {
                     val uri = item.uri ?: return@launch
@@ -239,7 +238,7 @@ class CreatePackViewModel @Inject constructor(
         viewModelScope.launch {
             if (selectedItems().size >= CreateSpec.MAX_STICKERS) {
                 bitmap.recycle()
-                toast("30 stickers is the maximum")
+                toast(UiText.res(R.string.create_toast_max, CreateSpec.MAX_STICKERS))
                 return@launch
             }
             val square = withContext(Dispatchers.Default) {
@@ -261,14 +260,14 @@ class CreatePackViewModel @Inject constructor(
             items += item
             shots += 1
             push()
-            toast("Shot added to the pack")
+            toast(UiText.res(R.string.create_toast_shot_added))
         }
     }
 
     fun togglePicked(id: String) {
         val item = items.find { it.id == id } ?: return
         if (!item.selected && selectedItems().size >= CreateSpec.MAX_STICKERS) {
-            toast("30 stickers is the maximum")
+            toast(UiText.res(R.string.create_toast_max, CreateSpec.MAX_STICKERS))
             return
         }
         item.selected = !item.selected
@@ -418,7 +417,7 @@ class CreatePackViewModel @Inject constructor(
                 push()
                 refreshDerived(item)
             }
-            else -> toast("Nothing to undo")
+            else -> toast(UiText.res(R.string.create_toast_nothing_to_undo))
         }
     }
 
@@ -440,7 +439,7 @@ class CreatePackViewModel @Inject constructor(
         push()
     }
 
-    fun notifyAlreadyAdded() = toast("Already in WhatsApp")
+    fun notifyAlreadyAdded() = toast(UiText.res(R.string.toast_already_in_whatsapp))
 
     fun addToWhatsApp() = startExport(toWhatsApp = true)
 
@@ -452,7 +451,7 @@ class CreatePackViewModel @Inject constructor(
             exportState = AddVisualState.Added
             push()
             viewModelScope.launch {
-                _events.emit(CreateEvent.ShowToast("Added to WhatsApp", check = true))
+                _events.emit(CreateEvent.ShowToast(UiText.res(R.string.toast_added_to_whatsapp), check = true))
                 delay(900)
                 finished = true
                 _events.emit(CreateEvent.ExportComplete)
@@ -482,11 +481,14 @@ class CreatePackViewModel @Inject constructor(
         exportProgress = 0f
         push()
         val stickers = selectedItems()
-        val finalName = packName.trim().ifEmpty { "Untitled pack" }
+        // Resolved now, in the app language, and kept with the pack.
+        val words = appContext.inAppLanguage()
+        val finalName = packName.trim().ifEmpty { words.getString(R.string.create_untitled) }
+        val publisher = words.getString(R.string.create_publisher)
         val trayAt = trayIndex.coerceIn(0, max(0, stickers.size - 1))
         exportJob = viewModelScope.launch {
             try {
-                val (id, name) = exportPack(stickers, finalName, trayAt)
+                val (id, name) = exportPack(stickers, finalName, publisher, trayAt)
                 savedPackId = id
                 savedPackName = name
                 exportProgress = 1f
@@ -510,7 +512,7 @@ class CreatePackViewModel @Inject constructor(
         exportState = AddVisualState.Idle
         push()
         viewModelScope.launch {
-            _events.emit(CreateEvent.ShowToast("Saved to My Packs"))
+            _events.emit(CreateEvent.ShowToast(UiText.res(R.string.create_toast_saved)))
             delay(900)
             finished = true
             _events.emit(CreateEvent.ExportComplete)
@@ -526,6 +528,7 @@ class CreatePackViewModel @Inject constructor(
     private suspend fun exportPack(
         stickers: List<MediaItem>,
         finalName: String,
+        publisher: String,
         trayAt: Int
     ): Pair<String, String> = withContext(Dispatchers.Default) {
         check(stickers.size in CreateSpec.MIN_STICKERS..CreateSpec.MAX_STICKERS) {
@@ -553,7 +556,7 @@ class CreatePackViewModel @Inject constructor(
             ValidatablePack(
                 identifier = dirId,
                 name = finalName,
-                publisher = PACK_PUBLISHER,
+                publisher = publisher,
                 trayImageFile = TRAY_FILE,
                 trayBytes = trayBytes,
                 animatedStickerPack = packAnimated,
@@ -568,7 +571,7 @@ class CreatePackViewModel @Inject constructor(
         }
         val id = myPacksRepository.saveOwnPack(
             name = finalName,
-            publisher = PACK_PUBLISHER,
+            publisher = publisher,
             animated = packAnimated,
             stickers = fileNames.map { it to DEFAULT_EMOJIS },
             dir = dir.absolutePath,

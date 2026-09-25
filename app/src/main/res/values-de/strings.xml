@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- German. Mirrors values/strings.xml key for key; StringResourcesTest checks it. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">Zurück</string>
+    <string name="common_close">Schließen</string>
+    <string name="common_keep">Behalten</string>
+    <string name="common_cancel">Abbrechen</string>
+    <string name="common_not_now">Nicht jetzt</string>
+    <string name="common_retry">Erneut versuchen</string>
+    <string name="common_done">Fertig</string>
+    <string name="common_percent">%1$d %%</string>
+    <string name="meta_join">%1$s · %2$s</string>
+    <string name="honesty_line">Kostenlos · Keine Werbung · Kein Konto</string>
+    <string name="nav_home">Startseite</string>
+    <string name="nav_my_packs">Meine Packs</string>
+    <string name="nav_create">Pack erstellen</string>
+    <string name="add_bar_idle">Zu WhatsApp hinzufügen</string>
+    <string name="add_bar_downloading">Wird geladen · %1$d %%</string>
+    <string name="add_bar_sent">An WhatsApp gesendet …</string>
+    <string name="add_bar_added">Zu WhatsApp hinzugefügt</string>
+    <string name="add_bar_failed">Fehler beim Laden · Wiederholen</string>
+    <string name="add_bar_hint_idle">Wird auf dein Handy geladen und dann in WhatsApp geöffnet.</string>
+    <string name="add_bar_hint_downloading">Das Pack wird aus der Cloud geladen.</string>
+    <string name="add_bar_hint_sent">Bestätige in WhatsApp, dann ist alles erledigt.</string>
+    <string name="add_bar_hint_added">Verwalte es unter „Meine Packs“.</string>
+    <string name="add_bar_hint_failed">Prüfe deine Verbindung und tippe dann für einen neuen Versuch.</string>
+    <string name="add_pill_add">Hinzufügen</string>
+    <string name="add_pill_sent">Gesendet …</string>
+    <string name="add_pill_added">Hinzugefügt</string>
+    <string name="add_pill_retry">Wiederholen</string>
+    <string name="add_pill_downloading">Wird geladen, %1$d Prozent</string>
+    <plurals name="sticker_count">
+        <item quantity="one">%d Sticker</item>
+        <item quantity="other">%d Sticker</item>
+    </plurals>
+    <string name="pack_adds">%1$s × hinzugefügt</string>
+    <string name="pack_save">Pack speichern</string>
+    <string name="pack_unsave">Aus Gespeicherten entfernen</string>
+    <string name="pack_options">Pack-Optionen</string>
+    <string name="pack_share">Love Stickers teilen</string>
+    <string name="badge_animated">ANIMIERT</string>
+    <string name="sticker_remove">Sticker entfernen</string>
+    <string name="sticker_add">Sticker hinzufügen</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">Überspringen</string>
+    <string name="onboarding_slide1_title">Sag es mit einem Sticker</string>
+    <string name="onboarding_slide1_body">Handverlesene Packs voller Liebe: süß, lustig, romantisch. Ein Tipp, und das Pack ist in WhatsApp.</string>
+    <string name="onboarding_slide2_title">Mach deine eigenen</string>
+    <string name="onboarding_slide2_body">Mach aus deinen Fotos Sticker. Zuschneiden, freistellen, ein Wort dazu. Auch animierte Packs aus kurzen Clips.</string>
+    <string name="onboarding_your_photo">DEIN FOTO</string>
+    <string name="onboarding_next">Weiter</string>
+    <string name="onboarding_get_started">Los geht’s</string>
+    <string name="onboarding_sticker_alt">Fertiger Sticker: Frau formt mit den Händen ein Herz, mit weißem Stanzrand</string>
+    <string name="onboarding_photo_alt">Originalfoto</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">Paare</string>
+    <string name="theme_cute">Süß</string>
+    <string name="theme_funny">Lustig</string>
+    <string name="theme_anime">Anime</string>
+    <string name="theme_romantic">Romantisch</string>
+    <string name="theme_flirty">Flirt</string>
+    <string name="theme_goodnight">Gute Nacht</string>
+    <string name="theme_distance">Fernbeziehung</string>
+    <string name="customize_title">Wähle deine Themen</string>
+    <string name="customize_edit_title">Deine Themen</string>
+    <string name="customize_subtitle">Die Startseite zeigt Packs aus den Themen, die du wählst. Du kannst sie jederzeit in den Einstellungen ändern.</string>
+    <string name="customize_save">Speichern</string>
+    <string name="customize_pick_one">Wähle mindestens ein Thema</string>
+    <plurals name="customize_continue">
+        <item quantity="one">Weiter · %d Thema</item>
+        <item quantity="other">Weiter · %d Themen</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">Du bist offline</string>
+    <string name="offline_body">Packs werden aus der Cloud geladen. Prüfe deine Verbindung und versuch es noch mal.</string>
+    <string name="offline_footnote">Bereits hinzugefügte Packs funktionieren in WhatsApp weiterhin.</string>
+    <string name="no_whatsapp_title">WhatsApp ist nicht installiert</string>
+    <string name="no_whatsapp_body">Sticker werden in WhatsApp hinzugefügt. Installiere die App und komm dann zurück, um dieses Pack hinzuzufügen.</string>
+    <string name="no_whatsapp_confirm">WhatsApp holen</string>
+    <string name="toast_added_to_whatsapp">Zu WhatsApp hinzugefügt</string>
+    <string name="toast_already_in_whatsapp">Schon in WhatsApp</string>
+    <string name="toast_saved_heart">Gespeichert · du findest es auf der Startseite unter ♥ Gespeichert</string>
+
+    <!-- Home -->
+    <string name="home_search">Suchen</string>
+    <string name="home_settings">Einstellungen</string>
+    <string name="home_search_placeholder">Packs voller Liebe suchen</string>
+    <string name="home_chip_trending">Angesagt</string>
+    <string name="home_chip_animated">Animiert</string>
+    <string name="home_chip_saved">Gespeichert · %1$d</string>
+    <string name="home_no_results_title">Keine Packs für „%1$s“</string>
+    <string name="home_no_results_body">Versuch es mit einem Thema, z. B. „Süß“ oder „Anime“.</string>
+    <string name="toast_still_offline">Immer noch offline. Versuch es gleich noch mal.</string>
+    <string name="toast_opening_play_store">Play Store wird geöffnet …</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">Von dir erstellt</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">IN WHATSAPP · %1$d</string>
+    <string name="my_packs_section_own">VON DIR ERSTELLT · %1$d</string>
+    <string name="my_packs_yours">von dir</string>
+    <string name="my_packs_menu_readd">Erneut zu WhatsApp hinzufügen</string>
+    <string name="my_packs_menu_add">Zu WhatsApp hinzufügen</string>
+    <string name="my_packs_menu_remove">Aus dieser App entfernen</string>
+    <string name="my_packs_menu_delete">Pack löschen</string>
+    <string name="my_packs_remove_title">„%1$s“ aus dieser App entfernen?</string>
+    <string name="my_packs_remove_body">Löscht die lokale Kopie. WhatsApp behält das Pack, bis du es dort entfernst.</string>
+    <string name="my_packs_remove_confirm">Entfernen</string>
+    <string name="my_packs_delete_title">„%1$s“ löschen?</string>
+    <string name="my_packs_delete_body">Löscht das Pack und seine Sticker von diesem Handy. Das lässt sich nicht rückgängig machen. Falls du es hinzugefügt hast, behält WhatsApp seine Kopie.</string>
+    <string name="my_packs_delete_confirm">Löschen</string>
+    <string name="my_packs_toast_removed">Aus dieser App entfernt</string>
+    <string name="my_packs_toast_deleted">Pack gelöscht</string>
+    <string name="my_packs_empty_title">Noch keine Packs</string>
+    <string name="my_packs_empty_body">Packs, die du zu WhatsApp hinzufügst, erscheinen hier – zusammen mit denen, die du selbst erstellst.</string>
+    <string name="common_browse_packs">Packs entdecken</string>
+    <string name="my_packs_empty_make_own">Selbst erstellen</string>
+    <string name="my_packs_info_removal">Wenn du ein Pack hier entfernst, wird die Kopie dieser App gelöscht. WhatsApp behält seine eigene, bis du sie dort entfernst.</string>
+    <string name="my_packs_saved">Gespeicherte Packs</string>
+
+    <!-- Saved -->
+    <string name="saved_title">Gespeichert</string>
+    <plurals name="saved_pack_count">
+        <item quantity="one">%d Pack</item>
+        <item quantity="other">%d Packs</item>
+    </plurals>
+    <string name="saved_empty_title">Noch keine gespeicherten Packs</string>
+    <string name="saved_empty_body">Tippe bei einem Pack auf das Herz, um es hier für später aufzuheben.</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">Neues Pack</string>
+    <plurals name="create_selected_count">
+        <item quantity="one">%d ausgewählt</item>
+        <item quantity="other">%d ausgewählt</item>
+    </plurals>
+    <string name="create_source_photos">Fotos</string>
+    <string name="create_source_camera">Kamera</string>
+    <string name="create_source_video">Video</string>
+    <string name="create_next">Weiter</string>
+    <plurals name="create_next_count">
+        <item quantity="one">Weiter · %d Sticker</item>
+        <item quantity="other">Weiter · %d Sticker</item>
+    </plurals>
+    <string name="create_import_hint_ready">„Weiter“ stellt jedes Motiv auf diesem Handy frei. Bis zu %1$d pro Pack.</string>
+    <string name="create_import_hint_pick">Wähle mindestens %1$d (%2$d von %1$d). Bis zu %3$d pro Pack.</string>
+    <string name="create_item_remove">Aus dem Pack entfernen</string>
+    <string name="create_item_add">Zum Pack hinzufügen</string>
+    <string name="create_viewfinder">Sucher</string>
+    <plurals name="create_shot_count">
+        <item quantity="one">%d Aufnahme</item>
+        <item quantity="other">%d Aufnahmen</item>
+    </plurals>
+    <string name="create_take_picture">Foto aufnehmen</string>
+    <string name="create_toast_max">Maximal %1$d Sticker</string>
+    <string name="create_toast_shot_added">Aufnahme zum Pack hinzugefügt</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">Freistellen</string>
+    <string name="create_undo">Rückgängig</string>
+    <string name="create_toast_nothing_to_undo">Nichts rückgängig zu machen</string>
+    <string name="create_tool_auto">Auto</string>
+    <string name="create_tool_brush">Pinsel</string>
+    <string name="create_tool_erase">Radierer</string>
+    <string name="create_tool_text">Text</string>
+    <string name="create_tool_zoom">Zoom</string>
+    <string name="create_hint_zoomed">Tippe noch mal auf Zoom, um das Bild einzupassen</string>
+    <string name="create_hint_auto">Tippe auf Auto, um das Motiv freizustellen</string>
+    <string name="create_hint_auto_done">Auf diesem Handy freigestellt. Nichts wurde hochgeladen.</string>
+    <string name="create_hint_brush">Tippe auf das Bild, um Teile zurückzuholen</string>
+    <string name="create_hint_erase">Tippe auf Reste, um sie wegzuradieren</string>
+    <string name="create_hint_text">Gib unten ein Wort ein</string>
+    <string name="create_hint_default">Zoome hinein, um Kanten nachzubessern</string>
+    <string name="create_cutting_out_on_phone">Wird auf diesem Handy freigestellt …</string>
+    <string name="create_cutting_out">Wird freigestellt …</string>
+    <string name="create_brush_size">Pinselgröße</string>
+    <string name="create_eraser_size">Radierergröße</string>
+    <string name="create_caption_placeholder">Ein Wort hinzufügen</string>
+    <string name="create_outline_title">Weiße Kontur</string>
+    <string name="create_outline_body">Gut sichtbar auf jedem Chat-Hintergrund. Von WhatsApp empfohlen.</string>
+    <string name="create_edit_sticker">Diesen Sticker bearbeiten</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">Pack-Details</string>
+    <string name="create_tray_title">Pack-Icon</string>
+    <string name="create_tray_body">Wird in der Sticker-Auswahl von WhatsApp angezeigt. Tippe unten auf einen Sticker, um ihn zu verwenden.</string>
+    <string name="create_use_as_tray">Als Pack-Icon verwenden</string>
+    <string name="create_name_label">Pack-Name</string>
+    <string name="create_name_placeholder">z. B. Nur wir zwei</string>
+    <string name="create_info_specs">%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">Animiert</string>
+    <string name="create_kind_static">Statisch</string>
+    <string name="create_info_body">jeweils unter 100 KB, auf diesem Handy erstellt. Nichts wird hochgeladen.</string>
+    <string name="create_save_only">Nur in „Meine Packs“ speichern</string>
+    <string name="create_toast_saved">In „Meine Packs“ gespeichert</string>
+    <string name="create_untitled">Unbenanntes Pack</string>
+    <string name="create_publisher">Von dir erstellt</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_alerts_title">Hinweise zu neuen Packs</string>
+    <string name="settings_alerts_on">Nur wenn ein neues Pack dazukommt.</string>
+    <string name="settings_alerts_off">Aus. Du erfährst nichts von neuen Packs.</string>
+    <string name="settings_section_preferences">ALLGEMEIN</string>
+    <string name="settings_section_about">ÜBER DIE APP</string>
+    <string name="settings_edit_themes">Themen bearbeiten</string>
+    <plurals name="settings_theme_count">
+        <item quantity="one">%d Thema</item>
+        <item quantity="other">%d Themen</item>
+    </plurals>
+    <string name="settings_language">Sprache</string>
+    <string name="settings_clear">Heruntergeladene Packs löschen</string>
+    <string name="settings_storage_none">Keine</string>
+    <string name="settings_size_mb">%1$.1f MB</string>
+    <string name="settings_rate">Bewerte uns</string>
+    <string name="settings_contact">Schreib uns</string>
+    <string name="settings_more_apps">Weitere Apps</string>
+    <string name="settings_ad_badge">ANZEIGE</string>
+    <string name="settings_privacy">Datenschutz</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_free_card">Love Stickers ist kostenlos und bleibt es auch. Keine Werbung, kein Konto, kein Tracking. Deine Fotos verlassen nie dein Handy.</string>
+    <string name="settings_toast_alerts_on">Hinweise zu neuen Packs an</string>
+    <string name="settings_toast_alerts_off">Hinweise zu neuen Packs aus</string>
+    <string name="settings_toast_nothing_to_clear">Nichts zu löschen</string>
+    <string name="settings_toast_cleared">Downloads gelöscht</string>
+    <string name="settings_notif_title">Love Stickers erlauben, dir Benachrichtigungen zu senden?</string>
+    <string name="settings_notif_body">Android fragt nur einmal. Wir melden uns nur, wenn ein neues Pack dazukommt. Niemals Werbung.</string>
+    <string name="settings_notif_deny">Nicht zulassen</string>
+    <string name="settings_notif_allow">Zulassen</string>
+    <string name="settings_clear_title">Heruntergeladene Packs löschen?</string>
+    <string name="settings_clear_body">Entfernt die in dieser App gespeicherten Kopien (%1$s). Packs, die schon in WhatsApp sind, bleiben dort.</string>
+    <string name="settings_clear_keep">Behalten</string>
+    <string name="settings_clear_confirm">Löschen</string>
+    <string name="toast_no_email_app">Keine E-Mail-App auf diesem Handy.</string>
+    <string name="toast_link_failed">Link konnte nicht geöffnet werden.</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">Gefällt dir Love Stickers?</string>
+    <string name="rate_body">Deine ehrliche Bewertung hilft anderen, eine Sticker-App ohne Werbung zu finden.</string>
+    <plurals name="rate_star">
+        <item quantity="one">%d Stern</item>
+        <item quantity="other">%d Sterne</item>
+    </plurals>
+    <string name="rate_hint_idle">Tippe auf einen Stern</string>
+    <string name="rate_hint_five">Großartig!</string>
+    <string name="rate_hint_low">Sag uns, was nicht gepasst hat</string>
+    <string name="rate_maybe_later">Vielleicht später</string>
+    <string name="rate_store_title">Danke!</string>
+    <string name="rate_store_body">Magst du das auch bei Google Play teilen? Das hilft einer kleinen, werbefreien App beim Wachsen.</string>
+    <string name="rate_store_cta">Bei Google Play bewerten</string>
+    <string name="rate_feedback_title">Was können wir besser machen?</string>
+    <string name="rate_feedback_body">Sag uns, was gefehlt hat. Das geht direkt an unser Team statt in eine öffentliche Bewertung, und wir lesen alles.</string>
+    <string name="rate_feedback_placeholder">Was hat dir für 5 Sterne gefehlt?</string>
+    <string name="rate_feedback_cta">Feedback senden</string>
+    <string name="rate_thanks_title">Danke, ist angekommen</string>
+    <string name="rate_thanks_body">Deine Nachricht ist auf dem Weg zu unserem Team. Sie prägt, was wir als Nächstes bauen.</string>
+
+    <!-- Language -->
+    <string name="language_note">Ändert die Sprache der App. Pack-Namen bleiben wie veröffentlicht.</string>
+    <string name="language_system">Systemstandard</string>
+    <string name="language_system_sub">Gerätesprache</string>
+    <string name="language_rtl_badge">RTL</string>
+    <string name="language_name_en">Englisch</string>
+    <string name="language_name_ar">Arabisch</string>
+    <string name="language_name_es">Spanisch</string>
+    <string name="language_name_pt">Portugiesisch</string>
+    <string name="language_name_pt_br">Portugiesisch (Brasilien)</string>
+    <string name="language_name_fr">Französisch</string>
+    <string name="language_name_hi">Hindi</string>
+    <string name="language_name_id">Indonesisch</string>
+    <string name="language_name_tr">Türkisch</string>
+    <string name="language_name_ur">Urdu</string>
+    <string name="language_name_de">Deutsch</string>
+    <string name="language_name_ru">Russisch</string>
+    <string name="language_name_it">Italienisch</string>
+    <string name="language_name_zh">Chinesisch (vereinfacht)</string>
+    <string name="language_name_fa">Persisch</string>
+    <string name="language_name_he">Hebräisch</string>
+    <string name="language_name_ps">Paschtu</string>
+    <string name="language_name_ha">Hausa</string>
+    <string name="language_name_my">Birmanisch</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">Eine Frage, ein kaputtes Pack, ein Pack, das du dir wünschst. Wir lesen jede Nachricht.</string>
+    <string name="contact_message_placeholder">Schreib deine Nachricht …</string>
+    <string name="contact_email_label">E-Mail · optional, nur wenn du eine Antwort möchtest</string>
+    <string name="contact_attach_note">Wird mit App-Version und Android-Version gesendet. Sonst nichts.</string>
+    <string name="contact_send">Senden</string>
+</resources>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Indonesian. Mirrors values/strings.xml key for key; StringResourcesTest checks it. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">Kembali</string>
+    <string name="common_close">Tutup</string>
+    <string name="common_keep">Pertahankan</string>
+    <string name="common_cancel">Batal</string>
+    <string name="common_not_now">Lain kali</string>
+    <string name="common_retry">Coba lagi</string>
+    <string name="common_done">Selesai</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">%1$s · %2$s</string>
+    <string name="honesty_line">Gratis · Tanpa iklan · Tanpa akun</string>
+    <string name="nav_home">Beranda</string>
+    <string name="nav_my_packs">Paket Saya</string>
+    <string name="nav_create">Buat paket</string>
+    <string name="add_bar_idle">Tambahkan ke WhatsApp</string>
+    <string name="add_bar_downloading">Mengunduh · %1$d%%</string>
+    <string name="add_bar_sent">Dikirim ke WhatsApp…</string>
+    <string name="add_bar_added">Ditambahkan ke WhatsApp</string>
+    <string name="add_bar_failed">Unduhan gagal · Coba lagi</string>
+    <string name="add_bar_hint_idle">Diunduh ke ponsel Anda, lalu dibuka di WhatsApp.</string>
+    <string name="add_bar_hint_downloading">Mengunduh paket dari cloud.</string>
+    <string name="add_bar_hint_sent">Konfirmasi di WhatsApp untuk menyelesaikan.</string>
+    <string name="add_bar_hint_added">Kelola di Paket Saya.</string>
+    <string name="add_bar_hint_failed">Periksa koneksi Anda, lalu ketuk untuk mencoba lagi.</string>
+    <string name="add_pill_add">Tambah</string>
+    <string name="add_pill_sent">Dikirim…</string>
+    <string name="add_pill_added">Ditambahkan</string>
+    <string name="add_pill_retry">Coba lagi</string>
+    <string name="add_pill_downloading">Mengunduh %1$d persen</string>
+    <plurals name="sticker_count">
+        <item quantity="other">%d stiker</item>
+    </plurals>
+    <string name="pack_adds">%1$s kali ditambahkan</string>
+    <string name="pack_save">Simpan paket</string>
+    <string name="pack_unsave">Hapus dari Tersimpan</string>
+    <string name="pack_options">Opsi paket</string>
+    <string name="pack_share">Bagikan Love Stickers</string>
+    <string name="badge_animated">ANIMASI</string>
+    <string name="sticker_remove">Hapus stiker</string>
+    <string name="sticker_add">Tambahkan stiker</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">Lewati</string>
+    <string name="onboarding_slide1_title">Ungkapkan lewat stiker</string>
+    <string name="onboarding_slide1_body">Paket cinta pilihan: imut, kocak, romantis. Sekali ketuk, paket langsung masuk ke WhatsApp.</string>
+    <string name="onboarding_slide2_title">Buat sendiri</string>
+    <string name="onboarding_slide2_body">Ubah foto menjadi stiker. Pangkas, potong objek, tambahkan kata. Paket animasi dari klip pendek juga bisa.</string>
+    <string name="onboarding_your_photo">FOTO ANDA</string>
+    <string name="onboarding_next">Lanjut</string>
+    <string name="onboarding_get_started">Mulai</string>
+    <string name="onboarding_sticker_alt">Stiker jadi: perempuan membentuk hati dengan tangannya, dengan garis tepi putih di sekelilingnya</string>
+    <string name="onboarding_photo_alt">Foto asli</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">Pasangan</string>
+    <string name="theme_cute">Imut</string>
+    <string name="theme_funny">Kocak</string>
+    <string name="theme_anime">Anime</string>
+    <string name="theme_romantic">Romantis</string>
+    <string name="theme_flirty">Menggoda</string>
+    <string name="theme_goodnight">Selamat tidur</string>
+    <string name="theme_distance">Jarak jauh</string>
+    <string name="customize_title">Pilih tema Anda</string>
+    <string name="customize_edit_title">Tema Anda</string>
+    <string name="customize_subtitle">Beranda menampilkan paket dari tema yang Anda pilih. Ubah kapan saja di Setelan.</string>
+    <string name="customize_save">Simpan</string>
+    <string name="customize_pick_one">Pilih minimal satu tema</string>
+    <plurals name="customize_continue">
+        <item quantity="other">Lanjutkan · %d tema</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">Anda sedang offline</string>
+    <string name="offline_body">Paket diambil dari cloud. Periksa koneksi Anda, lalu coba lagi.</string>
+    <string name="offline_footnote">Paket yang sudah Anda tambahkan tetap bisa dipakai di WhatsApp.</string>
+    <string name="no_whatsapp_title">WhatsApp belum terpasang</string>
+    <string name="no_whatsapp_body">Stiker ditambahkan di dalam WhatsApp. Pasang WhatsApp, lalu kembali ke sini untuk menambahkan paket ini.</string>
+    <string name="no_whatsapp_confirm">Pasang WhatsApp</string>
+    <string name="toast_added_to_whatsapp">Ditambahkan ke WhatsApp</string>
+    <string name="toast_already_in_whatsapp">Sudah ada di WhatsApp</string>
+    <string name="toast_saved_heart">Disimpan · temukan di ♥ Tersimpan di Beranda</string>
+
+    <!-- Home -->
+    <string name="home_search">Cari</string>
+    <string name="home_settings">Setelan</string>
+    <string name="home_search_placeholder">Cari paket cinta</string>
+    <string name="home_chip_trending">Populer</string>
+    <string name="home_chip_animated">Animasi</string>
+    <string name="home_chip_saved">Tersimpan · %1$d</string>
+    <string name="home_no_results_title">Tidak ada paket untuk “%1$s”</string>
+    <string name="home_no_results_body">Coba nama tema, seperti “imut” atau “anime”.</string>
+    <string name="toast_still_offline">Masih offline. Silakan coba sesaat lagi.</string>
+    <string name="toast_opening_play_store">Membuka Play Store…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">Buatan Anda</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">DI WHATSAPP · %1$d</string>
+    <string name="my_packs_section_own">BUATAN ANDA · %1$d</string>
+    <string name="my_packs_yours">milik Anda</string>
+    <string name="my_packs_menu_readd">Tambahkan lagi ke WhatsApp</string>
+    <string name="my_packs_menu_add">Tambahkan ke WhatsApp</string>
+    <string name="my_packs_menu_remove">Hapus dari aplikasi ini</string>
+    <string name="my_packs_menu_delete">Hapus paket</string>
+    <string name="my_packs_remove_title">Hapus “%1$s” dari aplikasi ini?</string>
+    <string name="my_packs_remove_body">Salinan lokal akan dihapus. Paket tetap ada di WhatsApp sampai Anda menghapusnya di sana.</string>
+    <string name="my_packs_remove_confirm">Hapus</string>
+    <string name="my_packs_delete_title">Hapus “%1$s”?</string>
+    <string name="my_packs_delete_body">Paket dan stikernya akan dihapus dari ponsel ini. Tindakan ini tidak dapat dibatalkan. Jika sudah Anda tambahkan ke WhatsApp, salinannya tetap ada di sana.</string>
+    <string name="my_packs_delete_confirm">Hapus</string>
+    <string name="my_packs_toast_removed">Dihapus dari aplikasi ini</string>
+    <string name="my_packs_toast_deleted">Paket dihapus</string>
+    <string name="my_packs_empty_title">Belum ada paket</string>
+    <string name="my_packs_empty_body">Paket yang Anda tambahkan ke WhatsApp akan muncul di sini, begitu juga paket buatan Anda.</string>
+    <string name="common_browse_packs">Jelajahi paket</string>
+    <string name="my_packs_empty_make_own">Buat sendiri</string>
+    <string name="my_packs_info_removal">Menghapus paket di sini hanya menghapus salinan di aplikasi ini. WhatsApp tetap menyimpan salinannya sendiri sampai Anda menghapusnya di sana.</string>
+    <string name="my_packs_saved">Paket tersimpan</string>
+
+    <!-- Saved -->
+    <string name="saved_title">Tersimpan</string>
+    <plurals name="saved_pack_count">
+        <item quantity="other">%d paket</item>
+    </plurals>
+    <string name="saved_empty_title">Belum ada paket tersimpan</string>
+    <string name="saved_empty_body">Ketuk ikon hati di paket mana pun agar tersimpan di sini untuk nanti.</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">Paket baru</string>
+    <plurals name="create_selected_count">
+        <item quantity="other">%d dipilih</item>
+    </plurals>
+    <string name="create_source_photos">Foto</string>
+    <string name="create_source_camera">Kamera</string>
+    <string name="create_source_video">Video</string>
+    <string name="create_next">Lanjut</string>
+    <plurals name="create_next_count">
+        <item quantity="other">Lanjut · %d stiker</item>
+    </plurals>
+    <string name="create_import_hint_ready">Ketuk Lanjut untuk memotong setiap objek di ponsel ini. Maksimal %1$d per paket.</string>
+    <string name="create_import_hint_pick">Pilih minimal %1$d (%2$d dari %1$d). Maksimal %3$d per paket.</string>
+    <string name="create_item_remove">Hapus dari paket</string>
+    <string name="create_item_add">Tambahkan ke paket</string>
+    <string name="create_viewfinder">jendela bidik</string>
+    <plurals name="create_shot_count">
+        <item quantity="other">%d foto</item>
+    </plurals>
+    <string name="create_take_picture">Ambil foto</string>
+    <string name="create_toast_max">Maksimal %1$d stiker</string>
+    <string name="create_toast_shot_added">Foto ditambahkan ke paket</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">Potong objek</string>
+    <string name="create_undo">Urungkan</string>
+    <string name="create_toast_nothing_to_undo">Tidak ada yang bisa diurungkan</string>
+    <string name="create_tool_auto">Otomatis</string>
+    <string name="create_tool_brush">Kuas</string>
+    <string name="create_tool_erase">Hapus</string>
+    <string name="create_tool_text">Teks</string>
+    <string name="create_tool_zoom">Zoom</string>
+    <string name="create_hint_zoomed">Ketuk Zoom lagi agar pas di layar</string>
+    <string name="create_hint_auto">Ketuk Otomatis untuk memotong objek</string>
+    <string name="create_hint_auto_done">Dipotong di ponsel ini. Tidak ada yang diunggah.</string>
+    <string name="create_hint_brush">Ketuk gambar untuk mengembalikan bagian yang terhapus</string>
+    <string name="create_hint_erase">Ketuk sisa latar untuk menghapusnya</string>
+    <string name="create_hint_text">Ketik kata di bawah</string>
+    <string name="create_hint_default">Perbesar untuk merapikan tepi</string>
+    <string name="create_cutting_out_on_phone">Memotong objek di ponsel ini…</string>
+    <string name="create_cutting_out">Memotong objek…</string>
+    <string name="create_brush_size">Ukuran kuas</string>
+    <string name="create_eraser_size">Ukuran penghapus</string>
+    <string name="create_caption_placeholder">Tambahkan kata</string>
+    <string name="create_outline_title">Garis tepi putih</string>
+    <string name="create_outline_body">Terlihat jelas di latar chat apa pun. Disarankan oleh WhatsApp.</string>
+    <string name="create_edit_sticker">Edit stiker ini</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">Detail paket</string>
+    <string name="create_tray_title">Ikon paket</string>
+    <string name="create_tray_body">Tampil di pemilih stiker WhatsApp. Ketuk stiker di bawah untuk menjadikannya ikon.</string>
+    <string name="create_use_as_tray">Jadikan ikon paket</string>
+    <string name="create_name_label">Nama paket</string>
+    <string name="create_name_placeholder">mis. Kita selamanya</string>
+    <string name="create_info_specs">%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">Animasi</string>
+    <string name="create_kind_static">Statis</string>
+    <string name="create_info_body">di bawah 100 KB per stiker, dibuat di ponsel ini. Tidak ada yang diunggah.</string>
+    <string name="create_save_only">Simpan ke Paket Saya saja</string>
+    <string name="create_toast_saved">Disimpan ke Paket Saya</string>
+    <string name="create_untitled">Paket tanpa nama</string>
+    <string name="create_publisher">Buatan Anda</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Setelan</string>
+    <string name="settings_alerts_title">Notifikasi paket baru</string>
+    <string name="settings_alerts_on">Hanya saat ada paket baru.</string>
+    <string name="settings_alerts_off">Nonaktif. Anda tidak akan mendapat kabar tentang paket baru.</string>
+    <string name="settings_section_preferences">PREFERENSI</string>
+    <string name="settings_section_about">TENTANG</string>
+    <string name="settings_edit_themes">Ubah tema</string>
+    <plurals name="settings_theme_count">
+        <item quantity="other">%d tema</item>
+    </plurals>
+    <string name="settings_language">Bahasa</string>
+    <string name="settings_clear">Hapus paket yang diunduh</string>
+    <string name="settings_storage_none">Tidak ada</string>
+    <string name="settings_size_mb">%1$.1f MB</string>
+    <string name="settings_rate">Beri rating</string>
+    <string name="settings_contact">Hubungi kami</string>
+    <string name="settings_more_apps">Aplikasi lainnya</string>
+    <string name="settings_ad_badge">IKLAN</string>
+    <string name="settings_privacy">Kebijakan privasi</string>
+    <string name="settings_version">Versi</string>
+    <string name="settings_free_card">Love Stickers gratis, dan akan selalu gratis. Tanpa iklan, tanpa akun, tanpa pelacakan. Foto Anda tidak pernah keluar dari ponsel Anda.</string>
+    <string name="settings_toast_alerts_on">Notifikasi paket baru aktif</string>
+    <string name="settings_toast_alerts_off">Notifikasi paket baru nonaktif</string>
+    <string name="settings_toast_nothing_to_clear">Tidak ada yang perlu dihapus</string>
+    <string name="settings_toast_cleared">Unduhan dihapus</string>
+    <string name="settings_notif_title">Izinkan Love Stickers mengirim notifikasi?</string>
+    <string name="settings_notif_body">Android hanya bertanya sekali. Kami hanya memberi tahu Anda saat ada paket baru. Tidak akan pernah ada promosi.</string>
+    <string name="settings_notif_deny">Jangan izinkan</string>
+    <string name="settings_notif_allow">Izinkan</string>
+    <string name="settings_clear_title">Hapus paket yang diunduh?</string>
+    <string name="settings_clear_body">Salinan yang disimpan di aplikasi ini (%1$s) akan dihapus. Paket yang sudah ada di WhatsApp tetap di sana.</string>
+    <string name="settings_clear_keep">Pertahankan</string>
+    <string name="settings_clear_confirm">Hapus</string>
+    <string name="toast_no_email_app">Tidak ada aplikasi email di ponsel ini.</string>
+    <string name="toast_link_failed">Tidak dapat membuka link tersebut.</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">Suka Love Stickers?</string>
+    <string name="rate_body">Rating jujur Anda membantu orang lain menemukan aplikasi stiker tanpa iklan.</string>
+    <plurals name="rate_star">
+        <item quantity="other">%d bintang</item>
+    </plurals>
+    <string name="rate_hint_idle">Ketuk bintang</string>
+    <string name="rate_hint_five">Suka sekali!</string>
+    <string name="rate_hint_low">Beri tahu kami apa yang salah</string>
+    <string name="rate_maybe_later">Nanti saja</string>
+    <string name="rate_store_title">Terima kasih!</string>
+    <string name="rate_store_body">Maukah Anda membagikannya di Google Play? Itu membantu aplikasi kecil tanpa iklan ini berkembang.</string>
+    <string name="rate_store_cta">Beri rating di Google Play</string>
+    <string name="rate_feedback_title">Apa yang bisa kami perbaiki?</string>
+    <string name="rate_feedback_body">Ceritakan apa yang kurang. Pesan ini langsung sampai ke tim, bukan menjadi ulasan publik, dan kami membaca semuanya.</string>
+    <string name="rate_feedback_placeholder">Apa yang bisa membuat aplikasi ini layak 5 bintang?</string>
+    <string name="rate_feedback_cta">Kirim masukan</string>
+    <string name="rate_thanks_title">Terima kasih, kami mendengar Anda</string>
+    <string name="rate_thanks_body">Pesan Anda sedang menuju tim kami. Masukan ini menentukan apa yang kami buat berikutnya.</string>
+
+    <!-- Language -->
+    <string name="language_note">Mengubah bahasa aplikasi. Nama paket tetap seperti aslinya.</string>
+    <string name="language_system">Default sistem</string>
+    <string name="language_system_sub">Bahasa perangkat</string>
+    <string name="language_rtl_badge">RTL</string>
+    <string name="language_name_en">Inggris</string>
+    <string name="language_name_ar">Arab</string>
+    <string name="language_name_es">Spanyol</string>
+    <string name="language_name_pt">Portugis</string>
+    <string name="language_name_pt_br">Portugis (Brasil)</string>
+    <string name="language_name_fr">Prancis</string>
+    <string name="language_name_hi">Hindi</string>
+    <string name="language_name_id">Indonesia</string>
+    <string name="language_name_tr">Turki</string>
+    <string name="language_name_ur">Urdu</string>
+    <string name="language_name_de">Jerman</string>
+    <string name="language_name_ru">Rusia</string>
+    <string name="language_name_it">Italia</string>
+    <string name="language_name_zh">Tionghoa (Sederhana)</string>
+    <string name="language_name_fa">Persia</string>
+    <string name="language_name_he">Ibrani</string>
+    <string name="language_name_ps">Pashto</string>
+    <string name="language_name_ha">Hausa</string>
+    <string name="language_name_my">Burma</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">Pertanyaan, paket yang rusak, atau paket yang Anda harapkan ada. Kami membaca setiap pesan.</string>
+    <string name="contact_message_placeholder">Tulis pesan Anda…</string>
+    <string name="contact_email_label">Email · opsional, hanya jika Anda ingin dibalas</string>
+    <string name="contact_attach_note">Dikirim bersama versi aplikasi dan versi Android. Tidak ada yang lain.</string>
+    <string name="contact_send">Kirim</string>
+</resources>

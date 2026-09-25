@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Persian. Mirrors values/strings.xml key for key; StringResourcesTest checks it. Strings that would start with Latin text or a pack name begin with &#x200F; (RLM) so they keep a right-to-left paragraph direction. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">بازگشت</string>
+    <string name="common_close">بستن</string>
+    <string name="common_keep">نگه داشتن</string>
+    <string name="common_cancel">لغو</string>
+    <string name="common_not_now">اکنون نه</string>
+    <string name="common_retry">تلاش مجدد</string>
+    <string name="common_done">تمام</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">&#x200F;%1$s · %2$s</string>
+    <string name="honesty_line">رایگان · بدون تبلیغات · بدون حساب</string>
+    <string name="nav_home">خانه</string>
+    <string name="nav_my_packs">بسته‌های من</string>
+    <string name="nav_create">ساخت بسته</string>
+    <string name="add_bar_idle">افزودن به واتس‌اپ</string>
+    <string name="add_bar_downloading">در حال دانلود · %1$d%%</string>
+    <string name="add_bar_sent">به واتس‌اپ ارسال شد…</string>
+    <string name="add_bar_added">به واتس‌اپ افزوده شد</string>
+    <string name="add_bar_failed">دانلود ناموفق بود · تلاش مجدد</string>
+    <string name="add_bar_hint_idle">روی گوشی شما دانلود می‌شود، سپس در واتس‌اپ باز می‌شود.</string>
+    <string name="add_bar_hint_downloading">در حال دریافت بسته از فضای ابری.</string>
+    <string name="add_bar_hint_sent">برای تمام کردن، در واتس‌اپ تأیید کنید.</string>
+    <string name="add_bar_hint_added">آن را در «بسته‌های من» مدیریت کنید.</string>
+    <string name="add_bar_hint_failed">اتصال خود را بررسی کنید، سپس برای تلاش دوباره ضربه بزنید.</string>
+    <string name="add_pill_add">افزودن</string>
+    <string name="add_pill_sent">ارسال شد…</string>
+    <string name="add_pill_added">افزوده شد</string>
+    <string name="add_pill_retry">تلاش مجدد</string>
+    <string name="add_pill_downloading">در حال دانلود، %1$d درصد</string>
+    <plurals name="sticker_count">
+        <item quantity="one">%d استیکر</item>
+        <item quantity="other">%d استیکر</item>
+    </plurals>
+    <string name="pack_adds">&#x200F;%1$s بار افزوده شده</string>
+    <string name="pack_save">ذخیرهٔ بسته</string>
+    <string name="pack_unsave">حذف از ذخیره‌شده‌ها</string>
+    <string name="pack_options">گزینه‌های بسته</string>
+    <string name="pack_share">اشتراک‌گذاری Love Stickers</string>
+    <string name="badge_animated">متحرک</string>
+    <string name="sticker_remove">حذف استیکر</string>
+    <string name="sticker_add">افزودن استیکر</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">رد شدن</string>
+    <string name="onboarding_slide1_title">با یک استیکر بگویید</string>
+    <string name="onboarding_slide1_body">بسته‌های عاشقانهٔ گلچین‌شده: بامزه، خنده‌دار، رمانتیک. با یک ضربه، بسته به واتس‌اپ اضافه می‌شود.</string>
+    <string name="onboarding_slide2_title">استیکر خودتان را بسازید</string>
+    <string name="onboarding_slide2_body">عکس‌ها را به استیکر تبدیل کنید. برش بزنید، دوربری کنید، کلمه‌ای اضافه کنید. از کلیپ‌های کوتاه هم بسته‌های متحرک بسازید.</string>
+    <string name="onboarding_your_photo">عکس شما</string>
+    <string name="onboarding_next">بعدی</string>
+    <string name="onboarding_get_started">شروع کنید</string>
+    <string name="onboarding_sticker_alt">استیکر نهایی: زنی که با دستانش قلب درست می‌کند، با حاشیهٔ سفید دور تا دور</string>
+    <string name="onboarding_photo_alt">عکس اصلی</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">زوج‌ها</string>
+    <string name="theme_cute">بامزه</string>
+    <string name="theme_funny">خنده‌دار</string>
+    <string name="theme_anime">انیمه</string>
+    <string name="theme_romantic">رمانتیک</string>
+    <string name="theme_flirty">دلبرانه</string>
+    <string name="theme_goodnight">شب بخیر</string>
+    <string name="theme_distance">عشق از راه دور</string>
+    <string name="customize_title">موضوع‌هایتان را انتخاب کنید</string>
+    <string name="customize_edit_title">موضوع‌های شما</string>
+    <string name="customize_subtitle">«خانه» بسته‌هایی از موضوع‌هایی که انتخاب می‌کنید نشان می‌دهد. هر وقت خواستید، آن‌ها را در «تنظیمات» تغییر دهید.</string>
+    <string name="customize_save">ذخیره</string>
+    <string name="customize_pick_one">دست‌کم یک موضوع انتخاب کنید</string>
+    <plurals name="customize_continue">
+        <item quantity="one">ادامه · %d موضوع</item>
+        <item quantity="other">ادامه · %d موضوع</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">آفلاین هستید</string>
+    <string name="offline_body">بسته‌ها از فضای ابری دریافت می‌شوند. اتصال خود را بررسی کنید و دوباره امتحان کنید.</string>
+    <string name="offline_footnote">بسته‌هایی که قبلاً اضافه کرده‌اید، همچنان در واتس‌اپ کار می‌کنند.</string>
+    <string name="no_whatsapp_title">واتس‌اپ نصب نیست</string>
+    <string name="no_whatsapp_body">استیکرها داخل واتس‌اپ اضافه می‌شوند. آن را نصب کنید، سپس برگردید تا این بسته را اضافه کنید.</string>
+    <string name="no_whatsapp_confirm">دریافت واتس‌اپ</string>
+    <string name="toast_added_to_whatsapp">به واتس‌اپ افزوده شد</string>
+    <string name="toast_already_in_whatsapp">از قبل در واتس‌اپ هست</string>
+    <string name="toast_saved_heart">ذخیره شد · آن را در «♥ ذخیره‌شده‌ها» در «خانه» پیدا کنید</string>
+
+    <!-- Home -->
+    <string name="home_search">جستجو</string>
+    <string name="home_settings">تنظیمات</string>
+    <string name="home_search_placeholder">جستجوی بسته‌های عاشقانه</string>
+    <string name="home_chip_trending">پرطرفدار</string>
+    <string name="home_chip_animated">متحرک</string>
+    <string name="home_chip_saved">ذخیره‌شده‌ها · %1$d</string>
+    <string name="home_no_results_title">بسته‌ای برای «%1$s» پیدا نشد</string>
+    <string name="home_no_results_body">نام یک موضوع را امتحان کنید، مثل «بامزه» یا «انیمه».</string>
+    <string name="toast_still_offline">هنوز آفلاین هستید. کمی بعد دوباره امتحان کنید.</string>
+    <string name="toast_opening_play_store">در حال باز کردن Play Store…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">ساخت شما</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">در واتس‌اپ · %1$d</string>
+    <string name="my_packs_section_own">ساخت شما · %1$d</string>
+    <string name="my_packs_yours">ساخت شما</string>
+    <string name="my_packs_menu_readd">افزودن دوباره به واتس‌اپ</string>
+    <string name="my_packs_menu_add">افزودن به واتس‌اپ</string>
+    <string name="my_packs_menu_remove">حذف از این برنامه</string>
+    <string name="my_packs_menu_delete">پاک کردن بسته</string>
+    <string name="my_packs_remove_title">&#x200F;«%1$s» از این برنامه حذف شود؟</string>
+    <string name="my_packs_remove_body">نسخهٔ محلی پاک می‌شود. واتس‌اپ بسته را نگه می‌دارد تا وقتی که آن را از آنجا حذف کنید.</string>
+    <string name="my_packs_remove_confirm">حذف</string>
+    <string name="my_packs_delete_title">&#x200F;«%1$s» پاک شود؟</string>
+    <string name="my_packs_delete_body">بسته و استیکرهایش از این گوشی پاک می‌شوند. این کار برگشت‌پذیر نیست. اگر آن را اضافه کرده باشید، واتس‌اپ نسخهٔ خودش را نگه می‌دارد.</string>
+    <string name="my_packs_delete_confirm">پاک کردن</string>
+    <string name="my_packs_toast_removed">از این برنامه حذف شد</string>
+    <string name="my_packs_toast_deleted">بسته پاک شد</string>
+    <string name="my_packs_empty_title">هنوز بسته‌ای ندارید</string>
+    <string name="my_packs_empty_body">بسته‌هایی که به واتس‌اپ اضافه می‌کنید، همراه با بسته‌هایی که می‌سازید، اینجا نشان داده می‌شوند.</string>
+    <string name="common_browse_packs">مرور بسته‌ها</string>
+    <string name="my_packs_empty_make_own">بستهٔ خودتان را بسازید</string>
+    <string name="my_packs_info_removal">حذف بسته از اینجا، نسخهٔ این برنامه را پاک می‌کند. واتس‌اپ نسخهٔ خودش را نگه می‌دارد تا وقتی که آن را از آنجا حذف کنید.</string>
+    <string name="my_packs_saved">بسته‌های ذخیره‌شده</string>
+
+    <!-- Saved -->
+    <string name="saved_title">ذخیره‌شده‌ها</string>
+    <plurals name="saved_pack_count">
+        <item quantity="one">%d بسته</item>
+        <item quantity="other">%d بسته</item>
+    </plurals>
+    <string name="saved_empty_title">هنوز بسته‌ای ذخیره نکرده‌اید</string>
+    <string name="saved_empty_body">روی قلب هر بسته ضربه بزنید تا آن را برای بعد اینجا نگه دارید.</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">بستهٔ جدید</string>
+    <plurals name="create_selected_count">
+        <item quantity="one">%d مورد انتخاب شد</item>
+        <item quantity="other">%d مورد انتخاب شد</item>
+    </plurals>
+    <string name="create_source_photos">عکس‌ها</string>
+    <string name="create_source_camera">دوربین</string>
+    <string name="create_source_video">ویدیو</string>
+    <string name="create_next">بعدی</string>
+    <plurals name="create_next_count">
+        <item quantity="one">بعدی · %d استیکر</item>
+        <item quantity="other">بعدی · %d استیکر</item>
+    </plurals>
+    <string name="create_import_hint_ready">با «بعدی»، سوژهٔ هر عکس روی همین گوشی دوربری می‌شود. حداکثر %1$d مورد در هر بسته.</string>
+    <string name="create_import_hint_pick">دست‌کم %1$d مورد انتخاب کنید (%2$d از %1$d). حداکثر %3$d مورد در هر بسته.</string>
+    <string name="create_item_remove">حذف از بسته</string>
+    <string name="create_item_add">افزودن به بسته</string>
+    <string name="create_viewfinder">منظره‌یاب</string>
+    <plurals name="create_shot_count">
+        <item quantity="one">%d عکس</item>
+        <item quantity="other">%d عکس</item>
+    </plurals>
+    <string name="create_take_picture">گرفتن عکس</string>
+    <string name="create_toast_max">حداکثر %1$d استیکر مجاز است</string>
+    <string name="create_toast_shot_added">عکس به بسته اضافه شد</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">دوربری</string>
+    <string name="create_undo">واگرد</string>
+    <string name="create_toast_nothing_to_undo">چیزی برای واگرد نیست</string>
+    <string name="create_tool_auto">خودکار</string>
+    <string name="create_tool_brush">قلم‌مو</string>
+    <string name="create_tool_erase">پاک‌کن</string>
+    <string name="create_tool_text">متن</string>
+    <string name="create_tool_zoom">زوم</string>
+    <string name="create_hint_zoomed">برای جا شدن در صفحه، دوباره روی «زوم» ضربه بزنید</string>
+    <string name="create_hint_auto">برای دوربری سوژه، روی «خودکار» ضربه بزنید</string>
+    <string name="create_hint_auto_done">روی همین گوشی دوربری شد. چیزی بارگذاری نشد.</string>
+    <string name="create_hint_brush">برای برگرداندن بخش‌ها، روی تصویر ضربه بزنید</string>
+    <string name="create_hint_erase">برای پاک کردن باقی‌مانده‌ها، روی آن‌ها ضربه بزنید</string>
+    <string name="create_hint_text">یک کلمه در پایین بنویسید</string>
+    <string name="create_hint_default">برای اصلاح لبه‌ها زوم کنید</string>
+    <string name="create_cutting_out_on_phone">در حال دوربری روی همین گوشی…</string>
+    <string name="create_cutting_out">در حال دوربری…</string>
+    <string name="create_brush_size">اندازهٔ قلم‌مو</string>
+    <string name="create_eraser_size">اندازهٔ پاک‌کن</string>
+    <string name="create_caption_placeholder">یک کلمه اضافه کنید</string>
+    <string name="create_outline_title">حاشیهٔ سفید</string>
+    <string name="create_outline_body">روی هر پس‌زمینهٔ گفتگویی خوانا است. واتس‌اپ آن را توصیه می‌کند.</string>
+    <string name="create_edit_sticker">ویرایش این استیکر</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">جزئیات بسته</string>
+    <string name="create_tray_title">نماد بسته</string>
+    <string name="create_tray_body">در انتخابگر استیکر واتس‌اپ نشان داده می‌شود. برای استفاده، روی یکی از استیکرهای زیر ضربه بزنید.</string>
+    <string name="create_use_as_tray">استفاده به‌عنوان نماد بسته</string>
+    <string name="create_name_label">نام بسته</string>
+    <string name="create_name_placeholder">مثلاً: من و تو، همیشه</string>
+    <string name="create_info_specs">&#x200F;%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">متحرک</string>
+    <string name="create_kind_static">ثابت</string>
+    <string name="create_info_body">هر کدام زیر ۱۰۰ کیلوبایت، ساخته‌شده روی همین گوشی. چیزی بارگذاری نمی‌شود.</string>
+    <string name="create_save_only">فقط ذخیره در «بسته‌های من»</string>
+    <string name="create_toast_saved">در «بسته‌های من» ذخیره شد</string>
+    <string name="create_untitled">بستهٔ بی‌نام</string>
+    <string name="create_publisher">ساخت شما</string>
+
+    <!-- Settings -->
+    <string name="settings_title">تنظیمات</string>
+    <string name="settings_alerts_title">اعلان بسته‌های جدید</string>
+    <string name="settings_alerts_on">فقط وقتی بستهٔ جدیدی اضافه شود.</string>
+    <string name="settings_alerts_off">خاموش. از بسته‌های جدید باخبر نمی‌شوید.</string>
+    <string name="settings_section_preferences">ترجیحات</string>
+    <string name="settings_section_about">درباره</string>
+    <string name="settings_edit_themes">ویرایش موضوع‌ها</string>
+    <plurals name="settings_theme_count">
+        <item quantity="one">%d موضوع</item>
+        <item quantity="other">%d موضوع</item>
+    </plurals>
+    <string name="settings_language">زبان</string>
+    <string name="settings_clear">پاک کردن بسته‌های دانلودشده</string>
+    <string name="settings_storage_none">هیچ</string>
+    <string name="settings_size_mb">%1$.1f مگابایت</string>
+    <string name="settings_rate">به ما امتیاز دهید</string>
+    <string name="settings_contact">تماس با ما</string>
+    <string name="settings_more_apps">برنامه‌های دیگر</string>
+    <string name="settings_ad_badge">تبلیغ</string>
+    <string name="settings_privacy">سیاست حفظ حریم خصوصی</string>
+    <string name="settings_version">نسخه</string>
+    <string name="settings_free_card">&#x200F;Love Stickers رایگان است و همیشه رایگان می‌ماند. بدون تبلیغات، بدون حساب، بدون ردیابی. عکس‌هایتان هرگز از گوشی‌تان خارج نمی‌شوند.</string>
+    <string name="settings_toast_alerts_on">اعلان بسته‌های جدید روشن شد</string>
+    <string name="settings_toast_alerts_off">اعلان بسته‌های جدید خاموش شد</string>
+    <string name="settings_toast_nothing_to_clear">چیزی برای پاک کردن نیست</string>
+    <string name="settings_toast_cleared">دانلودها پاک شدند</string>
+    <string name="settings_notif_title">به Love Stickers اجازهٔ ارسال اعلان می‌دهید؟</string>
+    <string name="settings_notif_body">اندروید فقط یک بار می‌پرسد. فقط وقتی بستهٔ جدیدی اضافه شود به شما خبر می‌دهیم. هیچ‌وقت تبلیغ نمی‌فرستیم.</string>
+    <string name="settings_notif_deny">اجازه ندادن</string>
+    <string name="settings_notif_allow">اجازه دادن</string>
+    <string name="settings_clear_title">بسته‌های دانلودشده پاک شوند؟</string>
+    <string name="settings_clear_body">نسخه‌های ذخیره‌شده در این برنامه (%1$s) پاک می‌شوند. بسته‌هایی که در واتس‌اپ هستند، همان‌جا می‌مانند.</string>
+    <string name="settings_clear_keep">نگه داشتن</string>
+    <string name="settings_clear_confirm">پاک کردن</string>
+    <string name="toast_no_email_app">هیچ برنامهٔ ایمیلی روی این گوشی نیست.</string>
+    <string name="toast_link_failed">آن پیوند باز نشد.</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">از Love Stickers لذت می‌برید؟</string>
+    <string name="rate_body">امتیاز صادقانهٔ شما به دیگران کمک می‌کند یک برنامهٔ استیکر بدون تبلیغات پیدا کنند.</string>
+    <plurals name="rate_star">
+        <item quantity="one">%d ستاره</item>
+        <item quantity="other">%d ستاره</item>
+    </plurals>
+    <string name="rate_hint_idle">روی یک ستاره ضربه بزنید</string>
+    <string name="rate_hint_five">خیلی دوستش دارم!</string>
+    <string name="rate_hint_low">بگویید چه چیزی درست نبود</string>
+    <string name="rate_maybe_later">شاید بعداً</string>
+    <string name="rate_store_title">سپاسگزاریم!</string>
+    <string name="rate_store_body">این را در Google Play هم می‌گویید؟ به رشد یک برنامهٔ کوچک و بدون تبلیغ کمک می‌کند.</string>
+    <string name="rate_store_cta">امتیاز دادن در Google Play</string>
+    <string name="rate_feedback_title">چطور می‌توانیم بهتر شویم؟</string>
+    <string name="rate_feedback_body">بگویید چه چیزی کم بود. نظرتان مستقیم به دست تیم می‌رسد، نه به‌صورت نقد عمومی، و همه را می‌خوانیم.</string>
+    <string name="rate_feedback_placeholder">چه چیزی این برنامه را پنج‌ستاره می‌کرد؟</string>
+    <string name="rate_feedback_cta">ارسال بازخورد</string>
+    <string name="rate_thanks_title">ممنونیم، صدایتان را شنیدیم</string>
+    <string name="rate_thanks_body">یادداشت شما در راه رسیدن به تیم است و روی کارهای بعدی ما اثر می‌گذارد.</string>
+
+    <!-- Language -->
+    <string name="language_note">زبان برنامه را تغییر می‌دهد. نام بسته‌ها همان‌طور که منتشر شده‌اند می‌مانند.</string>
+    <string name="language_system">پیش‌فرض سیستم</string>
+    <string name="language_system_sub">زبان دستگاه</string>
+    <string name="language_rtl_badge">&#x200F;RTL</string>
+    <string name="language_name_en">انگلیسی</string>
+    <string name="language_name_ar">عربی</string>
+    <string name="language_name_es">اسپانیایی</string>
+    <string name="language_name_pt">پرتغالی</string>
+    <string name="language_name_pt_br">پرتغالی (برزیل)</string>
+    <string name="language_name_fr">فرانسوی</string>
+    <string name="language_name_hi">هندی</string>
+    <string name="language_name_id">اندونزیایی</string>
+    <string name="language_name_tr">ترکی</string>
+    <string name="language_name_ur">اردو</string>
+    <string name="language_name_de">آلمانی</string>
+    <string name="language_name_ru">روسی</string>
+    <string name="language_name_it">ایتالیایی</string>
+    <string name="language_name_zh">چینی (ساده‌شده)</string>
+    <string name="language_name_fa">فارسی</string>
+    <string name="language_name_he">عبری</string>
+    <string name="language_name_ps">پشتو</string>
+    <string name="language_name_ha">هوسا</string>
+    <string name="language_name_my">برمه‌ای</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">یک سؤال، یک بستهٔ خراب، بسته‌ای که دلتان می‌خواهد وجود داشته باشد. همهٔ پیام‌ها را می‌خوانیم.</string>
+    <string name="contact_message_placeholder">پیام خود را بنویسید…</string>
+    <string name="contact_email_label">ایمیل · اختیاری، فقط اگر پاسخ می‌خواهید</string>
+    <string name="contact_attach_note">همراه با نسخهٔ برنامه و نسخهٔ اندروید ارسال می‌شود. چیز دیگری نه.</string>
+    <string name="contact_send">ارسال</string>
+</resources>

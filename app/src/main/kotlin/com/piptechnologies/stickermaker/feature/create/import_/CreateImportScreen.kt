@@ -40,6 +40,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.piptechnologies.stickermaker.core.design.Canvas as CanvasColor
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Ink
 import com.piptechnologies.stickermaker.core.design.LoveIcons
 import com.piptechnologies.stickermaker.core.design.LoveStickersTheme
@@ -60,6 +64,7 @@ import com.piptechnologies.stickermaker.core.design.components.SegmentedControl
 import com.piptechnologies.stickermaker.core.design.components.StickerTile
 import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.showToast
+import com.piptechnologies.stickermaker.core.ui.asString
 import com.piptechnologies.stickermaker.feature.create.CreateEvent
 import com.piptechnologies.stickermaker.feature.create.CreateFooter
 import com.piptechnologies.stickermaker.feature.create.CreatePackViewModel
@@ -93,6 +98,7 @@ fun CreateImportScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val toaster = remember { SnackbarHostState() }
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     // A finished export left this session behind; entering Import starts anew.
@@ -100,7 +106,9 @@ fun CreateImportScreen(
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
-            if (event is CreateEvent.ShowToast) scope.launch { toaster.showToast(event.message, event.check) }
+            if (event is CreateEvent.ShowToast) {
+                scope.launch { toaster.showToast(event.message.asString(context), event.check) }
+            }
         }
     }
 
@@ -162,12 +170,12 @@ private fun CreateImportContent(
     Box(Modifier.fillMaxSize().background(CanvasColor)) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             LoveTopBar(
-                title = "New pack",
+                title = stringResource(R.string.create_import_title),
                 onBack = onBack,
                 height = 52.dp,
                 actions = {
                     Text(
-                        if (n > 0) "$n selected" else "",
+                        if (n > 0) pluralStringResource(R.plurals.create_selected_count, n, n) else "",
                         style = MonoCounterText,
                         color = Muted,
                         modifier = Modifier.padding(end = 8.dp)
@@ -175,7 +183,11 @@ private fun CreateImportContent(
                 }
             )
             SegmentedControl(
-                options = listOf("Photos", "Camera", "Video"),
+                options = listOf(
+                    stringResource(R.string.create_source_photos),
+                    stringResource(R.string.create_source_camera),
+                    stringResource(R.string.create_source_video)
+                ),
                 selectedIndex = state.source.ordinal,
                 onSelect = { onSelectSource(ImportSource.entries[it]) },
                 icons = listOf(LoveIcons.Images, LoveIcons.Camera, LoveIcons.Video),
@@ -197,15 +209,24 @@ private fun CreateImportContent(
             }
             CreateFooter {
                 PrimaryButton(
-                    label = if (n >= CreateSpec.MIN_STICKERS) "Next · $n stickers" else "Next",
+                    label = if (n >= CreateSpec.MIN_STICKERS) {
+                        pluralStringResource(R.plurals.create_next_count, n, n)
+                    } else {
+                        stringResource(R.string.create_next)
+                    },
                     enabled = n >= CreateSpec.MIN_STICKERS,
                     onClick = onNext
                 )
                 FooterHint(
                     if (n >= CreateSpec.MIN_STICKERS) {
-                        "Next cuts out each subject on this phone. Up to 30 per pack."
+                        stringResource(R.string.create_import_hint_ready, CreateSpec.MAX_STICKERS)
                     } else {
-                        "Pick at least 3 ($n of 3). Up to 30 per pack."
+                        stringResource(
+                            R.string.create_import_hint_pick,
+                            CreateSpec.MIN_STICKERS,
+                            n,
+                            CreateSpec.MAX_STICKERS
+                        )
                     }
                 )
             }
@@ -241,7 +262,7 @@ private fun PickerGrid(
                 selected = item.selected,
                 contentPadding = 0.dp,
                 label = item.durationLabel,
-                contentDescription = if (item.selected) "Remove from pack" else "Add to pack"
+                contentDescription = stringResource(if (item.selected) R.string.create_item_remove else R.string.create_item_add)
             ) {
                 when {
                     item.pickerModel != null -> AsyncImage(
@@ -300,13 +321,13 @@ private fun CameraPane(
                     }
             )
             Text(
-                "viewfinder",
+                stringResource(R.string.create_viewfinder),
                 style = hintStyle,
                 color = ViewfinderHintColor,
                 modifier = Modifier.align(Alignment.Center)
             )
             Text(
-                if (shots == 1) "1 shot" else "$shots shots",
+                pluralStringResource(R.plurals.create_shot_count, shots, shots),
                 style = hintStyle,
                 color = ViewfinderHintColor,
                 modifier = Modifier
@@ -326,7 +347,11 @@ private fun CameraPane(
                     .clip(CircleShape)
                     .background(Color.White)
                     .border(4.dp, Rose, CircleShape)
-                    .clickable(role = Role.Button, onClickLabel = "Take a picture", onClick = onShoot)
+                    .clickable(
+                        role = Role.Button,
+                        onClickLabel = stringResource(R.string.create_take_picture),
+                        onClick = onShoot
+                    )
             )
         }
     }

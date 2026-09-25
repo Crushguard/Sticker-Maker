@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hebrew. Mirrors values/strings.xml key for key; StringResourcesTest checks it. Strings that would start with Latin text or a pack name begin with &#x200F; (RLM) so they keep a right-to-left paragraph direction. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">חזרה</string>
+    <string name="common_close">סגירה</string>
+    <string name="common_keep">להשאיר</string>
+    <string name="common_cancel">ביטול</string>
+    <string name="common_not_now">לא עכשיו</string>
+    <string name="common_retry">לנסות שוב</string>
+    <string name="common_done">סיום</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">&#x200F;%1$s · %2$s</string>
+    <string name="honesty_line">חינם · בלי פרסומות · בלי חשבון</string>
+    <string name="nav_home">דף הבית</string>
+    <string name="nav_my_packs">החבילות שלי</string>
+    <string name="nav_create">יצירת חבילה</string>
+    <string name="add_bar_idle">הוספה ל-WhatsApp</string>
+    <string name="add_bar_downloading">מתבצעת הורדה · %1$d%%</string>
+    <string name="add_bar_sent">נשלחה ל-WhatsApp…</string>
+    <string name="add_bar_added">נוספה ל-WhatsApp</string>
+    <string name="add_bar_failed">ההורדה נכשלה · לנסות שוב</string>
+    <string name="add_bar_hint_idle">החבילה תורד לטלפון ותיפתח ב-WhatsApp.</string>
+    <string name="add_bar_hint_downloading">החבילה בדרך מהענן.</string>
+    <string name="add_bar_hint_sent">כדי לסיים, יש לאשר ב-WhatsApp.</string>
+    <string name="add_bar_hint_added">אפשר לנהל אותה בחבילות שלי.</string>
+    <string name="add_bar_hint_failed">יש לבדוק את החיבור ואז להקיש כדי לנסות שוב.</string>
+    <string name="add_pill_add">הוספה</string>
+    <string name="add_pill_sent">נשלחה…</string>
+    <string name="add_pill_added">נוספה</string>
+    <string name="add_pill_retry">לנסות שוב</string>
+    <string name="add_pill_downloading">מתבצעת הורדה, %1$d אחוז</string>
+    <plurals name="sticker_count">
+        <item quantity="one">סטיקר אחד</item>
+        <item quantity="two">שני סטיקרים</item>
+        <item quantity="other">%d סטיקרים</item>
+    </plurals>
+    <string name="pack_adds">&#x200F;%1$s הוספות</string>
+    <string name="pack_save">שמירת החבילה</string>
+    <string name="pack_unsave">הסרה מהשמורים</string>
+    <string name="pack_options">אפשרויות חבילה</string>
+    <string name="pack_share">שיתוף Love Stickers</string>
+    <string name="badge_animated">מונפש</string>
+    <string name="sticker_remove">הסרת הסטיקר</string>
+    <string name="sticker_add">הוספת סטיקר</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">דילוג</string>
+    <string name="onboarding_slide1_title">אומרים את זה בסטיקר</string>
+    <string name="onboarding_slide1_body">חבילות אהבה נבחרות: חמודות, מצחיקות, רומנטיות. הקשה אחת מוסיפה חבילה ל-WhatsApp.</string>
+    <string name="onboarding_slide2_title">סטיקרים משלך</string>
+    <string name="onboarding_slide2_body">הופכים תמונות לסטיקרים. חותכים, גוזרים ומוסיפים מילה. אפשר גם חבילות מונפשות מסרטונים קצרים.</string>
+    <string name="onboarding_your_photo">התמונה שלך</string>
+    <string name="onboarding_next">הבא</string>
+    <string name="onboarding_get_started">בואו נתחיל</string>
+    <string name="onboarding_sticker_alt">סטיקר מוכן: אישה עושה לב עם הידיים, עם קו מתאר לבן סביבה</string>
+    <string name="onboarding_photo_alt">התמונה המקורית</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">זוגות</string>
+    <string name="theme_cute">חמוד</string>
+    <string name="theme_funny">מצחיק</string>
+    <string name="theme_anime">אנימה</string>
+    <string name="theme_romantic">רומנטי</string>
+    <string name="theme_flirty">פלרטוט</string>
+    <string name="theme_goodnight">לילה טוב</string>
+    <string name="theme_distance">אהבה מרחוק</string>
+    <string name="customize_title">בחירת נושאים</string>
+    <string name="customize_edit_title">הנושאים שלך</string>
+    <string name="customize_subtitle">בדף הבית מוצגות חבילות מהנושאים שבחרת. אפשר לשנות אותם בכל עת בהגדרות.</string>
+    <string name="customize_save">שמירה</string>
+    <string name="customize_pick_one">יש לבחור לפחות נושא אחד</string>
+    <plurals name="customize_continue">
+        <item quantity="one">המשך · נושא אחד</item>
+        <item quantity="two">המשך · שני נושאים</item>
+        <item quantity="other">המשך · %d נושאים</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">אין חיבור לאינטרנט</string>
+    <string name="offline_body">החבילות מגיעות מהענן. יש לבדוק את החיבור ולנסות שוב.</string>
+    <string name="offline_footnote">חבילות שכבר הוספת ימשיכו לעבוד ב-WhatsApp.</string>
+    <string name="no_whatsapp_title">אפליקציית WhatsApp לא מותקנת</string>
+    <string name="no_whatsapp_body">הסטיקרים מתווספים בתוך WhatsApp. אחרי ההתקנה אפשר לחזור לכאן ולהוסיף את החבילה.</string>
+    <string name="no_whatsapp_confirm">הורדת WhatsApp</string>
+    <string name="toast_added_to_whatsapp">החבילה נוספה ל-WhatsApp</string>
+    <string name="toast_already_in_whatsapp">החבילה כבר נמצאת ב-WhatsApp</string>
+    <string name="toast_saved_heart">נשמרה · אפשר למצוא אותה תחת ♥ שמורים בדף הבית</string>
+
+    <!-- Home -->
+    <string name="home_search">חיפוש</string>
+    <string name="home_settings">הגדרות</string>
+    <string name="home_search_placeholder">חיפוש חבילות אהבה</string>
+    <string name="home_chip_trending">פופולרי</string>
+    <string name="home_chip_animated">מונפשים</string>
+    <string name="home_chip_saved">שמורים · %1$d</string>
+    <string name="home_no_results_title">אין חבילות עבור ”%1$s”</string>
+    <string name="home_no_results_body">כדאי לנסות שם של נושא, כמו ”חמוד” או ”אנימה”.</string>
+    <string name="toast_still_offline">עדיין אין חיבור. אפשר לנסות שוב בעוד רגע.</string>
+    <string name="toast_opening_play_store">פותחים את Play Store…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">נוצרה על ידך</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">ב-WhatsApp · %1$d</string>
+    <string name="my_packs_section_own">נוצרו על ידך · %1$d</string>
+    <string name="my_packs_yours">שלך</string>
+    <string name="my_packs_menu_readd">הוספה מחדש ל-WhatsApp</string>
+    <string name="my_packs_menu_add">הוספה ל-WhatsApp</string>
+    <string name="my_packs_menu_remove">הסרה מהאפליקציה</string>
+    <string name="my_packs_menu_delete">מחיקת החבילה</string>
+    <string name="my_packs_remove_title">להסיר את ”%1$s” מהאפליקציה?</string>
+    <string name="my_packs_remove_body">העותק המקומי יימחק. החבילה תישאר ב-WhatsApp עד שתוסר משם.</string>
+    <string name="my_packs_remove_confirm">הסרה</string>
+    <string name="my_packs_delete_title">למחוק את ”%1$s”?</string>
+    <string name="my_packs_delete_body">החבילה והסטיקרים שלה יימחקו מהטלפון הזה. אי אפשר לבטל את הפעולה. אם הוספת אותה ל-WhatsApp, העותק שם יישאר.</string>
+    <string name="my_packs_delete_confirm">מחיקה</string>
+    <string name="my_packs_toast_removed">הוסרה מהאפליקציה</string>
+    <string name="my_packs_toast_deleted">החבילה נמחקה</string>
+    <string name="my_packs_empty_title">אין עדיין חבילות</string>
+    <string name="my_packs_empty_body">חבילות שהוספת ל-WhatsApp יופיעו כאן, יחד עם אלה שיצרת.</string>
+    <string name="common_browse_packs">עיון בחבילות</string>
+    <string name="my_packs_empty_make_own">ליצור חבילה משלך</string>
+    <string name="my_packs_info_removal">הסרת חבילה כאן מוחקת את העותק של האפליקציה. ב-WhatsApp העותק נשאר עד שמסירים אותו משם.</string>
+    <string name="my_packs_saved">חבילות שמורות</string>
+
+    <!-- Saved -->
+    <string name="saved_title">שמורים</string>
+    <plurals name="saved_pack_count">
+        <item quantity="one">חבילה אחת</item>
+        <item quantity="two">שתי חבילות</item>
+        <item quantity="other">%d חבילות</item>
+    </plurals>
+    <string name="saved_empty_title">אין עדיין חבילות שמורות</string>
+    <string name="saved_empty_body">אפשר להקיש על הלב בכל חבילה כדי לשמור אותה כאן להמשך.</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">חבילה חדשה</string>
+    <plurals name="create_selected_count">
+        <item quantity="one">%d נבחר</item>
+        <item quantity="two">%d נבחרו</item>
+        <item quantity="other">%d נבחרו</item>
+    </plurals>
+    <string name="create_source_photos">תמונות</string>
+    <string name="create_source_camera">מצלמה</string>
+    <string name="create_source_video">סרטון</string>
+    <string name="create_next">הבא</string>
+    <plurals name="create_next_count">
+        <item quantity="one">הבא · סטיקר אחד</item>
+        <item quantity="two">הבא · שני סטיקרים</item>
+        <item quantity="other">הבא · %d סטיקרים</item>
+    </plurals>
+    <string name="create_import_hint_ready">הקשה על ”הבא” תגזור כל דמות כאן בטלפון. עד %1$d בחבילה.</string>
+    <string name="create_import_hint_pick">יש לבחור לפחות %1$d (נבחרו %2$d מתוך %1$d). עד %3$d בחבילה.</string>
+    <string name="create_item_remove">הסרה מהחבילה</string>
+    <string name="create_item_add">הוספה לחבילה</string>
+    <string name="create_viewfinder">עינית</string>
+    <plurals name="create_shot_count">
+        <item quantity="one">צילום אחד</item>
+        <item quantity="two">שני צילומים</item>
+        <item quantity="other">%d צילומים</item>
+    </plurals>
+    <string name="create_take_picture">צילום תמונה</string>
+    <string name="create_toast_max">המקסימום הוא %1$d סטיקרים</string>
+    <string name="create_toast_shot_added">הצילום נוסף לחבילה</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">גזירה</string>
+    <string name="create_undo">ביטול פעולה</string>
+    <string name="create_toast_nothing_to_undo">אין מה לבטל</string>
+    <string name="create_tool_auto">אוטומטי</string>
+    <string name="create_tool_brush">מברשת</string>
+    <string name="create_tool_erase">מחק</string>
+    <string name="create_tool_text">טקסט</string>
+    <string name="create_tool_zoom">זום</string>
+    <string name="create_hint_zoomed">יש להקיש שוב על ”זום” כדי להתאים למסך</string>
+    <string name="create_hint_auto">יש להקיש על ”אוטומטי” כדי לגזור את הדמות</string>
+    <string name="create_hint_auto_done">הגזירה בוצעה בטלפון הזה. שום דבר לא הועלה.</string>
+    <string name="create_hint_brush">יש להקיש על התמונה כדי להחזיר חלקים</string>
+    <string name="create_hint_erase">יש להקיש על שאריות כדי למחוק אותן</string>
+    <string name="create_hint_text">יש להקליד מילה למטה</string>
+    <string name="create_hint_default">אפשר להגדיל כדי לתקן את הקצוות</string>
+    <string name="create_cutting_out_on_phone">גוזרים כאן בטלפון…</string>
+    <string name="create_cutting_out">גוזרים…</string>
+    <string name="create_brush_size">גודל המברשת</string>
+    <string name="create_eraser_size">גודל המחק</string>
+    <string name="create_caption_placeholder">הוספת מילה</string>
+    <string name="create_outline_title">קו מתאר לבן</string>
+    <string name="create_outline_body">בולט על כל רקע של צ\'אט. מומלץ על ידי WhatsApp.</string>
+    <string name="create_edit_sticker">עריכת הסטיקר</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">פרטי החבילה</string>
+    <string name="create_tray_title">סמל החבילה</string>
+    <string name="create_tray_body">מוצג בבורר הסטיקרים של WhatsApp. אפשר להקיש על סטיקר למטה כדי להשתמש בו.</string>
+    <string name="create_use_as_tray">שימוש כסמל החבילה</string>
+    <string name="create_name_label">שם החבילה</string>
+    <string name="create_name_placeholder">למשל: רק שנינו</string>
+    <string name="create_info_specs">&#x200F;%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">מונפשים</string>
+    <string name="create_kind_static">סטטיים</string>
+    <string name="create_info_body">פחות מ-100 KB כל אחד, נוצרים בטלפון הזה. שום דבר לא מועלה.</string>
+    <string name="create_save_only">שמירה בחבילות שלי בלבד</string>
+    <string name="create_toast_saved">נשמרה בחבילות שלי</string>
+    <string name="create_untitled">חבילה ללא שם</string>
+    <string name="create_publisher">נוצרה על ידך</string>
+
+    <!-- Settings -->
+    <string name="settings_title">הגדרות</string>
+    <string name="settings_alerts_title">התראות על חבילות חדשות</string>
+    <string name="settings_alerts_on">רק כשנוספת חבילה חדשה.</string>
+    <string name="settings_alerts_off">כבוי. לא יגיעו עדכונים על חבילות חדשות.</string>
+    <string name="settings_section_preferences">העדפות</string>
+    <string name="settings_section_about">אודות</string>
+    <string name="settings_edit_themes">עריכת נושאים</string>
+    <plurals name="settings_theme_count">
+        <item quantity="one">נושא אחד</item>
+        <item quantity="two">שני נושאים</item>
+        <item quantity="other">%d נושאים</item>
+    </plurals>
+    <string name="settings_language">שפה</string>
+    <string name="settings_clear">ניקוי חבילות שהורדו</string>
+    <string name="settings_storage_none">אין</string>
+    <string name="settings_size_mb">&#x200F;%1$.1f MB</string>
+    <string name="settings_rate">דירוג האפליקציה</string>
+    <string name="settings_contact">יצירת קשר</string>
+    <string name="settings_more_apps">אפליקציות נוספות</string>
+    <string name="settings_ad_badge">מודעה</string>
+    <string name="settings_privacy">מדיניות פרטיות</string>
+    <string name="settings_version">גרסה</string>
+    <string name="settings_free_card">אפליקציית Love Stickers חינמית, ותמיד תהיה. בלי פרסומות, בלי חשבון, בלי מעקב. התמונות שלך אף פעם לא יוצאות מהטלפון.</string>
+    <string name="settings_toast_alerts_on">ההתראות על חבילות חדשות הופעלו</string>
+    <string name="settings_toast_alerts_off">ההתראות על חבילות חדשות כובו</string>
+    <string name="settings_toast_nothing_to_clear">אין מה לנקות</string>
+    <string name="settings_toast_cleared">ההורדות נוקו</string>
+    <string name="settings_notif_title">לאפשר ל-Love Stickers לשלוח התראות?</string>
+    <string name="settings_notif_body">מערכת Android שואלת פעם אחת בלבד. נשלח התראה רק כשנוספת חבילה חדשה. בלי תוכן שיווקי, אף פעם.</string>
+    <string name="settings_notif_deny">לא לאפשר</string>
+    <string name="settings_notif_allow">לאפשר</string>
+    <string name="settings_clear_title">לנקות את החבילות שהורדו?</string>
+    <string name="settings_clear_body">העותקים השמורים באפליקציה (%1$s) יימחקו. חבילות שכבר נמצאות ב-WhatsApp יישארו שם.</string>
+    <string name="settings_clear_keep">להשאיר אותן</string>
+    <string name="settings_clear_confirm">ניקוי</string>
+    <string name="toast_no_email_app">אין בטלפון הזה אפליקציית אימייל.</string>
+    <string name="toast_link_failed">לא הצלחנו לפתוח את הקישור.</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">מה דעתך על Love Stickers?</string>
+    <string name="rate_body">הדירוג הכן שלך עוזר לאחרים למצוא אפליקציית סטיקרים בלי פרסומות.</string>
+    <plurals name="rate_star">
+        <item quantity="one">כוכב אחד</item>
+        <item quantity="two">שני כוכבים</item>
+        <item quantity="other">%d כוכבים</item>
+    </plurals>
+    <string name="rate_hint_idle">יש להקיש על כוכב</string>
+    <string name="rate_hint_five">אהבתי!</string>
+    <string name="rate_hint_low">נשמח לשמוע מה השתבש</string>
+    <string name="rate_maybe_later">אולי אחר כך</string>
+    <string name="rate_store_title">תודה!</string>
+    <string name="rate_store_body">רוצה לשתף את זה גם ב-Google Play? זה עוזר לאפליקציה קטנה בלי פרסומות לגדול.</string>
+    <string name="rate_store_cta">דירוג ב-Google Play</string>
+    <string name="rate_feedback_title">איך נוכל להשתפר?</string>
+    <string name="rate_feedback_body">נשמח לשמוע מה היה חסר. ההודעה מגיעה ישר לצוות, לא לביקורת ציבורית, ואנחנו קוראים כל אחת.</string>
+    <string name="rate_feedback_placeholder">מה היה הופך את האפליקציה ל-5 כוכבים?</string>
+    <string name="rate_feedback_cta">שליחת משוב</string>
+    <string name="rate_thanks_title">תודה, שמענו אותך</string>
+    <string name="rate_thanks_body">ההודעה שלך בדרך לצוות. היא תעזור לנו להחליט מה לבנות בהמשך.</string>
+
+    <!-- Language -->
+    <string name="language_note">משנה את שפת האפליקציה. שמות החבילות נשארים כפי שפורסמו.</string>
+    <string name="language_system">ברירת המחדל של המערכת</string>
+    <string name="language_system_sub">שפת המכשיר</string>
+    <string name="language_rtl_badge">&#x200F;RTL</string>
+    <string name="language_name_en">אנגלית</string>
+    <string name="language_name_ar">ערבית</string>
+    <string name="language_name_es">ספרדית</string>
+    <string name="language_name_pt">פורטוגזית</string>
+    <string name="language_name_pt_br">פורטוגזית (ברזיל)</string>
+    <string name="language_name_fr">צרפתית</string>
+    <string name="language_name_hi">הינדי</string>
+    <string name="language_name_id">אינדונזית</string>
+    <string name="language_name_tr">טורקית</string>
+    <string name="language_name_ur">אורדו</string>
+    <string name="language_name_de">גרמנית</string>
+    <string name="language_name_ru">רוסית</string>
+    <string name="language_name_it">איטלקית</string>
+    <string name="language_name_zh">סינית (פשוטה)</string>
+    <string name="language_name_fa">פרסית</string>
+    <string name="language_name_he">עברית</string>
+    <string name="language_name_ps">פשטו</string>
+    <string name="language_name_ha">האוסה</string>
+    <string name="language_name_my">בורמזית</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">שאלה, חבילה שלא עובדת, חבילה שהיית רוצה שתהיה. אנחנו קוראים כל הודעה.</string>
+    <string name="contact_message_placeholder">ההודעה שלך…</string>
+    <string name="contact_email_label">אימייל · לא חובה, רק אם רוצים תשובה</string>
+    <string name="contact_attach_note">ההודעה נשלחת עם גרסת האפליקציה וגרסת Android. זה הכול.</string>
+    <string name="contact_send">שליחה</string>
+</resources>

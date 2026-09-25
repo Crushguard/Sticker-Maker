@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Ink2
 import com.piptechnologies.stickermaker.core.design.LoveIcons
@@ -62,6 +64,8 @@ import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.TopBarIconButton
 import com.piptechnologies.stickermaker.core.design.components.showToast
 import com.piptechnologies.stickermaker.core.model.AddState
+import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.asString
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import kotlinx.coroutines.launch
 
@@ -107,7 +111,7 @@ fun PackDetailScreen(
                     viewModel.onAddLaunchFailed()
                 }
                 is PackDetailEvent.Toast -> scope.launch {
-                    toastHost.showToast(event.message, event.withCheck)
+                    toastHost.showToast(event.message.asString(context), event.withCheck)
                 }
             }
         }
@@ -132,10 +136,10 @@ fun PackDetailScreen(
 
     if (state.showNoWhatsApp) {
         ConfirmSheet(
-            title = NO_WHATSAPP_TITLE,
-            body = NO_WHATSAPP_BODY,
-            confirmLabel = NO_WHATSAPP_CONFIRM,
-            cancelLabel = NO_WHATSAPP_CANCEL,
+            title = stringResource(R.string.no_whatsapp_title),
+            body = stringResource(R.string.no_whatsapp_body),
+            confirmLabel = stringResource(R.string.no_whatsapp_confirm),
+            cancelLabel = stringResource(R.string.common_not_now),
             destructive = false,
             icon = LoveIcons.MessageCircle,
             onConfirm = {
@@ -171,13 +175,13 @@ internal fun PackDetailContent(
             actions = {
                 TopBarIconButton(
                     icon = if (state.favorite) LoveIcons.HeartFilled else LoveIcons.Heart,
-                    contentDescription = if (state.favorite) "Remove from saved" else "Save pack",
+                    contentDescription = stringResource(if (state.favorite) R.string.pack_unsave else R.string.pack_save),
                     tint = if (state.favorite) Rose else Ink2,
                     onClick = onToggleFavorite
                 )
                 TopBarIconButton(
                     icon = LoveIcons.Send,
-                    contentDescription = "Share Love Stickers",
+                    contentDescription = stringResource(R.string.pack_share),
                     tint = Ink2,
                     onClick = onShare
                 )
@@ -198,12 +202,12 @@ internal fun PackDetailContent(
                 )
                 state.unavailable -> EmptyState(
                     icon = LoveIcons.WifiOff,
-                    title = OFFLINE_TITLE,
-                    body = OFFLINE_BODY,
+                    title = stringResource(R.string.offline_title),
+                    body = stringResource(R.string.offline_body),
                     large = true,
-                    primaryLabel = OFFLINE_RETRY,
+                    primaryLabel = stringResource(R.string.common_retry),
                     onPrimary = onRetryLoad,
-                    footnote = OFFLINE_FOOTNOTE,
+                    footnote = stringResource(R.string.offline_footnote),
                     modifier = Modifier.align(Alignment.Center)
                 )
                 else -> LazyVerticalGrid(
@@ -219,7 +223,7 @@ internal fun PackDetailContent(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.padding(bottom = 4.dp)
                         ) {
-                            Text(text = state.metaLine, style = DetailMetaText, color = Ink2)
+                            Text(text = state.metaLine.asString(), style = DetailMetaText, color = Ink2)
                             if (state.animated) AnimatedBadge()
                         }
                     }
@@ -296,7 +300,7 @@ private fun previewState(addState: AddState) = PackDetailUiState(
     loading = false,
     packId = "clingy-mango",
     title = "Clingy Mango",
-    metaLine = "18 stickers · 96.4K adds",
+    metaLine = UiText.Raw("18 stickers · 96.4K adds"),
     animated = false,
     stickers = List(9) { DetailSticker("p$it", "") },
     favorite = true,

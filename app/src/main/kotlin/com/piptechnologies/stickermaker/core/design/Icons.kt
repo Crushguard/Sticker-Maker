@@ -15,18 +15,24 @@ import androidx.compose.ui.unit.dp
  */
 object LoveIcons {
 
-    /** Builds a stroked 24x24 Lucide-style vector from raw SVG path data. */
+    /**
+     * Builds a stroked 24x24 Lucide-style vector from raw SVG path data.
+     * [autoMirror] flips it in right-to-left layouts: set it on icons that
+     * point along the reading direction (back, chevrons, undo and redo).
+     */
     private fun lucideIcon(
         name: String,
         vararg pathData: String,
-        filled: Boolean = false
+        filled: Boolean = false,
+        autoMirror: Boolean = false
     ): ImageVector {
         val builder = ImageVector.Builder(
             name = name,
             defaultWidth = 24.dp,
             defaultHeight = 24.dp,
             viewportWidth = 24f,
-            viewportHeight = 24f
+            viewportHeight = 24f,
+            autoMirror = autoMirror
         )
         for (d in pathData) {
             builder.addPath(
@@ -155,7 +161,8 @@ object LoveIcons {
         lucideIcon(
             "send",
             "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
-            "m21.854 2.147-10.94 10.939"
+            "m21.854 2.147-10.94 10.939",
+            autoMirror = true
         )
     }
 
@@ -182,15 +189,15 @@ object LoveIcons {
     }
 
     val ArrowLeft: ImageVector by lazy {
-        lucideIcon("arrow-left", "m12 19-7-7 7-7", "M19 12H5")
+        lucideIcon("arrow-left", "m12 19-7-7 7-7", "M19 12H5", autoMirror = true)
     }
 
     val ChevronLeft: ImageVector by lazy {
-        lucideIcon("chevron-left", "m15 18-6-6 6-6")
+        lucideIcon("chevron-left", "m15 18-6-6 6-6", autoMirror = true)
     }
 
     val ChevronRight: ImageVector by lazy {
-        lucideIcon("chevron-right", "m9 18 6-6-6-6")
+        lucideIcon("chevron-right", "m9 18 6-6-6-6", autoMirror = true)
     }
 
     val ChevronDown: ImageVector by lazy {
@@ -325,7 +332,8 @@ object LoveIcons {
         lucideIcon(
             "undo-2",
             "M9 14 4 9l5-5",
-            "M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"
+            "M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11",
+            autoMirror = true
         )
     }
 
@@ -333,7 +341,8 @@ object LoveIcons {
         lucideIcon(
             "redo-2",
             "m15 14 5-5-5-5",
-            "M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13"
+            "M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13",
+            autoMirror = true
         )
     }
 

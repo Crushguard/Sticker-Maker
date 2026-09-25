@@ -78,6 +78,19 @@ object Tour {
         writeManifest()
     }
 
+    /** Continues the manifest an earlier test class in this run (or a previous run) wrote. */
+    fun resume() {
+        outDir.mkdirs()
+        val file = File(outDir, "manifest.json")
+        synchronized(shots) {
+            if (shots.length() == 0 && file.isFile) {
+                val saved = JSONObject(file.readText()).optJSONArray("shots") ?: JSONArray()
+                for (i in 0 until saved.length()) shots.put(saved.get(i))
+            }
+            writeManifest()
+        }
+    }
+
     fun shell(command: String): String {
         val pfd = instrumentation.uiAutomation.executeShellCommand(command)
         return ParcelFileDescriptor.AutoCloseInputStream(pfd).use { String(it.readBytes()) }
@@ -101,11 +114,20 @@ object Tour {
         SystemClock.sleep(150)
     }
 
-    /** Full-screen screenshot (status bar, sheets and other apps' dialogs included). */
-    fun screenshot(fileName: String): File {
+    /**
+     * Full-screen screenshot (status bar, sheets and other apps' dialogs
+     * included), optionally downscaled by [scale] to keep bulk sets small.
+     */
+    fun screenshot(fileName: String, scale: Float = 1f): File {
         awaitFrames()
-        val bitmap = instrumentation.uiAutomation.takeScreenshot()
+        val full = instrumentation.uiAutomation.takeScreenshot()
             ?: throw AssertionError("UiAutomation.takeScreenshot returned null")
+        val bitmap = if (scale == 1f) {
+            full
+        } else {
+            Bitmap.createScaledBitmap(full, (full.width * scale).toInt(), (full.height * scale).toInt(), true)
+                .also { full.recycle() }
+        }
         val file = File(outDir, fileName)
         file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()
@@ -137,6 +159,24 @@ object Tour {
                 .put("file", fileName)
                 .put("status", "pass")
                 .put("notes", notes)
+        )
+    }
+
+    /** One screen of the per-language pass ([LocaleTourTest]). */
+    fun recordLocale(tag: String, languageName: String, screen: String, title: String, fileName: String) {
+        record(
+            JSONObject()
+                .put("key", "lang-$tag-$screen")
+                .put("frame", JSONObject.NULL)
+                .put("section", "Languages")
+                .put("locale", tag)
+                .put("language", languageName)
+                .put("screen", screen)
+                .put("title", title)
+                .put("route", "")
+                .put("file", fileName)
+                .put("status", "pass")
+                .put("notes", "")
         )
     }
 

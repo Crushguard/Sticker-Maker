@@ -24,6 +24,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Border
 import com.piptechnologies.stickermaker.core.design.Ink2
 import com.piptechnologies.stickermaker.core.design.LoveIcons
@@ -111,8 +114,7 @@ fun PackCard(
                     if (animated) AnimatedBadge()
                 }
                 Text(
-                    if (downloadsLabel.isBlank()) "$stickerCount stickers"
-                    else "$stickerCount stickers · $downloadsLabel",
+                    packMetaLine(stickerCount, downloadsLabel),
                     style = MetaText,
                     color = Muted,
                     maxLines = 1,
@@ -125,7 +127,7 @@ fun PackCard(
                 CardIconButton(
                     icon = if (favorite) LoveIcons.HeartFilled else LoveIcons.Heart,
                     tint = if (favorite) Rose else HeartIdle,
-                    contentDescription = if (favorite) "Remove from saved" else "Save pack",
+                    contentDescription = stringResource(if (favorite) R.string.pack_unsave else R.string.pack_save),
                     onClick = onFavoriteToggle
                 )
             }
@@ -139,7 +141,7 @@ fun PackCard(
                 CardIconButton(
                     icon = LoveIcons.MoreVertical,
                     tint = Ink2,
-                    contentDescription = "Pack options",
+                    contentDescription = stringResource(R.string.pack_options),
                     onClick = onMenu
                 )
             }
@@ -159,9 +161,16 @@ fun PackCard(
     }
 }
 
+/** "18 stickers", or "18 stickers · 96.4K adds" when [second] is given, in the current language. */
+@Composable
+fun packMetaLine(stickerCount: Int, second: String): String {
+    val count = pluralStringResource(R.plurals.sticker_count, stickerCount, stickerCount)
+    return if (second.isBlank()) count else stringResource(R.string.meta_join, count, second)
+}
+
 /** Mono 9 "ANIMATED" chip: subtle bg, 1px border, 5 radius. */
 @Composable
-fun AnimatedBadge(modifier: Modifier = Modifier, label: String = "ANIMATED") {
+fun AnimatedBadge(modifier: Modifier = Modifier, label: String = stringResource(R.string.badge_animated)) {
     Text(
         label,
         style = BadgeText,

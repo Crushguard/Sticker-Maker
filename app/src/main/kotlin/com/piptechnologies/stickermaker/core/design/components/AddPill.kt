@@ -30,12 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Amber
 import com.piptechnologies.stickermaker.core.design.AmberLine
 import com.piptechnologies.stickermaker.core.design.AmberTint
@@ -79,10 +81,10 @@ fun AddPill(
     modifier: Modifier = Modifier,
     progress: Float = 0f,
     iconOnlyWhenAdded: Boolean = false,
-    idleLabel: String = "Add",
-    sentLabel: String = "Sent…",
-    addedLabel: String = "Added",
-    failedLabel: String = "Retry"
+    idleLabel: String = stringResource(R.string.add_pill_add),
+    sentLabel: String = stringResource(R.string.add_pill_sent),
+    addedLabel: String = stringResource(R.string.add_pill_added),
+    failedLabel: String = stringResource(R.string.add_pill_retry)
 ) {
     val compactAdded = iconOnlyWhenAdded && state == AddVisualState.Added
     val bg by animateColorAsState(
@@ -111,7 +113,8 @@ fun AddPill(
     val pressed by interaction.collectIsPressedAsState()
     val stateLabel = when (state) {
         AddVisualState.Idle -> idleLabel
-        AddVisualState.Downloading -> "Downloading ${(progress.coerceIn(0f, 1f) * 100).roundToInt()} percent"
+        AddVisualState.Downloading ->
+            stringResource(R.string.add_pill_downloading, (progress.coerceIn(0f, 1f) * 100).roundToInt())
         AddVisualState.Sent -> sentLabel
         AddVisualState.Added -> addedLabel
         AddVisualState.Failed -> failedLabel
@@ -165,7 +168,11 @@ fun AddPill(
                             Text(idleLabel, style = PillText, color = fg)
                         }
                         AddVisualState.Downloading ->
-                            Text("${(progress.coerceIn(0f, 1f) * 100).roundToInt()}%", style = PillText, color = fg)
+                            Text(
+                                stringResource(R.string.common_percent, (progress.coerceIn(0f, 1f) * 100).roundToInt()),
+                                style = PillText,
+                                color = fg
+                            )
                         AddVisualState.Sent -> {
                             CircularProgressIndicator(Modifier.size(13.dp), color = fg, strokeWidth = 2.dp)
                             Spacer(Modifier.width(6.dp))

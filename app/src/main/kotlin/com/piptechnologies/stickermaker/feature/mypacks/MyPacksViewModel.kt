@@ -4,17 +4,18 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.di.IoDispatcher
 import com.piptechnologies.stickermaker.core.data.prefs.PrefsRepository
 import com.piptechnologies.stickermaker.core.data.repo.CatalogRepository
 import com.piptechnologies.stickermaker.core.data.repo.MyPacksRepository
 import com.piptechnologies.stickermaker.core.model.AddState
+import com.piptechnologies.stickermaker.core.ui.UiText
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
@@ -31,55 +32,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-// ---- Copy: exact strings from design/Prototype.dc.html ---------------------
-
-internal const val TITLE_MY_PACKS = "My Packs"
-internal const val SECTION_IN_WHATSAPP = "In WhatsApp"
-internal const val SECTION_MADE_BY_YOU = "Made by you"
-internal const val META_YOURS = "yours"
-
-internal const val MENU_READD = "Re-add to WhatsApp"
-internal const val MENU_ADD = "Add to WhatsApp"
-internal const val MENU_REMOVE = "Remove from this app"
-internal const val MENU_DELETE = "Delete pack"
-
-internal const val REMOVE_BODY =
-    "Deletes the local copy. WhatsApp keeps the pack until you remove it there."
-internal const val REMOVE_CONFIRM = "Remove"
-internal const val DELETE_BODY =
-    "Deletes the pack and its stickers from this phone. This can't be undone. " +
-        "If you added it, WhatsApp keeps its copy."
-internal const val DELETE_CONFIRM = "Delete"
-internal const val CONFIRM_KEEP = "Keep"
-
-internal const val TOAST_REMOVED = "Removed from this app"
-internal const val TOAST_DELETED = "Pack deleted"
-internal const val TOAST_ADDED = "Added to WhatsApp"
-internal const val TOAST_ALREADY = "Already in WhatsApp"
-
-internal const val EMPTY_TITLE = "No packs yet"
-internal const val EMPTY_BODY =
-    "Packs you add to WhatsApp show up here, along with the ones you make."
-internal const val EMPTY_PRIMARY = "Browse packs"
-internal const val EMPTY_GHOST = "Make your own"
-
-internal const val INFO_REMOVAL =
-    "Removing a pack here deletes this app's copy. WhatsApp keeps its own until you remove it there."
-
-internal const val NO_WHATSAPP_TITLE = "WhatsApp isn't installed"
-internal const val NO_WHATSAPP_BODY =
-    "Stickers are added inside WhatsApp. Install it, then come back to add this pack."
-internal const val NO_WHATSAPP_CONFIRM = "Get WhatsApp"
-internal const val NO_WHATSAPP_CANCEL = "Not now"
-
-/** "96.4K adds"-style meta segment: the prototype's fmt() ported one to one. */
-private fun formatAdds(count: Long): String =
-    if (count >= 1000) {
-        String.format(Locale.ROOT, "%.1f", count / 1000.0).removeSuffix(".0") + "K"
-    } else {
-        count.toString()
-    }
-
 // ---- UI state --------------------------------------------------------------
 
 /** One card in either section. */
@@ -89,7 +41,7 @@ data class MyPackRow(
     val animated: Boolean,
     val stickerCount: Int,
     /** "96.4K adds" for catalog packs (empty offline), "yours" for own packs. */
-    val metaLabel: String,
+    val metaLabel: UiText,
     val own: Boolean,
     val whitelisted: Boolean,
     val addState: AddState,
@@ -120,7 +72,7 @@ data class MyPacksUiState(
 
 sealed interface MyPacksEvent {
     data class LaunchAddIntent(val intent: Intent) : MyPacksEvent
-    data class Toast(val message: String, val withCheck: Boolean) : MyPacksEvent
+    data class Toast(val message: UiText, val withCheck: Boolean) : MyPacksEvent
 }
 
 private data class MyPacksRows(
@@ -173,7 +125,9 @@ class MyPacksViewModel @Inject constructor(
                 name = pack.name,
                 animated = pack.animated,
                 stickerCount = pack.stickerFiles.size,
-                metaLabel = catalogById[pack.id]?.let { "${formatAdds(it.downloads)} adds" }.orEmpty(),
+                metaLabel = catalogById[pack.id]
+                    ?.let { UiText.res(R.string.pack_adds, UiText.Compact(it.downloads)) }
+                    ?: UiText.Raw(""),
                 own = false,
                 whitelisted = pack.whitelisted,
                 addState = sessions[pack.id]
@@ -187,7 +141,7 @@ class MyPacksViewModel @Inject constructor(
                 name = pack.name,
                 animated = pack.animated,
                 stickerCount = pack.stickerFiles.size,
-                metaLabel = META_YOURS,
+                metaLabel = UiText.res(R.string.my_packs_yours),
                 own = true,
                 whitelisted = pack.whitelisted,
                 addState = sessions[pack.id]
@@ -234,7 +188,7 @@ class MyPacksViewModel @Inject constructor(
         val row = findRow(id) ?: return
         when (row.addState) {
             is AddState.Downloading, AddState.Sent -> Unit
-            AddState.Added -> toast(TOAST_ALREADY)
+            AddState.Added -> toast(UiText.res(R.string.toast_already_in_whatsapp))
             AddState.Idle, is AddState.Failed -> resend(row)
         }
     }
@@ -275,7 +229,7 @@ class MyPacksViewModel @Inject constructor(
         confirm.value = null
         viewModelScope.launch {
             runCatching { catalogRepository.removePack(target.packId) }
-            toast(TOAST_REMOVED)
+            toast(UiText.res(R.string.my_packs_toast_removed))
         }
     }
 
@@ -284,7 +238,7 @@ class MyPacksViewModel @Inject constructor(
         confirm.value = null
         viewModelScope.launch {
             runCatching { myPacksRepository.deleteOwnPack(target.packId) }
-            toast(TOAST_DELETED)
+            toast(UiText.res(R.string.my_packs_toast_deleted))
         }
     }
 
@@ -310,7 +264,7 @@ class MyPacksViewModel @Inject constructor(
                 pending = null
                 persistWhitelisted(row.id, row.own, whitelisted = true)
                 sessions.update { it - row.id }
-                _events.send(MyPacksEvent.Toast(TOAST_ALREADY, false))
+                _events.send(MyPacksEvent.Toast(UiText.res(R.string.toast_already_in_whatsapp), false))
             }
         }
     }
@@ -327,7 +281,7 @@ class MyPacksViewModel @Inject constructor(
                     }
                     persistWhitelisted(current.id, current.own, verified)
                     sessions.update { it - current.id }
-                    toast(TOAST_ADDED, withCheck = true)
+                    toast(UiText.res(R.string.toast_added_to_whatsapp), withCheck = true)
                 }
                 is AddStickerPackFlow.AddResult.Cancelled ->
                     // The pack was already installed here; cancelling only means
@@ -360,7 +314,7 @@ class MyPacksViewModel @Inject constructor(
     private fun findRow(id: String): MyPackRow? =
         uiState.value.let { state -> (state.installed + state.own).firstOrNull { it.id == id } }
 
-    private fun toast(message: String, withCheck: Boolean = false) {
+    private fun toast(message: UiText, withCheck: Boolean = false) {
         _events.trySend(MyPacksEvent.Toast(message, withCheck))
     }
 }

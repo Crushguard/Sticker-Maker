@@ -13,11 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.LoveIcons
 import com.piptechnologies.stickermaker.core.design.LoveStickersTheme
@@ -34,7 +36,7 @@ private val HonestyText = TextStyle(fontFamily = Hanken, fontWeight = FontWeight
 @Composable
 fun HonestyLine(
     modifier: Modifier = Modifier,
-    text: String = "Free · No ads · No account",
+    text: String = stringResource(R.string.honesty_line),
     icon: ImageVector? = LoveIcons.HeartHandshake,
     color: Color = HonestyColor
 ) {

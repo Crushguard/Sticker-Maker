@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 data class SettingsUiState(
     val alertsEnabled: Boolean = true,
     val themesCount: Int = 0,
-    val languageTag: String = PrefsRepository.LANGUAGE_SYSTEM,
     val downloadedBytes: Long = 0L,
     val hasDownloads: Boolean = false
 )
@@ -55,14 +54,12 @@ class SettingsViewModel @Inject constructor(
         combine(
             prefs.alertsEnabled,
             prefs.selectedThemes,
-            prefs.language,
             myPacks.observeInstalled()
-        ) { alerts, themes, language, installed ->
+        ) { alerts, themes, installed ->
             val bytes = installed.sumOf { pack -> directorySize(File(pack.dir)) }
             SettingsUiState(
                 alertsEnabled = alerts,
                 themesCount = themes.size,
-                languageTag = language,
                 downloadedBytes = bytes,
                 hasDownloads = installed.isNotEmpty() || bytes > 0L
             )
