@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hindi. Mirrors values/strings.xml key for key; StringResourcesTest checks it. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">वापस जाएं</string>
+    <string name="common_close">बंद करें</string>
+    <string name="common_keep">रखें</string>
+    <string name="common_cancel">रद्द करें</string>
+    <string name="common_not_now">अभी नहीं</string>
+    <string name="common_retry">फिर कोशिश करें</string>
+    <string name="common_done">हो गया</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">%1$s · %2$s</string>
+    <string name="honesty_line">मुफ़्त · बिना विज्ञापन · बिना अकाउंट</string>
+    <string name="nav_home">होम</string>
+    <string name="nav_my_packs">मेरे पैक</string>
+    <string name="nav_create">पैक बनाएं</string>
+    <string name="add_bar_idle">WhatsApp में जोड़ें</string>
+    <string name="add_bar_downloading">डाउनलोड हो रहा है · %1$d%%</string>
+    <string name="add_bar_sent">WhatsApp को भेजा गया…</string>
+    <string name="add_bar_added">WhatsApp में जोड़ा गया</string>
+    <string name="add_bar_failed">डाउनलोड नहीं हुआ · फिर कोशिश करें</string>
+    <string name="add_bar_hint_idle">पहले आपके फ़ोन पर डाउनलोड होगा, फिर WhatsApp में खुलेगा।</string>
+    <string name="add_bar_hint_downloading">पैक क्लाउड से आ रहा है।</string>
+    <string name="add_bar_hint_sent">पूरा करने के लिए WhatsApp में कन्फ़र्म करें।</string>
+    <string name="add_bar_hint_added">इसे “मेरे पैक” में मैनेज करें।</string>
+    <string name="add_bar_hint_failed">अपना कनेक्शन जांचें, फिर दोबारा कोशिश करने के लिए टैप करें।</string>
+    <string name="add_pill_add">जोड़ें</string>
+    <string name="add_pill_sent">भेजा गया…</string>
+    <string name="add_pill_added">जोड़ा गया</string>
+    <string name="add_pill_retry">फिर कोशिश करें</string>
+    <string name="add_pill_downloading">%1$d प्रतिशत डाउनलोड हुआ</string>
+    <plurals name="sticker_count">
+        <item quantity="one">%d स्टिकर</item>
+        <item quantity="other">%d स्टिकर</item>
+    </plurals>
+    <string name="pack_adds">%1$s बार जोड़ा गया</string>
+    <string name="pack_save">पैक सेव करें</string>
+    <string name="pack_unsave">सेव किए गए से हटाएं</string>
+    <string name="pack_options">पैक के विकल्प</string>
+    <string name="pack_share">Love Stickers शेयर करें</string>
+    <string name="badge_animated">एनिमेटेड</string>
+    <string name="sticker_remove">स्टिकर हटाएं</string>
+    <string name="sticker_add">स्टिकर जोड़ें</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">छोड़ें</string>
+    <string name="onboarding_slide1_title">दिल की बात, स्टिकर के साथ</string>
+    <string name="onboarding_slide1_body">चुनिंदा लव पैक: क्यूट, मज़ेदार, रोमांटिक। बस एक टैप में पैक WhatsApp में जुड़ जाता है।</string>
+    <string name="onboarding_slide2_title">अपने स्टिकर ख़ुद बनाएं</string>
+    <string name="onboarding_slide2_body">फ़ोटो को स्टिकर में बदलें। क्रॉप करें, बैकग्राउंड हटाएं, कोई शब्द जोड़ें। छोटी क्लिप से एनिमेटेड पैक भी बन सकते हैं।</string>
+    <string name="onboarding_your_photo">आपकी फ़ोटो</string>
+    <string name="onboarding_next">आगे</string>
+    <string name="onboarding_get_started">शुरू करें</string>
+    <string name="onboarding_sticker_alt">तैयार स्टिकर: हाथों से दिल बनाती महिला, चारों ओर सफ़ेद आउटलाइन</string>
+    <string name="onboarding_photo_alt">मूल फ़ोटो</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">कपल</string>
+    <string name="theme_cute">क्यूट</string>
+    <string name="theme_funny">मज़ेदार</string>
+    <string name="theme_anime">एनीमे</string>
+    <string name="theme_romantic">रोमांटिक</string>
+    <string name="theme_flirty">फ़्लर्टी</string>
+    <string name="theme_goodnight">गुड नाइट</string>
+    <string name="theme_distance">लॉन्ग डिस्टेंस</string>
+    <string name="customize_title">अपनी थीम चुनें</string>
+    <string name="customize_edit_title">आपकी थीम</string>
+    <string name="customize_subtitle">होम पर आपकी चुनी हुई थीम के पैक दिखते हैं। इन्हें कभी भी सेटिंग में बदलें।</string>
+    <string name="customize_save">सेव करें</string>
+    <string name="customize_pick_one">कम से कम एक थीम चुनें</string>
+    <plurals name="customize_continue">
+        <item quantity="one">जारी रखें · %d थीम</item>
+        <item quantity="other">जारी रखें · %d थीम</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">आप ऑफ़लाइन हैं</string>
+    <string name="offline_body">पैक क्लाउड से आते हैं। अपना कनेक्शन जांचें और फिर कोशिश करें।</string>
+    <string name="offline_footnote">जो पैक आप पहले ही जोड़ चुके हैं, वे WhatsApp में चलते रहेंगे।</string>
+    <string name="no_whatsapp_title">WhatsApp इंस्टॉल नहीं है</string>
+    <string name="no_whatsapp_body">स्टिकर WhatsApp के अंदर ही जोड़े जाते हैं। इसे इंस्टॉल करें, फिर यह पैक जोड़ने के लिए वापस आएं।</string>
+    <string name="no_whatsapp_confirm">WhatsApp इंस्टॉल करें</string>
+    <string name="toast_added_to_whatsapp">WhatsApp में जोड़ा गया</string>
+    <string name="toast_already_in_whatsapp">पहले से WhatsApp में है</string>
+    <string name="toast_saved_heart">सेव हो गया · इसे होम पर “♥ सेव किए गए” में देखें</string>
+
+    <!-- Home -->
+    <string name="home_search">खोजें</string>
+    <string name="home_settings">सेटिंग</string>
+    <string name="home_search_placeholder">लव पैक खोजें</string>
+    <string name="home_chip_trending">ट्रेंडिंग</string>
+    <string name="home_chip_animated">एनिमेटेड</string>
+    <string name="home_chip_saved">सेव किए गए · %1$d</string>
+    <string name="home_no_results_title">“%1$s” के लिए कोई पैक नहीं मिला</string>
+    <string name="home_no_results_body">किसी थीम का नाम खोजकर देखें, जैसे “क्यूट” या “एनीमे”।</string>
+    <string name="toast_still_offline">आप अब भी ऑफ़लाइन हैं। थोड़ी देर में फिर कोशिश करें।</string>
+    <string name="toast_opening_play_store">Play Store खुल रहा है…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">आपने बनाया</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">WhatsApp में · %1$d</string>
+    <string name="my_packs_section_own">आपने बनाए · %1$d</string>
+    <string name="my_packs_yours">आपका</string>
+    <string name="my_packs_menu_readd">WhatsApp में फिर से जोड़ें</string>
+    <string name="my_packs_menu_add">WhatsApp में जोड़ें</string>
+    <string name="my_packs_menu_remove">इस ऐप से हटाएं</string>
+    <string name="my_packs_menu_delete">पैक डिलीट करें</string>
+    <string name="my_packs_remove_title">“%1$s” को इस ऐप से हटाएं?</string>
+    <string name="my_packs_remove_body">इस ऐप में रखी कॉपी डिलीट हो जाएगी। WhatsApp में पैक तब तक रहेगा, जब तक आप उसे वहां से नहीं हटाते।</string>
+    <string name="my_packs_remove_confirm">हटाएं</string>
+    <string name="my_packs_delete_title">“%1$s” डिलीट करें?</string>
+    <string name="my_packs_delete_body">पैक और उसके स्टिकर इस फ़ोन से डिलीट हो जाएंगे। इसे वापस नहीं लाया जा सकता। अगर आपने इसे WhatsApp में जोड़ा था, तो वहां इसकी कॉपी बनी रहेगी।</string>
+    <string name="my_packs_delete_confirm">डिलीट करें</string>
+    <string name="my_packs_toast_removed">इस ऐप से हटा दिया गया</string>
+    <string name="my_packs_toast_deleted">पैक डिलीट हो गया</string>
+    <string name="my_packs_empty_title">अभी कोई पैक नहीं है</string>
+    <string name="my_packs_empty_body">आप WhatsApp में जो पैक जोड़ेंगे, वे यहां दिखेंगे। आपके बनाए पैक भी यहीं मिलेंगे।</string>
+    <string name="common_browse_packs">पैक देखें</string>
+    <string name="my_packs_empty_make_own">अपना पैक बनाएं</string>
+    <string name="my_packs_info_removal">यहां से पैक हटाने पर सिर्फ़ इस ऐप की कॉपी डिलीट होती है। WhatsApp में उसकी अपनी कॉपी तब तक रहती है, जब तक आप उसे वहां से नहीं हटाते।</string>
+    <string name="my_packs_saved">सेव किए गए पैक</string>
+
+    <!-- Saved -->
+    <string name="saved_title">सेव किए गए</string>
+    <plurals name="saved_pack_count">
+        <item quantity="one">%d पैक</item>
+        <item quantity="other">%d पैक</item>
+    </plurals>
+    <string name="saved_empty_title">अभी तक कोई पैक सेव नहीं किया गया</string>
+    <string name="saved_empty_body">किसी भी पैक के दिल वाले आइकॉन पर टैप करें, वह बाद के लिए यहां सेव रहेगा।</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">नया पैक</string>
+    <plurals name="create_selected_count">
+        <item quantity="one">%d चुना गया</item>
+        <item quantity="other">%d चुने गए</item>
+    </plurals>
+    <string name="create_source_photos">फ़ोटो</string>
+    <string name="create_source_camera">कैमरा</string>
+    <string name="create_source_video">वीडियो</string>
+    <string name="create_next">आगे</string>
+    <plurals name="create_next_count">
+        <item quantity="one">आगे · %d स्टिकर</item>
+        <item quantity="other">आगे · %d स्टिकर</item>
+    </plurals>
+    <string name="create_import_hint_ready">“आगे” पर टैप करते ही हर फ़ोटो का बैकग्राउंड इसी फ़ोन पर हट जाएगा। एक पैक में %1$d तक।</string>
+    <string name="create_import_hint_pick">कम से कम %1$d चुनें (%1$d में से %2$d)। एक पैक में %3$d तक।</string>
+    <string name="create_item_remove">पैक से हटाएं</string>
+    <string name="create_item_add">पैक में जोड़ें</string>
+    <string name="create_viewfinder">व्यूफ़ाइंडर</string>
+    <plurals name="create_shot_count">
+        <item quantity="one">%d फ़ोटो</item>
+        <item quantity="other">%d फ़ोटो</item>
+    </plurals>
+    <string name="create_take_picture">फ़ोटो लें</string>
+    <string name="create_toast_max">ज़्यादा से ज़्यादा %1$d स्टिकर</string>
+    <string name="create_toast_shot_added">फ़ोटो पैक में जोड़ दी गई</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">कटआउट</string>
+    <string name="create_undo">पहले जैसा करें</string>
+    <string name="create_toast_nothing_to_undo">पहले जैसा करने के लिए कुछ नहीं है</string>
+    <string name="create_tool_auto">ऑटो</string>
+    <string name="create_tool_brush">ब्रश</string>
+    <string name="create_tool_erase">मिटाएं</string>
+    <string name="create_tool_text">टेक्स्ट</string>
+    <string name="create_tool_zoom">ज़ूम</string>
+    <string name="create_hint_zoomed">पूरी तस्वीर देखने के लिए ज़ूम पर फिर से टैप करें</string>
+    <string name="create_hint_auto">बैकग्राउंड हटाने के लिए ऑटो पर टैप करें</string>
+    <string name="create_hint_auto_done">बैकग्राउंड इसी फ़ोन पर हटाया गया। कुछ भी अपलोड नहीं हुआ।</string>
+    <string name="create_hint_brush">हिस्से वापस लाने के लिए तस्वीर पर टैप करें</string>
+    <string name="create_hint_erase">बचे हुए हिस्सों को मिटाने के लिए उन पर टैप करें</string>
+    <string name="create_hint_text">नीचे कोई शब्द लिखें</string>
+    <string name="create_hint_default">किनारे ठीक करने के लिए ज़ूम इन करें</string>
+    <string name="create_cutting_out_on_phone">इसी फ़ोन पर बैकग्राउंड हटाया जा रहा है…</string>
+    <string name="create_cutting_out">बैकग्राउंड हटाया जा रहा है…</string>
+    <string name="create_brush_size">ब्रश का साइज़</string>
+    <string name="create_eraser_size">इरेज़र का साइज़</string>
+    <string name="create_caption_placeholder">कोई शब्द जोड़ें</string>
+    <string name="create_outline_title">सफ़ेद आउटलाइन</string>
+    <string name="create_outline_body">किसी भी चैट बैकग्राउंड पर साफ़ दिखता है। WhatsApp भी यही सुझाता है।</string>
+    <string name="create_edit_sticker">यह स्टिकर एडिट करें</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">पैक की जानकारी</string>
+    <string name="create_tray_title">पैक आइकॉन</string>
+    <string name="create_tray_body">WhatsApp में स्टिकर चुनते समय यही दिखता है। आइकॉन चुनने के लिए नीचे किसी स्टिकर पर टैप करें।</string>
+    <string name="create_use_as_tray">पैक आइकॉन बनाएं</string>
+    <string name="create_name_label">पैक का नाम</string>
+    <string name="create_name_placeholder">जैसे: हमेशा साथ</string>
+    <string name="create_info_specs">%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">एनिमेटेड</string>
+    <string name="create_kind_static">स्टैटिक</string>
+    <string name="create_info_body">हर स्टिकर 100 KB से कम, इसी फ़ोन पर बना। कुछ भी अपलोड नहीं होता।</string>
+    <string name="create_save_only">सिर्फ़ “मेरे पैक” में सेव करें</string>
+    <string name="create_toast_saved">“मेरे पैक” में सेव हो गया</string>
+    <string name="create_untitled">बिना नाम का पैक</string>
+    <string name="create_publisher">आपने बनाया</string>
+
+    <!-- Settings -->
+    <string name="settings_title">सेटिंग</string>
+    <string name="settings_alerts_title">नए पैक के अलर्ट</string>
+    <string name="settings_alerts_on">सिर्फ़ तब, जब कोई नया पैक जुड़े।</string>
+    <string name="settings_alerts_off">बंद। आपको नए पैक की ख़बर नहीं मिलेगी।</string>
+    <string name="settings_section_preferences">प्राथमिकताएं</string>
+    <string name="settings_section_about">ऐप के बारे में</string>
+    <string name="settings_edit_themes">थीम बदलें</string>
+    <plurals name="settings_theme_count">
+        <item quantity="one">%d थीम</item>
+        <item quantity="other">%d थीम</item>
+    </plurals>
+    <string name="settings_language">भाषा</string>
+    <string name="settings_clear">डाउनलोड किए गए पैक हटाएं</string>
+    <string name="settings_storage_none">कुछ नहीं</string>
+    <string name="settings_size_mb">%1$.1f MB</string>
+    <string name="settings_rate">हमें रेटिंग दें</string>
+    <string name="settings_contact">हमसे संपर्क करें</string>
+    <string name="settings_more_apps">और ऐप</string>
+    <string name="settings_ad_badge">विज्ञापन</string>
+    <string name="settings_privacy">प्राइवेसी पॉलिसी</string>
+    <string name="settings_version">वर्शन</string>
+    <string name="settings_free_card">Love Stickers मुफ़्त है और हमेशा रहेगा। न विज्ञापन, न अकाउंट, न ट्रैकिंग। आपकी फ़ोटो कभी आपके फ़ोन से बाहर नहीं जातीं।</string>
+    <string name="settings_toast_alerts_on">नए पैक के अलर्ट चालू हैं</string>
+    <string name="settings_toast_alerts_off">नए पैक के अलर्ट बंद हैं</string>
+    <string name="settings_toast_nothing_to_clear">हटाने के लिए कुछ नहीं है</string>
+    <string name="settings_toast_cleared">डाउनलोड हटा दिए गए</string>
+    <string name="settings_notif_title">Love Stickers को सूचनाएं भेजने की अनुमति दें?</string>
+    <string name="settings_notif_body">Android सिर्फ़ एक बार पूछता है। हम सूचना तभी भेजते हैं, जब कोई नया पैक जुड़ता है। कभी कोई प्रमोशन नहीं।</string>
+    <string name="settings_notif_deny">अनुमति न दें</string>
+    <string name="settings_notif_allow">अनुमति दें</string>
+    <string name="settings_clear_title">डाउनलोड किए गए पैक हटाएं?</string>
+    <string name="settings_clear_body">इस ऐप में सेव की गई कॉपियां (%1$s) हट जाएंगी। जो पैक पहले से WhatsApp में हैं, वे वहीं रहेंगे।</string>
+    <string name="settings_clear_keep">रहने दें</string>
+    <string name="settings_clear_confirm">हटाएं</string>
+    <string name="toast_no_email_app">इस फ़ोन में कोई ईमेल ऐप नहीं है।</string>
+    <string name="toast_link_failed">यह लिंक नहीं खुल सका।</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">Love Stickers पसंद आ रहा है?</string>
+    <string name="rate_body">आपकी सच्ची रेटिंग से दूसरे लोगों को बिना विज्ञापन वाला स्टिकर ऐप ढूंढने में मदद मिलती है।</string>
+    <plurals name="rate_star">
+        <item quantity="one">%d स्टार</item>
+        <item quantity="other">%d स्टार</item>
+    </plurals>
+    <string name="rate_hint_idle">किसी स्टार पर टैप करें</string>
+    <string name="rate_hint_five">बहुत पसंद आया!</string>
+    <string name="rate_hint_low">बताएं कि क्या गड़बड़ हुई</string>
+    <string name="rate_maybe_later">बाद में</string>
+    <string name="rate_store_title">शुक्रिया!</string>
+    <string name="rate_store_body">क्या आप Google Play पर भी यही रेटिंग देंगे? इससे एक छोटे, बिना विज्ञापन वाले ऐप को आगे बढ़ने में मदद मिलती है।</string>
+    <string name="rate_store_cta">Google Play पर रेटिंग दें</string>
+    <string name="rate_feedback_title">हम क्या बेहतर कर सकते हैं?</string>
+    <string name="rate_feedback_body">बताएं कि क्या कमी रह गई। यह पब्लिक रिव्यू में नहीं, सीधे हमारी टीम के पास जाता है, और हम हर मैसेज पढ़ते हैं।</string>
+    <string name="rate_feedback_placeholder">इसे 5-स्टार ऐप बनाने के लिए क्या होना चाहिए था?</string>
+    <string name="rate_feedback_cta">फ़ीडबैक भेजें</string>
+    <string name="rate_thanks_title">शुक्रिया, हमने आपकी बात सुन ली</string>
+    <string name="rate_thanks_body">आपका मैसेज टीम तक पहुंच रहा है। इसी से तय होता है कि हम आगे क्या बनाएंगे।</string>
+
+    <!-- Language -->
+    <string name="language_note">इससे ऐप की भाषा बदलती है। पैक के नाम वैसे ही रहते हैं, जैसे पब्लिश हुए थे।</string>
+    <string name="language_system">सिस्टम डिफ़ॉल्ट</string>
+    <string name="language_system_sub">डिवाइस की भाषा</string>
+    <string name="language_rtl_badge">RTL</string>
+    <string name="language_name_en">अंग्रेज़ी</string>
+    <string name="language_name_ar">अरबी</string>
+    <string name="language_name_es">स्पेनिश</string>
+    <string name="language_name_pt">पुर्तगाली</string>
+    <string name="language_name_pt_br">पुर्तगाली (ब्राज़ील)</string>
+    <string name="language_name_fr">फ़्रेंच</string>
+    <string name="language_name_hi">हिंदी</string>
+    <string name="language_name_id">इंडोनेशियाई</string>
+    <string name="language_name_tr">तुर्की</string>
+    <string name="language_name_ur">उर्दू</string>
+    <string name="language_name_de">जर्मन</string>
+    <string name="language_name_ru">रूसी</string>
+    <string name="language_name_it">इतालवी</string>
+    <string name="language_name_zh">चीनी (सरलीकृत)</string>
+    <string name="language_name_fa">फ़ारसी</string>
+    <string name="language_name_he">हिब्रू</string>
+    <string name="language_name_ps">पश्तो</string>
+    <string name="language_name_ha">हौसा</string>
+    <string name="language_name_my">बर्मी</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">कोई सवाल, कोई ख़राब पैक, या कोई ऐसा पैक जो आप यहां देखना चाहते हैं। हम हर मैसेज पढ़ते हैं।</string>
+    <string name="contact_message_placeholder">अपना मैसेज लिखें…</string>
+    <string name="contact_email_label">ईमेल · ज़रूरी नहीं, सिर्फ़ तब जब आपको जवाब चाहिए</string>
+    <string name="contact_attach_note">मैसेज के साथ ऐप का वर्शन और Android वर्शन भेजा जाता है। और कुछ नहीं।</string>
+    <string name="contact_send">भेजें</string>
+</resources>

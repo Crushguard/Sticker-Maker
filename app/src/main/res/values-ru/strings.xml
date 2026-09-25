@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Russian. Mirrors values/strings.xml key for key; StringResourcesTest checks it. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">Назад</string>
+    <string name="common_close">Закрыть</string>
+    <string name="common_keep">Оставить</string>
+    <string name="common_cancel">Отмена</string>
+    <string name="common_not_now">Не сейчас</string>
+    <string name="common_retry">Повторить</string>
+    <string name="common_done">Готово</string>
+    <string name="common_percent">%1$d %%</string>
+    <string name="meta_join">%1$s · %2$s</string>
+    <string name="honesty_line">Бесплатно · Без рекламы · Без аккаунта</string>
+    <string name="nav_home">Главная</string>
+    <string name="nav_my_packs">Мои наборы</string>
+    <string name="nav_create">Создать набор</string>
+    <string name="add_bar_idle">Добавить в WhatsApp</string>
+    <string name="add_bar_downloading">Загрузка · %1$d %%</string>
+    <string name="add_bar_sent">Отправлено в WhatsApp…</string>
+    <string name="add_bar_added">Добавлено в WhatsApp</string>
+    <string name="add_bar_failed">Ошибка загрузки · Повторить</string>
+    <string name="add_bar_hint_idle">Набор загрузится на телефон и откроется в WhatsApp.</string>
+    <string name="add_bar_hint_downloading">Загружаем набор из облака.</string>
+    <string name="add_bar_hint_sent">Подтвердите в WhatsApp, чтобы завершить.</string>
+    <string name="add_bar_hint_added">Управлять им можно в разделе «Мои наборы».</string>
+    <string name="add_bar_hint_failed">Проверьте подключение и нажмите, чтобы повторить.</string>
+    <string name="add_pill_add">Добавить</string>
+    <string name="add_pill_sent">Отправлено…</string>
+    <string name="add_pill_added">Добавлено</string>
+    <string name="add_pill_retry">Повторить</string>
+    <string name="add_pill_downloading">Загрузка: %1$d %%</string>
+    <plurals name="sticker_count">
+        <item quantity="one">%d стикер</item>
+        <item quantity="few">%d стикера</item>
+        <item quantity="many">%d стикеров</item>
+        <item quantity="other">%d стикера</item>
+    </plurals>
+    <string name="pack_adds">Добавлений: %1$s</string>
+    <string name="pack_save">Сохранить набор</string>
+    <string name="pack_unsave">Убрать из сохранённых</string>
+    <string name="pack_options">Действия с набором</string>
+    <string name="pack_share">Поделиться приложением Love Stickers</string>
+    <string name="badge_animated">АНИМАЦИЯ</string>
+    <string name="sticker_remove">Удалить стикер</string>
+    <string name="sticker_add">Добавить стикер</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">Пропустить</string>
+    <string name="onboarding_slide1_title">Скажите это стикером</string>
+    <string name="onboarding_slide1_body">Подборка наборов о любви: милые, смешные, романтичные. Одно нажатие — и набор уже в WhatsApp.</string>
+    <string name="onboarding_slide2_title">Создайте свои стикеры</string>
+    <string name="onboarding_slide2_body">Превращайте фото в стикеры. Обрезайте, вырезайте, добавляйте надписи. А из коротких видео получатся анимированные наборы.</string>
+    <string name="onboarding_your_photo">ВАШЕ ФОТО</string>
+    <string name="onboarding_next">Далее</string>
+    <string name="onboarding_get_started">Начать</string>
+    <string name="onboarding_sticker_alt">Готовый стикер: женщина складывает сердечко из ладоней, белая обводка по контуру</string>
+    <string name="onboarding_photo_alt">Исходное фото</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">Пары</string>
+    <string name="theme_cute">Милые</string>
+    <string name="theme_funny">Смешные</string>
+    <string name="theme_anime">Аниме</string>
+    <string name="theme_romantic">Романтика</string>
+    <string name="theme_flirty">Флирт</string>
+    <string name="theme_goodnight">Спокойной ночи</string>
+    <string name="theme_distance">На расстоянии</string>
+    <string name="customize_title">Выберите темы</string>
+    <string name="customize_edit_title">Ваши темы</string>
+    <string name="customize_subtitle">На Главной показываются наборы по выбранным темам. Изменить темы можно в любой момент в Настройках.</string>
+    <string name="customize_save">Сохранить</string>
+    <string name="customize_pick_one">Выберите хотя бы одну тему</string>
+    <plurals name="customize_continue">
+        <item quantity="one">Продолжить · %d тема</item>
+        <item quantity="few">Продолжить · %d темы</item>
+        <item quantity="many">Продолжить · %d тем</item>
+        <item quantity="other">Продолжить · %d темы</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">Вы не в сети</string>
+    <string name="offline_body">Наборы загружаются из облака. Проверьте подключение и попробуйте снова.</string>
+    <string name="offline_footnote">Уже добавленные наборы по-прежнему работают в WhatsApp.</string>
+    <string name="no_whatsapp_title">WhatsApp не установлен</string>
+    <string name="no_whatsapp_body">Стикеры добавляются в самом WhatsApp. Установите его и вернитесь, чтобы добавить этот набор.</string>
+    <string name="no_whatsapp_confirm">Установить WhatsApp</string>
+    <string name="toast_added_to_whatsapp">Добавлено в WhatsApp</string>
+    <string name="toast_already_in_whatsapp">Уже есть в WhatsApp</string>
+    <string name="toast_saved_heart">Сохранено · ищите на Главной в ♥ Сохранённых</string>
+
+    <!-- Home -->
+    <string name="home_search">Поиск</string>
+    <string name="home_settings">Настройки</string>
+    <string name="home_search_placeholder">Поиск наборов о любви</string>
+    <string name="home_chip_trending">В тренде</string>
+    <string name="home_chip_animated">Анимация</string>
+    <string name="home_chip_saved">Сохранённые · %1$d</string>
+    <string name="home_no_results_title">Нет наборов по запросу «%1$s»</string>
+    <string name="home_no_results_body">Попробуйте название темы, например «милые» или «аниме».</string>
+    <string name="toast_still_offline">Вы всё ещё не в сети. Попробуйте чуть позже.</string>
+    <string name="toast_opening_play_store">Открываем Play Store…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">Создан вами</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">В WHATSAPP · %1$d</string>
+    <string name="my_packs_section_own">СОЗДАННЫЕ ВАМИ · %1$d</string>
+    <string name="my_packs_yours">ваш</string>
+    <string name="my_packs_menu_readd">Снова добавить в WhatsApp</string>
+    <string name="my_packs_menu_add">Добавить в WhatsApp</string>
+    <string name="my_packs_menu_remove">Убрать из приложения</string>
+    <string name="my_packs_menu_delete">Удалить набор</string>
+    <string name="my_packs_remove_title">Убрать «%1$s» из приложения?</string>
+    <string name="my_packs_remove_body">Копия в приложении будет удалена. В WhatsApp набор останется, пока вы не удалите его там.</string>
+    <string name="my_packs_remove_confirm">Убрать</string>
+    <string name="my_packs_delete_title">Удалить «%1$s»?</string>
+    <string name="my_packs_delete_body">Набор и его стикеры будут удалены с этого телефона. Это действие нельзя отменить. Если вы добавили набор в WhatsApp, там сохранится его копия.</string>
+    <string name="my_packs_delete_confirm">Удалить</string>
+    <string name="my_packs_toast_removed">Набор убран из приложения</string>
+    <string name="my_packs_toast_deleted">Набор удалён</string>
+    <string name="my_packs_empty_title">Пока нет наборов</string>
+    <string name="my_packs_empty_body">Здесь появятся наборы, которые вы добавите в WhatsApp, и те, что вы создадите сами.</string>
+    <string name="common_browse_packs">Смотреть наборы</string>
+    <string name="my_packs_empty_make_own">Создать свой набор</string>
+    <string name="my_packs_info_removal">Если убрать набор здесь, удалится только копия в приложении. В WhatsApp набор останется, пока вы не удалите его там.</string>
+    <string name="my_packs_saved">Сохранённые наборы</string>
+
+    <!-- Saved -->
+    <string name="saved_title">Сохранённые</string>
+    <plurals name="saved_pack_count">
+        <item quantity="one">%d набор</item>
+        <item quantity="few">%d набора</item>
+        <item quantity="many">%d наборов</item>
+        <item quantity="other">%d набора</item>
+    </plurals>
+    <string name="saved_empty_title">Пока нет сохранённых наборов</string>
+    <string name="saved_empty_body">Нажмите на сердечко у любого набора, чтобы отложить его на потом.</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">Новый набор</string>
+    <plurals name="create_selected_count">
+        <item quantity="one">Выбрано: %d</item>
+        <item quantity="few">Выбрано: %d</item>
+        <item quantity="many">Выбрано: %d</item>
+        <item quantity="other">Выбрано: %d</item>
+    </plurals>
+    <string name="create_source_photos">Фото</string>
+    <string name="create_source_camera">Камера</string>
+    <string name="create_source_video">Видео</string>
+    <string name="create_next">Далее</string>
+    <plurals name="create_next_count">
+        <item quantity="one">Далее · %d стикер</item>
+        <item quantity="few">Далее · %d стикера</item>
+        <item quantity="many">Далее · %d стикеров</item>
+        <item quantity="other">Далее · %d стикера</item>
+    </plurals>
+    <string name="create_import_hint_ready">Нажмите «Далее», чтобы вырезать объекты прямо на телефоне. В наборе — до %1$d.</string>
+    <string name="create_import_hint_pick">Выберите не меньше %1$d (%2$d из %1$d). В наборе — до %3$d.</string>
+    <string name="create_item_remove">Убрать из набора</string>
+    <string name="create_item_add">Добавить в набор</string>
+    <string name="create_viewfinder">видоискатель</string>
+    <plurals name="create_shot_count">
+        <item quantity="one">%d снимок</item>
+        <item quantity="few">%d снимка</item>
+        <item quantity="many">%d снимков</item>
+        <item quantity="other">%d снимка</item>
+    </plurals>
+    <string name="create_take_picture">Сделать снимок</string>
+    <string name="create_toast_max">Максимум — %1$d стикеров</string>
+    <string name="create_toast_shot_added">Снимок добавлен в набор</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">Вырезание</string>
+    <string name="create_undo">Отменить</string>
+    <string name="create_toast_nothing_to_undo">Нечего отменять</string>
+    <string name="create_tool_auto">Авто</string>
+    <string name="create_tool_brush">Кисть</string>
+    <string name="create_tool_erase">Ластик</string>
+    <string name="create_tool_text">Текст</string>
+    <string name="create_tool_zoom">Масштаб</string>
+    <string name="create_hint_zoomed">Нажмите «Масштаб» ещё раз, чтобы показать целиком</string>
+    <string name="create_hint_auto">Нажмите «Авто», чтобы вырезать объект</string>
+    <string name="create_hint_auto_done">Вырезано прямо на телефоне. Ничего никуда не отправлялось.</string>
+    <string name="create_hint_brush">Нажимайте на изображение, чтобы вернуть удалённые части</string>
+    <string name="create_hint_erase">Нажимайте на остатки фона, чтобы стереть их</string>
+    <string name="create_hint_text">Введите надпись ниже</string>
+    <string name="create_hint_default">Увеличьте масштаб, чтобы поправить края</string>
+    <string name="create_cutting_out_on_phone">Вырезаем прямо на телефоне…</string>
+    <string name="create_cutting_out">Вырезаем…</string>
+    <string name="create_brush_size">Размер кисти</string>
+    <string name="create_eraser_size">Размер ластика</string>
+    <string name="create_caption_placeholder">Добавьте надпись</string>
+    <string name="create_outline_title">Белая обводка</string>
+    <string name="create_outline_body">Стикер хорошо виден на любом фоне чата. Так рекомендует WhatsApp.</string>
+    <string name="create_edit_sticker">Изменить стикер</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">О наборе</string>
+    <string name="create_tray_title">Значок набора</string>
+    <string name="create_tray_body">Показывается в панели стикеров WhatsApp. Нажмите на стикер ниже, чтобы выбрать его.</string>
+    <string name="create_use_as_tray">Сделать значком набора</string>
+    <string name="create_name_label">Название набора</string>
+    <string name="create_name_placeholder">Например, «Всегда вместе»</string>
+    <string name="create_info_specs">%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">Анимированные</string>
+    <string name="create_kind_static">Статичные</string>
+    <string name="create_info_body">каждый до 100 КБ, всё создаётся прямо на телефоне. Ничего никуда не отправляется.</string>
+    <string name="create_save_only">Сохранить только в «Мои наборы»</string>
+    <string name="create_toast_saved">Сохранено в «Мои наборы»</string>
+    <string name="create_untitled">Набор без названия</string>
+    <string name="create_publisher">Создан вами</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_alerts_title">Уведомления о новых наборах</string>
+    <string name="settings_alerts_on">Только когда появляется новый набор.</string>
+    <string name="settings_alerts_off">Выключены. Вы не узнаете о новых наборах.</string>
+    <string name="settings_section_preferences">ПАРАМЕТРЫ</string>
+    <string name="settings_section_about">О ПРИЛОЖЕНИИ</string>
+    <string name="settings_edit_themes">Изменить темы</string>
+    <plurals name="settings_theme_count">
+        <item quantity="one">%d тема</item>
+        <item quantity="few">%d темы</item>
+        <item quantity="many">%d тем</item>
+        <item quantity="other">%d темы</item>
+    </plurals>
+    <string name="settings_language">Язык</string>
+    <string name="settings_clear">Удалить загруженные наборы</string>
+    <string name="settings_storage_none">Пусто</string>
+    <string name="settings_size_mb">%1$.1f МБ</string>
+    <string name="settings_rate">Оцените нас</string>
+    <string name="settings_contact">Написать нам</string>
+    <string name="settings_more_apps">Другие приложения</string>
+    <string name="settings_ad_badge">РЕКЛАМА</string>
+    <string name="settings_privacy">Политика конфиденциальности</string>
+    <string name="settings_version">Версия</string>
+    <string name="settings_free_card">Love Stickers — бесплатное приложение, и так будет всегда. Без рекламы, без аккаунта, без отслеживания. Ваши фото никогда не покидают телефон.</string>
+    <string name="settings_toast_alerts_on">Уведомления о новых наборах включены</string>
+    <string name="settings_toast_alerts_off">Уведомления о новых наборах выключены</string>
+    <string name="settings_toast_nothing_to_clear">Нечего удалять</string>
+    <string name="settings_toast_cleared">Загруженные наборы удалены</string>
+    <string name="settings_notif_title">Разрешить приложению Love Stickers отправлять уведомления?</string>
+    <string name="settings_notif_body">Android спросит один раз. Мы сообщаем только о новых наборах. Никакой рекламы — никогда.</string>
+    <string name="settings_notif_deny">Не разрешать</string>
+    <string name="settings_notif_allow">Разрешить</string>
+    <string name="settings_clear_title">Удалить загруженные наборы?</string>
+    <string name="settings_clear_body">Копии, сохранённые в приложении (%1$s), будут удалены. Наборы, уже добавленные в WhatsApp, останутся там.</string>
+    <string name="settings_clear_keep">Оставить</string>
+    <string name="settings_clear_confirm">Удалить</string>
+    <string name="toast_no_email_app">На телефоне нет почтового приложения.</string>
+    <string name="toast_link_failed">Не удалось открыть ссылку.</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">Нравится Love Stickers?</string>
+    <string name="rate_body">Ваша честная оценка поможет другим найти приложение со стикерами без рекламы.</string>
+    <plurals name="rate_star">
+        <item quantity="one">%d звезда</item>
+        <item quantity="few">%d звезды</item>
+        <item quantity="many">%d звёзд</item>
+        <item quantity="other">%d звезды</item>
+    </plurals>
+    <string name="rate_hint_idle">Нажмите на звезду</string>
+    <string name="rate_hint_five">Обожаю!</string>
+    <string name="rate_hint_low">Расскажите, что пошло не так</string>
+    <string name="rate_maybe_later">Может, позже</string>
+    <string name="rate_store_title">Спасибо!</string>
+    <string name="rate_store_body">Не могли бы вы поставить такую же оценку в Google Play? Это помогает расти небольшому приложению без рекламы.</string>
+    <string name="rate_store_cta">Оценить в Google Play</string>
+    <string name="rate_feedback_title">Как нам стать лучше?</string>
+    <string name="rate_feedback_body">Расскажите, что вас не устроило. Это не публичный отзыв: сообщение попадёт прямо к команде, и мы читаем каждое.</string>
+    <string name="rate_feedback_placeholder">Чего не хватило до 5 звёзд?</string>
+    <string name="rate_feedback_cta">Отправить отзыв</string>
+    <string name="rate_thanks_title">Спасибо, мы вас услышали</string>
+    <string name="rate_thanks_body">Ваше сообщение уже в пути к команде. Оно влияет на то, что мы сделаем дальше.</string>
+
+    <!-- Language -->
+    <string name="language_note">Меняет язык приложения. Названия наборов остаются как в оригинале.</string>
+    <string name="language_system">Как в системе</string>
+    <string name="language_system_sub">Язык устройства</string>
+    <string name="language_rtl_badge">RTL</string>
+    <string name="language_name_en">Английский</string>
+    <string name="language_name_ar">Арабский</string>
+    <string name="language_name_es">Испанский</string>
+    <string name="language_name_pt">Португальский</string>
+    <string name="language_name_pt_br">Португальский (Бразилия)</string>
+    <string name="language_name_fr">Французский</string>
+    <string name="language_name_hi">Хинди</string>
+    <string name="language_name_id">Индонезийский</string>
+    <string name="language_name_tr">Турецкий</string>
+    <string name="language_name_ur">Урду</string>
+    <string name="language_name_de">Немецкий</string>
+    <string name="language_name_ru">Русский</string>
+    <string name="language_name_it">Итальянский</string>
+    <string name="language_name_zh">Китайский (упрощённый)</string>
+    <string name="language_name_fa">Персидский</string>
+    <string name="language_name_he">Иврит</string>
+    <string name="language_name_ps">Пушту</string>
+    <string name="language_name_ha">Хауса</string>
+    <string name="language_name_my">Бирманский</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">Вопрос, неработающий набор или набор, о котором вы мечтаете. Мы читаем каждое сообщение.</string>
+    <string name="contact_message_placeholder">Напишите сообщение…</string>
+    <string name="contact_email_label">Эл. почта · необязательно, только если нужен ответ</string>
+    <string name="contact_attach_note">Вместе с сообщением отправятся версия приложения и версия Android. Больше ничего.</string>
+    <string name="contact_send">Отправить</string>
+</resources>

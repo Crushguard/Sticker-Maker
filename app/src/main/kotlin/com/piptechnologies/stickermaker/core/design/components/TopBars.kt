@@ -39,6 +39,7 @@ import com.piptechnologies.stickermaker.core.design.Ink2
 import com.piptechnologies.stickermaker.core.design.LoveIcons
 import com.piptechnologies.stickermaker.core.design.LoveStickersTheme
 import com.piptechnologies.stickermaker.core.design.Rose
+import com.piptechnologies.stickermaker.core.ui.inLayoutDirection
 
 // Toolbar icon grey (between Ink and Ink2), from the top-bar spec.
 private val ToolbarIcon = Color(0xFF3D4550)
@@ -84,7 +85,7 @@ fun LoveTopBar(
         }
         Text(
             title,
-            style = titleStyle,
+            style = titleStyle.inLayoutDirection(),
             color = Ink,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

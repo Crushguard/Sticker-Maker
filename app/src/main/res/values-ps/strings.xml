@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pashto. Mirrors values/strings.xml key for key; StringResourcesTest checks it. Strings that would start with Latin text or a pack name begin with &#x200F; (RLM) so they keep a right-to-left paragraph direction. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">شاته</string>
+    <string name="common_close">بندول</string>
+    <string name="common_keep">ساتل</string>
+    <string name="common_cancel">لغوه</string>
+    <string name="common_not_now">اوس نه</string>
+    <string name="common_retry">بیا هڅه</string>
+    <string name="common_done">بشپړ</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">&#x200F;%1$s · %2$s</string>
+    <string name="honesty_line">وړیا · اعلانونه نشته · حساب نه غواړي</string>
+    <string name="nav_home">کور</string>
+    <string name="nav_my_packs">زما کڅوړې</string>
+    <string name="nav_create">کڅوړه جوړول</string>
+    <string name="add_bar_idle">واټساپ ته اضافه کړئ</string>
+    <string name="add_bar_downloading">ښکته کېږي · %1$d%%</string>
+    <string name="add_bar_sent">واټساپ ته ولېږل شوه…</string>
+    <string name="add_bar_added">واټساپ ته اضافه شوه</string>
+    <string name="add_bar_failed">ښکته کول ناکام شول · بیا هڅه</string>
+    <string name="add_bar_hint_idle">ستاسو ټیلیفون ته ښکته کېږي، بیا په واټساپ کې پرانیستل کېږي.</string>
+    <string name="add_bar_hint_downloading">کڅوړه له کلاوډ څخه راځي.</string>
+    <string name="add_bar_hint_sent">د بشپړولو لپاره په واټساپ کې تایید کړئ.</string>
+    <string name="add_bar_hint_added">په «زما کڅوړې» کې یې اداره کړئ.</string>
+    <string name="add_bar_hint_failed">خپل انټرنېټ وګورئ، بیا کېکاږئ څو بیا هڅه وکړو.</string>
+    <string name="add_pill_add">اضافه</string>
+    <string name="add_pill_sent">ولېږل شوه…</string>
+    <string name="add_pill_added">اضافه شوه</string>
+    <string name="add_pill_retry">بیا هڅه</string>
+    <string name="add_pill_downloading">ښکته کېږي، %1$d سلنه</string>
+    <plurals name="sticker_count">
+        <item quantity="one">%d سټیکر</item>
+        <item quantity="other">%d سټیکرونه</item>
+    </plurals>
+    <string name="pack_adds">&#x200F;%1$s ځله اضافه شوې</string>
+    <string name="pack_save">کڅوړه خوندي کول</string>
+    <string name="pack_unsave">له خوندي شویو لرې کول</string>
+    <string name="pack_options">د کڅوړې اختیارونه</string>
+    <string name="pack_share">د Love Stickers شریکول</string>
+    <string name="badge_animated">خوځنده</string>
+    <string name="sticker_remove">سټیکر لرې کول</string>
+    <string name="sticker_add">سټیکر اضافه کول</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">پرېښودل</string>
+    <string name="onboarding_slide1_title">په سټیکر یې ووایئ</string>
+    <string name="onboarding_slide1_body">غوره شوې د مینې کڅوړې: خوږې، خندوونکې، رومانټیک. په یو کېکاږلو کڅوړه واټساپ ته اضافه کېږي.</string>
+    <string name="onboarding_slide2_title">خپل سټیکرونه جوړ کړئ</string>
+    <string name="onboarding_slide2_body">انځورونه په سټیکرونو بدل کړئ. پرې یې کړئ، شالید یې لرې کړئ، یوه کلمه ورزیاته کړئ. له لنډو ویډیوګانو خوځنده کڅوړې هم جوړولی شئ.</string>
+    <string name="onboarding_your_photo">ستاسو انځور</string>
+    <string name="onboarding_next">بل</string>
+    <string name="onboarding_get_started">پیل کړئ</string>
+    <string name="onboarding_sticker_alt">چمتو سټیکر: یوه ښځه په لاسونو زړه جوړوي، شاوخوا یې سپینه پرې شوې څنډه</string>
+    <string name="onboarding_photo_alt">اصلي انځور</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">جوړې</string>
+    <string name="theme_cute">خوږ</string>
+    <string name="theme_funny">خندوونکي</string>
+    <string name="theme_anime">انیمې</string>
+    <string name="theme_romantic">رومانټیک</string>
+    <string name="theme_flirty">ناز</string>
+    <string name="theme_goodnight">شپه مو پخیر</string>
+    <string name="theme_distance">له لرې مینه</string>
+    <string name="customize_title">خپلې موضوعګانې وټاکئ</string>
+    <string name="customize_edit_title">ستاسو موضوعګانې</string>
+    <string name="customize_subtitle">په «کور» کې ستاسو د ټاکل شویو موضوعګانو کڅوړې ښودل کېږي. هر وخت یې په امستنو کې بدلولی شئ.</string>
+    <string name="customize_save">خوندي کول</string>
+    <string name="customize_pick_one">لږ تر لږه یوه موضوع وټاکئ</string>
+    <plurals name="customize_continue">
+        <item quantity="one">دوام · %d موضوع</item>
+        <item quantity="other">دوام · %d موضوعګانې</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">انټرنېټ نشته</string>
+    <string name="offline_body">کڅوړې له کلاوډ څخه راځي. خپل انټرنېټ وګورئ او بیا هڅه وکړئ.</string>
+    <string name="offline_footnote">هغه کڅوړې چې مو دمخه اضافه کړې، په واټساپ کې لا هم کار کوي.</string>
+    <string name="no_whatsapp_title">واټساپ نصب شوی نه دی</string>
+    <string name="no_whatsapp_body">سټیکرونه په واټساپ کې دننه اضافه کېږي. لومړی واټساپ نصب کړئ، بیا راوګرځئ او دا کڅوړه اضافه کړئ.</string>
+    <string name="no_whatsapp_confirm">واټساپ ترلاسه کړئ</string>
+    <string name="toast_added_to_whatsapp">واټساپ ته اضافه شوه</string>
+    <string name="toast_already_in_whatsapp">دمخه په واټساپ کې ده</string>
+    <string name="toast_saved_heart">خوندي شوه · په «کور» کې یې په «♥ خوندي شوي» کې ومومئ</string>
+
+    <!-- Home -->
+    <string name="home_search">لټون</string>
+    <string name="home_settings">امستنې</string>
+    <string name="home_search_placeholder">د مینې کڅوړې ولټوئ</string>
+    <string name="home_chip_trending">مشهور</string>
+    <string name="home_chip_animated">خوځنده</string>
+    <string name="home_chip_saved">خوندي شوي · %1$d</string>
+    <string name="home_no_results_title">د «%1$s» لپاره کومه کڅوړه نشته</string>
+    <string name="home_no_results_body">د یوې موضوع نوم وازمویئ، لکه «خوږ» یا «انیمې».</string>
+    <string name="toast_still_offline">لا هم انټرنېټ نشته. یوه شېبه وروسته بیا هڅه وکړئ.</string>
+    <string name="toast_opening_play_store">د Play Store پرانیستل…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">ستاسو له خوا جوړه شوې</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">په واټساپ کې · %1$d</string>
+    <string name="my_packs_section_own">ستاسو له خوا جوړې شوې · %1$d</string>
+    <string name="my_packs_yours">ستاسو</string>
+    <string name="my_packs_menu_readd">بیا واټساپ ته اضافه کړئ</string>
+    <string name="my_packs_menu_add">واټساپ ته اضافه کړئ</string>
+    <string name="my_packs_menu_remove">له دې اپلیکیشن څخه لرې کړئ</string>
+    <string name="my_packs_menu_delete">کڅوړه ړنګه کړئ</string>
+    <string name="my_packs_remove_title">آیا «%1$s» له دې اپلیکیشن څخه لرې شي؟</string>
+    <string name="my_packs_remove_body">په ټیلیفون کې شته کاپي ړنګېږي. واټساپ کڅوړه تر هغو ساتي چې تاسو یې هلته لرې نه کړئ.</string>
+    <string name="my_packs_remove_confirm">لرې کول</string>
+    <string name="my_packs_delete_title">آیا «%1$s» ړنګه شي؟</string>
+    <string name="my_packs_delete_body">کڅوړه او سټیکرونه یې له دې ټیلیفون څخه ړنګېږي. دا کار بېرته نه راګرځي. که مو واټساپ ته اضافه کړې وي، واټساپ خپله کاپي ساتي.</string>
+    <string name="my_packs_delete_confirm">ړنګول</string>
+    <string name="my_packs_toast_removed">له دې اپلیکیشن څخه لرې شوه</string>
+    <string name="my_packs_toast_deleted">کڅوړه ړنګه شوه</string>
+    <string name="my_packs_empty_title">تر اوسه کومه کڅوړه نشته</string>
+    <string name="my_packs_empty_body">هغه کڅوړې چې واټساپ ته یې اضافه کوئ، دلته ښکاري، او هغه هم چې پخپله یې جوړوئ.</string>
+    <string name="common_browse_packs">کڅوړې وګورئ</string>
+    <string name="my_packs_empty_make_own">خپله کڅوړه جوړه کړئ</string>
+    <string name="my_packs_info_removal">دلته د کڅوړې لرې کول د دې اپلیکیشن کاپي ړنګوي. واټساپ خپله کاپي تر هغو ساتي چې تاسو یې هلته لرې نه کړئ.</string>
+    <string name="my_packs_saved">خوندي شوې کڅوړې</string>
+
+    <!-- Saved -->
+    <string name="saved_title">خوندي شوي</string>
+    <plurals name="saved_pack_count">
+        <item quantity="one">%d کڅوړه</item>
+        <item quantity="other">%d کڅوړې</item>
+    </plurals>
+    <string name="saved_empty_title">تر اوسه کومه خوندي شوې کڅوړه نشته</string>
+    <string name="saved_empty_body">د هرې کڅوړې زړه کېکاږئ څو د وروسته لپاره دلته پاتې شي.</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">نوې کڅوړه</string>
+    <plurals name="create_selected_count">
+        <item quantity="one">%d ټاکل شوی</item>
+        <item quantity="other">%d ټاکل شوي</item>
+    </plurals>
+    <string name="create_source_photos">انځورونه</string>
+    <string name="create_source_camera">کامره</string>
+    <string name="create_source_video">ویډیو</string>
+    <string name="create_next">بل</string>
+    <plurals name="create_next_count">
+        <item quantity="one">بل · %d سټیکر</item>
+        <item quantity="other">بل · %d سټیکرونه</item>
+    </plurals>
+    <string name="create_import_hint_ready">«بل» د هر انځور شالید په همدې ټیلیفون کې لرې کوي. په هره کڅوړه کې تر %1$d پورې.</string>
+    <string name="create_import_hint_pick">لږ تر لږه %1$d وټاکئ (%2$d له %1$d څخه). په هره کڅوړه کې تر %3$d پورې.</string>
+    <string name="create_item_remove">له کڅوړې لرې کول</string>
+    <string name="create_item_add">کڅوړې ته اضافه کول</string>
+    <string name="create_viewfinder">د کامرې چوکاټ</string>
+    <plurals name="create_shot_count">
+        <item quantity="one">%d انځور</item>
+        <item quantity="other">%d انځورونه</item>
+    </plurals>
+    <string name="create_take_picture">انځور واخلئ</string>
+    <string name="create_toast_max">تر ټولو زیات %1$d سټیکرونه کېدای شي</string>
+    <string name="create_toast_shot_added">انځور کڅوړې ته اضافه شو</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">شالید لرې کول</string>
+    <string name="create_undo">بېرته راګرځول</string>
+    <string name="create_toast_nothing_to_undo">بېرته راګرځولو ته څه نشته</string>
+    <string name="create_tool_auto">اتومات</string>
+    <string name="create_tool_brush">برس</string>
+    <string name="create_tool_erase">پاکول</string>
+    <string name="create_tool_text">متن</string>
+    <string name="create_tool_zoom">زوم</string>
+    <string name="create_hint_zoomed">د برابرولو لپاره بیا «زوم» کېکاږئ</string>
+    <string name="create_hint_auto">د شالید لرې کولو لپاره «اتومات» کېکاږئ</string>
+    <string name="create_hint_auto_done">شالید په همدې ټیلیفون کې لرې شو. هېڅ شی پورته نه شو.</string>
+    <string name="create_hint_brush">په انځور کېکاږئ څو برخې بېرته راوګرځي</string>
+    <string name="create_hint_erase">پاتې برخې کېکاږئ څو پاکې شي</string>
+    <string name="create_hint_text">لاندې یوه کلمه ولیکئ</string>
+    <string name="create_hint_default">د څنډو سمولو لپاره انځور لوی کړئ</string>
+    <string name="create_cutting_out_on_phone">په همدې ټیلیفون کې شالید لرې کېږي…</string>
+    <string name="create_cutting_out">شالید لرې کېږي…</string>
+    <string name="create_brush_size">د برس اندازه</string>
+    <string name="create_eraser_size">د پاکوونکي اندازه</string>
+    <string name="create_caption_placeholder">یوه کلمه اضافه کړئ</string>
+    <string name="create_outline_title">سپینه څنډه</string>
+    <string name="create_outline_body">د چټ په هر شالید ښه ښکاري. واټساپ یې سپارښتنه کوي.</string>
+    <string name="create_edit_sticker">دا سټیکر سم کړئ</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">د کڅوړې معلومات</string>
+    <string name="create_tray_title">د کڅوړې آیکن</string>
+    <string name="create_tray_body">د واټساپ د سټیکرونو په ټاکونکي کې ښودل کېږي. د کارولو لپاره لاندې یو سټیکر کېکاږئ.</string>
+    <string name="create_use_as_tray">د کڅوړې آیکن یې کړئ</string>
+    <string name="create_name_label">د کڅوړې نوم</string>
+    <string name="create_name_placeholder">لکه: تل یوځای</string>
+    <string name="create_info_specs">&#x200F;%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">خوځنده</string>
+    <string name="create_kind_static">ثابت</string>
+    <string name="create_info_body">هر یو له ۱۰۰ KB څخه کم، په همدې ټیلیفون کې جوړ شوي. هېڅ شی نه پورته کېږي.</string>
+    <string name="create_save_only">یوازې په «زما کڅوړې» کې خوندي کړئ</string>
+    <string name="create_toast_saved">په «زما کڅوړې» کې خوندي شوه</string>
+    <string name="create_untitled">بې نومه کڅوړه</string>
+    <string name="create_publisher">ستاسو له خوا جوړه شوې</string>
+
+    <!-- Settings -->
+    <string name="settings_title">امستنې</string>
+    <string name="settings_alerts_title">د نویو کڅوړو خبرتیاوې</string>
+    <string name="settings_alerts_on">یوازې کله چې نوې کڅوړه اضافه شي.</string>
+    <string name="settings_alerts_off">بند. د نویو کڅوړو په اړه به خبر نه شئ.</string>
+    <string name="settings_section_preferences">غوره توبونه</string>
+    <string name="settings_section_about">په اړه</string>
+    <string name="settings_edit_themes">د موضوعګانو سمون</string>
+    <plurals name="settings_theme_count">
+        <item quantity="one">%d موضوع</item>
+        <item quantity="other">%d موضوعګانې</item>
+    </plurals>
+    <string name="settings_language">ژبه</string>
+    <string name="settings_clear">ښکته شوې کڅوړې پاکول</string>
+    <string name="settings_storage_none">هېڅ</string>
+    <string name="settings_size_mb">&#x200F;%1$.1f MB</string>
+    <string name="settings_rate">موږ ته نمره راکړئ</string>
+    <string name="settings_contact">له موږ سره اړیکه</string>
+    <string name="settings_more_apps">نور اپلیکیشنونه</string>
+    <string name="settings_ad_badge">اعلان</string>
+    <string name="settings_privacy">د محرمیت تګلاره</string>
+    <string name="settings_version">نسخه</string>
+    <string name="settings_free_card">د Love Stickers اپلیکیشن وړیا دی او تل به وړیا وي. نه اعلانونه، نه حساب، نه څارنه. ستاسو انځورونه هېڅکله له ټیلیفون څخه نه وځي.</string>
+    <string name="settings_toast_alerts_on">د نویو کڅوړو خبرتیاوې فعالې شوې</string>
+    <string name="settings_toast_alerts_off">د نویو کڅوړو خبرتیاوې بندې شوې</string>
+    <string name="settings_toast_nothing_to_clear">د پاکولو لپاره څه نشته</string>
+    <string name="settings_toast_cleared">ښکته شوې کڅوړې پاکې شوې</string>
+    <string name="settings_notif_title">آیا Love Stickers ته اجازه ورکوئ چې خبرتیاوې واستوي؟</string>
+    <string name="settings_notif_body">اندروید یوازې یو ځل پوښتنه کوي. موږ یوازې هغه وخت خبرتیا درلېږو چې نوې کڅوړه اضافه شي. هېڅکله تبلیغات نه.</string>
+    <string name="settings_notif_deny">اجازه مه ورکوئ</string>
+    <string name="settings_notif_allow">اجازه ورکړئ</string>
+    <string name="settings_clear_title">آیا ښکته شوې کڅوړې پاکې شي؟</string>
+    <string name="settings_clear_body">په دې اپلیکیشن کې ساتل شوې کاپيګانې (%1$s) لرې کېږي. هغه کڅوړې چې دمخه په واټساپ کې دي، هلته پاتې کېږي.</string>
+    <string name="settings_clear_keep">ویې ساتئ</string>
+    <string name="settings_clear_confirm">پاکول</string>
+    <string name="toast_no_email_app">په دې ټیلیفون کې د برېښنالیک اپلیکیشن نشته.</string>
+    <string name="toast_link_failed">هغه لینک پرانیستل نه شو.</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">آیا له Love Stickers خوند اخلئ؟</string>
+    <string name="rate_body">ستاسو رښتینې نمره له نورو سره مرسته کوي چې یو بې اعلانونو سټیکر اپلیکیشن پیدا کړي.</string>
+    <plurals name="rate_star">
+        <item quantity="one">%d ستوری</item>
+        <item quantity="other">%d ستوري</item>
+    </plurals>
+    <string name="rate_hint_idle">یو ستوری کېکاږئ</string>
+    <string name="rate_hint_five">ډېر مې خوښ دی!</string>
+    <string name="rate_hint_low">موږ ته ووایئ چې څه ستونزه وه</string>
+    <string name="rate_maybe_later">شاید وروسته</string>
+    <string name="rate_store_title">مننه!</string>
+    <string name="rate_store_body">آیا دا نمره په Google Play کې هم شریکوئ؟ دا له یو کوچني، بې اعلانونو اپلیکیشن سره د ودې مرسته کوي.</string>
+    <string name="rate_store_cta">په Google Play کې نمره ورکړئ</string>
+    <string name="rate_feedback_title">څنګه یې ښه کولی شو؟</string>
+    <string name="rate_feedback_body">موږ ته ووایئ چې څه کمی و. دا مستقیم ټیم ته ځي، نه عامه بیاکتنې ته، او موږ هر یو لولو.</string>
+    <string name="rate_feedback_placeholder">څه شي به دا اپلیکیشن د ۵ ستورو وړ کړی وای؟</string>
+    <string name="rate_feedback_cta">نظر ولېږئ</string>
+    <string name="rate_thanks_title">مننه، ستاسو خبره مو واورېده</string>
+    <string name="rate_thanks_body">ستاسو یادښت ټیم ته په لاره دی. دا زموږ په راتلونکو کارونو اغېز کوي.</string>
+
+    <!-- Language -->
+    <string name="language_note">د اپلیکیشن ژبه بدلوي. د کڅوړو نومونه لکه څنګه چې خپاره شوي، همداسې پاتې کېږي.</string>
+    <string name="language_system">د سیسټم ډیفالټ</string>
+    <string name="language_system_sub">د وسیلې ژبه</string>
+    <string name="language_rtl_badge">&#x200F;RTL</string>
+    <string name="language_name_en">انګلیسي</string>
+    <string name="language_name_ar">عربي</string>
+    <string name="language_name_es">هسپانوي</string>
+    <string name="language_name_pt">پرتګالي</string>
+    <string name="language_name_pt_br">پرتګالي (برازیل)</string>
+    <string name="language_name_fr">فرانسوي</string>
+    <string name="language_name_hi">هندي</string>
+    <string name="language_name_id">اندونیزیايي</string>
+    <string name="language_name_tr">ترکي</string>
+    <string name="language_name_ur">اردو</string>
+    <string name="language_name_de">الماني</string>
+    <string name="language_name_ru">روسي</string>
+    <string name="language_name_it">ایټالوي</string>
+    <string name="language_name_zh">چینايي (ساده)</string>
+    <string name="language_name_fa">فارسي</string>
+    <string name="language_name_he">عبراني</string>
+    <string name="language_name_ps">پښتو</string>
+    <string name="language_name_ha">هوسا</string>
+    <string name="language_name_my">برمايي</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">یوه پوښتنه، خرابه کڅوړه، یا هغه کڅوړه چې ارمان یې لرئ. موږ هر پیغام لولو.</string>
+    <string name="contact_message_placeholder">خپل پیغام ولیکئ…</string>
+    <string name="contact_email_label">برېښنالیک · اختیاري، یوازې که ځواب غواړئ</string>
+    <string name="contact_attach_note">د اپلیکیشن له نسخې او د اندروید له نسخې سره یوځای لېږل کېږي. نور هېڅ نه.</string>
+    <string name="contact_send">لېږل</string>
+</resources>

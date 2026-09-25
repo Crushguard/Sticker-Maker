@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Turkish. Mirrors values/strings.xml key for key; StringResourcesTest checks it. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">Geri</string>
+    <string name="common_close">Kapat</string>
+    <string name="common_keep">Sakla</string>
+    <string name="common_cancel">İptal</string>
+    <string name="common_not_now">Şimdi değil</string>
+    <string name="common_retry">Tekrar dene</string>
+    <string name="common_done">Bitti</string>
+    <string name="common_percent">%%%1$d</string>
+    <string name="meta_join">%1$s · %2$s</string>
+    <string name="honesty_line">Ücretsiz · Reklam yok · Hesap yok</string>
+    <string name="nav_home">Ana sayfa</string>
+    <string name="nav_my_packs">Paketlerim</string>
+    <string name="nav_create">Paket oluştur</string>
+    <string name="add_bar_idle">WhatsApp\'a ekle</string>
+    <string name="add_bar_downloading">İndiriliyor · %%%1$d</string>
+    <string name="add_bar_sent">WhatsApp\'a gönderildi…</string>
+    <string name="add_bar_added">WhatsApp\'a eklendi</string>
+    <string name="add_bar_failed">İndirilemedi · Tekrar dene</string>
+    <string name="add_bar_hint_idle">Telefonunuza indirilir, ardından WhatsApp\'ta açılır.</string>
+    <string name="add_bar_hint_downloading">Paket buluttan aktarılıyor.</string>
+    <string name="add_bar_hint_sent">Bitirmek için WhatsApp\'ta onaylayın.</string>
+    <string name="add_bar_hint_added">Paketlerim sekmesinden yönetebilirsiniz.</string>
+    <string name="add_bar_hint_failed">Bağlantınızı kontrol edin, ardından tekrar denemek için dokunun.</string>
+    <string name="add_pill_add">Ekle</string>
+    <string name="add_pill_sent">Gönderildi…</string>
+    <string name="add_pill_added">Eklendi</string>
+    <string name="add_pill_retry">Tekrar dene</string>
+    <string name="add_pill_downloading">İndiriliyor, yüzde %1$d</string>
+    <plurals name="sticker_count">
+        <item quantity="one">%d çıkartma</item>
+        <item quantity="other">%d çıkartma</item>
+    </plurals>
+    <string name="pack_adds">%1$s ekleme</string>
+    <string name="pack_save">Paketi kaydet</string>
+    <string name="pack_unsave">Kaydedilenlerden kaldır</string>
+    <string name="pack_options">Paket seçenekleri</string>
+    <string name="pack_share">Love Stickers uygulamasını paylaş</string>
+    <string name="badge_animated">HAREKETLİ</string>
+    <string name="sticker_remove">Çıkartmayı kaldır</string>
+    <string name="sticker_add">Çıkartma ekle</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">Atla</string>
+    <string name="onboarding_slide1_title">Bir çıkartmayla söyleyin</string>
+    <string name="onboarding_slide1_body">Özenle seçilmiş aşk paketleri: sevimli, komik, romantik. Tek dokunuşla paket WhatsApp\'a eklenir.</string>
+    <string name="onboarding_slide2_title">Kendi çıkartmalarınızı yapın</string>
+    <string name="onboarding_slide2_body">Fotoğrafları çıkartmaya dönüştürün. Kırpın, kesip çıkarın, bir kelime ekleyin. Kısa videolardan hareketli paketler de yapabilirsiniz.</string>
+    <string name="onboarding_your_photo">FOTOĞRAFINIZ</string>
+    <string name="onboarding_next">İleri</string>
+    <string name="onboarding_get_started">Başlayın</string>
+    <string name="onboarding_sticker_alt">Hazır çıkartma: elleriyle kalp yapan bir kadın, beyaz kesim kenarlığı</string>
+    <string name="onboarding_photo_alt">Orijinal fotoğraf</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">Çiftler</string>
+    <string name="theme_cute">Sevimli</string>
+    <string name="theme_funny">Komik</string>
+    <string name="theme_anime">Anime</string>
+    <string name="theme_romantic">Romantik</string>
+    <string name="theme_flirty">Flörtöz</string>
+    <string name="theme_goodnight">İyi geceler</string>
+    <string name="theme_distance">Uzak mesafe</string>
+    <string name="customize_title">Temalarınızı seçin</string>
+    <string name="customize_edit_title">Temalarınız</string>
+    <string name="customize_subtitle">Ana sayfada seçtiğiniz temalardan paketler gösterilir. Temaları istediğiniz zaman Ayarlar bölümünden değiştirebilirsiniz.</string>
+    <string name="customize_save">Kaydet</string>
+    <string name="customize_pick_one">En az bir tema seçin</string>
+    <plurals name="customize_continue">
+        <item quantity="one">Devam · %d tema</item>
+        <item quantity="other">Devam · %d tema</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">Çevrimdışısınız</string>
+    <string name="offline_body">Paketler buluttan aktarılır. Bağlantınızı kontrol edip tekrar deneyin.</string>
+    <string name="offline_footnote">Daha önce eklediğiniz paketler WhatsApp\'ta çalışmaya devam eder.</string>
+    <string name="no_whatsapp_title">WhatsApp yüklü değil</string>
+    <string name="no_whatsapp_body">Çıkartmalar WhatsApp\'ın içinden eklenir. Uygulamayı yükleyin, ardından bu paketi eklemek için geri dönün.</string>
+    <string name="no_whatsapp_confirm">WhatsApp\'ı indir</string>
+    <string name="toast_added_to_whatsapp">WhatsApp\'a eklendi</string>
+    <string name="toast_already_in_whatsapp">Zaten WhatsApp\'ta</string>
+    <string name="toast_saved_heart">Kaydedildi · Ana sayfada ♥ Kaydedilenler altında bulabilirsiniz</string>
+
+    <!-- Home -->
+    <string name="home_search">Ara</string>
+    <string name="home_settings">Ayarlar</string>
+    <string name="home_search_placeholder">Aşk paketlerinde ara</string>
+    <string name="home_chip_trending">Popüler</string>
+    <string name="home_chip_animated">Hareketli</string>
+    <string name="home_chip_saved">Kaydedilenler · %1$d</string>
+    <string name="home_no_results_title">“%1$s” için paket yok</string>
+    <string name="home_no_results_body">“sevimli” veya “anime” gibi bir tema adı deneyin.</string>
+    <string name="toast_still_offline">Hâlâ çevrimdışı. Birazdan tekrar deneyin.</string>
+    <string name="toast_opening_play_store">Play Store açılıyor…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">Kendi yapımınız</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">WHATSAPP\'TA · %1$d</string>
+    <string name="my_packs_section_own">KENDİ YAPIMINIZ · %1$d</string>
+    <string name="my_packs_yours">sizinki</string>
+    <string name="my_packs_menu_readd">WhatsApp\'a yeniden ekle</string>
+    <string name="my_packs_menu_add">WhatsApp\'a ekle</string>
+    <string name="my_packs_menu_remove">Bu uygulamadan kaldır</string>
+    <string name="my_packs_menu_delete">Paketi sil</string>
+    <string name="my_packs_remove_title">“%1$s” bu uygulamadan kaldırılsın mı?</string>
+    <string name="my_packs_remove_body">Yerel kopya silinir. Paket, siz oradan kaldırana kadar WhatsApp\'ta kalır.</string>
+    <string name="my_packs_remove_confirm">Kaldır</string>
+    <string name="my_packs_delete_title">“%1$s” silinsin mi?</string>
+    <string name="my_packs_delete_body">Paket ve çıkartmaları bu telefondan silinir. Bu işlem geri alınamaz. Paketi WhatsApp\'a eklediyseniz WhatsApp\'taki kopyası kalır.</string>
+    <string name="my_packs_delete_confirm">Sil</string>
+    <string name="my_packs_toast_removed">Bu uygulamadan kaldırıldı</string>
+    <string name="my_packs_toast_deleted">Paket silindi</string>
+    <string name="my_packs_empty_title">Henüz paket yok</string>
+    <string name="my_packs_empty_body">WhatsApp\'a eklediğiniz paketler, kendi yaptıklarınızla birlikte burada görünür.</string>
+    <string name="common_browse_packs">Paketlere göz at</string>
+    <string name="my_packs_empty_make_own">Kendiniz yapın</string>
+    <string name="my_packs_info_removal">Bir paketi buradan kaldırmak, bu uygulamadaki kopyayı siler. WhatsApp, siz oradan kaldırana kadar kendi kopyasını saklar.</string>
+    <string name="my_packs_saved">Kaydedilen paketler</string>
+
+    <!-- Saved -->
+    <string name="saved_title">Kaydedilenler</string>
+    <plurals name="saved_pack_count">
+        <item quantity="one">%d paket</item>
+        <item quantity="other">%d paket</item>
+    </plurals>
+    <string name="saved_empty_title">Henüz kaydedilen paket yok</string>
+    <string name="saved_empty_body">Herhangi bir paketin kalbine dokunarak onu sonrası için burada saklayın.</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">Yeni paket</string>
+    <plurals name="create_selected_count">
+        <item quantity="one">%d seçildi</item>
+        <item quantity="other">%d seçildi</item>
+    </plurals>
+    <string name="create_source_photos">Fotoğraflar</string>
+    <string name="create_source_camera">Kamera</string>
+    <string name="create_source_video">Video</string>
+    <string name="create_next">İleri</string>
+    <plurals name="create_next_count">
+        <item quantity="one">İleri · %d çıkartma</item>
+        <item quantity="other">İleri · %d çıkartma</item>
+    </plurals>
+    <string name="create_import_hint_ready">İleri düğmesi her konuyu bu telefonda kesip çıkarır. Paket başına en fazla %1$d.</string>
+    <string name="create_import_hint_pick">En az %1$d seçin (%1$d içinden %2$d). Paket başına en fazla %3$d.</string>
+    <string name="create_item_remove">Paketten çıkar</string>
+    <string name="create_item_add">Pakete ekle</string>
+    <string name="create_viewfinder">vizör</string>
+    <plurals name="create_shot_count">
+        <item quantity="one">%d çekim</item>
+        <item quantity="other">%d çekim</item>
+    </plurals>
+    <string name="create_take_picture">Fotoğraf çek</string>
+    <string name="create_toast_max">En fazla %1$d çıkartma eklenebilir</string>
+    <string name="create_toast_shot_added">Çekim pakete eklendi</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">Kesip çıkar</string>
+    <string name="create_undo">Geri al</string>
+    <string name="create_toast_nothing_to_undo">Geri alınacak bir şey yok</string>
+    <string name="create_tool_auto">Otomatik</string>
+    <string name="create_tool_brush">Fırça</string>
+    <string name="create_tool_erase">Silgi</string>
+    <string name="create_tool_text">Metin</string>
+    <string name="create_tool_zoom">Büyüt</string>
+    <string name="create_hint_zoomed">Ekrana sığdırmak için Büyüt düğmesine tekrar dokunun</string>
+    <string name="create_hint_auto">Konuyu kesip çıkarmak için Otomatik düğmesine dokunun</string>
+    <string name="create_hint_auto_done">Bu telefonda kesip çıkarıldı. Hiçbir şey yüklenmedi.</string>
+    <string name="create_hint_brush">Parçaları geri getirmek için resme dokunun</string>
+    <string name="create_hint_erase">Silmek için kalıntılara dokunun</string>
+    <string name="create_hint_text">Aşağıya bir kelime yazın</string>
+    <string name="create_hint_default">Kenarları düzeltmek için yakınlaştırın</string>
+    <string name="create_cutting_out_on_phone">Bu telefonda kesip çıkarılıyor…</string>
+    <string name="create_cutting_out">Kesip çıkarılıyor…</string>
+    <string name="create_brush_size">Fırça boyutu</string>
+    <string name="create_eraser_size">Silgi boyutu</string>
+    <string name="create_caption_placeholder">Bir kelime ekleyin</string>
+    <string name="create_outline_title">Beyaz kenarlık</string>
+    <string name="create_outline_body">Her sohbet arka planında belirgin durur. WhatsApp da bunu önerir.</string>
+    <string name="create_edit_sticker">Bu çıkartmayı düzenle</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">Paket ayrıntıları</string>
+    <string name="create_tray_title">Paket simgesi</string>
+    <string name="create_tray_body">WhatsApp\'ın çıkartma seçicisinde gösterilir. Kullanmak için aşağıdan bir çıkartmaya dokunun.</string>
+    <string name="create_use_as_tray">Paket simgesi yap</string>
+    <string name="create_name_label">Paket adı</string>
+    <string name="create_name_placeholder">ör. Hep biz</string>
+    <string name="create_info_specs">%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">Hareketli</string>
+    <string name="create_kind_static">Sabit</string>
+    <string name="create_info_body">her biri 100 KB altında, bu telefonda yapıldı. Hiçbir şey yüklenmez.</string>
+    <string name="create_save_only">Yalnızca Paketlerim\'e kaydet</string>
+    <string name="create_toast_saved">Paketlerim\'e kaydedildi</string>
+    <string name="create_untitled">Adsız paket</string>
+    <string name="create_publisher">Kendi yapımınız</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_alerts_title">Yeni paket bildirimleri</string>
+    <string name="settings_alerts_on">Yalnızca yeni bir paket eklendiğinde.</string>
+    <string name="settings_alerts_off">Kapalı. Yeni paketlerden haberiniz olmaz.</string>
+    <string name="settings_section_preferences">TERCİHLER</string>
+    <string name="settings_section_about">HAKKINDA</string>
+    <string name="settings_edit_themes">Temaları düzenle</string>
+    <plurals name="settings_theme_count">
+        <item quantity="one">%d tema</item>
+        <item quantity="other">%d tema</item>
+    </plurals>
+    <string name="settings_language">Dil</string>
+    <string name="settings_clear">İndirilen paketleri temizle</string>
+    <string name="settings_storage_none">Yok</string>
+    <string name="settings_size_mb">%1$.1f MB</string>
+    <string name="settings_rate">Bizi değerlendirin</string>
+    <string name="settings_contact">Bize ulaşın</string>
+    <string name="settings_more_apps">Diğer uygulamalar</string>
+    <string name="settings_ad_badge">REKLAM</string>
+    <string name="settings_privacy">Gizlilik politikası</string>
+    <string name="settings_version">Sürüm</string>
+    <string name="settings_free_card">Love Stickers ücretsizdir ve hep öyle kalacak. Reklam yok, hesap yok, takip yok. Fotoğraflarınız asla telefonunuzdan çıkmaz.</string>
+    <string name="settings_toast_alerts_on">Yeni paket bildirimleri açıldı</string>
+    <string name="settings_toast_alerts_off">Yeni paket bildirimleri kapatıldı</string>
+    <string name="settings_toast_nothing_to_clear">Temizlenecek bir şey yok</string>
+    <string name="settings_toast_cleared">İndirilenler temizlendi</string>
+    <string name="settings_notif_title">Love Stickers uygulamasının bildirim göndermesine izin verilsin mi?</string>
+    <string name="settings_notif_body">Android bunu bir kez sorar. Yalnızca yeni bir paket eklendiğinde bildirim göndeririz. Asla kampanya bildirimi göndermeyiz.</string>
+    <string name="settings_notif_deny">İzin verme</string>
+    <string name="settings_notif_allow">İzin ver</string>
+    <string name="settings_clear_title">İndirilen paketler temizlensin mi?</string>
+    <string name="settings_clear_body">Bu uygulamada saklanan kopyalar (%1$s) kaldırılır. Zaten WhatsApp\'ta olan paketler orada kalır.</string>
+    <string name="settings_clear_keep">Kalsın</string>
+    <string name="settings_clear_confirm">Temizle</string>
+    <string name="toast_no_email_app">Bu telefonda e-posta uygulaması yok.</string>
+    <string name="toast_link_failed">Bağlantı açılamadı.</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">Love Stickers hoşunuza gidiyor mu?</string>
+    <string name="rate_body">Dürüst puanınız, başkalarının reklamsız bir çıkartma uygulaması bulmasına yardımcı olur.</string>
+    <plurals name="rate_star">
+        <item quantity="one">%d yıldız</item>
+        <item quantity="other">%d yıldız</item>
+    </plurals>
+    <string name="rate_hint_idle">Bir yıldıza dokunun</string>
+    <string name="rate_hint_five">Bayıldım!</string>
+    <string name="rate_hint_low">Neyin yanlış gittiğini bize anlatın</string>
+    <string name="rate_maybe_later">Belki sonra</string>
+    <string name="rate_store_title">Teşekkürler!</string>
+    <string name="rate_store_body">Bunu Google Play\'de de paylaşır mısınız? Küçük ve reklamsız bir uygulamanın büyümesine yardımcı olur.</string>
+    <string name="rate_store_cta">Google Play\'de puan ver</string>
+    <string name="rate_feedback_title">Nasıl daha iyi olabiliriz?</string>
+    <string name="rate_feedback_body">Neyin eksik kaldığını bize anlatın. Herkese açık bir yorum olarak değil, doğrudan ekibe gider ve her birini okuyoruz.</string>
+    <string name="rate_feedback_placeholder">Bu uygulamayı 5 yıldızlık yapmak için ne gerekirdi?</string>
+    <string name="rate_feedback_cta">Geri bildirim gönder</string>
+    <string name="rate_thanks_title">Teşekkürler, sizi duyuyoruz</string>
+    <string name="rate_thanks_body">Notunuz ekibe doğru yolda. Bundan sonra ne geliştireceğimize yön veriyor.</string>
+
+    <!-- Language -->
+    <string name="language_note">Uygulamanın dilini değiştirir. Paket adları yayımlandığı gibi kalır.</string>
+    <string name="language_system">Sistem varsayılanı</string>
+    <string name="language_system_sub">Cihaz dili</string>
+    <string name="language_rtl_badge">RTL</string>
+    <string name="language_name_en">İngilizce</string>
+    <string name="language_name_ar">Arapça</string>
+    <string name="language_name_es">İspanyolca</string>
+    <string name="language_name_pt">Portekizce</string>
+    <string name="language_name_pt_br">Portekizce (Brezilya)</string>
+    <string name="language_name_fr">Fransızca</string>
+    <string name="language_name_hi">Hintçe</string>
+    <string name="language_name_id">Endonezce</string>
+    <string name="language_name_tr">Türkçe</string>
+    <string name="language_name_ur">Urduca</string>
+    <string name="language_name_de">Almanca</string>
+    <string name="language_name_ru">Rusça</string>
+    <string name="language_name_it">İtalyanca</string>
+    <string name="language_name_zh">Çince (Basitleştirilmiş)</string>
+    <string name="language_name_fa">Farsça</string>
+    <string name="language_name_he">İbranice</string>
+    <string name="language_name_ps">Peştuca</string>
+    <string name="language_name_ha">Hausaca</string>
+    <string name="language_name_my">Birmanca</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">Bir soru, bozuk bir paket, keşke olsa dediğiniz bir paket. Her mesajı okuyoruz.</string>
+    <string name="contact_message_placeholder">Mesajınızı yazın…</string>
+    <string name="contact_email_label">E-posta · isteğe bağlı, yalnızca yanıt istiyorsanız</string>
+    <string name="contact_attach_note">Uygulama sürümü ve Android sürümüyle birlikte gönderilir. Başka hiçbir şey eklenmez.</string>
+    <string name="contact_send">Gönder</string>
+</resources>

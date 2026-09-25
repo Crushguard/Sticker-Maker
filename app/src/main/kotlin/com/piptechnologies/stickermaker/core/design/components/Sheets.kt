@@ -42,6 +42,7 @@ import com.piptechnologies.stickermaker.core.design.Ink2
 import com.piptechnologies.stickermaker.core.design.LoveIcons
 import com.piptechnologies.stickermaker.core.design.LoveStickersTheme
 import com.piptechnologies.stickermaker.core.design.Surface
+import com.piptechnologies.stickermaker.core.ui.inLayoutDirection
 
 // Drag handle grey from the sheet spec (between Border and BorderStrong).
 private val HandleColor = Color(0xFFE1E5EB)
@@ -105,7 +106,7 @@ fun SheetHeader(
             .padding(start = 20.dp, end = 12.dp, bottom = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(title, style = SheetTitleText, color = Ink, modifier = Modifier.weight(1f))
+        Text(title, style = SheetTitleText.inLayoutDirection(), color = Ink, modifier = Modifier.weight(1f))
         if (onClose != null) {
             Box(
                 modifier = Modifier

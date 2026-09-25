@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hausa. Mirrors values/strings.xml key for key; StringResourcesTest checks it. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">Baya</string>
+    <string name="common_close">Rufe</string>
+    <string name="common_keep">Riƙe</string>
+    <string name="common_cancel">Soke</string>
+    <string name="common_not_now">Ba yanzu ba</string>
+    <string name="common_retry">Sake gwadawa</string>
+    <string name="common_done">An gama</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">%1$s · %2$s</string>
+    <string name="honesty_line">Kyauta · Babu talla · Babu asusu</string>
+    <string name="nav_home">Gida</string>
+    <string name="nav_my_packs">Fakitocina</string>
+    <string name="nav_create">Ƙirƙiri fakiti</string>
+    <string name="add_bar_idle">Ƙara zuwa WhatsApp</string>
+    <string name="add_bar_downloading">Ana saukewa · %1$d%%</string>
+    <string name="add_bar_sent">An aika zuwa WhatsApp…</string>
+    <string name="add_bar_added">An ƙara zuwa WhatsApp</string>
+    <string name="add_bar_failed">Saukewa ta gaza · Sake gwadawa</string>
+    <string name="add_bar_hint_idle">Za a sauke shi zuwa wayarku, sannan a buɗe shi a WhatsApp.</string>
+    <string name="add_bar_hint_downloading">Ana sauke fakitin daga intanet.</string>
+    <string name="add_bar_hint_sent">Tabbatar a cikin WhatsApp don kammalawa.</string>
+    <string name="add_bar_hint_added">Kuna iya sarrafa shi a “Fakitocina”.</string>
+    <string name="add_bar_hint_failed">Ku duba haɗin intanet ɗinku, sannan ku taɓa don sake gwadawa.</string>
+    <string name="add_pill_add">Ƙara</string>
+    <string name="add_pill_sent">An aika…</string>
+    <string name="add_pill_added">An ƙara</string>
+    <string name="add_pill_retry">Sake gwadawa</string>
+    <string name="add_pill_downloading">Ana saukewa, kashi %1$d cikin ɗari</string>
+    <plurals name="sticker_count">
+        <item quantity="one">Sitika %d</item>
+        <item quantity="other">Sitika %d</item>
+    </plurals>
+    <string name="pack_adds">An ƙara sau %1$s</string>
+    <string name="pack_save">Ajiye fakiti</string>
+    <string name="pack_unsave">Cire daga ajiya</string>
+    <string name="pack_options">Zaɓuɓɓukan fakiti</string>
+    <string name="pack_share">Raba Love Stickers</string>
+    <string name="badge_animated">MAI MOTSI</string>
+    <string name="sticker_remove">Cire sitika</string>
+    <string name="sticker_add">Ƙara sitika</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">Tsallake</string>
+    <string name="onboarding_slide1_title">Faɗe shi da sitika</string>
+    <string name="onboarding_slide1_body">Zaɓaɓɓun fakitocin soyayya: masu kyau, na barkwanci, na ƙauna. Taɓawa ɗaya tak za ta ƙara fakiti zuwa WhatsApp.</string>
+    <string name="onboarding_slide2_title">Ƙirƙiri naku</string>
+    <string name="onboarding_slide2_body">Mayar da hotuna su zama sitika. Datse, cire bango, ƙara kalma. Har ma da fakiti masu motsi daga gajerun bidiyoyi.</string>
+    <string name="onboarding_your_photo">HOTONKU</string>
+    <string name="onboarding_next">Na gaba</string>
+    <string name="onboarding_get_started">Mu fara</string>
+    <string name="onboarding_sticker_alt">Sitika da aka kammala: mace tana yin siffar zuciya da hannayenta, tare da farin layin iyaka</string>
+    <string name="onboarding_photo_alt">Hoton asali</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">Masoya</string>
+    <string name="theme_cute">Kyawawa</string>
+    <string name="theme_funny">Barkwanci</string>
+    <string name="theme_anime">Anime</string>
+    <string name="theme_romantic">Soyayya</string>
+    <string name="theme_flirty">Kwarkwasa</string>
+    <string name="theme_goodnight">Sai da safe</string>
+    <string name="theme_distance">Nesa da juna</string>
+    <string name="customize_title">Zaɓi jigoginku</string>
+    <string name="customize_edit_title">Jigoginku</string>
+    <string name="customize_subtitle">“Gida” na nuna fakitoci daga jigogin da kuka zaɓa. Kuna iya canza su a kowane lokaci a “Saituna”.</string>
+    <string name="customize_save">Ajiye</string>
+    <string name="customize_pick_one">Zaɓi jigo aƙalla ɗaya</string>
+    <plurals name="customize_continue">
+        <item quantity="one">Ci gaba · jigo %d</item>
+        <item quantity="other">Ci gaba · jigogi %d</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">Babu intanet</string>
+    <string name="offline_body">Ana samun fakitoci ne daga intanet. Ku duba haɗin intanet ɗinku, sannan ku sake gwadawa.</string>
+    <string name="offline_footnote">Fakitocin da kuka riga kuka ƙara za su ci gaba da aiki a WhatsApp.</string>
+    <string name="no_whatsapp_title">Ba a shigar da WhatsApp ba</string>
+    <string name="no_whatsapp_body">Ana ƙara sitika ne a cikin WhatsApp. Ku shigar da shi, sannan ku dawo don ƙara wannan fakiti.</string>
+    <string name="no_whatsapp_confirm">Samo WhatsApp</string>
+    <string name="toast_added_to_whatsapp">An ƙara zuwa WhatsApp</string>
+    <string name="toast_already_in_whatsapp">Ya riga ya shiga WhatsApp</string>
+    <string name="toast_saved_heart">An ajiye · za ku same shi a ƙarƙashin “♥ An ajiye” a “Gida”</string>
+
+    <!-- Home -->
+    <string name="home_search">Bincika</string>
+    <string name="home_settings">Saituna</string>
+    <string name="home_search_placeholder">Bincika fakitocin soyayya</string>
+    <string name="home_chip_trending">Masu tashe</string>
+    <string name="home_chip_animated">Masu motsi</string>
+    <string name="home_chip_saved">An ajiye · %1$d</string>
+    <string name="home_no_results_title">Ba a sami fakiti don “%1$s” ba</string>
+    <string name="home_no_results_body">Gwada sunan jigo, kamar “kyawawa” ko “anime”.</string>
+    <string name="toast_still_offline">Har yanzu babu intanet. Ku sake gwadawa nan ba da jimawa ba.</string>
+    <string name="toast_opening_play_store">Ana buɗe Play Store…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">Aikinku</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">A CIKIN WHATSAPP · %1$d</string>
+    <string name="my_packs_section_own">AIKINKU · %1$d</string>
+    <string name="my_packs_yours">naku</string>
+    <string name="my_packs_menu_readd">Sake ƙara zuwa WhatsApp</string>
+    <string name="my_packs_menu_add">Ƙara zuwa WhatsApp</string>
+    <string name="my_packs_menu_remove">Cire daga wannan manhaja</string>
+    <string name="my_packs_menu_delete">Share fakiti</string>
+    <string name="my_packs_remove_title">A cire “%1$s” daga wannan manhaja?</string>
+    <string name="my_packs_remove_body">Wannan zai share kwafin da ke kan wannan waya. WhatsApp zai ci gaba da riƙe fakitin har sai kun cire shi a can.</string>
+    <string name="my_packs_remove_confirm">Cire</string>
+    <string name="my_packs_delete_title">A share “%1$s”?</string>
+    <string name="my_packs_delete_body">Za a share fakitin tare da dukkan sitika da ke cikinsa daga wannan waya. Ba za a iya dawo da shi ba. Idan kun ƙara shi a WhatsApp, WhatsApp zai riƙe nasa kwafin.</string>
+    <string name="my_packs_delete_confirm">Share</string>
+    <string name="my_packs_toast_removed">An cire daga wannan manhaja</string>
+    <string name="my_packs_toast_deleted">An share fakiti</string>
+    <string name="my_packs_empty_title">Babu fakiti tukuna</string>
+    <string name="my_packs_empty_body">Fakitocin da kuka ƙara zuwa WhatsApp za su bayyana a nan, tare da waɗanda kuka ƙirƙira.</string>
+    <string name="common_browse_packs">Duba fakitoci</string>
+    <string name="my_packs_empty_make_own">Ƙirƙiri naku</string>
+    <string name="my_packs_info_removal">Cire fakiti a nan zai share kwafin wannan manhaja ne kawai. WhatsApp zai riƙe nasa har sai kun cire shi a can.</string>
+    <string name="my_packs_saved">Fakitocin da aka ajiye</string>
+
+    <!-- Saved -->
+    <string name="saved_title">An ajiye</string>
+    <plurals name="saved_pack_count">
+        <item quantity="one">Fakiti %d</item>
+        <item quantity="other">Fakitoci %d</item>
+    </plurals>
+    <string name="saved_empty_title">Babu fakitin da aka ajiye tukuna</string>
+    <string name="saved_empty_body">Taɓa zuciyar kowane fakiti don ajiye shi a nan domin nan gaba.</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">Sabon fakiti</string>
+    <plurals name="create_selected_count">
+        <item quantity="one">An zaɓi %d</item>
+        <item quantity="other">An zaɓi %d</item>
+    </plurals>
+    <string name="create_source_photos">Hotuna</string>
+    <string name="create_source_camera">Kyamara</string>
+    <string name="create_source_video">Bidiyo</string>
+    <string name="create_next">Na gaba</string>
+    <plurals name="create_next_count">
+        <item quantity="one">Na gaba · sitika %d</item>
+        <item quantity="other">Na gaba · sitika %d</item>
+    </plurals>
+    <string name="create_import_hint_ready">“Na gaba” zai cire bangon kowane hoto a kan wannan waya. Har zuwa %1$d a kowane fakiti.</string>
+    <string name="create_import_hint_pick">Zaɓi aƙalla %1$d (%2$d cikin %1$d). Har zuwa %3$d a kowane fakiti.</string>
+    <string name="create_item_remove">Cire daga fakiti</string>
+    <string name="create_item_add">Ƙara zuwa fakiti</string>
+    <string name="create_viewfinder">wurin kallo</string>
+    <plurals name="create_shot_count">
+        <item quantity="one">Hoto %d</item>
+        <item quantity="other">Hotuna %d</item>
+    </plurals>
+    <string name="create_take_picture">Ɗauki hoto</string>
+    <string name="create_toast_max">Sitika %1$d ne iyaka</string>
+    <string name="create_toast_shot_added">An ƙara hoto zuwa fakiti</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">Cire bango</string>
+    <string name="create_undo">Warware</string>
+    <string name="create_toast_nothing_to_undo">Babu abin da za a warware</string>
+    <string name="create_tool_auto">Atomatik</string>
+    <string name="create_tool_brush">Burushi</string>
+    <string name="create_tool_erase">Goge</string>
+    <string name="create_tool_text">Rubutu</string>
+    <string name="create_tool_zoom">Zuƙowa</string>
+    <string name="create_hint_zoomed">Sake taɓa “Zuƙowa” don ganin hoton gaba ɗaya</string>
+    <string name="create_hint_auto">Taɓa “Atomatik” don cire bango</string>
+    <string name="create_hint_auto_done">An cire bango a kan wannan waya. Ba a ɗora komai ba.</string>
+    <string name="create_hint_brush">Taɓa hoton don dawo da wasu sassa</string>
+    <string name="create_hint_erase">Taɓa ragowar don goge su</string>
+    <string name="create_hint_text">Rubuta kalma a ƙasa</string>
+    <string name="create_hint_default">Zuƙo kusa don gyara gefuna</string>
+    <string name="create_cutting_out_on_phone">Ana cire bango a kan wannan waya…</string>
+    <string name="create_cutting_out">Ana cire bango…</string>
+    <string name="create_brush_size">Girman burushi</string>
+    <string name="create_eraser_size">Girman magogi</string>
+    <string name="create_caption_placeholder">Ƙara kalma</string>
+    <string name="create_outline_title">Farin layin iyaka</string>
+    <string name="create_outline_body">Yana fitowa sosai a kan kowane bangon hira. WhatsApp na ba da shawarar amfani da shi.</string>
+    <string name="create_edit_sticker">Gyara wannan sitika</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">Bayanan fakiti</string>
+    <string name="create_tray_title">Alamar fakiti</string>
+    <string name="create_tray_body">Tana bayyana a wurin zaɓar sitika na WhatsApp. Taɓa sitika a ƙasa don zaɓar alamar.</string>
+    <string name="create_use_as_tray">Mai da alamar fakiti</string>
+    <string name="create_name_label">Sunan fakiti</string>
+    <string name="create_name_placeholder">Misali: Mu biyu, har abada</string>
+    <string name="create_info_specs">%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">Mai motsi</string>
+    <string name="create_kind_static">Mara motsi</string>
+    <string name="create_info_body">ƙasa da 100 KB kowanne, an yi su a kan wannan waya. Ba a ɗora komai ba.</string>
+    <string name="create_save_only">Ajiye a “Fakitocina” kawai</string>
+    <string name="create_toast_saved">An ajiye a “Fakitocina”</string>
+    <string name="create_untitled">Fakiti marar suna</string>
+    <string name="create_publisher">Aikinku</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Saituna</string>
+    <string name="settings_alerts_title">Sanarwar sabon fakiti</string>
+    <string name="settings_alerts_on">Sai lokacin da aka ƙara sabon fakiti.</string>
+    <string name="settings_alerts_off">A kashe. Ba za ku ji labarin sabbin fakitoci ba.</string>
+    <string name="settings_section_preferences">ZAƁUƁƁUKA</string>
+    <string name="settings_section_about">GAME DA MU</string>
+    <string name="settings_edit_themes">Gyara jigogi</string>
+    <plurals name="settings_theme_count">
+        <item quantity="one">Jigo %d</item>
+        <item quantity="other">Jigogi %d</item>
+    </plurals>
+    <string name="settings_language">Harshe</string>
+    <string name="settings_clear">Share fakitocin da aka sauke</string>
+    <string name="settings_storage_none">Babu</string>
+    <string name="settings_size_mb">%1$.1f MB</string>
+    <string name="settings_rate">Kimanta mu</string>
+    <string name="settings_contact">Tuntuɓe mu</string>
+    <string name="settings_more_apps">Ƙarin manhajoji</string>
+    <string name="settings_ad_badge">TALLA</string>
+    <string name="settings_privacy">Manufar tsare sirri</string>
+    <string name="settings_version">Siga</string>
+    <string name="settings_free_card">Love Stickers kyauta ce, kuma za ta ci gaba da zama kyauta har abada. Babu talla, babu asusu, babu bin diddigi. Hotunanku ba sa taɓa barin wayarku.</string>
+    <string name="settings_toast_alerts_on">An kunna sanarwar sabon fakiti</string>
+    <string name="settings_toast_alerts_off">An kashe sanarwar sabon fakiti</string>
+    <string name="settings_toast_nothing_to_clear">Babu abin da za a share</string>
+    <string name="settings_toast_cleared">An share abubuwan da aka sauke</string>
+    <string name="settings_notif_title">A bar Love Stickers ta aika sanarwa?</string>
+    <string name="settings_notif_body">Android na tambaya sau ɗaya kawai. Muna sanar da ku ne kawai idan an ƙara sabon fakiti. Ba za mu taɓa aika talla ba.</string>
+    <string name="settings_notif_deny">Kar a bari</string>
+    <string name="settings_notif_allow">A bari</string>
+    <string name="settings_clear_title">A share fakitocin da aka sauke?</string>
+    <string name="settings_clear_body">Za a cire kwafin da aka ajiye a wannan manhaja (%1$s). Fakitocin da ke cikin WhatsApp za su ci gaba da zama a can.</string>
+    <string name="settings_clear_keep">Riƙe su</string>
+    <string name="settings_clear_confirm">Share</string>
+    <string name="toast_no_email_app">Babu manhajar imel a wannan waya.</string>
+    <string name="toast_link_failed">Ba a iya buɗe wannan mahaɗin ba.</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">Kuna jin daɗin Love Stickers?</string>
+    <string name="rate_body">Ƙimarku ta gaskiya tana taimaka wa wasu su sami manhajar sitika marar talla.</string>
+    <plurals name="rate_star">
+        <item quantity="one">Tauraro %d</item>
+        <item quantity="other">Taurari %d</item>
+    </plurals>
+    <string name="rate_hint_idle">Taɓa tauraro</string>
+    <string name="rate_hint_five">Ina son ta sosai!</string>
+    <string name="rate_hint_low">Faɗa mana abin da bai yi daidai ba</string>
+    <string name="rate_maybe_later">Wataƙila daga baya</string>
+    <string name="rate_store_title">Mun gode!</string>
+    <string name="rate_store_body">Za ku iya raba hakan a Google Play? Yana taimaka wa ƙaramar manhaja marar talla ta bunƙasa.</string>
+    <string name="rate_store_cta">Kimanta a Google Play</string>
+    <string name="rate_feedback_title">Ta yaya za mu inganta?</string>
+    <string name="rate_feedback_body">Ku faɗa mana inda muka gaza. Saƙonku zai isa ga ƙungiyarmu kai tsaye, ba zai bayyana ga jama\'a ba, kuma muna karanta kowanne.</string>
+    <string name="rate_feedback_placeholder">Me zai sa wannan manhaja ta cancanci taurari 5?</string>
+    <string name="rate_feedback_cta">Aika ra\'ayi</string>
+    <string name="rate_thanks_title">Mun gode, mun ji ku</string>
+    <string name="rate_thanks_body">Saƙonku yana kan hanyarsa zuwa ƙungiyarmu. Yana taimaka mana mu tsara abin da za mu gina a gaba.</string>
+
+    <!-- Language -->
+    <string name="language_note">Yana canza harshen manhaja. Sunayen fakitoci za su kasance kamar yadda aka wallafa su.</string>
+    <string name="language_system">Bin saitin na\'ura</string>
+    <string name="language_system_sub">Harshen na\'ura</string>
+    <string name="language_rtl_badge">RTL</string>
+    <string name="language_name_en">Turanci</string>
+    <string name="language_name_ar">Larabci</string>
+    <string name="language_name_es">Sifaniyanci</string>
+    <string name="language_name_pt">Harshen Potugis</string>
+    <string name="language_name_pt_br">Harshen Potugis (Birazil)</string>
+    <string name="language_name_fr">Faransanci</string>
+    <string name="language_name_hi">Harshen Hindi</string>
+    <string name="language_name_id">Harshen Indunusiya</string>
+    <string name="language_name_tr">Harshen Turkiyya</string>
+    <string name="language_name_ur">Urdanci</string>
+    <string name="language_name_de">Jamusanci</string>
+    <string name="language_name_ru">Rashanci</string>
+    <string name="language_name_it">Italiyanci</string>
+    <string name="language_name_zh">Sinanci (Sauƙaƙaƙƙe)</string>
+    <string name="language_name_fa">Farisanci</string>
+    <string name="language_name_he">Ibrananci</string>
+    <string name="language_name_ps">Pashtanci</string>
+    <string name="language_name_ha">Hausa</string>
+    <string name="language_name_my">Burmanci</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">Tambaya, fakitin da ya lalace, ko fakitin da kuke fatan a samar. Muna karanta kowane saƙo.</string>
+    <string name="contact_message_placeholder">Rubuta saƙonku…</string>
+    <string name="contact_email_label">Imel · ba dole ba ne, sai idan kuna son amsa</string>
+    <string name="contact_attach_note">Ana aikawa tare da sigar manhaja da sigar Android. Babu wani abu daban.</string>
+    <string name="contact_send">Aika</string>
+</resources>

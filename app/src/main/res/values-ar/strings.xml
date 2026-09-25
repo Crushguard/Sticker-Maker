@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Arabic. Mirrors values/strings.xml key for key; StringResourcesTest checks it. Strings that would start with Latin text or a pack name begin with &#x200F; (RLM) so they keep a right-to-left paragraph direction. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">رجوع</string>
+    <string name="common_close">إغلاق</string>
+    <string name="common_keep">إبقاء</string>
+    <string name="common_cancel">إلغاء</string>
+    <string name="common_not_now">ليس الآن</string>
+    <string name="common_retry">إعادة المحاولة</string>
+    <string name="common_done">تم</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">&#x200F;%1$s · %2$s</string>
+    <string name="honesty_line">مجاني · بلا إعلانات · بلا حساب</string>
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_my_packs">حزمي</string>
+    <string name="nav_create">إنشاء حزمة</string>
+    <string name="add_bar_idle">إضافة إلى واتساب</string>
+    <string name="add_bar_downloading">جارٍ التنزيل · %1$d%%</string>
+    <string name="add_bar_sent">أُرسلت إلى واتساب…</string>
+    <string name="add_bar_added">أُضيفت إلى واتساب</string>
+    <string name="add_bar_failed">تعذّر التنزيل · إعادة المحاولة</string>
+    <string name="add_bar_hint_idle">تُنزَّل على هاتفك، ثم تُفتح في واتساب.</string>
+    <string name="add_bar_hint_downloading">جارٍ جلب الحزمة من السحابة.</string>
+    <string name="add_bar_hint_sent">أكِّد في واتساب لإتمام الإضافة.</string>
+    <string name="add_bar_hint_added">يمكنك إدارتها من «حزمي».</string>
+    <string name="add_bar_hint_failed">تحقّق من اتصالك، ثم انقر للمحاولة مجددًا.</string>
+    <string name="add_pill_add">إضافة</string>
+    <string name="add_pill_sent">أُرسلت…</string>
+    <string name="add_pill_added">أُضيفت</string>
+    <string name="add_pill_retry">إعادة المحاولة</string>
+    <string name="add_pill_downloading">جارٍ التنزيل، %1$d بالمئة</string>
+    <plurals name="sticker_count">
+        <item quantity="zero">لا ملصقات</item>
+        <item quantity="one">ملصق واحد</item>
+        <item quantity="two">ملصقان</item>
+        <item quantity="few">%d ملصقات</item>
+        <item quantity="many">%d ملصقًا</item>
+        <item quantity="other">%d ملصق</item>
+    </plurals>
+    <string name="pack_adds">&#x200F;%1$s إضافة</string>
+    <string name="pack_save">حفظ الحزمة</string>
+    <string name="pack_unsave">إزالة من المحفوظة</string>
+    <string name="pack_options">خيارات الحزمة</string>
+    <string name="pack_share">مشاركة Love Stickers</string>
+    <string name="badge_animated">متحركة</string>
+    <string name="sticker_remove">إزالة الملصق</string>
+    <string name="sticker_add">إضافة ملصق</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">تخطي</string>
+    <string name="onboarding_slide1_title">قُلها بملصق</string>
+    <string name="onboarding_slide1_body">حزم حب مختارة بعناية: لطيفة، ومضحكة، ورومانسية. نقرة واحدة تضيف الحزمة إلى واتساب.</string>
+    <string name="onboarding_slide2_title">اصنع ملصقاتك</string>
+    <string name="onboarding_slide2_body">حوّل صورك إلى ملصقات: اقتصاص، وقصّ، وإضافة كلمة. وحزم متحركة من مقاطع قصيرة أيضًا.</string>
+    <string name="onboarding_your_photo">صورتك</string>
+    <string name="onboarding_next">التالي</string>
+    <string name="onboarding_get_started">ابدأ الآن</string>
+    <string name="onboarding_sticker_alt">ملصق جاهز: امرأة تشكّل قلبًا بيديها، بإطار أبيض حول الشكل</string>
+    <string name="onboarding_photo_alt">الصورة الأصلية</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">أزواج</string>
+    <string name="theme_cute">لطيفة</string>
+    <string name="theme_funny">مضحكة</string>
+    <string name="theme_anime">أنمي</string>
+    <string name="theme_romantic">رومانسية</string>
+    <string name="theme_flirty">غزل</string>
+    <string name="theme_goodnight">ليلة سعيدة</string>
+    <string name="theme_distance">حب عن بُعد</string>
+    <string name="customize_title">اختر مواضيعك</string>
+    <string name="customize_edit_title">مواضيعك</string>
+    <string name="customize_subtitle">تعرض «الرئيسية» حزمًا من المواضيع التي تختارها. غيّرها متى شئت من «الإعدادات».</string>
+    <string name="customize_save">حفظ</string>
+    <string name="customize_pick_one">اختر موضوعًا واحدًا على الأقل</string>
+    <plurals name="customize_continue">
+        <item quantity="zero">متابعة · لا مواضيع</item>
+        <item quantity="one">متابعة · موضوع واحد</item>
+        <item quantity="two">متابعة · موضوعان</item>
+        <item quantity="few">متابعة · %d مواضيع</item>
+        <item quantity="many">متابعة · %d موضوعًا</item>
+        <item quantity="other">متابعة · %d موضوع</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">أنت غير متصل</string>
+    <string name="offline_body">تُجلب الحزم من السحابة. تحقّق من اتصالك وحاول مجددًا.</string>
+    <string name="offline_footnote">الحزم التي أضفتها من قبل تظل تعمل في واتساب.</string>
+    <string name="no_whatsapp_title">واتساب غير مثبّت</string>
+    <string name="no_whatsapp_body">تُضاف الملصقات داخل واتساب. ثبّته، ثم عُد لإضافة هذه الحزمة.</string>
+    <string name="no_whatsapp_confirm">تنزيل واتساب</string>
+    <string name="toast_added_to_whatsapp">أُضيفت إلى واتساب</string>
+    <string name="toast_already_in_whatsapp">موجودة في واتساب بالفعل</string>
+    <string name="toast_saved_heart">حُفظت · تجدها ضمن «♥ المحفوظة» في «الرئيسية»</string>
+
+    <!-- Home -->
+    <string name="home_search">بحث</string>
+    <string name="home_settings">الإعدادات</string>
+    <string name="home_search_placeholder">ابحث في حزم الحب</string>
+    <string name="home_chip_trending">رائجة</string>
+    <string name="home_chip_animated">متحركة</string>
+    <string name="home_chip_saved">المحفوظة · %1$d</string>
+    <string name="home_no_results_title">لا توجد حزم تطابق «%1$s»</string>
+    <string name="home_no_results_body">جرّب اسم موضوع، مثل «لطيفة» أو «أنمي».</string>
+    <string name="toast_still_offline">ما زلت غير متصل. حاول مجددًا بعد قليل.</string>
+    <string name="toast_opening_play_store">جارٍ فتح Play Store…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">من صنعك</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">في واتساب · %1$d</string>
+    <string name="my_packs_section_own">من صنعك · %1$d</string>
+    <string name="my_packs_yours">من صنعك</string>
+    <string name="my_packs_menu_readd">إعادة الإضافة إلى واتساب</string>
+    <string name="my_packs_menu_add">إضافة إلى واتساب</string>
+    <string name="my_packs_menu_remove">إزالة من هذا التطبيق</string>
+    <string name="my_packs_menu_delete">حذف الحزمة</string>
+    <string name="my_packs_remove_title">إزالة «%1$s» من هذا التطبيق؟</string>
+    <string name="my_packs_remove_body">يحذف ذلك النسخة المحلية. يحتفظ واتساب بالحزمة حتى تزيلها منه.</string>
+    <string name="my_packs_remove_confirm">إزالة</string>
+    <string name="my_packs_delete_title">حذف «%1$s»؟</string>
+    <string name="my_packs_delete_body">يحذف ذلك الحزمة وملصقاتها من هذا الهاتف، ولا يمكن التراجع عنه. إذا كنت قد أضفتها، فسيحتفظ واتساب بنسخته.</string>
+    <string name="my_packs_delete_confirm">حذف</string>
+    <string name="my_packs_toast_removed">أُزيلت من هذا التطبيق</string>
+    <string name="my_packs_toast_deleted">حُذفت الحزمة</string>
+    <string name="my_packs_empty_title">لا توجد حزم بعد</string>
+    <string name="my_packs_empty_body">تظهر هنا الحزم التي تضيفها إلى واتساب، إلى جانب الحزم التي تصنعها.</string>
+    <string name="common_browse_packs">تصفّح الحزم</string>
+    <string name="my_packs_empty_make_own">اصنع حزمتك</string>
+    <string name="my_packs_info_removal">إزالة حزمة من هنا تحذف نسخة هذا التطبيق. يحتفظ واتساب بنسخته حتى تزيلها منه.</string>
+    <string name="my_packs_saved">الحزم المحفوظة</string>
+
+    <!-- Saved -->
+    <string name="saved_title">المحفوظة</string>
+    <plurals name="saved_pack_count">
+        <item quantity="zero">لا حزم</item>
+        <item quantity="one">حزمة واحدة</item>
+        <item quantity="two">حزمتان</item>
+        <item quantity="few">%d حزم</item>
+        <item quantity="many">%d حزمة</item>
+        <item quantity="other">%d حزمة</item>
+    </plurals>
+    <string name="saved_empty_title">لا توجد حزم محفوظة بعد</string>
+    <string name="saved_empty_body">انقر على القلب في أي حزمة لتحتفظ بها هنا لوقت لاحق.</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">حزمة جديدة</string>
+    <plurals name="create_selected_count">
+        <item quantity="zero">لم يُحدَّد شيء</item>
+        <item quantity="one">عنصر واحد محدد</item>
+        <item quantity="two">عنصران محددان</item>
+        <item quantity="few">%d عناصر محددة</item>
+        <item quantity="many">%d عنصرًا محددًا</item>
+        <item quantity="other">%d عنصر محدد</item>
+    </plurals>
+    <string name="create_source_photos">الصور</string>
+    <string name="create_source_camera">الكاميرا</string>
+    <string name="create_source_video">فيديو</string>
+    <string name="create_next">التالي</string>
+    <plurals name="create_next_count">
+        <item quantity="zero">التالي · لا ملصقات</item>
+        <item quantity="one">التالي · ملصق واحد</item>
+        <item quantity="two">التالي · ملصقان</item>
+        <item quantity="few">التالي · %d ملصقات</item>
+        <item quantity="many">التالي · %d ملصقًا</item>
+        <item quantity="other">التالي · %d ملصق</item>
+    </plurals>
+    <string name="create_import_hint_ready">زر «التالي» يقصّ كل عنصر على هذا الهاتف. بحد أقصى %1$d لكل حزمة.</string>
+    <string name="create_import_hint_pick">اختر %1$d على الأقل (%2$d من %1$d). بحد أقصى %3$d لكل حزمة.</string>
+    <string name="create_item_remove">إزالة من الحزمة</string>
+    <string name="create_item_add">إضافة إلى الحزمة</string>
+    <string name="create_viewfinder">إطار التصوير</string>
+    <plurals name="create_shot_count">
+        <item quantity="zero">لا لقطات</item>
+        <item quantity="one">لقطة واحدة</item>
+        <item quantity="two">لقطتان</item>
+        <item quantity="few">%d لقطات</item>
+        <item quantity="many">%d لقطة</item>
+        <item quantity="other">%d لقطة</item>
+    </plurals>
+    <string name="create_take_picture">التقاط صورة</string>
+    <string name="create_toast_max">الحد الأقصى %1$d ملصقًا</string>
+    <string name="create_toast_shot_added">أُضيفت اللقطة إلى الحزمة</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">قصّ</string>
+    <string name="create_undo">تراجع</string>
+    <string name="create_toast_nothing_to_undo">لا شيء للتراجع عنه</string>
+    <string name="create_tool_auto">تلقائي</string>
+    <string name="create_tool_brush">فرشاة</string>
+    <string name="create_tool_erase">محو</string>
+    <string name="create_tool_text">نص</string>
+    <string name="create_tool_zoom">تكبير</string>
+    <string name="create_hint_zoomed">انقر على «تكبير» مجددًا لملاءمة الشاشة</string>
+    <string name="create_hint_auto">انقر على «تلقائي» لقصّ العنصر الرئيسي</string>
+    <string name="create_hint_auto_done">تم القصّ على هذا الهاتف. لم يُرفع أي شيء.</string>
+    <string name="create_hint_brush">انقر على الصورة لاستعادة أجزاء منها</string>
+    <string name="create_hint_erase">انقر على البقايا لمحوها</string>
+    <string name="create_hint_text">اكتب كلمة في الأسفل</string>
+    <string name="create_hint_default">كبّر الصورة لإصلاح الحواف</string>
+    <string name="create_cutting_out_on_phone">جارٍ القصّ على هذا الهاتف…</string>
+    <string name="create_cutting_out">جارٍ القصّ…</string>
+    <string name="create_brush_size">حجم الفرشاة</string>
+    <string name="create_eraser_size">حجم الممحاة</string>
+    <string name="create_caption_placeholder">أضف كلمة</string>
+    <string name="create_outline_title">إطار أبيض</string>
+    <string name="create_outline_body">يظهر بوضوح على أي خلفية دردشة. ينصح به واتساب.</string>
+    <string name="create_edit_sticker">تعديل هذا الملصق</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">تفاصيل الحزمة</string>
+    <string name="create_tray_title">أيقونة الحزمة</string>
+    <string name="create_tray_body">تظهر في منتقي الملصقات في واتساب. انقر على ملصق أدناه لاستخدامه.</string>
+    <string name="create_use_as_tray">تعيين كأيقونة الحزمة</string>
+    <string name="create_name_label">اسم الحزمة</string>
+    <string name="create_name_placeholder">مثلًا: معًا للأبد</string>
+    <string name="create_info_specs">&#x200F;%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">متحركة</string>
+    <string name="create_kind_static">ثابتة</string>
+    <string name="create_info_body">أقل من 100 كيلوبايت لكل ملصق، مصنوعة على هذا الهاتف. لا يُرفع أي شيء.</string>
+    <string name="create_save_only">الحفظ في «حزمي» فقط</string>
+    <string name="create_toast_saved">حُفظت في «حزمي»</string>
+    <string name="create_untitled">حزمة بلا اسم</string>
+    <string name="create_publisher">من صنعك</string>
+
+    <!-- Settings -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_alerts_title">تنبيهات الحزم الجديدة</string>
+    <string name="settings_alerts_on">فقط عند إضافة حزمة جديدة.</string>
+    <string name="settings_alerts_off">متوقفة. لن تصلك أخبار الحزم الجديدة.</string>
+    <string name="settings_section_preferences">التفضيلات</string>
+    <string name="settings_section_about">حول التطبيق</string>
+    <string name="settings_edit_themes">تعديل المواضيع</string>
+    <plurals name="settings_theme_count">
+        <item quantity="zero">لا مواضيع</item>
+        <item quantity="one">موضوع واحد</item>
+        <item quantity="two">موضوعان</item>
+        <item quantity="few">%d مواضيع</item>
+        <item quantity="many">%d موضوعًا</item>
+        <item quantity="other">%d موضوع</item>
+    </plurals>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_clear">مسح الحزم المُنزَّلة</string>
+    <string name="settings_storage_none">لا شيء</string>
+    <string name="settings_size_mb">%1$.1f ميغابايت</string>
+    <string name="settings_rate">قيّمنا</string>
+    <string name="settings_contact">تواصل معنا</string>
+    <string name="settings_more_apps">المزيد من التطبيقات</string>
+    <string name="settings_ad_badge">إعلان</string>
+    <string name="settings_privacy">سياسة الخصوصية</string>
+    <string name="settings_version">الإصدار</string>
+    <string name="settings_free_card">&#x200F;Love Stickers مجاني، وسيبقى كذلك دائمًا. بلا إعلانات، وبلا حساب، وبلا تتبّع. صورك لا تغادر هاتفك أبدًا.</string>
+    <string name="settings_toast_alerts_on">تم تشغيل تنبيهات الحزم الجديدة</string>
+    <string name="settings_toast_alerts_off">تم إيقاف تنبيهات الحزم الجديدة</string>
+    <string name="settings_toast_nothing_to_clear">لا شيء لمسحه</string>
+    <string name="settings_toast_cleared">تم مسح التنزيلات</string>
+    <string name="settings_notif_title">هل تريد السماح لتطبيق Love Stickers بإرسال إشعارات؟</string>
+    <string name="settings_notif_body">يسأل Android مرة واحدة فقط. لن نرسل إليك إشعارًا إلا عند إضافة حزمة جديدة. ولا عروض ترويجية أبدًا.</string>
+    <string name="settings_notif_deny">عدم السماح</string>
+    <string name="settings_notif_allow">السماح</string>
+    <string name="settings_clear_title">هل تريد مسح الحزم المُنزَّلة؟</string>
+    <string name="settings_clear_body">يزيل ذلك النسخ المخزّنة في هذا التطبيق (%1$s). تبقى الحزم الموجودة في واتساب كما هي.</string>
+    <string name="settings_clear_keep">الإبقاء عليها</string>
+    <string name="settings_clear_confirm">مسح</string>
+    <string name="toast_no_email_app">لا يوجد تطبيق بريد إلكتروني على هذا الهاتف.</string>
+    <string name="toast_link_failed">تعذّر فتح هذا الرابط.</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">هل يعجبك Love Stickers؟</string>
+    <string name="rate_body">تقييمك الصادق يساعد الآخرين على إيجاد تطبيق ملصقات بلا إعلانات.</string>
+    <plurals name="rate_star">
+        <item quantity="zero">لا نجوم</item>
+        <item quantity="one">نجمة واحدة</item>
+        <item quantity="two">نجمتان</item>
+        <item quantity="few">%d نجوم</item>
+        <item quantity="many">%d نجمة</item>
+        <item quantity="other">%d نجمة</item>
+    </plurals>
+    <string name="rate_hint_idle">انقر على نجمة</string>
+    <string name="rate_hint_five">أحببته!</string>
+    <string name="rate_hint_low">أخبرنا بما لم يعجبك</string>
+    <string name="rate_maybe_later">ربما لاحقًا</string>
+    <string name="rate_store_title">شكرًا لك!</string>
+    <string name="rate_store_body">هل تشارك رأيك على Google Play؟ فهذا يساعد تطبيقًا صغيرًا خاليًا من الإعلانات على النمو.</string>
+    <string name="rate_store_cta">قيّمنا على Google Play</string>
+    <string name="rate_feedback_title">كيف يمكننا أن نتحسّن؟</string>
+    <string name="rate_feedback_body">أخبرنا بما كان ناقصًا. تصل ملاحظتك مباشرةً إلى الفريق ولا تُنشر كمراجعة عامة، ونحن نقرأ كل ملاحظة.</string>
+    <string name="rate_feedback_placeholder">ما الذي كان سيجعل هذا التطبيق يستحق خمس نجوم؟</string>
+    <string name="rate_feedback_cta">إرسال الملاحظات</string>
+    <string name="rate_thanks_title">شكرًا لك، رأيك مسموع</string>
+    <string name="rate_thanks_body">ملاحظتك في طريقها إلى الفريق، وستساعدنا في تحديد ما نبنيه لاحقًا.</string>
+
+    <!-- Language -->
+    <string name="language_note">يغيّر لغة التطبيق. تبقى أسماء الحزم كما نُشرت.</string>
+    <string name="language_system">حسب النظام</string>
+    <string name="language_system_sub">لغة الجهاز</string>
+    <string name="language_rtl_badge">&#x200F;RTL</string>
+    <string name="language_name_en">الإنجليزية</string>
+    <string name="language_name_ar">العربية</string>
+    <string name="language_name_es">الإسبانية</string>
+    <string name="language_name_pt">البرتغالية</string>
+    <string name="language_name_pt_br">البرتغالية (البرازيل)</string>
+    <string name="language_name_fr">الفرنسية</string>
+    <string name="language_name_hi">الهندية</string>
+    <string name="language_name_id">الإندونيسية</string>
+    <string name="language_name_tr">التركية</string>
+    <string name="language_name_ur">الأردية</string>
+    <string name="language_name_de">الألمانية</string>
+    <string name="language_name_ru">الروسية</string>
+    <string name="language_name_it">الإيطالية</string>
+    <string name="language_name_zh">الصينية (المبسّطة)</string>
+    <string name="language_name_fa">الفارسية</string>
+    <string name="language_name_he">العبرية</string>
+    <string name="language_name_ps">البشتوية</string>
+    <string name="language_name_ha">الهوسا</string>
+    <string name="language_name_my">البورمية</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">سؤال، أو حزمة معطّلة، أو حزمة تتمنى وجودها. نقرأ كل رسالة.</string>
+    <string name="contact_message_placeholder">اكتب رسالتك…</string>
+    <string name="contact_email_label">البريد الإلكتروني · اختياري، فقط إن أردت ردًّا</string>
+    <string name="contact_attach_note">تُرسل مع إصدار التطبيق وإصدار Android. لا شيء غير ذلك.</string>
+    <string name="contact_send">إرسال</string>
+</resources>

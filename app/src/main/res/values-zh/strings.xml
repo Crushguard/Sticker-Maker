@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simplified Chinese. Mirrors values/strings.xml key for key; StringResourcesTest checks it. -->
+<resources>
+    <!-- Shared: actions, add controls, pack cards -->
+    <string name="common_back">返回</string>
+    <string name="common_close">关闭</string>
+    <string name="common_keep">保留</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_not_now">暂不</string>
+    <string name="common_retry">重试</string>
+    <string name="common_done">完成</string>
+    <string name="common_percent">%1$d%%</string>
+    <string name="meta_join">%1$s · %2$s</string>
+    <string name="honesty_line">免费 · 无广告 · 无需账号</string>
+    <string name="nav_home">首页</string>
+    <string name="nav_my_packs">我的贴图包</string>
+    <string name="nav_create">制作贴图包</string>
+    <string name="add_bar_idle">添加到 WhatsApp</string>
+    <string name="add_bar_downloading">正在下载 · %1$d%%</string>
+    <string name="add_bar_sent">已发送到 WhatsApp…</string>
+    <string name="add_bar_added">已添加到 WhatsApp</string>
+    <string name="add_bar_failed">下载失败 · 重试</string>
+    <string name="add_bar_hint_idle">先下载到你的手机，再在 WhatsApp 中打开。</string>
+    <string name="add_bar_hint_downloading">正在从云端获取贴图包。</string>
+    <string name="add_bar_hint_sent">请在 WhatsApp 中确认以完成添加。</string>
+    <string name="add_bar_hint_added">可在“我的贴图包”中管理。</string>
+    <string name="add_bar_hint_failed">请检查网络连接，然后点按重试。</string>
+    <string name="add_pill_add">添加</string>
+    <string name="add_pill_sent">已发送…</string>
+    <string name="add_pill_added">已添加</string>
+    <string name="add_pill_retry">重试</string>
+    <string name="add_pill_downloading">正在下载，已完成 %1$d%%</string>
+    <plurals name="sticker_count">
+        <item quantity="other">%d 张贴图</item>
+    </plurals>
+    <string name="pack_adds">%1$s 次添加</string>
+    <string name="pack_save">收藏贴图包</string>
+    <string name="pack_unsave">取消收藏</string>
+    <string name="pack_options">贴图包选项</string>
+    <string name="pack_share">分享 Love Stickers</string>
+    <string name="badge_animated">动态</string>
+    <string name="sticker_remove">移除贴图</string>
+    <string name="sticker_add">添加贴图</string>
+
+    <!-- Launch and onboarding -->
+    <string name="onboarding_skip">跳过</string>
+    <string name="onboarding_slide1_title">用贴图说出心意</string>
+    <string name="onboarding_slide1_body">精选恋爱贴图包：可爱、搞笑、浪漫。点按一下，即可将贴图包添加到 WhatsApp。</string>
+    <string name="onboarding_slide2_title">亲手制作</string>
+    <string name="onboarding_slide2_body">把照片变成贴图。裁剪、抠图、加上文字，还能用短视频做成动态贴图包。</string>
+    <string name="onboarding_your_photo">你的照片</string>
+    <string name="onboarding_next">下一步</string>
+    <string name="onboarding_get_started">开始使用</string>
+    <string name="onboarding_sticker_alt">制作好的贴图：一位女士用双手比心，带白色轮廓描边</string>
+    <string name="onboarding_photo_alt">原始照片</string>
+
+    <!-- Themes -->
+    <string name="theme_couples">情侣</string>
+    <string name="theme_cute">可爱</string>
+    <string name="theme_funny">搞笑</string>
+    <string name="theme_anime">动漫</string>
+    <string name="theme_romantic">浪漫</string>
+    <string name="theme_flirty">撩人</string>
+    <string name="theme_goodnight">晚安</string>
+    <string name="theme_distance">异地恋</string>
+    <string name="customize_title">选择你的主题</string>
+    <string name="customize_edit_title">你的主题</string>
+    <string name="customize_subtitle">首页会显示你所选主题的贴图包。你可以随时在“设置”中更改。</string>
+    <string name="customize_save">保存</string>
+    <string name="customize_pick_one">请至少选择一个主题</string>
+    <plurals name="customize_continue">
+        <item quantity="other">继续 · %d 个主题</item>
+    </plurals>
+
+    <!-- Shared states: offline, WhatsApp missing, confirmations -->
+    <string name="offline_title">你已离线</string>
+    <string name="offline_body">贴图包需要从云端加载。请检查网络连接，然后重试。</string>
+    <string name="offline_footnote">已添加的贴图包仍可在 WhatsApp 中正常使用。</string>
+    <string name="no_whatsapp_title">未安装 WhatsApp</string>
+    <string name="no_whatsapp_body">贴图需要在 WhatsApp 中添加。请先安装 WhatsApp，再回来添加这个贴图包。</string>
+    <string name="no_whatsapp_confirm">获取 WhatsApp</string>
+    <string name="toast_added_to_whatsapp">已添加到 WhatsApp</string>
+    <string name="toast_already_in_whatsapp">已在 WhatsApp 中</string>
+    <string name="toast_saved_heart">已收藏 · 可在首页的“♥ 收藏”中找到</string>
+
+    <!-- Home -->
+    <string name="home_search">搜索</string>
+    <string name="home_settings">设置</string>
+    <string name="home_search_placeholder">搜索恋爱贴图包</string>
+    <string name="home_chip_trending">热门</string>
+    <string name="home_chip_animated">动态</string>
+    <string name="home_chip_saved">收藏 · %1$d</string>
+    <string name="home_no_results_title">没有与“%1$s”相关的贴图包</string>
+    <string name="home_no_results_body">试试搜索主题名称，比如“可爱”或“动漫”。</string>
+    <string name="toast_still_offline">仍处于离线状态，请稍后再试。</string>
+    <string name="toast_opening_play_store">正在打开 Play Store…</string>
+
+    <!-- Pack page -->
+    <string name="detail_made_by_you">由你制作</string>
+
+    <!-- My Packs -->
+    <string name="my_packs_section_installed">已添加到 WhatsApp · %1$d</string>
+    <string name="my_packs_section_own">由你制作 · %1$d</string>
+    <string name="my_packs_yours">自制</string>
+    <string name="my_packs_menu_readd">重新添加到 WhatsApp</string>
+    <string name="my_packs_menu_add">添加到 WhatsApp</string>
+    <string name="my_packs_menu_remove">从本应用中移除</string>
+    <string name="my_packs_menu_delete">删除贴图包</string>
+    <string name="my_packs_remove_title">要从本应用中移除“%1$s”吗？</string>
+    <string name="my_packs_remove_body">这只会删除本机上的副本。WhatsApp 中的贴图包会一直保留，直到你在 WhatsApp 中将其移除。</string>
+    <string name="my_packs_remove_confirm">移除</string>
+    <string name="my_packs_delete_title">要删除“%1$s”吗？</string>
+    <string name="my_packs_delete_body">这会从本机删除该贴图包及其中的所有贴图，且无法撤销。如果你已将它添加到 WhatsApp，WhatsApp 中的副本会保留。</string>
+    <string name="my_packs_delete_confirm">删除</string>
+    <string name="my_packs_toast_removed">已从本应用中移除</string>
+    <string name="my_packs_toast_deleted">贴图包已删除</string>
+    <string name="my_packs_empty_title">还没有贴图包</string>
+    <string name="my_packs_empty_body">你添加到 WhatsApp 的贴图包，以及你亲手制作的贴图包，都会显示在这里。</string>
+    <string name="common_browse_packs">浏览贴图包</string>
+    <string name="my_packs_empty_make_own">亲手制作</string>
+    <string name="my_packs_info_removal">在这里移除贴图包只会删除本应用中的副本。WhatsApp 中的副本会一直保留，直到你在 WhatsApp 中将其移除。</string>
+    <string name="my_packs_saved">收藏的贴图包</string>
+
+    <!-- Saved -->
+    <string name="saved_title">收藏</string>
+    <plurals name="saved_pack_count">
+        <item quantity="other">%d 个贴图包</item>
+    </plurals>
+    <string name="saved_empty_title">还没有收藏的贴图包</string>
+    <string name="saved_empty_body">点按任意贴图包上的爱心，即可收藏到这里，方便以后查看。</string>
+
+    <!-- Create a pack: import -->
+    <string name="create_import_title">新贴图包</string>
+    <plurals name="create_selected_count">
+        <item quantity="other">已选 %d 项</item>
+    </plurals>
+    <string name="create_source_photos">照片</string>
+    <string name="create_source_camera">相机</string>
+    <string name="create_source_video">视频</string>
+    <string name="create_next">下一步</string>
+    <plurals name="create_next_count">
+        <item quantity="other">下一步 · %d 张贴图</item>
+    </plurals>
+    <string name="create_import_hint_ready">“下一步”会在本机上抠出每张图片的主体。每个贴图包最多 %1$d 张。</string>
+    <string name="create_import_hint_pick">请至少选择 %1$d 张（已选 %2$d/%1$d）。每个贴图包最多 %3$d 张。</string>
+    <string name="create_item_remove">从贴图包中移除</string>
+    <string name="create_item_add">添加到贴图包</string>
+    <string name="create_viewfinder">取景框</string>
+    <plurals name="create_shot_count">
+        <item quantity="other">已拍 %d 张</item>
+    </plurals>
+    <string name="create_take_picture">拍照</string>
+    <string name="create_toast_max">最多只能添加 %1$d 张贴图</string>
+    <string name="create_toast_shot_added">照片已添加到贴图包</string>
+
+    <!-- Create a pack: cut out -->
+    <string name="create_editor_title">抠图</string>
+    <string name="create_undo">撤销</string>
+    <string name="create_toast_nothing_to_undo">没有可撤销的操作</string>
+    <string name="create_tool_auto">自动</string>
+    <string name="create_tool_brush">画笔</string>
+    <string name="create_tool_erase">擦除</string>
+    <string name="create_tool_text">文字</string>
+    <string name="create_tool_zoom">缩放</string>
+    <string name="create_hint_zoomed">再次点按“缩放”以适应屏幕</string>
+    <string name="create_hint_auto">点按“自动”即可抠出主体</string>
+    <string name="create_hint_auto_done">已在本机完成抠图，未上传任何内容。</string>
+    <string name="create_hint_brush">点按图片，恢复被去掉的部分</string>
+    <string name="create_hint_erase">点按残留部分即可擦除</string>
+    <string name="create_hint_text">在下方输入文字</string>
+    <string name="create_hint_default">放大以修整边缘</string>
+    <string name="create_cutting_out_on_phone">正在本机上抠图…</string>
+    <string name="create_cutting_out">正在抠图…</string>
+    <string name="create_brush_size">画笔大小</string>
+    <string name="create_eraser_size">橡皮擦大小</string>
+    <string name="create_caption_placeholder">添加文字</string>
+    <string name="create_outline_title">白色描边</string>
+    <string name="create_outline_body">在任何聊天背景上都清晰可见。WhatsApp 推荐使用。</string>
+    <string name="create_edit_sticker">编辑这张贴图</string>
+
+    <!-- Create a pack: details -->
+    <string name="create_details_title">贴图包详情</string>
+    <string name="create_tray_title">贴图包图标</string>
+    <string name="create_tray_body">显示在 WhatsApp 的贴图选择器中。点按下方的贴图即可设为图标。</string>
+    <string name="create_use_as_tray">设为贴图包图标</string>
+    <string name="create_name_label">贴图包名称</string>
+    <string name="create_name_placeholder">例如：永远的我们</string>
+    <string name="create_info_specs">%1$s · %2$s · 512×512 WebP</string>
+    <string name="create_kind_animated">动态</string>
+    <string name="create_kind_static">静态</string>
+    <string name="create_info_body">每张不超过 100 KB，在本机制作，不会上传任何内容。</string>
+    <string name="create_save_only">仅保存到“我的贴图包”</string>
+    <string name="create_toast_saved">已保存到“我的贴图包”</string>
+    <string name="create_untitled">未命名贴图包</string>
+    <string name="create_publisher">由你制作</string>
+
+    <!-- Settings -->
+    <string name="settings_title">设置</string>
+    <string name="settings_alerts_title">新贴图包提醒</string>
+    <string name="settings_alerts_on">仅在有新贴图包时通知你。</string>
+    <string name="settings_alerts_off">已关闭。你不会收到新贴图包的通知。</string>
+    <string name="settings_section_preferences">偏好设置</string>
+    <string name="settings_section_about">关于</string>
+    <string name="settings_edit_themes">编辑主题</string>
+    <plurals name="settings_theme_count">
+        <item quantity="other">%d 个主题</item>
+    </plurals>
+    <string name="settings_language">语言</string>
+    <string name="settings_clear">清除已下载的贴图包</string>
+    <string name="settings_storage_none">无</string>
+    <string name="settings_size_mb">%1$.1f MB</string>
+    <string name="settings_rate">给我们评分</string>
+    <string name="settings_contact">联系我们</string>
+    <string name="settings_more_apps">更多应用</string>
+    <string name="settings_ad_badge">广告</string>
+    <string name="settings_privacy">隐私政策</string>
+    <string name="settings_version">版本</string>
+    <string name="settings_free_card">Love Stickers 现在免费，以后也永远免费。没有广告，无需账号，不做任何追踪。你的照片永远不会离开你的手机。</string>
+    <string name="settings_toast_alerts_on">已开启新贴图包提醒</string>
+    <string name="settings_toast_alerts_off">已关闭新贴图包提醒</string>
+    <string name="settings_toast_nothing_to_clear">没有可清除的内容</string>
+    <string name="settings_toast_cleared">已清除下载内容</string>
+    <string name="settings_notif_title">要允许 Love Stickers 发送通知吗？</string>
+    <string name="settings_notif_body">Android 只会询问一次。我们只在有新贴图包时通知你，绝不推送促销信息。</string>
+    <string name="settings_notif_deny">不允许</string>
+    <string name="settings_notif_allow">允许</string>
+    <string name="settings_clear_title">要清除已下载的贴图包吗？</string>
+    <string name="settings_clear_body">这会移除本应用中存储的副本（%1$s）。已在 WhatsApp 中的贴图包不受影响。</string>
+    <string name="settings_clear_keep">保留</string>
+    <string name="settings_clear_confirm">清除</string>
+    <string name="toast_no_email_app">本机没有电子邮件应用。</string>
+    <string name="toast_link_failed">无法打开该链接。</string>
+
+    <!-- Rate us -->
+    <string name="rate_title">喜欢 Love Stickers 吗？</string>
+    <string name="rate_body">你的真实评分能帮助更多人找到一款无广告的贴图应用。</string>
+    <plurals name="rate_star">
+        <item quantity="other">%d 星</item>
+    </plurals>
+    <string name="rate_hint_idle">点按星星评分</string>
+    <string name="rate_hint_five">超喜欢！</string>
+    <string name="rate_hint_low">告诉我们哪里出了问题</string>
+    <string name="rate_maybe_later">以后再说</string>
+    <string name="rate_store_title">谢谢你！</string>
+    <string name="rate_store_body">可以在 Google Play 上也分享一下你的评价吗？这能帮助一款无广告的小应用成长。</string>
+    <string name="rate_store_cta">在 Google Play 上评分</string>
+    <string name="rate_feedback_title">我们怎样才能做得更好？</string>
+    <string name="rate_feedback_body">告诉我们哪里做得不够好。你的反馈会直接发给我们的团队，不会作为公开评价发布，而且每一条我们都会认真阅读。</string>
+    <string name="rate_feedback_placeholder">怎样才能让它成为一款 5 星应用？</string>
+    <string name="rate_feedback_cta">发送反馈</string>
+    <string name="rate_thanks_title">谢谢你，我们收到了</string>
+    <string name="rate_thanks_body">你的反馈正在发送给我们的团队，它将影响我们接下来的开发方向。</string>
+
+    <!-- Language -->
+    <string name="language_note">更改应用的显示语言。贴图包名称保持发布时的原样。</string>
+    <string name="language_system">跟随系统</string>
+    <string name="language_system_sub">设备语言</string>
+    <string name="language_rtl_badge">RTL</string>
+    <string name="language_name_en">英语</string>
+    <string name="language_name_ar">阿拉伯语</string>
+    <string name="language_name_es">西班牙语</string>
+    <string name="language_name_pt">葡萄牙语</string>
+    <string name="language_name_pt_br">葡萄牙语（巴西）</string>
+    <string name="language_name_fr">法语</string>
+    <string name="language_name_hi">印地语</string>
+    <string name="language_name_id">印度尼西亚语</string>
+    <string name="language_name_tr">土耳其语</string>
+    <string name="language_name_ur">乌尔都语</string>
+    <string name="language_name_de">德语</string>
+    <string name="language_name_ru">俄语</string>
+    <string name="language_name_it">意大利语</string>
+    <string name="language_name_zh">中文（简体）</string>
+    <string name="language_name_fa">波斯语</string>
+    <string name="language_name_he">希伯来语</string>
+    <string name="language_name_ps">普什图语</string>
+    <string name="language_name_ha">豪萨语</string>
+    <string name="language_name_my">缅甸语</string>
+
+    <!-- Contact us -->
+    <string name="contact_intro">有疑问、贴图包出了问题，或是想要某个还没有的贴图包？每条消息我们都会阅读。</string>
+    <string name="contact_message_placeholder">写下你的留言…</string>
+    <string name="contact_email_label">电子邮件 · 选填，仅在需要回复时填写</string>
+    <string name="contact_attach_note">发送时会附带应用版本和 Android 版本，不含其他信息。</string>
+    <string name="contact_send">发送</string>
+</resources>
