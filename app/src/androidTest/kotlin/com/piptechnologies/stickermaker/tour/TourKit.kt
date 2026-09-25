@@ -16,6 +16,7 @@ import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.provider.MediaStore
 import android.view.Choreographer
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
@@ -27,6 +28,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.platform.app.InstrumentationRegistry
@@ -601,6 +603,27 @@ fun ComposeTestRule.pumpUntil(description: String, timeoutMs: Long, condition: (
             throw AssertionError("Timed out after ${timeoutMs}ms waiting for: $description")
         }
         pump(150)
+    }
+}
+
+/** A toast in a Material snackbar host: a polite live region that can be dismissed. */
+private val toastNode: SemanticsMatcher =
+    SemanticsMatcher.keyIsDefined(SemanticsActions.Dismiss) and
+        SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite)
+
+/**
+ * Clears toasts before a capture. Home shows them one after another for 4 s
+ * each on the compose clock, which the tour's waits barely move, so taps made
+ * minutes earlier can still cover the next screenshot. Dismisses the visible
+ * one through its accessibility action and moves the clock past the timeout.
+ */
+fun ComposeTestRule.clearToasts() {
+    repeat(6) {
+        if (exists(toastNode)) {
+            runCatching { onAllNodes(toastNode).onFirst().performSemanticsAction(SemanticsActions.Dismiss) }
+        }
+        mainClock.advanceTimeBy(5_000)
+        waitForIdle()
     }
 }
 

@@ -143,15 +143,18 @@ fun AddPill(
                 .border(1.dp, lineColor, LoveShapes.Pill),
             contentAlignment = Alignment.Center
         ) {
-            // Rose progress fill inside the control.
+            // Rose progress fill inside the control. matchParentSize keeps it out of
+            // the pill's own measurement: sized against the row instead, the fill
+            // stretched the pill as the download progressed.
             if (fill > 0f) {
-                Box(
-                    Modifier
-                        .fillMaxHeight()
-                        .align(Alignment.CenterStart)
-                        .fillMaxWidth(fill)
-                        .background(Rose.copy(alpha = 0.18f))
-                )
+                Box(Modifier.matchParentSize()) {
+                    Box(
+                        Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth(fill)
+                            .background(Rose.copy(alpha = 0.18f))
+                    )
+                }
             }
             Crossfade(targetState = state, label = "pillContent") { st ->
                 Row(

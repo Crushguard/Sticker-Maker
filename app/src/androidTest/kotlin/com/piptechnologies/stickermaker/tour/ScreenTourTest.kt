@@ -168,16 +168,19 @@ class ScreenTourTest {
             savedBytes?.let { StorageEmulator.write(brokenFile, it, "image/webp") }
         }
         step("Downloading") {
+            // The bar, unlike the card pill, lets Compose go idle mid-download, so
+            // the default clock works here and polls fast enough for a small pack.
             val throttled = EmulatorConsole.networkSpeed("edge")
-            val inFlight = if (throttled) downloadingAtLeast(20) else addBar("Downloading", substring = true)
-            compose.withManualClock {
-                compose.onAllNodes(addBar("Download failed · Retry")).onFirst().performClick()
-                compose.pumpUntil(inFlight.description, 90_000) { compose.exists(inFlight) }
-                shot(Frame.ADD_DOWNLOADING,
-                    if (throttled) "Retry after the file was restored; network slowed to EDGE through the emulator console to hold the state."
-                    else "Retry after the file was restored (captured at full network speed).",
-                    quick = true)
+            compose.tap(addBar("Download failed · Retry"))
+            if (throttled) {
+                compose.waitFor(downloadingAtLeast(20), 90_000)
+            } else {
+                compose.waitFor(addBar("Downloading", substring = true), 30_000)
             }
+            shot(Frame.ADD_DOWNLOADING,
+                if (throttled) "Retry after the file was restored; network slowed to EDGE through the emulator console to hold the state."
+                else "Retry after the file was restored (captured at full network speed).",
+                quick = true)
             EmulatorConsole.networkSpeed("full")
         }
         step("Sent to WhatsApp") {
@@ -233,6 +236,7 @@ class ScreenTourTest {
             compose.waitFor(inCard("Clingy Mango", hasClickLabel("Added")), 30_000)
         }
         step("Card pill states") {
+            compose.clearToasts()
             compose.reveal(card("Mango Moves"))
             compose.settle()
             val throttled = EmulatorConsole.networkSpeed("edge")
@@ -252,6 +256,7 @@ class ScreenTourTest {
             compose.waitFor(inCard("Mango Moves", hasClickLabel("Added")), 30_000)
         }
         step("Trending") {
+            compose.clearToasts()
             compose.scrollListToTop(card("Clingy Mango"))
             compose.tap(hasClickLabel("Trending"))
             shot(Frame.HOME_TRENDING, "Six themes picked; two packs added, two hearted (♥ Saved chip shows).")
