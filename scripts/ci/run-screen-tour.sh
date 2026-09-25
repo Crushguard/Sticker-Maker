@@ -22,6 +22,8 @@ adb shell am instrument -w \
 set -e
 
 adb logcat -d > "$OUT/logcat.txt" 2>/dev/null || true
+# Warnings and errors only: small enough to publish next to the screenshots.
+adb logcat -d -v time '*:W' > "$OUT/logcat-warnings.txt" 2>/dev/null || true
 rm -rf "$OUT/tour"
 if adb shell run-as "$APP" ls files/tour >/dev/null 2>&1; then
   adb exec-out run-as "$APP" tar -cf - -C files tour | tar -xf - -C "$OUT"

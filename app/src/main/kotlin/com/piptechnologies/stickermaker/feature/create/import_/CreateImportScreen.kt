@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,6 +77,7 @@ import com.piptechnologies.stickermaker.feature.create.ImportSource
 import com.piptechnologies.stickermaker.feature.create.MonoCounterText
 import com.piptechnologies.stickermaker.feature.create.PrimaryButton
 import com.piptechnologies.stickermaker.feature.create.createPackViewModel
+import kotlinx.coroutines.launch
 
 private val ViewfinderHintColor = Color(0xFFA2A9B4)
 
@@ -97,13 +99,16 @@ fun CreateImportScreen(
     val state by viewModel.state.collectAsState()
     val toaster = remember { SnackbarHostState() }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     // A finished export left this session behind; entering Import starts anew.
     LaunchedEffect(Unit) { viewModel.startFreshSessionIfFinished() }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
-            if (event is CreateEvent.ShowToast) toaster.showToast(event.message.asString(context), event.check)
+            if (event is CreateEvent.ShowToast) {
+                scope.launch { toaster.showToast(event.message.asString(context), event.check) }
+            }
         }
     }
 

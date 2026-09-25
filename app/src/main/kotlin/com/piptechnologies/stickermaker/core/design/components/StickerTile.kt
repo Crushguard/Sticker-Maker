@@ -51,6 +51,7 @@ private val CheckShape = RoundedCornerShape(7.dp)
  * the check (own-pack editing).
  * @param label optional mono caption pinned bottom-start (picker frame ids).
  * @param rotation slight playful tilt the detail grid applies per tile.
+ * @param bordered draws the 1dp hairline; the pack page's grid has none.
  */
 @Composable
 fun StickerTile(
@@ -63,6 +64,7 @@ fun StickerTile(
     radius: Dp = 14.dp,
     contentPadding: Dp = 8.dp,
     rotation: Float = 0f,
+    bordered: Boolean = true,
     label: String? = null,
     contentDescription: String? = null,
     content: @Composable () -> Unit = {}
@@ -75,10 +77,14 @@ fun StickerTile(
             .rotate(rotation)
             .clip(shape)
             .background(background)
-            .border(
-                width = if (selected) 2.dp else 1.dp,
-                color = if (selected) Rose else Border,
-                shape = shape
+            .then(
+                if (bordered || selected) {
+                    Modifier.border(
+                        width = if (selected) 2.dp else 1.dp,
+                        color = if (selected) Rose else Border,
+                        shape = shape
+                    )
+                } else Modifier
             )
             .then(
                 if (onClick != null) {

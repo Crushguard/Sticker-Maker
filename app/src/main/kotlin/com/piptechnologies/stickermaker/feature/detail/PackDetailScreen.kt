@@ -180,7 +180,7 @@ internal fun PackDetailContent(
                     onClick = onToggleFavorite
                 )
                 TopBarIconButton(
-                    icon = LoveIcons.Share2,
+                    icon = LoveIcons.Send,
                     contentDescription = stringResource(R.string.pack_share),
                     tint = Ink2,
                     onClick = onShare
@@ -231,7 +231,8 @@ internal fun PackDetailContent(
                         StickerTile(
                             background = DetailTileBg,
                             radius = 16.dp,
-                            contentPadding = 6.dp
+                            contentPadding = 6.dp,
+                            bordered = false
                         ) {
                             AsyncImage(
                                 model = sticker.model,

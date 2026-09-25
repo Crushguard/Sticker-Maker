@@ -108,7 +108,8 @@ def main():
                "(14 packs, 8 themes); the debug build points at them with `-PfirebaseEmulatorHost=10.0.2.2`")
     out.append("- **WhatsApp:** a test double (`testing/whatsapp-stub`) that reads each pack back "
                "through the app's ContentProvider and checks WhatsApp's pack rules before answering")
-    out.append("- **Test log:** [`app/instrument.txt`](app/instrument.txt)\n")
+    out.append("- **Test log:** [`app/instrument.txt`](app/instrument.txt) · "
+               "device warnings and errors: [`app/logcat-warnings.txt`](app/logcat-warnings.txt)\n")
     out.append("Design frames are rendered from `design/Prototype.dc.html`. The prototype's sample "
                "photos and own-pack stickers were never exported with the design, so frames 18–24 and "
                "26–28 show empty tiles on the design side; their layout is still the reference.\n")

@@ -38,6 +38,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -89,6 +90,7 @@ import com.piptechnologies.stickermaker.feature.create.CutStatus
 import com.piptechnologies.stickermaker.feature.create.createPackViewModel
 import com.piptechnologies.stickermaker.feature.create.isBusy
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
+import kotlinx.coroutines.launch
 
 private val InfoCardBg = Color(0xFFF6F7F9)
 private val InfoCardLine = Color(0xFFEBEEF2)
@@ -108,6 +110,7 @@ fun CreatePackDetailsScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val toaster = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     var showNoWhatsApp by remember { mutableStateOf(false) }
 
@@ -122,7 +125,9 @@ fun CreatePackDetailsScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                is CreateEvent.ShowToast -> toaster.showToast(event.message.asString(context), event.check)
+                // Toasts run on their own so ExportComplete is never held behind one.
+                is CreateEvent.ShowToast ->
+                    scope.launch { toaster.showToast(event.message.asString(context), event.check) }
                 is CreateEvent.LaunchAddToWhatsApp -> {
                     val intent = AddStickerPackFlow.createBestIntent(
                         context, event.identifier, event.packName
