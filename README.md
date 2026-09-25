@@ -106,8 +106,34 @@ emulator on every push to a `claude/**` branch:
    offline, add states including a real failed download, own packs made with
    ML Kit, My Packs, Settings) and screenshots each one. The stub reads every
    pack back through the app's ContentProvider and checks WhatsApp's pack rules;
-4. publishes the screenshots to the `screenshots` branch, whose README maps
-   each one to its design frame and route.
+4. switches the app through every language (`LocaleTourTest`) and captures
+   Home, a pack page, My Packs and Settings in each;
+5. publishes the screenshots to the `screenshots` branch, whose README maps
+   each one to its design frame and route, with a grid of every language.
+
+## Languages
+
+The app ships English plus the 18 languages of the RecoverMe and Status Saver
+apps: Arabic, German, Spanish, Persian, French, Hausa, Hebrew, Hindi,
+Indonesian, Italian, Burmese, Pashto, Portuguese (Portugal), Portuguese
+(Brazil), Russian, Turkish, Urdu and Simplified Chinese. Arabic, Persian,
+Hebrew, Pashto and Urdu lay out right to left.
+
+- All copy lives in `app/src/main/res/values/strings.xml`; each language has a
+  `values-xx/strings.xml` (Indonesian is `values-in`, Hebrew `values-iw`,
+  Brazilian Portuguese `values-pt-rBR`). Pack names are catalog data and stay
+  as published.
+- Settings › Language sets Android's per-app locale through AppCompat, which
+  also backs Android 13's per-app language setting
+  (`res/xml/locales_config.xml`); `AppLanguages` lists the languages.
+- Adding or changing a string: edit `values/strings.xml`, then every
+  `values-xx/strings.xml`. `StringResourcesTest` fails on a missing key, a
+  broken placeholder or missing plural forms, `LocalizedFormattingTest`
+  formats every string and plural in every language, and `LocalesConfigTest`
+  keeps `locales_config.xml` in step with the Language screen.
+- In right-to-left languages a string that would start with Latin text or a
+  pack-name placeholder begins with `&#x200F;` (RLM) so its paragraph stays
+  right to left.
 
 ## Trying it on a phone
 
