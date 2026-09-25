@@ -115,9 +115,48 @@ object LoveIcons {
         )
     }
 
-    /** The speech-bubble glyph the Add controls use to say "WhatsApp" in our own colours. */
+    /**
+     * The glyph the Add controls use to say "WhatsApp" in our own colours: the
+     * prototype draws every "message-circle" as its waGlyph, a chat bubble with
+     * a filled handset inside.
+     */
     val MessageCircle: ImageVector by lazy {
-        lucideIcon("message-circle", "M7.9 20A9 9 0 1 0 4 16.1L2 22Z")
+        ImageVector.Builder(
+            name = "whatsapp-glyph",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        )
+            .addPath(
+                pathData = addPathNodes("M7.9 20A9 9 0 1 0 4 16.1L2 22Z"),
+                stroke = SolidColor(Color.Black),
+                strokeLineWidth = 1.9f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            )
+            // SVG: translate(6.5 6.5) scale(0.46), i.e. scale first, then move.
+            .addGroup(name = "handset", translationX = 6.5f, translationY = 6.5f, scaleX = 0.46f, scaleY = 0.46f)
+            .addPath(
+                pathData = addPathNodes(
+                    "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 " +
+                        "19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 " +
+                        ".7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 " +
+                        "12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                ),
+                fill = SolidColor(Color.Black)
+            )
+            .clearGroup()
+            .build()
+    }
+
+    /** Paper plane: the pack page's share action (Prototype `ic.share`). */
+    val Send: ImageVector by lazy {
+        lucideIcon(
+            "send",
+            "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
+            "m21.854 2.147-10.94 10.939"
+        )
     }
 
     val Moon: ImageVector by lazy {

@@ -120,18 +120,13 @@ fun PackCard(
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
-            when {
-                onFavoriteToggle != null -> CardIconButton(
+            // Home and Saved: heart, then the pill. My Packs: pill, then the ⋮ menu.
+            if (onFavoriteToggle != null) {
+                CardIconButton(
                     icon = if (favorite) LoveIcons.HeartFilled else LoveIcons.Heart,
                     tint = if (favorite) Rose else HeartIdle,
                     contentDescription = if (favorite) "Remove from saved" else "Save pack",
                     onClick = onFavoriteToggle
-                )
-                onMenu != null -> CardIconButton(
-                    icon = LoveIcons.MoreHorizontal,
-                    tint = Ink2,
-                    contentDescription = "Pack options",
-                    onClick = onMenu
                 )
             }
             AddPill(
@@ -140,6 +135,14 @@ fun PackCard(
                 iconOnlyWhenAdded = iconOnlyWhenAdded,
                 onClick = onAdd
             )
+            if (onMenu != null) {
+                CardIconButton(
+                    icon = LoveIcons.MoreVertical,
+                    tint = Ink2,
+                    contentDescription = "Pack options",
+                    onClick = onMenu
+                )
+            }
         }
         if (thumbnails.isNotEmpty()) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

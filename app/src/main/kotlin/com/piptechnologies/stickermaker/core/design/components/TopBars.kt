@@ -186,7 +186,7 @@ private fun LoveTopBarDetailPreview() {
             height = 52.dp,
             actions = {
                 TopBarIconButton(LoveIcons.Heart, "Save pack", onClick = {})
-                TopBarIconButton(LoveIcons.Share2, "Share Love Stickers", onClick = {})
+                TopBarIconButton(LoveIcons.Send, "Share Love Stickers", onClick = {})
             }
         )
     }

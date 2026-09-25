@@ -43,6 +43,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,6 +97,7 @@ import com.piptechnologies.stickermaker.feature.create.PrimaryButton
 import com.piptechnologies.stickermaker.feature.create.StickerRenderer
 import com.piptechnologies.stickermaker.feature.create.createPackViewModel
 import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
 
 private val UndoDisabled = Color(0xFFB4BAC4)
 private val ToolIdle = Color(0xFFC3C9D2)
@@ -119,6 +121,7 @@ fun CreateEditorScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val toaster = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val captionTypeface = remember {
         try {
@@ -130,7 +133,7 @@ fun CreateEditorScreen(
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
-            if (event is CreateEvent.ShowToast) toaster.showToast(event.message, event.check)
+            if (event is CreateEvent.ShowToast) scope.launch { toaster.showToast(event.message, event.check) }
         }
     }
 
