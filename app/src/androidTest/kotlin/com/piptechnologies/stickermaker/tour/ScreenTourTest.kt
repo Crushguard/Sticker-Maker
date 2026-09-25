@@ -169,16 +169,15 @@ class ScreenTourTest {
         }
         step("Downloading") {
             val throttled = EmulatorConsole.networkSpeed("edge")
-            compose.tap(addBar("Download failed · Retry"))
-            if (throttled) {
-                compose.waitFor(downloadingAtLeast(20), 90_000)
-            } else {
-                compose.waitFor(addBar("Downloading", substring = true), 30_000)
+            val inFlight = if (throttled) downloadingAtLeast(20) else addBar("Downloading", substring = true)
+            compose.withManualClock {
+                compose.onAllNodes(addBar("Download failed · Retry")).onFirst().performClick()
+                compose.pumpUntil(inFlight.description, 90_000) { compose.exists(inFlight) }
+                shot(Frame.ADD_DOWNLOADING,
+                    if (throttled) "Retry after the file was restored; network slowed to EDGE through the emulator console to hold the state."
+                    else "Retry after the file was restored (captured at full network speed).",
+                    quick = true)
             }
-            shot(Frame.ADD_DOWNLOADING,
-                if (throttled) "Retry after the file was restored; network slowed to EDGE through the emulator console to hold the state."
-                else "Retry after the file was restored (captured at full network speed).",
-                quick = true)
             EmulatorConsole.networkSpeed("full")
         }
         step("Sent to WhatsApp") {
@@ -237,12 +236,15 @@ class ScreenTourTest {
             compose.reveal(card("Mango Moves"))
             compose.settle()
             val throttled = EmulatorConsole.networkSpeed("edge")
-            compose.tap(inCard("Mango Moves", hasClickLabel("Add")))
-            compose.waitFor(
-                inCard("Mango Moves", if (throttled) pillDownloadingAtLeast(15) else hasClickLabelStartingWith("Downloading")),
-                90_000
+            val inFlight = inCard(
+                "Mango Moves",
+                if (throttled) pillDownloadingAtLeast(15) else hasClickLabelStartingWith("Downloading")
             )
-            shot(Frame.CARD_PILL, "Card pills in miniature: Clingy Mango added, Mango Moves downloading (network slowed to EDGE).", quick = true)
+            compose.withManualClock {
+                compose.onAllNodes(inCard("Mango Moves", hasClickLabel("Add"))).onFirst().performClick()
+                compose.pumpUntil(inFlight.description, 90_000) { compose.exists(inFlight) }
+                shot(Frame.CARD_PILL, "Card pills in miniature: Clingy Mango added, Mango Moves downloading (network slowed to EDGE).", quick = true)
+            }
             EmulatorConsole.networkSpeed("full")
             compose.awaitStubDialog(120_000)
             Tour.stubContractReport()

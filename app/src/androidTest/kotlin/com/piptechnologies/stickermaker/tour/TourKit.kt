@@ -578,6 +578,32 @@ fun ComposeTestRule.pump(ms: Long = 250) {
     SystemClock.sleep(ms)
 }
 
+/**
+ * Runs [block] with the compose clock under manual control. A download in
+ * flight animates its progress until it ends, so Compose never goes idle and
+ * every idling wait (taps, lookups) would block until the download is over;
+ * with autoAdvance off, lookups return at once and [pump] moves the clock.
+ */
+fun <T> ComposeTestRule.withManualClock(block: () -> T): T {
+    mainClock.autoAdvance = false
+    try {
+        return block()
+    } finally {
+        mainClock.autoAdvance = true
+    }
+}
+
+/** Pumps the app until [condition] holds; fails after [timeoutMs]. */
+fun ComposeTestRule.pumpUntil(description: String, timeoutMs: Long, condition: () -> Boolean) {
+    val deadline = SystemClock.uptimeMillis() + timeoutMs
+    while (!condition()) {
+        if (SystemClock.uptimeMillis() > deadline) {
+            throw AssertionError("Timed out after ${timeoutMs}ms waiting for: $description")
+        }
+        pump(150)
+    }
+}
+
 /** Waits, pumping the app, for the WhatsApp stub's confirm dialog. */
 fun ComposeTestRule.awaitStubDialog(timeoutMs: Long = 30_000): UiObject2 {
     val deadline = SystemClock.uptimeMillis() + timeoutMs

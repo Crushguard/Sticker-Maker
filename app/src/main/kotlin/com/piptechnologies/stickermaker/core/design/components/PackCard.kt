@@ -7,11 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -24,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -31,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -100,24 +100,13 @@ fun PackCard(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Column(Modifier.weight(1f)) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        title,
-                        style = MaterialTheme.typography.titleLarge,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false)
-                    )
-                    if (animated) AnimatedBadge()
-                }
+                TitleWithBadge(title, animated)
+                // Two lines: in some languages "stickers" and "adds" are long words.
                 Text(
                     packMetaLine(stickerCount, downloadsLabel),
                     style = MetaText,
                     color = Muted,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = 4.dp)
                 )
@@ -157,6 +146,47 @@ fun PackCard(
                     ) { thumb() }
                 }
             }
+        }
+    }
+}
+
+/**
+ * The one-line card title, followed by the ANIMATED badge when both fit. When
+ * they don't (long names, or the longer Add labels of some languages), the
+ * badge gives way so the name shows in full; a name too long even alone ends
+ * in an ellipsis.
+ */
+@Composable
+private fun TitleWithBadge(title: String, animated: Boolean) {
+    Layout(
+        content = {
+            Text(
+                title,
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            if (animated) AnimatedBadge()
+        }
+    ) { measurables, constraints ->
+        val titleMeasurable = measurables[0]
+        val gap = 8.dp.roundToPx()
+        val badge = measurables.getOrNull(1)?.let { badgeMeasurable ->
+            val needed = titleMeasurable.maxIntrinsicWidth(constraints.maxHeight) + gap +
+                badgeMeasurable.maxIntrinsicWidth(constraints.maxHeight)
+            if (needed <= constraints.maxWidth) badgeMeasurable.measure(Constraints()) else null
+        }
+        val titleMaxWidth = if (badge != null && constraints.hasBoundedWidth) {
+            (constraints.maxWidth - gap - badge.width).coerceAtLeast(0)
+        } else {
+            constraints.maxWidth
+        }
+        val titlePlaceable = titleMeasurable.measure(constraints.copy(minWidth = 0, maxWidth = titleMaxWidth))
+        val width = titlePlaceable.width + (badge?.let { gap + it.width } ?: 0)
+        val height = maxOf(titlePlaceable.height, badge?.height ?: 0)
+        layout(width, height) {
+            titlePlaceable.placeRelative(0, (height - titlePlaceable.height) / 2)
+            if (badge != null) badge.placeRelative(titlePlaceable.width + gap, (height - badge.height) / 2)
         }
     }
 }

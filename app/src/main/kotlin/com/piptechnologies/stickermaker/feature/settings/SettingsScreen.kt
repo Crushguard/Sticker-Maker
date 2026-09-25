@@ -53,6 +53,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -107,7 +108,14 @@ private val HeroSubStyle = TextStyle(fontFamily = Hanken, fontWeight = FontWeigh
 private val SectionLabelStyle = TextStyle(fontFamily = Mono, fontWeight = FontWeight.W600, fontSize = 11.sp, letterSpacing = 0.08.em)
 private val RowLabelStyle = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 14.5.sp)
 private val RowValueStyle = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W400, fontSize = 13.5.sp)
-private val VersionValueStyle = TextStyle(fontFamily = Mono, fontWeight = FontWeight.W400, fontSize = 12.sp)
+// "1.0.0 (1)" has no letters to set its direction, so pin it LTR; right-to-left
+// languages would otherwise show it as "(1) 1.0.0".
+private val VersionValueStyle = TextStyle(
+    fontFamily = Mono,
+    fontWeight = FontWeight.W400,
+    fontSize = 12.sp,
+    textDirection = TextDirection.Ltr
+)
 private val AdBadgeStyle = TextStyle(fontFamily = Mono, fontWeight = FontWeight.W600, fontSize = 9.sp, letterSpacing = 0.06.em)
 private val FreeCardStyle = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W400, fontSize = 12.5.sp, lineHeight = 19.sp)
 
