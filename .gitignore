@@ -24,3 +24,7 @@ firebase-debug.log
 firestore-debug.log
 ui-debug.log
 storage-debug.log
+
+# Python bytecode from the CI helper scripts
+__pycache__/
+*.pyc

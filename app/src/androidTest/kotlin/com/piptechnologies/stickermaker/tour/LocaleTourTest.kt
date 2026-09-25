@@ -51,6 +51,7 @@ class LocaleTourTest {
 
     private fun capture(language: AppLanguage) {
         val tag = language.tag
+        Tour.dismissSystemDialogs()
         applyLocale(tag)
         awaitHome(tag)
         shot(language, "home", "Home")
