@@ -8,6 +8,11 @@ OUT=${TOUR_OUT:-build/screen-tour}
 mkdir -p "$OUT"
 
 adb wait-for-device
+# The 2-core runner is saturated right after boot (Play services, System UI);
+# "isn't responding" dialogs would steal focus from the app mid-tour. Hide
+# them and let the first-boot work settle before the tour starts.
+adb shell settings put global hide_error_dialogs 1
+sleep 60
 adb install -r -t app/build/outputs/apk/debug/app-debug.apk
 adb install -r -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 # The tour installs the WhatsApp test double itself, after the "not installed" frame.

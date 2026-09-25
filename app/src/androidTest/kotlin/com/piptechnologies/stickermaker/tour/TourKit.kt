@@ -269,6 +269,14 @@ object Tour {
         throw AssertionError("WhatsApp contract check failed:\n${failed ?: "no report on screen"}")
     }
 
+    /**
+     * Taps Wait on an "… isn't responding" dialog if the loaded CI emulator
+     * raised one over the app (they are hidden, but a slow boot can race it).
+     */
+    fun dismissSystemDialogs() {
+        device.findObject(By.res("android", "aerr_wait"))?.click()
+    }
+
     fun cancelStubIfOpen() {
         device.findObject(By.desc("stub-cancel"))?.click()
         device.wait(Until.gone(By.desc("stub-cancel")), 5_000)
@@ -525,6 +533,7 @@ fun ComposeTestRule.reveal(matcher: SemanticsMatcher, timeoutMs: Long = 20_000) 
  * toast) stall while the tour waits on UiAutomator or sleeps.
  */
 fun ComposeTestRule.pump(ms: Long = 250) {
+    Tour.dismissSystemDialogs()
     mainClock.advanceTimeBy(ms)
     SystemClock.sleep(ms)
 }

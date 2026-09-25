@@ -534,6 +534,7 @@ class ScreenTourTest {
     // ------------------------------------------------------------------ //
 
     private fun step(name: String, block: () -> Unit) {
+        Tour.dismissSystemDialogs()
         try {
             block()
         } catch (t: Throwable) {
