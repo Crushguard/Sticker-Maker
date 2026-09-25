@@ -1,0 +1,11 @@
+/* Local stand-in for
+   https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap
+   /fonts/*.ttf is served from app/src/main/res/font/ (the same static instances the app ships). */
+@font-face{font-family:'Hanken Grotesk';font-style:normal;font-weight:400;font-display:block;src:url(/fonts/hg_regular.ttf) format('truetype')}
+@font-face{font-family:'Hanken Grotesk';font-style:normal;font-weight:500;font-display:block;src:url(/fonts/hg_medium.ttf) format('truetype')}
+@font-face{font-family:'Hanken Grotesk';font-style:normal;font-weight:600;font-display:block;src:url(/fonts/hg_semibold.ttf) format('truetype')}
+@font-face{font-family:'Hanken Grotesk';font-style:normal;font-weight:700;font-display:block;src:url(/fonts/hg_bold.ttf) format('truetype')}
+@font-face{font-family:'Hanken Grotesk';font-style:normal;font-weight:800;font-display:block;src:url(/fonts/hg_extrabold.ttf) format('truetype')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400;font-display:block;src:url(/fonts/jb_regular.ttf) format('truetype')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:block;src:url(/fonts/jb_medium.ttf) format('truetype')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:600;font-display:block;src:url(/fonts/jb_semibold.ttf) format('truetype')}

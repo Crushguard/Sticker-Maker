@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DC host</title>
+<!-- Served at /design/host.html so the prototype's ./assets/... URLs resolve like they do next to Prototype.dc.html -->
+<script src="/vendor/react.production.min.js"></script>
+<script src="/vendor/react-dom.production.min.js"></script>
+<script src="/shim.js"></script>
+</head>
+<body>
+<!-- Same box a <dc-import ... hint-size="390px,844px" style="width:390px;height:844px;display:block"> gets on Screens.dc.html -->
+<div id="root" style="width:390px;height:844px;display:block"></div>
+<script>
+  // Usage: /design/host.html?src=./Prototype.dc.html&props={"screen":"home","preset":"active","embedded":true}
+  window.__dcReady = false;
+  (async function boot() {
+    var q = new URLSearchParams(location.search);
+    var src = q.get('src') || './Prototype.dc.html';
+    var props = {};
+    try { props = JSON.parse(q.get('props') || '{}'); } catch (e) { DC.report('host', 'bad props JSON: ' + e.message); }
+    var loaded = await DC.load(src);
+    var m = DC.mount(loaded, props, document.getElementById('root'));
+    window.__dcProps = m.props;
+    await DC.settle();
+    window.__dcReady = true;
+  })().catch(function (e) {
+    DC.report('host', (e && e.stack) || String(e));
+    var pre = document.createElement('pre');
+    pre.setAttribute('data-dc-error', '1');
+    pre.style.cssText = 'position:fixed;inset:0;margin:0;padding:16px;background:#b00020;color:#fff;font:12px/1.4 monospace;white-space:pre-wrap';
+    pre.textContent = 'DC host error\n\n' + ((e && e.stack) || e);
+    document.body.appendChild(pre);
+    window.__dcReady = 'error';
+  });
+</script>
+</body>
+</html>

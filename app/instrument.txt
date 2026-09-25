@@ -1,0 +1,12 @@
+
+com.piptechnologies.stickermaker.tour.ScreenTourTest:s_glBindAttribLocation: bind attrib 0 name position
+s_glBindAttribLocation: bind attrib 1 name color
+s_glBindAttribLocation: bind attrib 2 name localCoord
+.........
+com.piptechnologies.stickermaker.tour.LocaleTourTest:.
+
+Time: 373.842
+
+OK (10 tests)
+
+

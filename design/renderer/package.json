@@ -1,0 +1,14 @@
+{
+  "name": "love-stickers-design-render",
+  "private": true,
+  "type": "module",
+  "description": "Renders design/Screens.dc.html frames (Prototype.dc.html) to PNG via a local DC runtime shim + Playwright",
+  "scripts": {
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "lucide": "^1.48.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
