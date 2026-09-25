@@ -15,6 +15,7 @@ import android.os.Environment
 import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.provider.MediaStore
+import android.view.Choreographer
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
@@ -48,6 +49,8 @@ import java.net.Socket
 import java.net.URL
 import java.util.Collections
 import java.util.IdentityHashMap
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import org.hamcrest.CoreMatchers.anyOf
 import org.json.JSONArray
 import org.json.JSONObject
@@ -82,8 +85,25 @@ object Tour {
 
     // ------------------------------------------------------------ capture //
 
+    /**
+     * Blocks until the UI thread has drawn [frames] more frames. A frame only
+     * starts once the previous one left the render thread, so this also waits
+     * out slow software rendering on CI before a capture.
+     */
+    fun awaitFrames(frames: Int = 3) {
+        repeat(frames) {
+            val drawn = CountDownLatch(1)
+            instrumentation.runOnMainSync {
+                Choreographer.getInstance().postFrameCallback { drawn.countDown() }
+            }
+            drawn.await(2, TimeUnit.SECONDS)
+        }
+        SystemClock.sleep(150)
+    }
+
     /** Full-screen screenshot (status bar, sheets and other apps' dialogs included). */
     fun screenshot(fileName: String): File {
+        awaitFrames()
         val bitmap = instrumentation.uiAutomation.takeScreenshot()
             ?: throw AssertionError("UiAutomation.takeScreenshot returned null")
         val file = File(outDir, fileName)
@@ -242,21 +262,11 @@ object Tour {
         check(!isInstalled(WHATSAPP)) { "com.whatsapp is still installed" }
     }
 
-    /** Waits for the stub's confirm dialog (its Add button). */
-    fun awaitStubDialog(timeoutMs: Long = 30_000): UiObject2 =
-        device.wait(Until.findObject(By.desc("stub-add")), timeoutMs)
-            ?: throw AssertionError("The WhatsApp stub dialog did not open within ${timeoutMs}ms")
-
     /** The stub's contract report; fails the step when the provider broke the contract. */
     fun stubContractReport(): String {
         device.findObject(By.desc("stub-contract-ok"))?.let { return it.text.orEmpty() }
         val failed = device.findObject(By.desc("stub-contract-failed"))?.text
         throw AssertionError("WhatsApp contract check failed:\n${failed ?: "no report on screen"}")
-    }
-
-    fun confirmStub() {
-        awaitStubDialog().click()
-        device.wait(Until.gone(By.desc("stub-add")), 15_000)
     }
 
     fun cancelStubIfOpen() {
@@ -502,9 +512,39 @@ fun ComposeTestRule.reveal(matcher: SemanticsMatcher, timeoutMs: Long = 20_000) 
         if (SystemClock.uptimeMillis() > deadline) {
             throw AssertionError("Timed out after ${timeoutMs}ms waiting for: ${matcher.description}")
         }
-        SystemClock.sleep(250)
+        pump()
     }
     runCatching { onAllNodes(matcher).onFirst().performScrollTo() }
+    waitForIdle()
+}
+
+/**
+ * Lets [ms] pass on both clocks: real time for the app's background work, and
+ * the compose test clock, which otherwise only moves inside compose waits.
+ * Without it, effects (launching WhatsApp, toast timeouts, navigation after a
+ * toast) stall while the tour waits on UiAutomator or sleeps.
+ */
+fun ComposeTestRule.pump(ms: Long = 250) {
+    mainClock.advanceTimeBy(ms)
+    SystemClock.sleep(ms)
+}
+
+/** Waits, pumping the app, for the WhatsApp stub's confirm dialog. */
+fun ComposeTestRule.awaitStubDialog(timeoutMs: Long = 30_000): UiObject2 {
+    val deadline = SystemClock.uptimeMillis() + timeoutMs
+    while (true) {
+        Tour.device.findObject(By.desc("stub-add"))?.let { return it }
+        if (SystemClock.uptimeMillis() > deadline) {
+            throw AssertionError("The WhatsApp stub dialog did not open within ${timeoutMs}ms")
+        }
+        pump()
+    }
+}
+
+/** Taps Add in the WhatsApp stub and waits for the app to get the result. */
+fun ComposeTestRule.confirmStub() {
+    awaitStubDialog().click()
+    Tour.device.wait(Until.gone(By.desc("stub-add")), 15_000)
     waitForIdle()
 }
 
@@ -525,5 +565,5 @@ fun ComposeTestRule.settle(extraMs: Long = 600) {
         // A stuck request should not block the tour; the screenshot shows what loaded.
     }
     runCatching { waitForIdle() }
-    SystemClock.sleep(extraMs)
+    pump(extraMs)
 }

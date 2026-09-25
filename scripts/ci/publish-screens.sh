@@ -38,7 +38,9 @@ fi
 rm -rf "$WORK/app"
 mkdir -p "$WORK/app"
 cp -R "$TOUR/tour/." "$WORK/app/"
-if [ -f "$TOUR/instrument.txt" ]; then cp "$TOUR/instrument.txt" "$WORK/app/"; fi
+for log in instrument.txt logcat-warnings.txt; do
+  if [ -f "$TOUR/$log" ]; then cp "$TOUR/$log" "$WORK/app/"; fi
+done
 
 python3 scripts/ci/screens_map.py \
   --root "$WORK" \

@@ -70,6 +70,8 @@ class ScreenTourTest {
     fun t01_firstRun() {
         step("Launch") {
             compose.waitFor(hasText("Love Stickers"), 10_000)
+            // Let the 400 ms fade-in finish; the 1.6 s beat runs on the same test clock.
+            compose.pump(450)
             shot(Frame.SPLASH, "Branding beat before onboarding (first run).", quick = true)
         }
         // Offline from here, so Home meets an empty cache like a first launch without signal.
@@ -180,11 +182,11 @@ class ScreenTourTest {
             EmulatorConsole.networkSpeed("full")
         }
         step("Sent to WhatsApp") {
-            Tour.awaitStubDialog(90_000)
+            compose.awaitStubDialog(90_000)
             val report = Tour.stubContractReport()
             compose.settle(300)
             shot(Frame.ADD_SENT, "Bar reads Sent to WhatsApp… under WhatsApp's confirm (test double). Provider check:\n$report", quick = true)
-            Tour.confirmStub()
+            compose.confirmStub()
         }
         step("Added") {
             compose.waitFor(addBar("Added to WhatsApp"), 30_000)
@@ -226,9 +228,9 @@ class ScreenTourTest {
         step("Add from the card pill") {
             compose.scrollListToTop(card("Clingy Mango"))
             compose.tap(inCard("Clingy Mango", hasClickLabel("Add")))
-            Tour.awaitStubDialog(90_000)
+            compose.awaitStubDialog(90_000)
             Tour.stubContractReport()
-            Tour.confirmStub()
+            compose.confirmStub()
             compose.waitFor(inCard("Clingy Mango", hasClickLabel("Added")), 30_000)
         }
         step("Card pill states") {
@@ -242,9 +244,9 @@ class ScreenTourTest {
             )
             shot(Frame.CARD_PILL, "Card pills in miniature: Clingy Mango added, Mango Moves downloading (network slowed to EDGE).", quick = true)
             EmulatorConsole.networkSpeed("full")
-            Tour.awaitStubDialog(120_000)
+            compose.awaitStubDialog(120_000)
             Tour.stubContractReport()
-            Tour.confirmStub()
+            compose.confirmStub()
             compose.waitFor(inCard("Mango Moves", hasClickLabel("Added")), 30_000)
         }
         step("Trending") {
@@ -347,12 +349,12 @@ class ScreenTourTest {
         }
         step("Export to WhatsApp") {
             compose.tap(addBar("Add to WhatsApp"))
-            Tour.awaitStubDialog(120_000)
+            compose.awaitStubDialog(120_000)
             val report = Tour.stubContractReport()
             compose.settle(300)
             extra("x03", "Own pack in WhatsApp's confirm", "packDetails",
                 "Exported on the phone (512×512 WebP, 96×96 tray) and read back through the provider:\n$report")
-            Tour.confirmStub()
+            compose.confirmStub()
             compose.waitFor(hasText("My Packs"), 30_000)
             compose.reveal(card("Us, always"), 30_000)
         }
@@ -385,9 +387,9 @@ class ScreenTourTest {
         }
         step("Add an own pack from its page") {
             compose.tap(addBar("Add to WhatsApp"))
-            Tour.awaitStubDialog(60_000)
+            compose.awaitStubDialog(60_000)
             val report = Tour.stubContractReport()
-            Tour.confirmStub()
+            compose.confirmStub()
             compose.waitFor(addBar("Added to WhatsApp"), 30_000)
             extra("x04", "Own pack added from its page", "detail/own",
                 "Local packs skip the download and hand straight to WhatsApp; provider check:\n$report")
@@ -627,7 +629,7 @@ class ScreenTourTest {
         val deadline = SystemClock.uptimeMillis() + timeoutMs
         while (SystemClock.uptimeMillis() < deadline) {
             if (condition()) return true
-            SystemClock.sleep(200)
+            compose.pump(200)
         }
         return condition()
     }
