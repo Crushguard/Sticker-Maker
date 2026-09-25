@@ -87,11 +87,6 @@ jobs:
           FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199 \
             node scripts/upload-pack.js --all --project "$PROJECT" --bucket "$BUCKET"
 
-      - name: Open the emulator console to the tour
-        # An empty token file turns console auth off; the tour slows the
-        # network through it to capture the transient Downloading states.
-        run: ": > ~/.emulator_console_auth_token"
-
       - name: Run the screen tour
         id: tour
         uses: reactivecircus/android-emulator-runner@v2

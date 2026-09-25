@@ -23,6 +23,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.piptechnologies.stickermaker.MainActivity
+import com.piptechnologies.stickermaker.core.data.download.DownloadPacing
 import com.piptechnologies.stickermaker.feature.create.editor.EDITOR_CANVAS_TAG
 import java.io.File
 import java.util.Locale
@@ -55,7 +56,7 @@ class ScreenTourTest {
     @After
     fun tidyUp() {
         Tour.cancelStubIfOpen()
-        EmulatorConsole.networkSpeed("full")
+        DownloadPacing.perFileDelayMs = 0
         if (intentsActive) {
             Intents.release()
             intentsActive = false
@@ -168,20 +169,18 @@ class ScreenTourTest {
             savedBytes?.let { StorageEmulator.write(brokenFile, it, "image/webp") }
         }
         step("Downloading") {
-            // The bar, unlike the card pill, lets Compose go idle mid-download, so
-            // the default clock works here and polls fast enough for a small pack.
-            val throttled = EmulatorConsole.networkSpeed("edge")
-            compose.tap(addBar("Download failed · Retry"))
-            if (throttled) {
-                compose.waitFor(downloadingAtLeast(20), 90_000)
-            } else {
-                compose.waitFor(addBar("Downloading", substring = true), 30_000)
+            // Against the local Storage emulator the pack arrives in half a second,
+            // so the debug build paces it (0.6 s per file) while the bar is captured.
+            DownloadPacing.perFileDelayMs = PACED_FILE_MS
+            try {
+                compose.tap(addBar("Download failed · Retry"))
+                compose.waitFor(downloadingAtLeast(50), 60_000)
+                shot(Frame.ADD_DOWNLOADING,
+                    "Retry after the file was restored; the debug build paces the download (0.6 s per file) to hold the state.",
+                    quick = true)
+            } finally {
+                DownloadPacing.perFileDelayMs = 0
             }
-            shot(Frame.ADD_DOWNLOADING,
-                if (throttled) "Retry after the file was restored; network slowed to EDGE through the emulator console to hold the state."
-                else "Retry after the file was restored (captured at full network speed).",
-                quick = true)
-            EmulatorConsole.networkSpeed("full")
         }
         step("Sent to WhatsApp") {
             compose.awaitStubDialog(90_000)
@@ -239,17 +238,17 @@ class ScreenTourTest {
             compose.clearToasts()
             compose.reveal(card("Mango Moves"))
             compose.settle()
-            val throttled = EmulatorConsole.networkSpeed("edge")
-            val inFlight = inCard(
-                "Mango Moves",
-                if (throttled) pillDownloadingAtLeast(15) else hasClickLabelStartingWith("Downloading")
-            )
-            compose.withManualClock {
-                compose.onAllNodes(inCard("Mango Moves", hasClickLabel("Add"))).onFirst().performClick()
-                compose.pumpUntil(inFlight.description, 90_000) { compose.exists(inFlight) }
-                shot(Frame.CARD_PILL, "Card pills in miniature: Clingy Mango added, Mango Moves downloading (network slowed to EDGE).", quick = true)
+            val inFlight = inCard("Mango Moves", pillDownloadingAtLeast(15))
+            DownloadPacing.perFileDelayMs = PACED_FILE_MS
+            try {
+                compose.withManualClock {
+                    compose.onAllNodes(inCard("Mango Moves", hasClickLabel("Add"))).onFirst().performClick()
+                    compose.pumpUntil(inFlight.description, 60_000) { compose.exists(inFlight) }
+                    shot(Frame.CARD_PILL, "Card pills in miniature: Clingy Mango added, Mango Moves downloading (paced by the debug build).", quick = true)
+                }
+            } finally {
+                DownloadPacing.perFileDelayMs = 0
             }
-            EmulatorConsole.networkSpeed("full")
             compose.awaitStubDialog(120_000)
             Tour.stubContractReport()
             compose.confirmStub()
@@ -657,6 +656,9 @@ class ScreenTourTest {
     }
 
     companion object {
+        /** Debug-build pause per downloaded file while a Downloading state is captured. */
+        private const val PACED_FILE_MS = 600L
+
         @BeforeClass
         @JvmStatic
         fun setUpDevice() {

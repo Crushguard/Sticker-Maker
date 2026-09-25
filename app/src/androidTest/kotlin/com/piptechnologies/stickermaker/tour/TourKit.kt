@@ -421,49 +421,6 @@ object StorageEmulator {
     }
 }
 
-/**
- * The Android emulator console, reached from the guest at 10.0.2.2:5554 (CI
- * creates an empty ~/.emulator_console_auth_token so no auth is needed).
- * Used to slow the network so the transient Downloading state can be captured.
- */
-object EmulatorConsole {
-    fun networkSpeed(preset: String): Boolean = command("network speed $preset")
-
-    private fun command(line: String): Boolean {
-        return try {
-            Socket().use { socket ->
-                socket.connect(InetSocketAddress("10.0.2.2", 5554), 3_000)
-                socket.soTimeout = 5_000
-                val input = socket.getInputStream().bufferedReader()
-                val output = socket.getOutputStream().bufferedWriter()
-                val banner = readReply(input)
-                if (banner.contains("Authentication required")) {
-                    false
-                } else {
-                    output.write("$line\r\n")
-                    output.flush()
-                    val reply = readReply(input)
-                    output.write("quit\r\n")
-                    output.flush()
-                    reply.trimEnd().endsWith("OK")
-                }
-            }
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    private fun readReply(input: java.io.BufferedReader): String {
-        val reply = StringBuilder()
-        while (true) {
-            val line = input.readLine() ?: break
-            reply.appendLine(line)
-            if (line.startsWith("OK") || line.startsWith("KO")) break
-        }
-        return reply.toString()
-    }
-}
-
 /** Photos for the Create flow, written to MediaStore like camera-roll pictures. */
 object TourPhotos {
     fun insert(count: Int, prefix: String): List<Uri> {
@@ -511,11 +468,6 @@ object TourPhotos {
 fun hasClickLabel(label: String): SemanticsMatcher =
     SemanticsMatcher("OnClick label == '$label'") { node ->
         node.config.getOrNull(SemanticsActions.OnClick)?.label == label
-    }
-
-fun hasClickLabelStartingWith(prefix: String): SemanticsMatcher =
-    SemanticsMatcher("OnClick label starts with '$prefix'") { node ->
-        node.config.getOrNull(SemanticsActions.OnClick)?.label?.startsWith(prefix) == true
     }
 
 private val verticalLazyList: SemanticsMatcher =

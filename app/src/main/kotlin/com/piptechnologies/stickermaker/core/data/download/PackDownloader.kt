@@ -2,6 +2,7 @@ package com.piptechnologies.stickermaker.core.data.download
 
 import android.content.Context
 import com.google.firebase.storage.FirebaseStorage
+import com.piptechnologies.stickermaker.BuildConfig
 import com.piptechnologies.stickermaker.core.data.di.IoDispatcher
 import com.piptechnologies.stickermaker.core.model.StickerPack
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -11,11 +12,23 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+
+/**
+ * Debug-only pause after each downloaded file, set by the on-device screen tour
+ * to hold the Downloading state long enough to capture it (the emulator's
+ * network throttle does not reliably reach the Storage emulator). Never read in
+ * release builds.
+ */
+object DownloadPacing {
+    @Volatile
+    var perFileDelayMs: Long = 0L
+}
 
 /** Progress of a pack download: whole files completed out of [totalFiles]. */
 data class DownloadProgress(
@@ -62,6 +75,9 @@ class PackDownloader @Inject constructor(
                 storage.getReference(path).getFile(File(tmpDir, fileName)).await()
                 val done = index + 1
                 emit(DownloadProgress(done, paths.size, done.toFloat() / paths.size))
+                if (BuildConfig.DEBUG && DownloadPacing.perFileDelayMs > 0) {
+                    delay(DownloadPacing.perFileDelayMs)
+                }
             }
             if (finalDir.exists() && !finalDir.deleteRecursively()) {
                 throw IOException("Could not replace ${finalDir.absolutePath}")
