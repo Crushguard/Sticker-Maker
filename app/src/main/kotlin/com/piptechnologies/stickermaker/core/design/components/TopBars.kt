@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,7 +28,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Hanken
@@ -132,43 +129,6 @@ fun TopBarIconButton(
     }
 }
 
-/**
- * Display header for Home-style screens: 26/800 title and an optional
- * one-line subtitle, with optional trailing actions on the title line.
- */
-@Composable
-fun LargeHeader(
-    title: String,
-    modifier: Modifier = Modifier,
-    subtitle: String? = null,
-    actions: @Composable RowScope.() -> Unit = {}
-) {
-    Column(modifier = modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                title,
-                style = MaterialTheme.typography.displayLarge,
-                color = Color(0xFF171A20),
-                modifier = Modifier.weight(1f)
-            )
-            actions()
-        }
-        if (subtitle != null) {
-            Text(
-                subtitle,
-                style = TextStyle(
-                    fontFamily = Hanken,
-                    fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 21.sp
-                ),
-                color = Ink2,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
-    }
-}
-
 @Preview(showBackground = true, backgroundColor = 0xFFFAFBFC, widthDp = 390)
 @Composable
 private fun LoveTopBarPreview() {
@@ -192,18 +152,6 @@ private fun LoveTopBarDetailPreview() {
                 TopBarIconButton(LoveIcons.Heart, "Save pack", onClick = {})
                 TopBarIconButton(LoveIcons.Send, "Share Love Stickers", onClick = {})
             }
-        )
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFFAFBFC, widthDp = 390)
-@Composable
-private fun LargeHeaderPreview() {
-    LoveStickersTheme {
-        LargeHeader(
-            title = "Pick your themes",
-            subtitle = "Home shows packs from the themes you choose. Change them anytime in Settings.",
-            modifier = Modifier.padding(vertical = 14.dp)
         )
     }
 }
