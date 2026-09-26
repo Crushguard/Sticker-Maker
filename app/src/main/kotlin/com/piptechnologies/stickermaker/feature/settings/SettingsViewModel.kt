@@ -94,7 +94,6 @@ class SettingsViewModel @Inject constructor(
                     // Keep clearing the remaining packs.
                 }
             }
-            prefs.markDownloadsCleared()
             _events.send(SettingsEvent.DownloadsCleared)
         }
     }

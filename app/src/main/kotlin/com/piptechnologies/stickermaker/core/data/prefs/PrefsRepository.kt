@@ -6,8 +6,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -47,10 +45,6 @@ class PrefsRepository @Inject constructor(
     val selectedThemes: Flow<Set<String>> =
         data.map { it[KEY_SELECTED_THEMES] ?: emptySet() }.distinctUntilChanged()
 
-    /** Session hearts / favorites counter. */
-    val heartsCount: Flow<Int> =
-        data.map { it[KEY_HEARTS_COUNT] ?: 0 }.distinctUntilChanged()
-
     /** Ids of packs the user hearted (the Saved screen and the ♥ Saved chip). */
     val favoritePackIds: Flow<Set<String>> =
         data.map { it[KEY_FAVORITE_PACK_IDS] ?: emptySet() }.distinctUntilChanged()
@@ -59,25 +53,12 @@ class PrefsRepository @Inject constructor(
     val alertsEnabled: Flow<Boolean> =
         data.map { it[KEY_ALERTS_ENABLED] ?: true }.distinctUntilChanged()
 
-    /** Epoch millis of the last "clear downloads" in Settings, 0 when never. */
-    val downloadsClearedAt: Flow<Long> =
-        data.map { it[KEY_DOWNLOADS_CLEARED_AT] ?: 0L }.distinctUntilChanged()
-
     suspend fun setOnboarded(value: Boolean) {
         dataStore.edit { it[KEY_ONBOARDED] = value }
     }
 
     suspend fun setSelectedThemes(themeIds: Set<String>) {
         dataStore.edit { it[KEY_SELECTED_THEMES] = themeIds }
-    }
-
-    suspend fun setHeartsCount(count: Int) {
-        dataStore.edit { it[KEY_HEARTS_COUNT] = count.coerceAtLeast(0) }
-    }
-
-    /** Adds [by] hearts (may be negative); the counter never drops below 0. */
-    suspend fun incrementHearts(by: Int = 1) {
-        dataStore.edit { it[KEY_HEARTS_COUNT] = ((it[KEY_HEARTS_COUNT] ?: 0) + by).coerceAtLeast(0) }
     }
 
     /** Hearts [packId], or un-hearts it when it is already in the set. */
@@ -93,16 +74,10 @@ class PrefsRepository @Inject constructor(
         dataStore.edit { it[KEY_ALERTS_ENABLED] = value }
     }
 
-    suspend fun markDownloadsCleared(at: Long = System.currentTimeMillis()) {
-        dataStore.edit { it[KEY_DOWNLOADS_CLEARED_AT] = at }
-    }
-
     companion object {
         private val KEY_ONBOARDED = booleanPreferencesKey("onboarded")
         private val KEY_SELECTED_THEMES = stringSetPreferencesKey("selected_themes")
-        private val KEY_HEARTS_COUNT = intPreferencesKey("hearts_count")
         private val KEY_FAVORITE_PACK_IDS = stringSetPreferencesKey("favorite_pack_ids")
         private val KEY_ALERTS_ENABLED = booleanPreferencesKey("alerts_enabled")
-        private val KEY_DOWNLOADS_CLEARED_AT = longPreferencesKey("downloads_cleared_at")
     }
 }
