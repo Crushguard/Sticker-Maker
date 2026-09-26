@@ -26,7 +26,7 @@
         <!-- Serves installed and own sticker packs to WhatsApp. -->
         <provider
             android:name=".whatsapp.StickerContentProvider"
-            android:authorities="com.piptechnologies.stickermaker.stickercontentprovider"
+            android:authorities="${applicationId}.stickercontentprovider"
             android:enabled="true"
             android:exported="true"
             android:readPermission="com.whatsapp.sticker.READ" />
