@@ -192,16 +192,8 @@ object LoveIcons {
         lucideIcon("arrow-left", "m12 19-7-7 7-7", "M19 12H5", autoMirror = true)
     }
 
-    val ChevronLeft: ImageVector by lazy {
-        lucideIcon("chevron-left", "m15 18-6-6 6-6", autoMirror = true)
-    }
-
     val ChevronRight: ImageVector by lazy {
         lucideIcon("chevron-right", "m9 18 6-6-6-6", autoMirror = true)
-    }
-
-    val ChevronDown: ImageVector by lazy {
-        lucideIcon("chevron-down", "m6 9 6 6 6-6")
     }
 
     val Plus: ImageVector by lazy {
@@ -221,17 +213,6 @@ object LoveIcons {
         )
     }
 
-    val Share2: ImageVector by lazy {
-        lucideIcon(
-            "share-2",
-            "M15 5a3 3 0 1 0 6 0a3 3 0 1 0-6 0",
-            "M3 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0",
-            "M15 19a3 3 0 1 0 6 0a3 3 0 1 0-6 0",
-            "M8.59 13.51 15.42 17.49",
-            "M15.41 6.51 8.59 10.49"
-        )
-    }
-
     val Trash2: ImageVector by lazy {
         lucideIcon(
             "trash-2",
@@ -240,23 +221,6 @@ object LoveIcons {
             "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2",
             "M10 11v6",
             "M14 11v6"
-        )
-    }
-
-    val Pencil: ImageVector by lazy {
-        lucideIcon(
-            "pencil",
-            "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z",
-            "m15 5 4 4"
-        )
-    }
-
-    val Image: ImageVector by lazy {
-        lucideIcon(
-            "image",
-            "M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
-            "M7 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0",
-            "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"
         )
     }
 
@@ -337,15 +301,6 @@ object LoveIcons {
         )
     }
 
-    val Redo2: ImageVector by lazy {
-        lucideIcon(
-            "redo-2",
-            "m15 14 5-5-5-5",
-            "M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13",
-            autoMirror = true
-        )
-    }
-
     val ZoomIn: ImageVector by lazy {
         lucideIcon(
             "zoom-in",
@@ -361,15 +316,6 @@ object LoveIcons {
             "settings",
             "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
             "M9 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0"
-        )
-    }
-
-    val Globe: ImageVector by lazy {
-        lucideIcon(
-            "globe",
-            "M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0",
-            "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20",
-            "M2 12h20"
         )
     }
 
@@ -405,13 +351,6 @@ object LoveIcons {
         )
     }
 
-    val Shield: ImageVector by lazy {
-        lucideIcon(
-            "shield",
-            "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
-        )
-    }
-
     val Info: ImageVector by lazy {
         lucideIcon(
             "info",
@@ -439,45 +378,11 @@ object LoveIcons {
         )
     }
 
-    /** Horizontal ellipsis, the card menu affordance on My Packs. */
-    val MoreHorizontal: ImageVector by lazy {
-        lucideIcon(
-            "more-horizontal",
-            "M4 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0",
-            "M11 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0",
-            "M18 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0"
-        )
-    }
-
-    val Grid: ImageVector by lazy {
-        lucideIcon(
-            "grid",
-            "M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
-            "M3 9h18",
-            "M3 15h18",
-            "M9 3v18",
-            "M15 3v18"
-        )
-    }
-
-    val Bookmark: ImageVector by lazy {
-        lucideIcon("bookmark", "m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z")
-    }
-
     val Home: ImageVector by lazy {
         lucideIcon(
             "home",
             "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8",
             "M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-        )
-    }
-
-    val Layers: ImageVector by lazy {
-        lucideIcon(
-            "layers",
-            "M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z",
-            "m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65",
-            "m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"
         )
     }
 
@@ -521,15 +426,6 @@ object LoveIcons {
         )
     }
 
-    val AlertTriangle: ImageVector by lazy {
-        lucideIcon(
-            "alert-triangle",
-            "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
-            "M12 9v4",
-            "M12 17h.01"
-        )
-    }
-
     val WifiOff: ImageVector by lazy {
         lucideIcon(
             "wifi-off",
@@ -541,10 +437,5 @@ object LoveIcons {
             "M22 8.82a15 15 0 0 0-11.288-3.764",
             "m2 2 20 20"
         )
-    }
-
-    /** Open spinner arc; rotate it for an indeterminate spinner. */
-    val Loader: ImageVector by lazy {
-        lucideIcon("loader", "M21 12a9 9 0 1 1-6.219-8.56")
     }
 }
