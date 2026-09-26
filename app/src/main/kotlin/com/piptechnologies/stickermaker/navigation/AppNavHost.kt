@@ -101,8 +101,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
                 onOpenPack = openPack,
                 onCreate = { navController.navigate(Routes.CREATE) },
                 onMyPacks = { navController.navigate(Routes.MY_PACKS) { launchSingleTop = true } },
-                onSettings = { navController.navigate(Routes.SETTINGS) },
-                onSaved = { navController.navigate(Routes.SAVED) }
+                onSettings = { navController.navigate(Routes.SETTINGS) }
             )
         }
 

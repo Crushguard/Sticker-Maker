@@ -104,10 +104,8 @@ private val CancelText = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.
  * Home (Prototype `is.home`): slim brand bar with Search and Settings, chip
  * row (Trending · ♥ Saved · Animated · your themes), browse cards with heart
  * and the Add pill, the offline full state, and the 3-slot bottom nav
- * (Home · raised Create · My Packs).
- *
- * @param onSaved reserved: the design reaches Saved from the My Packs
- * toolbar heart; on Home the ♥ Saved chip filters in place instead.
+ * (Home · raised Create · My Packs). Saved is reached from the My Packs
+ * toolbar heart; on Home the ♥ Saved chip filters in place.
  */
 @Composable
 fun HomeScreen(
@@ -115,7 +113,6 @@ fun HomeScreen(
     onCreate: () -> Unit,
     onMyPacks: () -> Unit,
     onSettings: () -> Unit,
-    onSaved: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
