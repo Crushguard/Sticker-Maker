@@ -23,9 +23,6 @@ interface InstalledPackDao {
     fun getAllBlocking(): List<InstalledPackEntity>
 
     @Query("SELECT * FROM installed_packs WHERE id = :id")
-    suspend fun get(id: String): InstalledPackEntity?
-
-    @Query("SELECT * FROM installed_packs WHERE id = :id")
     fun getBlocking(id: String): InstalledPackEntity?
 
     @Query("SELECT * FROM installed_stickers WHERE packId = :packId ORDER BY indexInPack")
@@ -33,9 +30,6 @@ interface InstalledPackDao {
 
     @Query("SELECT * FROM installed_stickers WHERE packId = :packId ORDER BY indexInPack")
     fun stickersBlocking(packId: String): List<InstalledStickerEntity>
-
-    @Query("SELECT * FROM installed_stickers WHERE packId = :packId ORDER BY indexInPack")
-    fun observeStickers(packId: String): Flow<List<InstalledStickerEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertPack(pack: InstalledPackEntity)
@@ -77,9 +71,6 @@ interface OwnPackDao {
 
     @Query("SELECT * FROM own_stickers WHERE packId = :packId ORDER BY indexInPack")
     fun stickersBlocking(packId: String): List<OwnStickerEntity>
-
-    @Query("SELECT * FROM own_stickers WHERE packId = :packId ORDER BY indexInPack")
-    fun observeStickers(packId: String): Flow<List<OwnStickerEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertPack(pack: OwnPackEntity)
