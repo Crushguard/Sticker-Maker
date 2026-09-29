@@ -24,9 +24,7 @@ data class StickerPack(
     val downloads: Long,
     val hue: Int,
     val stickerCount: Int,
-    val trayUrl: String?,
-    val thumbUrls: List<String>,
-    val stickerUrls: List<String>,
+    val stickerUrls: List<String> = emptyList(),
     val trayPath: String = "",
     val stickerPaths: List<String> = emptyList(),
     val stickerEmojis: Map<String, List<String>> = emptyMap(),
@@ -42,3 +40,6 @@ data class StickerPack(
     val zipUrl: String? = null,
     val zipBytes: Long = 0,
 )
+
+/** The pack shows under its folder category and every category it lists in alsoIn. */
+fun StickerPack.inCategory(categoryId: String): Boolean = category == categoryId || categoryId in alsoIn

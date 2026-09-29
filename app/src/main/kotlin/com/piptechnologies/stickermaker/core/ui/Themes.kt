@@ -3,7 +3,6 @@ package com.piptechnologies.stickermaker.core.ui
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.ui.res.stringResource
 import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.model.Category
 
@@ -21,10 +20,14 @@ fun themeNameRes(categoryId: String): Int? = when (categoryId) {
     else -> null
 }
 
-/** A theme's name as UiText: translated when known, the published name otherwise. */
-fun Category.nameText(): UiText = themeNameRes(id)?.let { UiText.res(it) } ?: UiText.Raw(name)
+/**
+ * A theme's name as UiText: the catalog's name in the reader's language, else the app's own translation of a
+ * theme it knows, else the English name.
+ */
+fun Category.nameText(): UiText =
+    UiText.Localized(names, themeNameRes(id)?.let { UiText.res(it) } ?: UiText.Raw(names["en"] ?: name))
 
-/** A theme's name in the current language (see [themeNameRes]). */
+/** A theme's name in the current language (see [nameText]). */
 @Composable
 @ReadOnlyComposable
-fun Category.displayName(): String = themeNameRes(id)?.let { stringResource(it) } ?: name
+fun Category.displayName(): String = nameText().asString()

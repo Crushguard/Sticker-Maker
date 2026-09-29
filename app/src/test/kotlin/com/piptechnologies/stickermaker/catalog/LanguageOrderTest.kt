@@ -9,7 +9,7 @@ class LanguageOrderTest {
 
     private fun pack(id: String, lang: String) = StickerPack(
         id = id, name = id, publisher = "PIP Technologies", category = "sorry", animated = false, order = 0,
-        downloads = 0, hue = 0, stickerCount = 3, trayUrl = null, thumbUrls = emptyList(), stickerUrls = emptyList(),
+        downloads = 0, hue = 0, stickerCount = 3,
         lang = lang,
     )
 

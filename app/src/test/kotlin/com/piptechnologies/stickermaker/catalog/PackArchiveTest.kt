@@ -46,8 +46,8 @@ class PackArchiveTest {
 
     private fun pack(version: Int, url: String = "https://cdn/gm-gn-v$version.zip") = StickerPack(
         id = "gm-gn", name = "Good Morning, Good Night", publisher = "PIP Technologies", category = "goodnight",
-        animated = false, order = 0, downloads = 0, hue = 250, stickerCount = 2, trayUrl = null,
-        thumbUrls = emptyList(), stickerUrls = emptyList(), version = version, zipUrl = url, zipBytes = 1000,
+        animated = false, order = 0, downloads = 0, hue = 250, stickerCount = 2,
+        version = version, zipUrl = url, zipBytes = 1000,
     )
 
     @Before

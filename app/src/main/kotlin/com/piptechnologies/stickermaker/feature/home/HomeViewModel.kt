@@ -6,14 +6,18 @@ import androidx.lifecycle.viewModelScope
 import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.prefs.PrefsRepository
 import com.piptechnologies.stickermaker.core.data.repo.CatalogRepository
+import com.piptechnologies.stickermaker.core.data.catalog.inLanguageOrder
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
+import com.piptechnologies.stickermaker.core.design.components.PackCover
 import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.model.Category
 import com.piptechnologies.stickermaker.core.model.StickerPack
+import com.piptechnologies.stickermaker.core.model.inCategory
+import com.piptechnologies.stickermaker.core.model.withPacks
 import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.addsLabel
 import com.piptechnologies.stickermaker.core.ui.inAppLanguage
 import com.piptechnologies.stickermaker.core.ui.nameText
-import com.piptechnologies.stickermaker.core.ui.themeNameRes
 import com.piptechnologies.stickermaker.feature.customize.FallbackCategories
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -54,7 +58,8 @@ data class HomePackUi(
     val downloadsLabel: UiText,
     val animated: Boolean,
     val hue: Int,
-    val thumbUrls: List<String>,
+    /** One strip for the card's circles; tiles 0 = no cover (hue placeholders). */
+    val cover: PackCover,
     val favorite: Boolean,
     val addState: AddVisualState,
     val addProgress: Float
@@ -330,7 +335,7 @@ class HomeViewModel @Inject constructor(
         val offline = catalog != null && catalog.isEmpty()
         val catalogIds = catalog.orEmpty().mapTo(mutableSetOf()) { it.id }
         val favCount = data.favorites.count { it in catalogIds }
-        val selectedCategories = data.categories.filter { it.id in data.themes }
+        val selectedCategories = data.categories.filter { it.id in data.themes }.withPacks()
         val chips = buildList {
             add(HomeChipUi(CHIP_TRENDING, UiText.res(R.string.home_chip_trending)))
             if (favCount > 0) {
@@ -348,10 +353,10 @@ class HomeViewModel @Inject constructor(
                 id = pack.id,
                 name = pack.name,
                 stickerCount = pack.stickerCount,
-                downloadsLabel = UiText.res(R.string.pack_adds, UiText.Compact(pack.downloads)),
+                downloadsLabel = addsLabel(pack.downloads) ?: UiText.Raw(""),
                 animated = pack.animated,
                 hue = pack.hue,
-                thumbUrls = pack.thumbUrls.take(6),
+                cover = PackCover(pack.coverSmallUrl, pack.coverLargeUrl, pack.coverTiles),
                 favorite = pack.id in data.favorites,
                 addState = addState.toVisual(),
                 addProgress = (addState as? AddState.Downloading)?.progress ?: 0f
@@ -373,7 +378,11 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    /** Prototype `homePacks()`, verbatim: themes baseline, search, chips, trending sort. */
+    /**
+     * Prototype `homePacks()`: themes baseline, search, chips. The order is the catalog's rank (pinned,
+     * popular, newest) grouped by what the reader can read (see inLanguageOrder); a pack also shows under the
+     * categories it lists in alsoIn.
+     */
     private fun filterPacks(
         catalog: List<StickerPack>,
         data: HomeData,
@@ -381,39 +390,30 @@ class HomeViewModel @Inject constructor(
         query: String,
         chip: String
     ): List<StickerPack> {
-        var list = catalog.filter { data.themes.isEmpty() || it.category in data.themes }
+        val ordered = catalog.inLanguageOrder(appLanguageTag())
+        var list = ordered.filter { pack -> data.themes.isEmpty() || data.themes.any(pack::inCategory) }
         if (searchOpen) {
             if (query.isNotEmpty()) {
-                val q = query.lowercase()
-                val localized = appContext.inAppLanguage()
-                list = catalog.filter { pack ->
-                    pack.name.lowercase().contains(q) ||
-                        themeLabels(pack.category, data.categories, localized).any { it.lowercase().contains(q) }
-                }
+                val categories = data.categories.associateBy { it.id }
+                list = ordered.filter { matchesQuery(it, query, categories) }
             }
         } else {
             when (chip) {
                 CHIP_TRENDING -> Unit
                 CHIP_SAVED -> {
-                    val saved = catalog.filter { it.id in data.favorites }
+                    val saved = ordered.filter { it.id in data.favorites }
                     if (saved.isNotEmpty()) list = saved
                 }
-                CHIP_ANIMATED -> list = catalog.filter { it.animated }
-                else -> list = list.filter { it.category == chip }
+                CHIP_ANIMATED -> list = ordered.filter { it.animated }
+                else -> list = list.filter { it.inCategory(chip) }
             }
         }
-        return list.sortedByDescending { it.downloads }
+        return list
     }
 
-    /** The theme's published name plus its name in the app language, for search. */
-    private fun themeLabels(
-        categoryId: String,
-        categories: List<Category>,
-        localized: Context
-    ): List<String> = listOfNotNull(
-        categories.firstOrNull { it.id == categoryId }?.name ?: categoryId,
-        themeNameRes(categoryId)?.let { localized.getString(it) }
-    )
+    /** The app language as a BCP 47 tag ("pt-BR"), or the device's when following the system. */
+    private fun appLanguageTag(): String =
+        appContext.inAppLanguage().resources.configuration.locales[0].toLanguageTag()
 
     private fun effectiveChip(
         chipId: String,

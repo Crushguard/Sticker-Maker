@@ -11,7 +11,9 @@ import com.piptechnologies.stickermaker.core.data.repo.CatalogRepository
 import com.piptechnologies.stickermaker.core.data.repo.MyPacksRepository
 import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.model.StickerPack
+import com.piptechnologies.stickermaker.core.design.components.PackCover
 import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.addsLabel
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,10 +47,12 @@ data class SavedRow(
     val metaLabel: UiText,
     val own: Boolean,
     val addState: AddState,
-    /** Coil models: thumb URLs for catalog packs, [File]s for own packs. */
+    /** Coil models for own packs ([File]s); catalog packs use [cover]. */
     val thumbModels: List<Any>,
     /** The full catalog pack, for the download pipeline (null for own packs). */
-    val remote: StickerPack? = null
+    val remote: StickerPack? = null,
+    /** A catalog pack's cover strip (null for own packs). */
+    val cover: PackCover? = null
 )
 
 data class SavedUiState(
@@ -109,12 +113,13 @@ class SavedViewModel @Inject constructor(
                 name = pack.name,
                 animated = pack.animated,
                 stickerCount = pack.stickerCount,
-                metaLabel = UiText.res(R.string.pack_adds, UiText.Compact(pack.downloads)),
+                metaLabel = addsLabel(pack.downloads) ?: UiText.Raw(""),
                 own = false,
                 addState = sessions[pack.id]
                     ?: if (pack.id in whitelistedInstalled) AddState.Added else AddState.Idle,
-                thumbModels = pack.thumbUrls.take(6),
-                remote = pack
+                thumbModels = emptyList(),
+                remote = pack,
+                cover = PackCover(pack.coverSmallUrl, pack.coverLargeUrl, pack.coverTiles)
             )
         }
         val ownRows = own.filter { it.id in favorites }.map { pack ->

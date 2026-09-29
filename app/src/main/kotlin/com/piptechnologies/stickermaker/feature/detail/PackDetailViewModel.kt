@@ -14,6 +14,7 @@ import com.piptechnologies.stickermaker.core.model.InstalledPack
 import com.piptechnologies.stickermaker.core.model.OwnPack
 import com.piptechnologies.stickermaker.core.model.StickerPack
 import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.addsLabel
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -330,14 +331,13 @@ class PackDetailViewModel @Inject constructor(
                     loading = false,
                     packId = pack.id,
                     title = pack.name,
-                    metaLine = UiText.res(
-                        R.string.meta_join,
-                        UiText.plural(R.plurals.sticker_count, pack.stickerCount),
-                        UiText.res(R.string.pack_adds, UiText.Compact(pack.downloads))
-                    ),
+                    metaLine = addsLabel(pack.downloads)
+                        ?.let { adds ->
+                            UiText.res(R.string.meta_join, UiText.plural(R.plurals.sticker_count, pack.stickerCount), adds)
+                        }
+                        ?: UiText.plural(R.plurals.sticker_count, pack.stickerCount),
                     animated = pack.animated,
-                    stickers = pack.stickerUrls.ifEmpty { pack.thumbUrls }
-                        .mapIndexed { index, url -> DetailSticker("url-$index", url) },
+                    stickers = pack.stickerUrls.mapIndexed { index, url -> DetailSticker("url-$index", url) },
                     favorite = favorite,
                     addState = addState,
                     showNoWhatsApp = noWhatsApp

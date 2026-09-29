@@ -20,3 +20,6 @@ data class Category(
     val keywords: Map<String, List<String>> = emptyMap(),
     val packCount: Int = -1,
 )
+
+/** Categories to show as chips: those with live packs (an unknown count, -1, counts as some). */
+fun List<Category>.withPacks(): List<Category> = filter { it.packCount != 0 }
