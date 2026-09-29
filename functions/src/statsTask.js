@@ -51,7 +51,7 @@ async function runWeeklyStats({ propertyId, now = new Date(), client } = {}) {
     batch.set(doc.ref, { stats: { ...s, at: now } }, { mergeFields: ['stats'] });
   }
   await batch.commit();
-  await enqueuePublish(now.getTime());
+  await enqueuePublish();
   return { outcome: 'updated', packs: packs.size };
 }
 

@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { quietTaskId, fastTaskId, isQuiet, fastPathReady } = require('../src/readiness');
+const { quietTaskId, fastTaskId, isQuiet, fastPathReady, mustWait } = require('../src/readiness');
 const { parsePackManifest } = require('../src/manifest');
 
 test('quiet task ids share a 30-second bucket per pack', () => {
@@ -37,4 +37,13 @@ test('the fast path needs a pack.json that lists stickers which all exist', () =
   assert.equal(fastPathReady(parsePackManifest(null, ['1.png', '2.png', '3.png'], OPTS)), false);
   assert.equal(fastPathReady(parsePackManifest('{oops', ['1.png'], OPTS)), false);
   assert.equal(fastPathReady(parsePackManifest('{"stickers":[]}', ['1.png'], OPTS)), false);
+});
+
+test('a build waits while files or deletions are recent, unless pack.json lists a complete set', () => {
+  const now = 100000;
+  assert.equal(mustWait({ fastReady: false, newestObjectMs: 10000, lastEventMs: 95000, nowMs: now }), true, 'a deletion 5 s ago');
+  assert.equal(mustWait({ fastReady: false, newestObjectMs: 90000, lastEventMs: 0, nowMs: now }), true, 'an upload 10 s ago');
+  assert.equal(mustWait({ fastReady: false, newestObjectMs: 10000, lastEventMs: 60000, nowMs: now }), false, 'quiet for 40 s');
+  assert.equal(mustWait({ fastReady: true, newestObjectMs: 99000, lastEventMs: 99000, nowMs: now }), false, 'complete listing');
+  assert.equal(mustWait({ fastReady: false, newestObjectMs: 10000, lastEventMs: null, nowMs: now }), false, 'no event record');
 });

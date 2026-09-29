@@ -14,6 +14,7 @@ const { onObjectFinalized, onObjectDeleted } = require('firebase-functions/v2/st
 const { onTaskDispatched } = require('firebase-functions/v2/tasks');
 const { onDocumentWritten } = require('firebase-functions/v2/firestore');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
+const { HttpsError } = require('firebase-functions/v2/https');
 const { defineString } = require('firebase-functions/params');
 const logger = require('firebase-functions/logger');
 const { BUCKET, DATABASE, REGION } = require('./src/config');
@@ -30,10 +31,14 @@ const PUBLIC_URL_TEMPLATE = defineString('PUBLIC_URL_TEMPLATE', {
 setGlobalOptions({ region: REGION, minInstances: 0 });
 
 function libraryDeps() {
-  const { listFolder, readText } = require('./src/firebase');
+  const { FieldValue } = require('firebase-admin/firestore');
+  const { db, listFolder, readText } = require('./src/firebase');
   const { enqueueBuild } = require('./src/queue');
   const { syncCategories } = require('./src/categoriesTask');
-  return { listFolder, readText, enqueueBuild, syncCategories };
+  // builds/<packId>.lastEventAt lets a build wait out deletions too (they leave no timestamp on remaining files).
+  const touch = (packId, { category, folder }) =>
+    db().collection('builds').doc(packId).set({ category, folder, lastEventAt: FieldValue.serverTimestamp() }, { merge: true });
+  return { listFolder, readText, enqueueBuild, touch, syncCategories };
 }
 
 async function onLibraryEvent(event, kind) {
@@ -64,8 +69,12 @@ const buildPack = onTaskDispatched(
       const result = await runBuild(request.data);
       logger.info('build', result);
     } catch (err) {
-      if (err instanceof NotQuietYet) logger.info(err.message);
-      else logger.error('build failed', { data: request.data, error: err.stack || String(err) });
+      if (err instanceof NotQuietYet) {
+        // 503: Cloud Tasks retries shortly; an expected wait, not an error in the logs.
+        logger.info(err.message);
+        throw new HttpsError('unavailable', err.message);
+      }
+      logger.error('build failed', { data: request.data, error: err.stack || String(err) });
       throw err;
     }
   }

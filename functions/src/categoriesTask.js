@@ -26,7 +26,7 @@ async function syncCategories({ now = new Date() } = {}) {
     for (const ref of existing) if (!keep.has(ref.id)) batch.delete(ref);
     for (const { id, ...fields } of categories) batch.set(collection.doc(id), fields);
     await batch.commit();
-    await enqueuePublish(now.getTime());
+    await enqueuePublish();
     lines.push(`✅ ${categories.length} categories applied: ${categories.map((c) => c.id).join(', ')}. ${now.toISOString()}.`);
   }
   for (const error of errors) lines.push(`- ${error}`);

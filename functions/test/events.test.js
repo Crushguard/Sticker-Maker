@@ -6,7 +6,7 @@ const { handleLibraryEvent } = require('../src/events');
 
 /** Fake Storage folder + recorded side effects. */
 function fakes(folderFiles = {}) {
-  const calls = { builds: [], syncs: 0 };
+  const calls = { builds: [], syncs: 0, touches: [] };
   return {
     calls,
     deps: {
@@ -14,6 +14,7 @@ function fakes(folderFiles = {}) {
         Object.entries(folderFiles).map(([file, { generation = '1', text }]) => ({ file, generation, text, prefix })),
       readText: async (entry) => entry.text,
       enqueueBuild: async (task) => calls.builds.push(task),
+      touch: async (packId, where, nowMs) => calls.touches.push({ packId, ...where, nowMs }),
       syncCategories: async () => {
         calls.syncs += 1;
       },
@@ -87,4 +88,12 @@ test('a deleted pack file schedules the quiet build (which may unpublish)', asyn
   await handleLibraryEvent('library/sorry/Sorry Wiggle/01.png', 'deleted', NOW, deps);
   assert.equal(calls.builds.length, 1);
   assert.equal(calls.builds[0].delaySeconds, 45);
+});
+
+test('every pack event records when it happened, before any build is scheduled', async () => {
+  const { calls, deps } = fakes({ '01.png': {} });
+  await handleLibraryEvent('library/sorry/Sorry Wiggle/01.png', 'deleted', NOW, deps);
+  await handleLibraryEvent('library/sorry/Sorry Wiggle/_report.txt', 'finalized', NOW, deps);
+  await handleLibraryEvent('library/_categories.json', 'finalized', NOW, deps);
+  assert.deepEqual(calls.touches, [{ packId: 'sorry-wiggle', category: 'sorry', folder: 'Sorry Wiggle', nowMs: NOW }]);
 });

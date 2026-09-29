@@ -24,4 +24,14 @@ function fastPathReady(manifest) {
   return manifest.listed && manifest.errors.length === 0 && manifest.stickers.length > 0;
 }
 
-module.exports = { quietTaskId, fastTaskId, isQuiet, fastPathReady, QUIET_MS };
+/**
+ * Whether a build must wait for the folder to settle: until 30 s after the later of its newest object and its
+ * last upload or delete event (deletions leave no timestamp on the remaining files). A pack.json listing a
+ * complete set needs no wait.
+ */
+function mustWait({ fastReady, newestObjectMs, lastEventMs, nowMs }) {
+  if (fastReady) return false;
+  return !isQuiet(Math.max(newestObjectMs, lastEventMs || 0), nowMs);
+}
+
+module.exports = { quietTaskId, fastTaskId, isQuiet, fastPathReady, mustWait, QUIET_MS };

@@ -15,7 +15,7 @@ const FAST_DELAY_S = 2;
  * @param {string} objectName
  * @param {'finalized'|'deleted'} kind
  * @param {number} nowMs
- * @param {{listFolder: Function, readText: Function, enqueueBuild: Function, syncCategories: Function}} deps
+ * @param {{listFolder: Function, readText: Function, enqueueBuild: Function, touch: Function, syncCategories: Function}} deps
  */
 async function handleLibraryEvent(objectName, kind, nowMs, deps) {
   const parsed = parseLibraryPath(objectName);
@@ -26,6 +26,7 @@ async function handleLibraryEvent(objectName, kind, nowMs, deps) {
   if (parsed.kind !== 'pack') return;
 
   const { category, folder, packId, prefix } = parsed;
+  await deps.touch(packId, { category, folder }, nowMs);
   await deps.enqueueBuild({ category, folder, delaySeconds: QUIET_DELAY_S, id: quietTaskId(packId, nowMs) });
   if (kind !== 'finalized') return;
 

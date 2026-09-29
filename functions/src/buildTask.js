@@ -3,7 +3,7 @@
 const { LIBRARY_PREFIX, PUBLIC_PREFIX, publicPackBase } = require('./config');
 const { slugify, parseLibraryPath, isImageName, REPORT_FILE } = require('./library');
 const { parsePackManifest } = require('./manifest');
-const { isQuiet, fastPathReady } = require('./readiness');
+const { fastPathReady, mustWait } = require('./readiness');
 const { buildPackFromFiles } = require('./build');
 const { renderReport } = require('./report');
 const { db, bucket, listFolder, readBuffer, readText, savePublic, saveText } = require('./firebase');
@@ -47,14 +47,23 @@ async function runBuild({ category, folder }, { now = new Date() } = {}) {
   const prefix = `${LIBRARY_PREFIX}${category}/${folder}/`;
   const reportPath = `${prefix}${REPORT_FILE}`;
   const packRef = db().collection('packs').doc(packId);
-  const [liveSnap, entriesAll] = await Promise.all([packRef.get(), listFolder(prefix)]);
+  const [liveSnap, entriesAll, eventsSnap] = await Promise.all([
+    packRef.get(),
+    listFolder(prefix),
+    db().collection('builds').doc(packId).get(),
+  ]);
+  const lastEvent = eventsSnap.exists ? eventsSnap.data().lastEventAt : null;
+  const lastEventMs = lastEvent && typeof lastEvent.toMillis === 'function' ? lastEvent.toMillis() : null;
   const live = liveSnap.exists ? liveSnap.data() : null;
   const entries = entriesAll.filter((e) => parseLibraryPath(e.name).kind === 'pack');
 
   if (entries.length === 0) {
+    if (mustWait({ fastReady: false, newestObjectMs: 0, lastEventMs, nowMs: now.getTime() })) {
+      throw new NotQuietYet(`${prefix} is still changing`);
+    }
     if (live && live.source && live.source.folder === prefix && live.status !== 'removed') {
       await packRef.set({ status: 'removed', removedAt: now }, { merge: true });
-      await enqueuePublish(now.getTime());
+      await enqueuePublish();
       return { outcome: 'removed', packId };
     }
     return { outcome: 'empty', packId };
@@ -65,8 +74,8 @@ async function runBuild({ category, folder }, { now = new Date() } = {}) {
   const imageNames = entries.map((e) => e.file).filter(isImageName);
   const quick = parsePackManifest(manifestText, imageNames, { folder, category, categoryIds: new Set(), defaultEmojis: [] });
   const newest = Math.max(...entries.map((e) => e.updatedMs));
-  if (!fastPathReady(quick) && !isQuiet(newest, now.getTime())) {
-    throw new NotQuietYet(`${prefix} is still receiving files`);
+  if (mustWait({ fastReady: fastPathReady(quick), newestObjectMs: newest, lastEventMs, nowMs: now.getTime() })) {
+    throw new NotQuietYet(`${prefix} is still changing`);
   }
 
   const categories = await categoriesById();
@@ -142,7 +151,7 @@ async function runBuild({ category, folder }, { now = new Date() } = {}) {
     // mergeFields replaces these fields whole and leaves the console's pin/hidden and the weekly stats alone.
     await packRef.set(doc, { mergeFields: Object.keys(doc) });
     if (!result.unchanged) await deleteOldVersions(packId, result.version);
-    await enqueuePublish(now.getTime());
+    await enqueuePublish();
   }
 
   await saveText(
