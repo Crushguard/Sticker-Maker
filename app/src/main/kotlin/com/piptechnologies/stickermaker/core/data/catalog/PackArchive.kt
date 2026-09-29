@@ -63,6 +63,7 @@ class PackArchive(
             Sticker(
                 fileName = file,
                 emojis = (0 until (emojis?.length() ?: 0)).mapNotNull { emojis?.optString(it)?.ifBlank { null } },
+                text = sticker.optString("text"),
             )
         }
     }

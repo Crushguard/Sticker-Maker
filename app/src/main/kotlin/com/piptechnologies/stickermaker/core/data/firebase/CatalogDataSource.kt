@@ -67,6 +67,7 @@ class CatalogDataSource @Inject constructor(
             stickerPaths = stickers.map { File(dir, it.fileName).absolutePath },
             trayPath = File(dir, TRAY_FILE).absolutePath,
             stickerEmojis = stickers.associate { it.fileName to it.emojis },
+            stickerTexts = stickers.associate { it.fileName to it.text },
         )
     }
 

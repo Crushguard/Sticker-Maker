@@ -122,7 +122,7 @@ class StickerContentProvider : ContentProvider() {
 
     private fun getStickers(identifier: String): List<ProviderSticker> =
         db.installedPackDao().stickersBlocking(identifier)
-            .map { ProviderSticker(it.fileName, it.emojis) }
+            .map { ProviderSticker(it.fileName, it.emojis, it.accessibilityText) }
             .ifEmpty {
                 db.ownPackDao().stickersBlocking(identifier)
                     .map { ProviderSticker(it.fileName, it.emojis) }
@@ -179,7 +179,7 @@ class StickerContentProvider : ContentProvider() {
                 .add(PUBLISHER_WEBSITE_VALUE)
                 .add(PRIVACY_POLICY_WEBSITE_VALUE)
                 .add(LICENSE_AGREEMENT_WEBSITE_VALUE)
-                .add(IMAGE_DATA_VERSION_VALUE)
+                .add(stickerPack.imageDataVersion.toString())
                 .add(if (AVOID_CACHE_VALUE) 1 else 0)
                 .add(if (stickerPack.animatedStickerPack) 1 else 0)
         }
@@ -198,8 +198,8 @@ class StickerContentProvider : ContentProvider() {
         )
         for (sticker in getStickers(identifier)) {
             // Emojis are stored comma-joined, exactly the shape the sample builds with
-            // TextUtils.join(",", emojis). No accessibility text is stored.
-            cursor.addRow(arrayOf<Any?>(sticker.fileName, sticker.emojis, null))
+            // TextUtils.join(",", emojis). Catalog stickers carry their lettering as accessibility text.
+            cursor.addRow(arrayOf<Any?>(sticker.fileName, sticker.emojis, sticker.accessibilityText))
         }
         cursor.setNotificationUri(checkNotNull(context).contentResolver, uri)
         return cursor
@@ -272,9 +272,10 @@ class StickerContentProvider : ContentProvider() {
         val trayImageFile: String,
         val animatedStickerPack: Boolean,
         val dirPath: String,
+        val imageDataVersion: Int,
     )
 
-    private data class ProviderSticker(val fileName: String, val emojis: String)
+    private data class ProviderSticker(val fileName: String, val emojis: String, val accessibilityText: String? = null)
 
     companion object {
         private const val TAG = "StickerContentProvider"
@@ -310,8 +311,7 @@ class StickerContentProvider : ContentProvider() {
 
         /**
          * Values for the metadata columns Room does not store. All are optional for WhatsApp;
-         * empty means absent. Files on disk never change under an identifier without the pack
-         * being re-added, so the image data version is constant.
+         * empty means absent. The image data version comes from Room (the catalog version).
          */
         private const val ANDROID_PLAY_STORE_LINK = ""
         private const val IOS_APP_STORE_LINK = ""
@@ -319,7 +319,6 @@ class StickerContentProvider : ContentProvider() {
         private const val PUBLISHER_WEBSITE_VALUE = ""
         private const val PRIVACY_POLICY_WEBSITE_VALUE = ""
         private const val LICENSE_AGREEMENT_WEBSITE_VALUE = ""
-        private const val IMAGE_DATA_VERSION_VALUE = "1"
         private const val AVOID_CACHE_VALUE = false
 
         /**
@@ -351,6 +350,7 @@ class StickerContentProvider : ContentProvider() {
             trayImageFile = trayFile,
             animatedStickerPack = animated,
             dirPath = dirPath,
+            imageDataVersion = imageDataVersion,
         )
 
         private fun OwnPackEntity.toProviderPack() = ProviderPack(
@@ -360,6 +360,7 @@ class StickerContentProvider : ContentProvider() {
             trayImageFile = trayFile,
             animatedStickerPack = animated,
             dirPath = dirPath,
+            imageDataVersion = imageDataVersion,
         )
     }
 }

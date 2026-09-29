@@ -30,6 +30,7 @@ data class StickerPack(
     val trayPath: String = "",
     val stickerPaths: List<String> = emptyList(),
     val stickerEmojis: Map<String, List<String>> = emptyMap(),
+    val stickerTexts: Map<String, String> = emptyMap(),
     val version: Int = 1,
     val names: Map<String, String> = emptyMap(),
     val alsoIn: List<String> = emptyList(),

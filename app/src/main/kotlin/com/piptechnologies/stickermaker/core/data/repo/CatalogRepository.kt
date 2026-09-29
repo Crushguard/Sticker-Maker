@@ -105,7 +105,8 @@ class CatalogRepository @Inject constructor(
                 sortOrder = pack.order,
                 addedAt = System.currentTimeMillis(),
                 dirPath = downloader.packDir(pack.id).absolutePath,
-                whitelisted = false
+                whitelisted = false,
+                imageDataVersion = pack.version
             )
         )
         installedPackDao.deleteStickers(pack.id)
@@ -115,7 +116,11 @@ class CatalogRepository @Inject constructor(
                     packId = pack.id,
                     fileName = fileName,
                     emojis = (emojis[fileName] ?: DEFAULT_EMOJIS).joinToString(","),
-                    indexInPack = index
+                    indexInPack = index,
+                    accessibilityText = pack.stickerTexts[fileName]
+                        ?.trim()
+                        ?.ifBlank { null }
+                        ?.take(if (pack.animated) ANIMATED_TEXT_MAX else STATIC_TEXT_MAX)
                 )
             }
         )
@@ -124,5 +129,9 @@ class CatalogRepository @Inject constructor(
     private companion object {
         /** Fallback emoji tags when the catalog carries none for a sticker. */
         val DEFAULT_EMOJIS = listOf("❤️", "😊")
+
+        /** WhatsApp's accessibility text limits. */
+        const val STATIC_TEXT_MAX = 125
+        const val ANIMATED_TEXT_MAX = 255
     }
 }
