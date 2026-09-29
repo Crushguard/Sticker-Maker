@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /**
  * upload.js — puts a local sticker library into the stickermaker bucket, the way the pipeline likes it:
- * _categories.json first, then per pack every sticker (and tray.png) before pack.json, so a listing pack.json
- * makes the pack build the moment it lands. Files whose MD5 already matches are skipped.
+ * _categories.json first (and, when it changed, a wait until it is applied: packs read their categories when they
+ * build), then per pack every sticker (and tray.png) before pack.json, so a listing pack.json makes a new pack build
+ * the moment it lands. Files whose MD5 already matches are skipped.
  *
  * Usage:
  *   node scripts/library/upload.js <libraryDir> [--pack <category>/<folder>] [--wait] [--dry-run]
@@ -21,6 +22,7 @@ const path = require('path');
 const DEFAULT_PROJECT = 'play-console-f33dd';
 const CONTENT_TYPES = { '.png': 'image/png', '.webp': 'image/webp', '.gif': 'image/gif', '.json': 'application/json' };
 const UPLOAD_CONCURRENCY = 6;
+const CATEGORIES_REPORT = 'library/_categories_report.txt';
 
 function arg(flag, fallback) {
   const i = process.argv.indexOf(flag);
@@ -93,8 +95,9 @@ async function uploadPack(bucket, pack, options) {
   return { prefix, counts, changed: outcomes.some((o) => o === 'uploaded') };
 }
 
-async function waitForReport(bucket, prefix, sinceMs, timeoutMs = 240000) {
-  const file = bucket.file(`${prefix}_report.txt`);
+/** A text object (a build or categories report) once it has been written after sinceMs, or null on timeout. */
+async function waitForText(bucket, objectPath, sinceMs, timeoutMs = 240000) {
+  const file = bucket.file(objectPath);
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     const [exists] = await file.exists();
@@ -105,6 +108,25 @@ async function waitForReport(bucket, prefix, sinceMs, timeoutMs = 240000) {
     await new Promise((r) => setTimeout(r, 3000));
   }
   return null;
+}
+
+function waitForReport(bucket, prefix, sinceMs, timeoutMs) {
+  return waitForText(bucket, `${prefix}_report.txt`, sinceMs, timeoutMs);
+}
+
+/**
+ * Uploads _categories.json and, when it changed, waits until the pipeline has applied it: a pack built before that
+ * would lose its alsoIn categories and fall back to no category emoji until it is rebuilt.
+ */
+async function uploadCategories(bucket, localPath, options) {
+  const sinceMs = Date.now() - 2000;
+  const outcome = await uploadFile(bucket, localPath, 'library/_categories.json', options);
+  console.log(`_categories.json: ${outcome}`);
+  if (outcome !== 'uploaded') return;
+  const report = await waitForText(bucket, CATEGORIES_REPORT, sinceMs, 120000);
+  if (!report) throw new Error('_categories.json was not applied within 2 minutes: check the functions logs');
+  console.log(report.trim());
+  if (report.startsWith('❌')) throw new Error('fix _categories.json before uploading packs');
 }
 
 async function main() {
@@ -123,9 +145,7 @@ async function main() {
   const startedMs = Date.now() - 5000;
 
   const categoriesFile = path.join(libraryDir, '_categories.json');
-  if (!only && fs.existsSync(categoriesFile)) {
-    console.log(`_categories.json: ${await uploadFile(bucket, categoriesFile, 'library/_categories.json', options)}`);
-  }
+  if (!only && fs.existsSync(categoriesFile)) await uploadCategories(bucket, categoriesFile, options);
   const packs = listLocalPacks(libraryDir).filter((p) => !only || `${p.category}/${p.folder}` === only);
   if (only && !packs.length) {
     console.error(`no pack ${only} in ${libraryDir}`);
@@ -152,4 +172,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { listLocalPacks, uploadPack, uploadFile, waitForReport, storageBucket };
+module.exports = { listLocalPacks, uploadPack, uploadFile, uploadCategories, waitForReport, storageBucket };

@@ -14,7 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
-const { listLocalPacks, uploadPack, uploadFile, waitForReport, storageBucket } = require('./upload');
+const { listLocalPacks, uploadPack, uploadCategories, waitForReport, storageBucket } = require('./upload');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const LIBRARY = path.join(ROOT, 'library');
@@ -47,7 +47,7 @@ async function main() {
     console.log(`test add counts from design/catalog.json for ${design.packs.length} packs`);
   }
 
-  await uploadFile(bucket, path.join(LIBRARY, '_categories.json'), 'library/_categories.json', {});
+  await uploadCategories(bucket, path.join(LIBRARY, '_categories.json'), {});
   // One file at a time, one pack at a time: each upload event runs a Functions emulator worker, and a burst of
   // them exhausts a small machine (workers die with EPIPE). The fast path builds each pack as its pack.json lands.
   for (const pack of packs) {
