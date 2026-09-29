@@ -1,12 +1,12 @@
 rules_version = '2';
 
-// Sticker pack assets are public, immutable downloads. Uploads happen only
-// through the Admin SDK (scripts/upload-pack.js), which bypasses these rules.
+// Bucket play-console-f33dd-stickermaker. public/ holds the generated, immutable pack and catalog files the app
+// downloads; library/ holds the source art and is uploaded through the console or gcloud (IAM, not these rules).
 service firebase.storage {
   match /b/{bucket}/o {
-    match /packs/{allPaths=**} {
-      allow read: if true;
-      allow write: if false;
+    match /public/{allPaths=**} {
+      allow get: if true;
+      allow list, write: if false;
     }
     match /{allPaths=**} {
       allow read, write: if false;
