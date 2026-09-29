@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.shareIn
  */
 @Singleton
 class CatalogDataSource @Inject constructor(
-    store: CatalogStore,
+    private val store: CatalogStore,
     private val archive: PackArchive,
     @IoDispatcher ioDispatcher: CoroutineDispatcher,
 ) {
@@ -42,6 +42,9 @@ class CatalogDataSource @Inject constructor(
 
     /** Packs in rank order. */
     fun observePacks(): Flow<List<StickerPack>> = catalog.map { it?.packs.orEmpty() }
+
+    /** Tries the catalog download again; the result arrives through the streams above. */
+    fun retry() = store.retry()
 
     /**
      * One pack with its stickers on disk ([StickerPack.stickerUrls] are local files), downloading its zip if

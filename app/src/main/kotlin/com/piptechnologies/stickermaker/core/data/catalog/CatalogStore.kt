@@ -5,7 +5,10 @@ import java.util.zip.GZIPInputStream
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 
 /**
@@ -23,10 +26,18 @@ class CatalogStore(
 
     private data class Cached(val version: Int, val template: String, val catalog: Catalog)
 
+    private val retries = MutableStateFlow(0)
+
+    /**
+     * Tries the latest catalog/meta pointer again (Home's offline Retry): downloads it if it isn't cached, and
+     * emits null again when there is still nothing to show.
+     */
+    fun retry() = retries.update { it + 1 }
+
     val catalog: Flow<Catalog?> = channelFlow {
         var current: Cached? = withContext(io) { readCache() }
         current?.let { send(it.catalog) }
-        metaSource.observe().collect { meta ->
+        combine(metaSource.observe(), retries) { meta, _ -> meta }.collect { meta ->
             val cached = current
             if (meta == null) {
                 if (cached == null) send(null)

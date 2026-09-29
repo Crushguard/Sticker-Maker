@@ -31,7 +31,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -139,7 +138,6 @@ class HomeViewModel @Inject constructor(
     )
 
     private val controls = MutableStateFlow(Controls())
-    private val retrySignal = MutableStateFlow(0)
     private val packsMirror = MutableStateFlow<List<StickerPack>?>(null)
     private val installedMirror = MutableStateFlow<Set<String>>(emptySet())
     private val favoritesMirror = MutableStateFlow<Set<String>>(emptySet())
@@ -160,13 +158,12 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            retrySignal.collectLatest {
-                catalogRepository.observePacks().collect { packs ->
-                    packsMirror.value = packs
-                    if (pendingRetryToast) {
-                        pendingRetryToast = false
-                        if (packs.isEmpty()) _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_still_offline)))
-                    }
+            // One subscription for the screen's life: a Retry's outcome is the next list that arrives.
+            catalogRepository.observePacks().collect { packs ->
+                packsMirror.value = packs
+                if (pendingRetryToast) {
+                    pendingRetryToast = false
+                    if (packs.isEmpty()) _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_still_offline)))
                 }
             }
         }
@@ -216,10 +213,10 @@ class HomeViewModel @Inject constructor(
 
     fun onQueryChange(query: String) = controls.update { it.copy(query = query) }
 
-    /** Offline Retry: resubscribes the catalog stream. */
+    /** Offline Retry: downloads the catalog again, or says it is still offline. */
     fun onRetry() {
         pendingRetryToast = true
-        retrySignal.update { it + 1 }
+        catalogRepository.retryCatalog()
     }
 
     fun onToggleFavorite(packId: String) {

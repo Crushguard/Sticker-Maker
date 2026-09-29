@@ -8,6 +8,8 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.zip.GZIPOutputStream
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
@@ -99,5 +101,53 @@ class CatalogStoreTest {
     @Test
     fun nothingCachedAndNoPointerMeansNoCatalog() = runBlocking {
         assertNull(store(MutableStateFlow(null), FakeFetcher()).firstCatalog())
+    }
+
+    @Test
+    fun retryDownloadsAPointerWhoseDownloadFailed() = runBlocking {
+        val fetcher = FakeFetcher()
+        val store = store(MutableStateFlow(meta(1)), fetcher)
+        val emissions = mutableListOf<Catalog?>()
+        withTimeout(5_000) {
+            val job = launch(Dispatchers.Unconfined) { store.catalog.collect { emissions += it } }
+            while (emissions.isEmpty()) yield()
+            assertNull("the download failed and nothing is cached", emissions.single())
+
+            fetcher["https://cdn.example.com/public/catalog/v1.json.gz"] = gz(catalogJson(1, "a"))
+            store.retry()
+            while (emissions.last() == null) yield()
+            job.cancel()
+        }
+        assertEquals(listOf("a"), emissions.last()!!.packs.map { it.id })
+    }
+
+    @Test
+    fun retryWithNothingToLoadSaysSoAgain() = runBlocking {
+        val store = store(MutableStateFlow(null), FakeFetcher())
+        val emissions = mutableListOf<Catalog?>()
+        withTimeout(5_000) {
+            val job = launch(Dispatchers.Unconfined) { store.catalog.collect { emissions += it } }
+            while (emissions.isEmpty()) yield()
+            store.retry()
+            while (emissions.size < 2) yield()
+            job.cancel()
+        }
+        assertEquals(listOf<Catalog?>(null, null), emissions)
+    }
+
+    @Test
+    fun retryWithTheCatalogCurrentDownloadsNothing() = runBlocking {
+        val fetcher = FakeFetcher().apply { this["https://cdn.example.com/public/catalog/v1.json.gz"] = gz(catalogJson(1, "a")) }
+        val store = store(MutableStateFlow(meta(1)), fetcher)
+        val emissions = mutableListOf<Catalog?>()
+        withTimeout(5_000) {
+            val job = launch(Dispatchers.Unconfined) { store.catalog.collect { emissions += it } }
+            while (emissions.isEmpty()) yield()
+            store.retry()
+            yield()
+            job.cancel()
+        }
+        assertEquals(1, fetcher.requests.size)
+        assertEquals(1, emissions.size)
     }
 }

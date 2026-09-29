@@ -150,6 +150,8 @@ class PackDetailViewModel @Inject constructor(
             val remote = runCatching { catalogRepository.getPack(id) }.getOrNull()
             if (remote != null) {
                 content.value = DetailContent.Remote(remote)
+                // An installed pack on an older version takes the files the page just unpacked.
+                runCatching { catalogRepository.refreshInstalled(remote) }
                 return@launch
             }
             val own = runCatching {

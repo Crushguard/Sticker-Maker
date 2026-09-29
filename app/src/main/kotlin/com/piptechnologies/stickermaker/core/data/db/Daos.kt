@@ -23,6 +23,9 @@ interface InstalledPackDao {
     fun getAllBlocking(): List<InstalledPackEntity>
 
     @Query("SELECT * FROM installed_packs WHERE id = :id")
+    suspend fun get(id: String): InstalledPackEntity?
+
+    @Query("SELECT * FROM installed_packs WHERE id = :id")
     fun getBlocking(id: String): InstalledPackEntity?
 
     @Query("SELECT * FROM installed_stickers WHERE packId = :packId ORDER BY indexInPack")
