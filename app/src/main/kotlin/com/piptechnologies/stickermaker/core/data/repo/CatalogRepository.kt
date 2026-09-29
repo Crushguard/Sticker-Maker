@@ -61,10 +61,9 @@ class CatalogRepository @Inject constructor(
         downloader.download(pack).collect { progress ->
             emit(AddState.Downloading(progress.fraction))
         }
-        val emojis = pack.stickerEmojis.ifEmpty {
-            catalog.getPack(pack.id)?.stickerEmojis.orEmpty()
-        }
-        insertInstalled(pack, emojis)
+        // The pack is unpacked by now: its file list and emoji come from its contents.json.
+        val installed = catalog.withFiles(pack)
+        insertInstalled(installed, installed.stickerEmojis)
         emit(AddState.Sent)
     }
         .catch { error ->
