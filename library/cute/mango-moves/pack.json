@@ -1,0 +1,110 @@
+{
+  "name": "Mango Moves",
+  "lang": "en",
+  "tags": [
+    "mango",
+    "cat",
+    "kitty",
+    "dance"
+  ],
+  "order": 4,
+  "animate": "wiggle",
+  "stickers": [
+    {
+      "file": "01.webp",
+      "emojis": [
+        "🥳",
+        "🙌"
+      ],
+      "text": "LETS GOOO"
+    },
+    {
+      "file": "02.webp",
+      "emojis": [
+        "💫",
+        "❤️"
+      ],
+      "text": ""
+    },
+    {
+      "file": "03.webp",
+      "emojis": [
+        "🥳",
+        "🎉"
+      ],
+      "text": "YAY"
+    },
+    {
+      "file": "04.webp",
+      "emojis": [
+        "👋",
+        "😸"
+      ],
+      "text": "HIII"
+    },
+    {
+      "file": "05.webp",
+      "emojis": [
+        "❤️",
+        "💓"
+      ],
+      "text": "BA-DUM"
+    },
+    {
+      "file": "06.webp",
+      "emojis": [
+        "🏃",
+        "💨"
+      ],
+      "text": "COMING!"
+    },
+    {
+      "file": "07.webp",
+      "emojis": [
+        "🌪️",
+        "😆"
+      ],
+      "text": "wheee"
+    },
+    {
+      "file": "08.webp",
+      "emojis": [
+        "🥰",
+        "❤️"
+      ],
+      "text": "love u"
+    },
+    {
+      "file": "09.webp",
+      "emojis": [
+        "👋",
+        "😼"
+      ],
+      "text": "hey"
+    },
+    {
+      "file": "10.webp",
+      "emojis": [
+        "😼",
+        "🐾"
+      ],
+      "text": "ready"
+    },
+    {
+      "file": "11.webp",
+      "emojis": [
+        "📦",
+        "😼"
+      ],
+      "text": "mine"
+    },
+    {
+      "file": "12.webp",
+      "emojis": [
+        "😴",
+        "💤"
+      ],
+      "text": "tired, THUD"
+    }
+  ]
+}

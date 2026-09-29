@@ -1,0 +1,60 @@
+{
+  "name": "Bunny Bounce",
+  "lang": "en",
+  "tags": [
+    "bunny",
+    "bunnies"
+  ],
+  "order": 8,
+  "animate": "wiggle",
+  "stickers": [
+    {
+      "file": "01.webp",
+      "emojis": [
+        "🐰",
+        "💗"
+      ],
+      "text": "boing"
+    },
+    {
+      "file": "02.webp",
+      "emojis": [
+        "🤗",
+        "🐰"
+      ],
+      "text": "hug"
+    },
+    {
+      "file": "03.webp",
+      "emojis": [
+        "😘",
+        "🐰"
+      ],
+      "text": "mwah"
+    },
+    {
+      "file": "04.webp",
+      "emojis": [
+        "😊",
+        "🐰"
+      ],
+      "text": "hehe"
+    },
+    {
+      "file": "05.webp",
+      "emojis": [
+        "🥳",
+        "🐰"
+      ],
+      "text": "yay"
+    },
+    {
+      "file": "06.webp",
+      "emojis": [
+        "👋",
+        "🐰"
+      ],
+      "text": "hiii"
+    }
+  ]
+}

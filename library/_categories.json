@@ -1,0 +1,772 @@
+{
+  "categories": [
+    {
+      "id": "couples",
+      "order": 1,
+      "icon": "heart-handshake",
+      "hue": 10,
+      "emojis": [
+        "💑",
+        "❤️"
+      ],
+      "names": {
+        "en": "Couples",
+        "ar": "أزواج",
+        "es": "Parejas",
+        "pt": "Casais",
+        "pt-BR": "Casais",
+        "fr": "Couples",
+        "hi": "कपल",
+        "id": "Pasangan",
+        "tr": "Çiftler",
+        "ur": "جوڑے",
+        "de": "Paare",
+        "ru": "Пары",
+        "it": "Coppie",
+        "zh": "情侣",
+        "fa": "زوج‌ها",
+        "he": "זוגות",
+        "ps": "جوړې",
+        "ha": "Masoya",
+        "my": "စုံတွဲ"
+      },
+      "keywords": {
+        "en": [
+          "couple",
+          "us",
+          "together",
+          "bf",
+          "gf"
+        ],
+        "pt-BR": [
+          "namorados",
+          "casal"
+        ],
+        "pt": [
+          "namorados",
+          "casal"
+        ],
+        "es": [
+          "novios",
+          "pareja"
+        ],
+        "id": [
+          "pasangan",
+          "pacar"
+        ],
+        "tr": [
+          "sevgili",
+          "çift"
+        ],
+        "fr": [
+          "couple",
+          "amoureux"
+        ],
+        "hi": [
+          "जोड़ा"
+        ],
+        "ar": [
+          "حبيبي",
+          "حبيبتي"
+        ]
+      }
+    },
+    {
+      "id": "romantic",
+      "order": 2,
+      "icon": "flower-2",
+      "hue": 45,
+      "emojis": [
+        "❤️",
+        "🥰"
+      ],
+      "names": {
+        "en": "Romantic",
+        "ar": "رومانسية",
+        "es": "Romántico",
+        "pt": "Românticos",
+        "pt-BR": "Românticos",
+        "fr": "Romantique",
+        "hi": "रोमांटिक",
+        "id": "Romantis",
+        "tr": "Romantik",
+        "ur": "رومانوی",
+        "de": "Romantisch",
+        "ru": "Романтика",
+        "it": "Romantico",
+        "zh": "浪漫",
+        "fa": "رمانتیک",
+        "he": "רומנטי",
+        "ps": "رومانټیک",
+        "ha": "Soyayya",
+        "my": "ရိုမန်းတစ်"
+      },
+      "keywords": {
+        "en": [
+          "love",
+          "i love you",
+          "love you",
+          "heart"
+        ],
+        "pt-BR": [
+          "amor",
+          "te amo"
+        ],
+        "pt": [
+          "amor",
+          "amo-te"
+        ],
+        "es": [
+          "amor",
+          "te amo",
+          "te quiero"
+        ],
+        "id": [
+          "cinta",
+          "sayang",
+          "aku cinta kamu"
+        ],
+        "tr": [
+          "aşk",
+          "seni seviyorum"
+        ],
+        "fr": [
+          "je t'aime",
+          "amour"
+        ],
+        "de": [
+          "ich liebe dich",
+          "liebe"
+        ],
+        "it": [
+          "ti amo",
+          "amore"
+        ],
+        "ru": [
+          "люблю",
+          "любовь"
+        ],
+        "hi": [
+          "प्यार",
+          "आई लव यू"
+        ],
+        "ur": [
+          "محبت",
+          "پیار"
+        ],
+        "ar": [
+          "حب",
+          "أحبك"
+        ],
+        "fa": [
+          "عشق",
+          "دوستت دارم"
+        ],
+        "he": [
+          "אהבה"
+        ],
+        "zh": [
+          "爱你",
+          "我爱你"
+        ]
+      }
+    },
+    {
+      "id": "missyou",
+      "order": 3,
+      "icon": "hourglass",
+      "hue": 200,
+      "emojis": [
+        "🥺",
+        "💭"
+      ],
+      "names": {
+        "en": "Miss you",
+        "ar": "اشتقت إليك",
+        "es": "Te extraño",
+        "pt": "Saudades",
+        "pt-BR": "Saudade",
+        "fr": "Tu me manques",
+        "hi": "तुम्हारी याद",
+        "id": "Kangen",
+        "tr": "Özledim",
+        "ur": "تمہاری یاد",
+        "de": "Vermisse dich",
+        "ru": "Скучаю",
+        "it": "Mi manchi",
+        "zh": "想你",
+        "fa": "دلتنگی",
+        "he": "געגועים",
+        "ps": "ستا یاد",
+        "ha": "Kewa",
+        "my": "သတိရတယ်"
+      },
+      "keywords": {
+        "en": [
+          "miss",
+          "miss u",
+          "miss you",
+          "thinking of you"
+        ],
+        "pt-BR": [
+          "saudade",
+          "saudades",
+          "sinto sua falta"
+        ],
+        "pt": [
+          "saudades",
+          "tenho saudades"
+        ],
+        "es": [
+          "te extraño",
+          "te echo de menos"
+        ],
+        "id": [
+          "kangen",
+          "rindu"
+        ],
+        "ar": [
+          "اشتقت لك",
+          "وحشتني"
+        ],
+        "tr": [
+          "özledim",
+          "seni özledim"
+        ],
+        "fr": [
+          "tu me manques"
+        ],
+        "de": [
+          "vermisse dich",
+          "ich vermisse dich"
+        ],
+        "it": [
+          "mi manchi"
+        ],
+        "ru": [
+          "скучаю"
+        ],
+        "hi": [
+          "याद",
+          "मिस यू"
+        ],
+        "ur": [
+          "یاد"
+        ],
+        "fa": [
+          "دلتنگتم",
+          "دلم برات تنگ شده"
+        ],
+        "he": [
+          "מתגעגע",
+          "מתגעגעת"
+        ],
+        "zh": [
+          "想你"
+        ],
+        "ha": [
+          "kewa"
+        ]
+      }
+    },
+    {
+      "id": "sorry",
+      "order": 4,
+      "icon": "hand-heart",
+      "hue": 20,
+      "emojis": [
+        "🥺",
+        "🙏"
+      ],
+      "names": {
+        "en": "Sorry",
+        "ar": "اعتذار",
+        "es": "Perdón",
+        "pt": "Desculpa",
+        "pt-BR": "Desculpa",
+        "fr": "Pardon",
+        "hi": "माफ़ी",
+        "id": "Maaf",
+        "tr": "Özür dilerim",
+        "ur": "معافی",
+        "de": "Entschuldigung",
+        "ru": "Прости",
+        "it": "Scusa",
+        "zh": "对不起",
+        "fa": "ببخشید",
+        "he": "סליחה",
+        "ps": "بخښنه",
+        "ha": "Yi haƙuri",
+        "my": "တောင်းပန်ပါတယ်"
+      },
+      "keywords": {
+        "en": [
+          "sorry",
+          "apology",
+          "forgive",
+          "forgive me",
+          "my bad"
+        ],
+        "pt-BR": [
+          "desculpa",
+          "perdão",
+          "me perdoa"
+        ],
+        "pt": [
+          "desculpa",
+          "perdão"
+        ],
+        "es": [
+          "perdón",
+          "lo siento",
+          "perdóname"
+        ],
+        "id": [
+          "maaf",
+          "maafkan aku"
+        ],
+        "ar": [
+          "آسف",
+          "آسفة",
+          "سامحني"
+        ],
+        "tr": [
+          "özür dilerim",
+          "affet"
+        ],
+        "fr": [
+          "désolé",
+          "désolée",
+          "pardon"
+        ],
+        "de": [
+          "entschuldigung",
+          "tut mir leid"
+        ],
+        "it": [
+          "scusa",
+          "perdonami"
+        ],
+        "ru": [
+          "прости",
+          "извини"
+        ],
+        "hi": [
+          "माफ़",
+          "सॉरी"
+        ],
+        "ur": [
+          "معاف",
+          "سوری"
+        ],
+        "fa": [
+          "ببخشید",
+          "متاسفم"
+        ],
+        "he": [
+          "סליחה"
+        ],
+        "zh": [
+          "对不起",
+          "抱歉"
+        ]
+      }
+    },
+    {
+      "id": "cute",
+      "order": 5,
+      "icon": "rabbit",
+      "hue": 330,
+      "emojis": [
+        "🥰",
+        "🤗"
+      ],
+      "names": {
+        "en": "Cute",
+        "ar": "لطيفة",
+        "es": "Tierno",
+        "pt": "Fofos",
+        "pt-BR": "Fofos",
+        "fr": "Mignon",
+        "hi": "क्यूट",
+        "id": "Imut",
+        "tr": "Sevimli",
+        "ur": "پیارے",
+        "de": "Süß",
+        "ru": "Милые",
+        "it": "Carino",
+        "zh": "可爱",
+        "fa": "بامزه",
+        "he": "חמוד",
+        "ps": "خوږ",
+        "ha": "Kyawawa",
+        "my": "ချစ်စရာ"
+      },
+      "keywords": {
+        "en": [
+          "cute",
+          "kawaii",
+          "adorable",
+          "cat",
+          "bunny"
+        ]
+      }
+    },
+    {
+      "id": "flirty",
+      "order": 6,
+      "icon": "message-circle-heart",
+      "hue": 200,
+      "emojis": [
+        "😘",
+        "😉"
+      ],
+      "names": {
+        "en": "Flirty",
+        "ar": "غزل",
+        "es": "Coqueto",
+        "pt": "Atrevidos",
+        "pt-BR": "Paquera",
+        "fr": "Flirt",
+        "hi": "फ़्लर्टी",
+        "id": "Menggoda",
+        "tr": "Flörtöz",
+        "ur": "شوخ",
+        "de": "Flirt",
+        "ru": "Флирт",
+        "it": "Flirt",
+        "zh": "撩人",
+        "fa": "دلبرانه",
+        "he": "פלרטוט",
+        "ps": "ناز",
+        "ha": "Kwarkwasa",
+        "my": "ကလူကျီစယ်"
+      },
+      "keywords": {
+        "en": [
+          "flirt",
+          "crush",
+          "wink",
+          "cute"
+        ],
+        "pt-BR": [
+          "paquera",
+          "crush"
+        ],
+        "es": [
+          "coqueto",
+          "crush"
+        ],
+        "id": [
+          "gebetan",
+          "naksir"
+        ],
+        "tr": [
+          "flört"
+        ]
+      }
+    },
+    {
+      "id": "goodmorning",
+      "order": 7,
+      "icon": "sunrise",
+      "hue": 50,
+      "emojis": [
+        "☀️",
+        "😊"
+      ],
+      "names": {
+        "en": "Good morning",
+        "ar": "صباح الخير",
+        "es": "Buenos días",
+        "pt": "Bom dia",
+        "pt-BR": "Bom dia",
+        "fr": "Bonjour",
+        "hi": "सुप्रभात",
+        "id": "Selamat pagi",
+        "tr": "Günaydın",
+        "ur": "صبح بخیر",
+        "de": "Guten Morgen",
+        "ru": "Доброе утро",
+        "it": "Buongiorno",
+        "zh": "早上好",
+        "fa": "صبح بخیر",
+        "he": "בוקר טוב",
+        "ps": "سهار مو پخیر",
+        "ha": "Barka da safiya",
+        "my": "မင်္ဂလာနံနက်ခင်းပါ"
+      },
+      "keywords": {
+        "en": [
+          "good morning",
+          "gm",
+          "morning",
+          "rise and shine"
+        ],
+        "pt-BR": [
+          "bom dia"
+        ],
+        "pt": [
+          "bom dia"
+        ],
+        "es": [
+          "buenos días"
+        ],
+        "id": [
+          "selamat pagi",
+          "pagi"
+        ],
+        "ar": [
+          "صباح الخير"
+        ],
+        "tr": [
+          "günaydın"
+        ],
+        "fr": [
+          "bonjour"
+        ],
+        "de": [
+          "guten morgen"
+        ],
+        "it": [
+          "buongiorno"
+        ],
+        "ru": [
+          "доброе утро"
+        ],
+        "hi": [
+          "सुप्रभात",
+          "गुड मॉर्निंग"
+        ],
+        "ur": [
+          "صبح بخیر"
+        ],
+        "fa": [
+          "صبح بخیر"
+        ],
+        "he": [
+          "בוקר טוב"
+        ],
+        "zh": [
+          "早安",
+          "早上好"
+        ]
+      }
+    },
+    {
+      "id": "goodnight",
+      "order": 8,
+      "icon": "moon",
+      "hue": 250,
+      "emojis": [
+        "🌙",
+        "😴"
+      ],
+      "names": {
+        "en": "Good night",
+        "ar": "ليلة سعيدة",
+        "es": "Buenas noches",
+        "pt": "Boa noite",
+        "pt-BR": "Boa noite",
+        "fr": "Bonne nuit",
+        "hi": "गुड नाइट",
+        "id": "Selamat tidur",
+        "tr": "İyi geceler",
+        "ur": "شب بخیر",
+        "de": "Gute Nacht",
+        "ru": "Спокойной ночи",
+        "it": "Buonanotte",
+        "zh": "晚安",
+        "fa": "شب بخیر",
+        "he": "לילה טוב",
+        "ps": "شپه مو پخیر",
+        "ha": "Sai da safe",
+        "my": "ကောင်းသောည"
+      },
+      "keywords": {
+        "en": [
+          "good night",
+          "gn",
+          "night",
+          "sweet dreams",
+          "sleep"
+        ],
+        "pt-BR": [
+          "boa noite"
+        ],
+        "pt": [
+          "boa noite"
+        ],
+        "es": [
+          "buenas noches"
+        ],
+        "id": [
+          "selamat malam",
+          "selamat tidur"
+        ],
+        "ar": [
+          "تصبح على خير"
+        ],
+        "tr": [
+          "iyi geceler"
+        ],
+        "fr": [
+          "bonne nuit"
+        ],
+        "de": [
+          "gute nacht"
+        ],
+        "it": [
+          "buonanotte"
+        ],
+        "ru": [
+          "спокойной ночи"
+        ],
+        "hi": [
+          "शुभ रात्रि",
+          "गुड नाइट"
+        ],
+        "ur": [
+          "شب بخیر"
+        ],
+        "fa": [
+          "شب بخیر"
+        ],
+        "he": [
+          "לילה טוב"
+        ],
+        "zh": [
+          "晚安"
+        ]
+      }
+    },
+    {
+      "id": "distance",
+      "order": 9,
+      "icon": "plane",
+      "hue": 150,
+      "emojis": [
+        "✈️",
+        "💌"
+      ],
+      "names": {
+        "en": "Long distance",
+        "ar": "حب عن بُعد",
+        "es": "A distancia",
+        "pt": "À distância",
+        "pt-BR": "Longa distância",
+        "fr": "À distance",
+        "hi": "लॉन्ग डिस्टेंस",
+        "id": "Jarak jauh",
+        "tr": "Uzak mesafe",
+        "ur": "فاصلوں کی محبت",
+        "de": "Fernbeziehung",
+        "ru": "На расстоянии",
+        "it": "A distanza",
+        "zh": "异地恋",
+        "fa": "عشق از راه دور",
+        "he": "אהבה מרחוק",
+        "ps": "له لرې مینه",
+        "ha": "Nesa da juna",
+        "my": "အဝေးရောက်ချစ်သူ"
+      },
+      "keywords": {
+        "en": [
+          "long distance",
+          "ldr",
+          "far away",
+          "travel"
+        ],
+        "pt-BR": [
+          "distância",
+          "namoro à distância"
+        ],
+        "es": [
+          "distancia",
+          "a distancia"
+        ],
+        "id": [
+          "ldr",
+          "jarak jauh"
+        ]
+      }
+    },
+    {
+      "id": "funny",
+      "order": 10,
+      "icon": "laugh",
+      "hue": 85,
+      "emojis": [
+        "😂",
+        "❤️"
+      ],
+      "names": {
+        "en": "Funny",
+        "ar": "مضحكة",
+        "es": "Divertido",
+        "pt": "Engraçados",
+        "pt-BR": "Engraçados",
+        "fr": "Drôle",
+        "hi": "मज़ेदार",
+        "id": "Kocak",
+        "tr": "Komik",
+        "ur": "مزاحیہ",
+        "de": "Lustig",
+        "ru": "Смешные",
+        "it": "Divertente",
+        "zh": "搞笑",
+        "fa": "خنده‌دار",
+        "he": "מצחיק",
+        "ps": "خندوونکي",
+        "ha": "Barkwanci",
+        "my": "ရယ်စရာ"
+      },
+      "keywords": {
+        "en": [
+          "funny",
+          "lol",
+          "haha",
+          "meme"
+        ]
+      }
+    },
+    {
+      "id": "anime",
+      "order": 11,
+      "icon": "sparkles",
+      "hue": 300,
+      "emojis": [
+        "✨",
+        "❤️"
+      ],
+      "names": {
+        "en": "Anime",
+        "ar": "أنمي",
+        "es": "Anime",
+        "pt": "Anime",
+        "pt-BR": "Anime",
+        "fr": "Anime",
+        "hi": "एनीमे",
+        "id": "Anime",
+        "tr": "Anime",
+        "ur": "اینیمے",
+        "de": "Anime",
+        "ru": "Аниме",
+        "it": "Anime",
+        "zh": "动漫",
+        "fa": "انیمه",
+        "he": "אנימה",
+        "ps": "انیمې",
+        "ha": "Anime",
+        "my": "အန်နီမေး"
+      },
+      "keywords": {
+        "en": [
+          "anime",
+          "manga",
+          "kawaii"
+        ]
+      }
+    }
+  ]
+}
