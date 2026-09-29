@@ -56,9 +56,10 @@ library/                        (bucket play-console-f33dd-stickermaker, private
 - **Add or update a pack:** put its folder under its category in the bucket (Google Cloud console,
   Upload folder, or `node scripts/library/upload.js <libraryDir> --wait`). The functions convert it
   to WhatsApp's rules (ready 512×512 WebP ships byte for byte), make the tray and the Home cover
-  strips, zip it, and publish the catalog: live about 15–30 s after the last file when `pack.json`
-  lists the stickers (upload it last), otherwise once the folder is quiet for 30 s. A pack that
-  breaks a rule is not published and the live version stays; `_report.txt` says why.
+  strips, zip it, and publish the catalog. A new pack whose `pack.json` lists the stickers and is
+  uploaded last goes live about 15–30 s after it; anything else, updates of a live pack included,
+  goes live once its folder has been quiet for 30 s, so a half-uploaded update never ships. A pack
+  that breaks a rule is not published and the live version stays; `_report.txt` says why.
 - **Take a pack down:** delete its folder, or set `hidden: true` on `packs/<id>` in the Firestore
   console. **Pin** one to the top with `pin: 1` (2, 3…). Categories live in `_categories.json`.
 - **Ranking:** pinned, then popularity (weekly from the Analytics `pack_added` event, when
