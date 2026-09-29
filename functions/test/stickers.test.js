@@ -42,10 +42,10 @@ test('a PNG becomes a lossless 512 WebP when that fits', async () => {
   assert.ok(out.buffer.length <= 102400);
 });
 
-test('art that cannot be lossless tries near-lossless before lossy', async () => {
-  const out = await encodeSticker(await noisyPng(12), {});
+test('art that cannot be lossless ships lossy at quality 95 when that fits', async () => {
+  const out = await encodeSticker(await noisyPng(6), {});
   assert.equal(out.lossless, false);
-  assert.equal(out.quality, 'near-lossless');
+  assert.equal(out.quality, 95);
   assert.ok(out.buffer.length <= 102400);
 });
 

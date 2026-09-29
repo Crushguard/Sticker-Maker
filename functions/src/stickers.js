@@ -57,27 +57,29 @@ async function fittedRaw(buf) {
   return { data, raw: { width: info.width, height: info.height, channels: info.channels } };
 }
 
-/** Best quality that fits 100 KB: lossless, then near-lossless, then lossy from 95 down to the floor. */
+/**
+ * Best quality that fits 100 KB: lossless, else lossy from 95 down to the floor. Lossy uses effort 4: effort 6
+ * with a lossless alpha plane takes ~100x longer for ~2% fewer bytes.
+ */
 async function encodeStatic(buf) {
   const { data, raw } = await fittedRaw(buf);
-  const attempt = (options) => sharp(data, { raw }).webp({ effort: 6, ...options }).toBuffer();
-  const lossless = await attempt({ lossless: true });
+  const lossless = await sharp(data, { raw }).webp({ lossless: true, effort: 6 }).toBuffer();
   if (lossless.length <= WHATSAPP.staticMaxBytes) return { buffer: lossless, lossless: true, quality: 100 };
-  const near = await attempt({ nearLossless: true, quality: 60 });
-  if (near.length <= WHATSAPP.staticMaxBytes) return { buffer: near, lossless: false, quality: 'near-lossless' };
   for (let q = QUALITY.staticStart; q >= QUALITY.staticFloor; q -= QUALITY.step) {
-    const out = await attempt({ quality: q, alphaQuality: 100, smartSubsample: true });
+    const out = await sharp(data, { raw })
+      .webp({ quality: q, alphaQuality: 100, smartSubsample: true, effort: 4 })
+      .toBuffer();
     if (out.length <= WHATSAPP.staticMaxBytes) return { buffer: out, lossless: false, quality: q };
   }
   throw new StickerError(`can't fit 100 KB without going below quality ${QUALITY.staticFloor}; simplify the art`);
 }
 
-/** Animated WebP at the best quality from 90 down that fits 500 KB. */
+/** Animated WebP at the best quality from 90 down that fits 500 KB (effort 6 is ~100x slower for ~3%). */
 async function encodeFrames(image, delays) {
   for (let q = QUALITY.animatedStart; q >= QUALITY.animatedFloor; q -= QUALITY.step) {
     const out = await image
       .clone()
-      .webp({ quality: q, alphaQuality: 100, smartSubsample: true, effort: 6, delay: delays, loop: 0 })
+      .webp({ quality: q, alphaQuality: 100, smartSubsample: true, effort: 4, delay: delays, loop: 0 })
       .toBuffer();
     if (out.length <= WHATSAPP.animatedMaxBytes) return { buffer: out, quality: q };
   }

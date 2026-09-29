@@ -37,11 +37,12 @@ const QUALITY = {
   animatedStart: 90,
   animatedFloor: 60,
   step: 5,
-  cover: 88,
+  cover: 85,
+  coverAlpha: 90,
 };
 
-/** Home card cover tiles: small for screens up to 2x, large above. */
-const COVER_TILES = { small: 96, large: 192, count: 6 };
+/** Home card cover tiles (the card's circles are 46 dp): small for screens up to 2x, large (1:1 up to 3.5x) above. */
+const COVER_TILES = { small: 96, large: 160, count: 6 };
 
 const IMMUTABLE_CACHE = 'public, max-age=31536000, immutable';
 

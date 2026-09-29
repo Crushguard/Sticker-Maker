@@ -28,7 +28,7 @@ async function makeCoverStrip(framesPng, tile) {
     create: { width: tile * tiles.length, height: tile, channels: 4, background: TRANSPARENT },
   })
     .composite(tiles.map((input, i) => ({ input, left: i * tile, top: 0 })))
-    .webp({ quality: QUALITY.cover, alphaQuality: 100, smartSubsample: true, effort: 6 })
+    .webp({ quality: QUALITY.cover, alphaQuality: QUALITY.coverAlpha, smartSubsample: true, effort: 4 })
     .toBuffer();
 }
 
