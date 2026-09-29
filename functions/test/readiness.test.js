@@ -5,10 +5,9 @@ const assert = require('node:assert/strict');
 const { quietTaskId, fastTaskId, isQuiet, fastPathReady, mustWait } = require('../src/readiness');
 const { parsePackManifest } = require('../src/manifest');
 
-test('quiet task ids share a 30-second bucket per pack', () => {
-  assert.equal(quietTaskId('sorry-wiggle', 60000), 'q-sorry-wiggle-2');
-  assert.equal(quietTaskId('sorry-wiggle', 89999), 'q-sorry-wiggle-2');
-  assert.equal(quietTaskId('sorry-wiggle', 90000), 'q-sorry-wiggle-3');
+test('quiet task ids are unique per request', () => {
+  assert.match(quietTaskId('sorry-wiggle', 60000), /^q-sorry-wiggle-[0-9a-z]+-[0-9a-z]+$/);
+  assert.notEqual(quietTaskId('sorry-wiggle', 60000), quietTaskId('sorry-wiggle', 60000));
 });
 
 test('fast task ids depend on the exact object generations', () => {

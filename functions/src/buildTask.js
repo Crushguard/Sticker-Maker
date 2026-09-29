@@ -42,16 +42,20 @@ async function deleteOldVersions(packId, version) {
  * Builds the pack in library/<category>/<folder>/ and publishes it when it passes. Safe to run any number of
  * times: the same files give the same fingerprint and publish nothing new.
  */
-async function runBuild({ category, folder }, { now = new Date() } = {}) {
+async function runBuild({ category, folder, quiet = false }, { now = new Date() } = {}) {
   const packId = slugify(folder);
   const prefix = `${LIBRARY_PREFIX}${category}/${folder}/`;
   const reportPath = `${prefix}${REPORT_FILE}`;
   const packRef = db().collection('packs').doc(packId);
-  const [liveSnap, entriesAll, eventsSnap] = await Promise.all([
-    packRef.get(),
-    listFolder(prefix),
-    db().collection('builds').doc(packId).get(),
-  ]);
+  const buildsRef = db().collection('builds').doc(packId);
+  // A quiet build clears the pending flag before it looks at the folder: any event from here on schedules a
+  // new quiet build, so no change can slip between this listing and the next build.
+  if (quiet) await buildsRef.set({ quietPending: false }, { merge: true });
+  const wait = async (message) => {
+    if (quiet) await buildsRef.set({ quietPending: true, quietPendingSince: now }, { merge: true });
+    throw new NotQuietYet(message);
+  };
+  const [liveSnap, entriesAll, eventsSnap] = await Promise.all([packRef.get(), listFolder(prefix), buildsRef.get()]);
   const lastEvent = eventsSnap.exists ? eventsSnap.data().lastEventAt : null;
   const lastEventMs = lastEvent && typeof lastEvent.toMillis === 'function' ? lastEvent.toMillis() : null;
   const live = liveSnap.exists ? liveSnap.data() : null;
@@ -59,7 +63,7 @@ async function runBuild({ category, folder }, { now = new Date() } = {}) {
 
   if (entries.length === 0) {
     if (mustWait({ fastReady: false, newestObjectMs: 0, lastEventMs, nowMs: now.getTime() })) {
-      throw new NotQuietYet(`${prefix} is still changing`);
+      await wait(`${prefix} is still changing`);
     }
     if (live && live.source && live.source.folder === prefix && live.status !== 'removed') {
       await packRef.set({ status: 'removed', removedAt: now }, { merge: true });
@@ -75,7 +79,7 @@ async function runBuild({ category, folder }, { now = new Date() } = {}) {
   const quick = parsePackManifest(manifestText, imageNames, { folder, category, categoryIds: new Set(), defaultEmojis: [] });
   const newest = Math.max(...entries.map((e) => e.updatedMs));
   if (mustWait({ fastReady: fastPathReady(quick), newestObjectMs: newest, lastEventMs, nowMs: now.getTime() })) {
-    throw new NotQuietYet(`${prefix} is still changing`);
+    await wait(`${prefix} is still changing`);
   }
 
   const categories = await categoriesById();

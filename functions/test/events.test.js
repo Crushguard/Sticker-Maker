@@ -5,8 +5,9 @@ const assert = require('node:assert/strict');
 const { handleLibraryEvent } = require('../src/events');
 
 /** Fake Storage folder + recorded side effects. */
-function fakes(folderFiles = {}) {
+function fakes(folderFiles = {}, { quietPending = false } = {}) {
   const calls = { builds: [], syncs: 0, touches: [] };
+  let pending = quietPending;
   return {
     calls,
     deps: {
@@ -14,7 +15,13 @@ function fakes(folderFiles = {}) {
         Object.entries(folderFiles).map(([file, { generation = '1', text }]) => ({ file, generation, text, prefix })),
       readText: async (entry) => entry.text,
       enqueueBuild: async (task) => calls.builds.push(task),
-      touch: async (packId, where, nowMs) => calls.touches.push({ packId, ...where, nowMs }),
+      // Records the event; true when no quiet build is pending yet (the caller must schedule one).
+      recordEvent: async (packId, where, nowMs) => {
+        calls.touches.push({ packId, ...where, nowMs });
+        if (pending) return false;
+        pending = true;
+        return true;
+      },
       syncCategories: async () => {
         calls.syncs += 1;
       },
@@ -55,9 +62,12 @@ test('reports, junk and staging never schedule builds', async () => {
 test('an upload without a listing pack.json schedules only the quiet build', async () => {
   const { calls, deps } = fakes({ '01.png': {}, '02.png': {} });
   await handleLibraryEvent('library/sorry/Sorry Wiggle/02.png', 'finalized', NOW, deps);
-  assert.deepEqual(calls.builds, [
-    { category: 'sorry', folder: 'Sorry Wiggle', delaySeconds: 45, id: `q-sorry-wiggle-${Math.floor(NOW / 30000)}` },
-  ]);
+  assert.equal(calls.builds.length, 1);
+  assert.equal(calls.builds[0].category, 'sorry');
+  assert.equal(calls.builds[0].folder, 'Sorry Wiggle');
+  assert.equal(calls.builds[0].delaySeconds, 45);
+  assert.equal(calls.builds[0].quiet, true);
+  assert.match(calls.builds[0].id, /^q-sorry-wiggle-[0-9a-z]+-[0-9a-z]+$/);
 });
 
 test('the upload that completes a listing pack.json also schedules a build right away', async () => {
@@ -96,4 +106,23 @@ test('every pack event records when it happened, before any build is scheduled',
   await handleLibraryEvent('library/sorry/Sorry Wiggle/_report.txt', 'finalized', NOW, deps);
   await handleLibraryEvent('library/_categories.json', 'finalized', NOW, deps);
   assert.deepEqual(calls.touches, [{ packId: 'sorry-wiggle', category: 'sorry', folder: 'Sorry Wiggle', nowMs: NOW }]);
+});
+
+test('while a quiet build is pending, more events only record their time', async () => {
+  const { calls, deps } = fakes({ '01.png': {}, '02.png': {} });
+  await handleLibraryEvent('library/sorry/Sorry Wiggle/01.png', 'finalized', NOW, deps);
+  await handleLibraryEvent('library/sorry/Sorry Wiggle/02.png', 'finalized', NOW + 1000, deps);
+  await handleLibraryEvent('library/sorry/Sorry Wiggle/02.png', 'deleted', NOW + 2000, deps);
+  assert.equal(calls.builds.filter((b) => b.quiet).length, 1);
+  assert.equal(calls.touches.length, 3);
+});
+
+test('quiet build ids never repeat, so an id that already ran can never swallow a later event', async () => {
+  const ids = new Set();
+  for (let i = 0; i < 50; i++) {
+    const { calls, deps } = fakes({});
+    await handleLibraryEvent('library/sorry/Sorry Wiggle/01.png', 'deleted', NOW, deps);
+    ids.add(calls.builds[0].id);
+  }
+  assert.equal(ids.size, 50);
 });

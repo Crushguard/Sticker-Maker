@@ -4,9 +4,13 @@ const crypto = require('crypto');
 
 const QUIET_MS = 30000;
 
-/** One quiet build per pack per 30 seconds, however many files land in that window. */
+/**
+ * A quiet build's task id: unique per request. Debouncing is done by the builds/<packId> record (one pending
+ * quiet build per pack), never by task id, because an id that already ran stays blocked and would swallow a
+ * later event.
+ */
 function quietTaskId(packId, nowMs) {
-  return `q-${packId}-${Math.floor(nowMs / QUIET_MS)}`;
+  return `q-${packId}-${nowMs.toString(36)}-${crypto.randomBytes(4).toString('hex')}`;
 }
 
 /** One fast build per exact set of uploaded objects. */

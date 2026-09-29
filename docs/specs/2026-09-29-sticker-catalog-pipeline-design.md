@@ -1,6 +1,7 @@
 # Sticker catalog pipeline: design
 
-Date: 2026-09-29. Status: approved in conversation ("do it"); decisions below are final unless noted.
+Date: 2026-09-29. Status: approved in conversation ("do it"); implemented. Updated after implementation where the build taught
+us something (marked "Implementation note").
 
 ## Goal
 
@@ -29,7 +30,7 @@ Success:
 | Resource | Name | Notes |
 |---|---|---|
 | Firestore database | `stickermaker` (us-central1) | Replaces `stickers-app`, which was never created. Named databases get no free tier; the app reads one tiny document. |
-| Storage bucket | `play-console-f33dd-stickermaker` (us-central1, Standard) | `library/` private sources, `public/` generated files. Bucket names are global, hence the project prefix. The default bucket is not used. |
+| Storage bucket | `play-console-f33dd-stickermaker` (us-central1, Standard) | `library/` private sources, `public/` generated files. Bucket names are global, hence the project prefix. The default bucket is not used. Deploy target `stickermaker` in `.firebaserc` (the Storage emulator requires a target). |
 | Functions | codebase `stickermaker`, group `stickermaker` (us-central1) | Deployed names `stickermaker-<name>`; deploys never touch other codebases. Runtime nodejs24. |
 
 ## Architecture
@@ -133,14 +134,19 @@ languages; the 8 existing ones come from the app's `theme_*` strings, the 3 new 
 
 ### When a build runs
 
-- Every upload or delete under a pack folder schedules a "quiet" build: a task delayed 45 s with id
-  `q-<packId>-<30-second bucket>`. It builds only once the folder's newest object is at least 30 s old; otherwise it
-  fails on purpose and Cloud Tasks retries it (30 s backoff, 8 attempts).
+- Every upload or delete under a pack folder records its time in Firestore `builds/<packId>` (`lastEventAt`, in a
+  transaction) and schedules a "quiet" build 45 s out unless one is already pending for the pack (`quietPending`;
+  a flag older than 10 minutes no longer blocks). The quiet build clears the flag before it lists the folder, so any
+  later event schedules another build and no change is lost. It builds once the folder has been quiet for 30 s
+  (newest object and last event, since deletions leave no timestamp); until then it answers 503 and Cloud Tasks
+  retries it (30–60 s backoff, 8 attempts), setting the flag again.
 - Fast path: when `pack.json` lists the stickers and every listed file exists, the upload that completes the set also
   schedules a build 2 s out, id `f-<packId>-<hash of the listed objects' generations>`. Uploading the stickers first
   and `pack.json` last (what the export does) makes a pack live without the quiet wait.
-- Duplicate task ids are expected and ignored. Builds are deterministic, so two builds of the same files write the
-  same bytes.
+- Builds are deterministic, so two builds of the same files write the same bytes.
+- Implementation note: debouncing by task id (one id per 30 s) was dropped. Cloud Tasks keeps an id blocked after it
+  runs, so an event landing after its build already ran was silently dropped, and the Cloud Tasks emulator runs tasks
+  immediately, which turned every upload into a retrying task that exhausted the Functions emulator.
 
 ### Stickers (quality rules)
 
@@ -149,6 +155,8 @@ languages; the 8 existing ones come from the app's `theme_*` strings, the 3 new 
 - Otherwise it is fitted into 512×512 on transparency (Lanczos 3, never cropped) and encoded at the best quality that
   fits: static tries lossless first, then quality 95 stepping down by 5 to a floor of 75; animated from 90 down to 60.
   Below the floor the build fails for that file instead of shipping blurry art.
+- Implementation note: lossy and animated encodes use libwebp effort 4. Effort 6 measured about 100 times slower
+  (15 s instead of 0.16 s per animated sticker) for 2–3% fewer bytes; lossless keeps effort 6 (0.65 s).
 - Art smaller than 512 px on its longer side is upscaled and flagged in the report.
 - Animated input: frame delays under 8 ms become 100 ms (as browsers play them), noted; loops over 10 s fail.
 - `animate: "wiggle"` builds the launch packs' 4-frame wiggle (±1.8°, 150 ms frames) from static art.
@@ -158,7 +166,8 @@ languages; the 8 existing ones come from the app's `theme_*` strings, the 3 new 
 - Tray: `tray.png` if present, else the first sticker's first frame; 96×96, full-colour PNG, reduced to a palette only
   when needed to stay ≤ 50 KB.
 - Cover strip: the 6 cover stickers' first frames side by side on transparency, in two sizes: `cover-s.webp` with
-  96 px tiles (screens up to 2×) and `cover-l.webp` with 192 px tiles; WebP quality 88.
+  96 px tiles (screens up to 2×) and `cover-l.webp` with 160 px tiles (the card's 46 dp circles are 161 px at 3.5×);
+  WebP quality 85, alpha 90 (about 30 and 55 KB).
 - `pack.zip`: stored (not deflated), fixed timestamps, entries `contents.json`, `tray.png`, `01.webp` … in pack order.
   `contents.json`: `{ id, name, version, animated, stickers: [{ file, emojis, text }] }`.
 - All written under `public/packs/<id>/v<n>/` with `Cache-Control: public, max-age=31536000, immutable`. A build
@@ -189,7 +198,9 @@ Notes:
 
 ## Publish
 
-`publishCatalog` reads `categories` and every `packs` doc with status `live` and `hidden` not true, and writes:
+`publishCatalog` runs one at a time. Publish requests are never deduplicated (an id that already ran would drop a
+later request); a publish whose catalog is identical to the live one writes nothing. It reads `categories` and every
+`packs` doc with status `live` and `hidden` not true, and writes:
 
 - `public/catalog/v<k>.json.gz` (gzip, immutable, the last 3 kept):
 
@@ -245,13 +256,14 @@ Notes:
   keeps it in `filesDir/catalog/`; emits the cached catalog immediately on start (Home opens from disk).
 - URLs come from `urlTemplate`. Debug builds against the emulators rewrite `127.0.0.1`/`localhost` to the emulator
   host.
-- `PackArchive`: downloads `pack.zip` with byte progress, unpacks it atomically to a per-version folder, reused by the
-  pack page (stickers appear as they unpack) and by Add (no second download).
+- `PackArchive`: downloads `pack.zip` with byte progress, unpacks it atomically to `cacheDir/packs/<id>-<version>/`
+  (entry names checked, nothing outside the folder), reused by the pack page and by Add (no second download).
 - Home card: one cover strip per card (`cover-s` at density ≤ 2, else `cover-l`) sliced into the tile circles.
 - Home order, chips, search and counts as above. Pack page meta line hides counts under 100.
 - Room migration 1 → 2 adds `imageDataVersion` (default 1) to `installed_packs` and `own_packs` (the latter is the
-  custom-stickers spec's column); the provider sends it as `image_data_version`. An installed pack refreshes to a new
-  version when its pack page is opened.
+  custom-stickers spec's column) and `accessibilityText` to `installed_stickers`; the provider sends them as
+  `image_data_version` and `sticker_accessibility_text` (the sticker's lettering, capped at 125/255 characters).
+  An installed pack refreshes to a new version when its pack page is opened.
 - Downloads are plain HTTPS; the Firebase Storage SDK is no longer used.
 
 ## Migration
@@ -270,7 +282,9 @@ keep their category. `packs/<id>/` keeps the built WhatsApp fixtures for the val
 - Emulators: an end-to-end script uploads a library pack to the Storage emulator and waits for `catalog/meta`, the
   catalog file and the pack outputs (Storage, Firestore, Functions and Tasks emulators).
 - App: JVM tests for catalog parsing, URL templates, language grouping, zip unpacking and the Room migration.
-- CI: the screen tour seeds its emulators through the real pipeline.
+- CI: the screen tour seeds its emulators through the real pipeline (`scripts/library/seed-emulators.js`, one file
+  and one pack at a time; test-only add counts from `design/catalog.json` keep the frames matching the design), and
+  `.github/workflows/functions.yml` runs the functions' tests.
 
 ## Setup and operations
 

@@ -18,17 +18,9 @@ async function enqueue(functionName, data, options) {
   }
 }
 
-/**
- * Quiet builds share one id per pack per 30 s: in production that task runs 45 s after the window opened, after
- * every event of its window. The Cloud Tasks emulator ignores delays and runs tasks at once, so there each request
- * gets its own id (builds are idempotent).
- */
-function enqueueBuild({ category, folder, delaySeconds, id }) {
-  const taskId =
-    process.env.FUNCTIONS_EMULATOR === 'true' && id.startsWith('q-')
-      ? `${id}-${Math.random().toString(36).slice(2, 10)}`
-      : id;
-  return enqueue(BUILD_FUNCTION, { category, folder }, { scheduleDelaySeconds: delaySeconds, id: taskId });
+/** A build of library/<category>/<folder>/; quiet builds clear the pack's pending flag when they start. */
+function enqueueBuild({ category, folder, quiet = false, delaySeconds, id }) {
+  return enqueue(BUILD_FUNCTION, { category, folder, quiet }, { scheduleDelaySeconds: delaySeconds, id });
 }
 
 /**

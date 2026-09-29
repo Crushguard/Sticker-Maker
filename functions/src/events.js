@@ -8,14 +8,14 @@ const QUIET_DELAY_S = 45;
 const FAST_DELAY_S = 2;
 
 /**
- * What an upload or delete in the library does. Every pack-file event schedules a quiet build; the upload that
- * completes a listing pack.json also schedules a build straight away. Storage and the queue come in as deps so
- * the decisions are testable without Firebase.
+ * What an upload or delete in the library does. Every pack-file event records its time, and schedules a quiet
+ * build unless one is already pending for the pack; the upload that completes a listing pack.json also schedules
+ * a build straight away. Storage, Firestore and the queue come in as deps so the decisions are testable.
  *
  * @param {string} objectName
  * @param {'finalized'|'deleted'} kind
  * @param {number} nowMs
- * @param {{listFolder: Function, readText: Function, enqueueBuild: Function, touch: Function, syncCategories: Function}} deps
+ * @param {{listFolder: Function, readText: Function, enqueueBuild: Function, recordEvent: Function, syncCategories: Function}} deps
  */
 async function handleLibraryEvent(objectName, kind, nowMs, deps) {
   const parsed = parseLibraryPath(objectName);
@@ -26,8 +26,9 @@ async function handleLibraryEvent(objectName, kind, nowMs, deps) {
   if (parsed.kind !== 'pack') return;
 
   const { category, folder, packId, prefix } = parsed;
-  await deps.touch(packId, { category, folder }, nowMs);
-  await deps.enqueueBuild({ category, folder, delaySeconds: QUIET_DELAY_S, id: quietTaskId(packId, nowMs) });
+  if (await deps.recordEvent(packId, { category, folder }, nowMs)) {
+    await deps.enqueueBuild({ category, folder, quiet: true, delaySeconds: QUIET_DELAY_S, id: quietTaskId(packId, nowMs) });
+  }
   if (kind !== 'finalized') return;
 
   const entries = await deps.listFolder(prefix);
