@@ -18,6 +18,24 @@ function problem(err) {
   return err instanceof StickerError ? err.message : `can't read the image (${err.message})`;
 }
 
+/**
+ * The version of a changed pack: above the live one and above every version ever published, so a number never
+ * names two sets of files (not even after the record was deleted), unless the newest published folder already holds
+ * these exact files, above the live version: an earlier attempt of this build that died before its record, which
+ * the retry then finishes.
+ *
+ * @param {{version: number}|null} live
+ * @param {{version: number, hash: string|null}[]} published the pack's version folders in public/
+ * @param {string} contentHash
+ */
+function nextVersion(live, published, contentHash) {
+  const liveVersion = live ? live.version : 0;
+  const highest = Math.max(liveVersion, ...published.map((p) => p.version));
+  const retry =
+    highest > liveVersion && published.some((p) => p.version === highest && p.hash && contentHash.startsWith(p.hash));
+  return retry ? highest : highest + 1;
+}
+
 function failure(errors, notes) {
   return { ok: false, errors, notes, unchanged: false, version: null, contentHash: null, animated: false, count: 0, outputs: null, record: null };
 }
@@ -35,8 +53,9 @@ function failure(errors, notes) {
  * @param {Set<string>} input.categoryIds
  * @param {string[]} input.defaultEmojis the category's emoji
  * @param {{version: number, contentHash: string, animated: boolean}|null} input.live the live version, if any
+ * @param {{version: number, hash: string|null}[]} [input.published] the version folders already in public/
  */
-async function buildPackFromFiles({ packId, category, folder, files, manifestText, categoryIds, defaultEmojis, live }) {
+async function buildPackFromFiles({ packId, category, folder, files, manifestText, categoryIds, defaultEmojis, live, published = [] }) {
   const notes = [];
   const skipped = files.filter((f) => !isImageName(f.name)).map((f) => f.name);
   if (skipped.length) notes.push(`Skipped files that aren't PNG, WebP or GIF: ${skipped.join(', ')}.`);
@@ -116,7 +135,7 @@ async function buildPackFromFiles({ packId, category, folder, files, manifestTex
     .update(coverL)
     .digest('hex');
   const unchanged = !!live && live.contentHash === contentHash;
-  const version = unchanged ? live.version : (live ? live.version : 0) + 1;
+  const version = unchanged ? live.version : nextVersion(live, published, contentHash);
   const zip = makePackZip({ contents: contents(version), tray: tray.buffer, stickers });
 
   const record = {

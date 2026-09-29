@@ -3,7 +3,7 @@ package com.piptechnologies.stickermaker.core.data.catalog
 import java.net.URLEncoder
 
 /**
- * Turns a public object path ("public/packs/<id>/v3/pack.zip") into a URL with the template catalog/meta
+ * Turns a public object path ("public/packs/<id>/v3-1a2b3c4d/pack.zip") into a URL with the template catalog/meta
  * carries: `{path}` is the URL-encoded path (Firebase Storage), `{rawPath}` the path as is (a CDN).
  * Debug builds pointed at the emulators reach the host machine, not the device's own localhost.
  */

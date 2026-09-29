@@ -5,7 +5,7 @@
  *
  * library/<category>/<Pack Name>/ in bucket play-console-f33dd-stickermaker
  *   → onLibraryUpload / onLibraryDelete schedule buildPack
- *   → buildPack publishes public/packs/<id>/v<n>/ + Firestore packs/<id> + the folder's _report.txt
+ *   → buildPack publishes public/packs/<id>/v<n>-<hash8>/ + Firestore packs/<id> + the folder's _report.txt
  *   → publishCatalog writes public/catalog/v<k>.json.gz + catalog/meta, which the app listens to.
  */
 
@@ -17,7 +17,7 @@ const { onSchedule } = require('firebase-functions/v2/scheduler');
 const { HttpsError } = require('firebase-functions/v2/https');
 const { defineString } = require('firebase-functions/params');
 const logger = require('firebase-functions/logger');
-const { BUCKET, DATABASE, REGION } = require('./src/config');
+const { BUCKET, DATABASE, REGION, BUILD_RETRY } = require('./src/config');
 
 const GA4_PROPERTY_ID = defineString('GA4_PROPERTY_ID', {
   default: '',
@@ -30,64 +30,40 @@ const PUBLIC_URL_TEMPLATE = defineString('PUBLIC_URL_TEMPLATE', {
 
 setGlobalOptions({ region: REGION, minInstances: 0 });
 
-const QUIET_PENDING_STALE_MS = 10 * 60 * 1000;
-
-function libraryDeps() {
-  const { FieldValue } = require('firebase-admin/firestore');
-  const { db, listFolder, readText } = require('./src/firebase');
-  const { enqueueBuild } = require('./src/queue');
-  const { syncCategories } = require('./src/categoriesTask');
-  // builds/<packId>: lastEventAt lets a build wait out deletions too (they leave no timestamp on remaining
-  // files); quietPending keeps one quiet build in flight per pack. A flag older than 10 minutes (a task that
-  // ran out of retries) no longer blocks.
-  const recordEvent = (packId, { category, folder }) =>
-    db().runTransaction(async (tx) => {
-      const ref = db().collection('builds').doc(packId);
-      const snap = await tx.get(ref);
-      const data = snap.exists ? snap.data() : {};
-      const since = data.quietPendingSince && data.quietPendingSince.toMillis ? data.quietPendingSince.toMillis() : 0;
-      const schedule = !data.quietPending || Date.now() - since > QUIET_PENDING_STALE_MS;
-      tx.set(
-        ref,
-        {
-          category,
-          folder,
-          lastEventAt: FieldValue.serverTimestamp(),
-          ...(schedule ? { quietPending: true, quietPendingSince: FieldValue.serverTimestamp() } : {}),
-        },
-        { merge: true }
-      );
-      return schedule;
-    });
-  return { listFolder, readText, enqueueBuild, recordEvent, syncCategories };
-}
-
+/**
+ * Library uploads and deletes. Retried when they fail (a failed enqueue clears its pending flag first): recording an
+ * event twice only restamps its time, and a task id or the pending flag keeps a build from being scheduled twice.
+ */
 async function onLibraryEvent(event, kind) {
   const { handleLibraryEvent } = require('./src/events');
+  const { libraryDeps } = require('./src/deps');
   await handleLibraryEvent(event.data.name, kind, Date.now(), libraryDeps());
 }
 
-const onLibraryUpload = onObjectFinalized({ bucket: BUCKET, memory: '256MiB', maxInstances: 5 }, (event) =>
+const onLibraryUpload = onObjectFinalized({ bucket: BUCKET, memory: '256MiB', maxInstances: 5, retry: true }, (event) =>
   onLibraryEvent(event, 'finalized')
 );
 
-const onLibraryDelete = onObjectDeleted({ bucket: BUCKET, memory: '256MiB', maxInstances: 3 }, (event) =>
+const onLibraryDelete = onObjectDeleted({ bucket: BUCKET, memory: '256MiB', maxInstances: 3, retry: true }, (event) =>
   onLibraryEvent(event, 'deleted')
 );
 
 const buildPack = onTaskDispatched(
   {
-    retryConfig: { maxAttempts: 8, minBackoffSeconds: 30, maxBackoffSeconds: 60 },
+    retryConfig: BUILD_RETRY,
     rateLimits: { maxConcurrentDispatches: 3 },
     memory: '2GiB',
     cpu: 2,
+    // One build per instance: a build holds up to 30 × 10 MB of sources plus decoded frames.
+    concurrency: 1,
     timeoutSeconds: 540,
     maxInstances: 3,
   },
   async (request) => {
-    const { runBuild, NotQuietYet } = require('./src/buildTask');
+    const { runBuildTask, NotQuietYet } = require('./src/buildTask');
+    const { buildDeps } = require('./src/deps');
     try {
-      const result = await runBuild(request.data);
+      const result = await runBuildTask(request.data, { retryCount: request.retryCount, taskId: request.id }, buildDeps());
       logger.info('build', result);
     } catch (err) {
       if (err instanceof NotQuietYet) {

@@ -390,6 +390,13 @@ object StorageEmulator {
 
     fun read(path: String): ByteArray = call("GET", "$BASE/$bucket/o/${Uri.encode(path)}?alt=media")
 
+    /** Names of the objects under [prefix]. */
+    fun list(prefix: String): List<String> {
+        val json = JSONObject(String(call("GET", "$BASE/$bucket/o?prefix=${Uri.encode(prefix)}"), Charsets.UTF_8))
+        val items = json.optJSONArray("items") ?: return emptyList()
+        return (0 until items.length()).map { items.getJSONObject(it).getString("name") }
+    }
+
     fun delete(path: String) {
         call("DELETE", "$BASE/$bucket/o/${Uri.encode(path)}")
     }

@@ -5,7 +5,8 @@
  *
  * Uploads one pack (from library/ when present, else from packs/gm-gn/src), waits for the catalog, downloads the
  * catalog, a cover strip and the pack zip through the same URLs the app uses, re-uploads to prove nothing is
- * republished, then deletes the folder and waits for the pack to leave the catalog.
+ * republished, replaces two stickers slowly to prove an update goes live once and whole, then deletes the folder and
+ * waits for the pack to leave the catalog.
  */
 'use strict';
 
@@ -105,6 +106,7 @@ async function main() {
   console.log(`✓ catalog v${meta.version}: ${catalog.packs.length} pack(s), ${meta.bytes} bytes gzipped`);
   if (entry.count !== stickerCount) fail(`catalog count ${entry.count}, expected ${stickerCount}`);
   if (entry.version !== 1) fail(`first version is ${entry.version}`);
+  if (!/\/v1-[0-9a-f]{8}\/pack\.zip$/.test(entry.zip.path)) fail(`zip path ${entry.zip.path} is not content-addressed`);
   if (!catalog.categories.some((c) => c.id === pack.category && c.packs >= 1)) fail('category count missing');
 
   const cover = await fetch(urlOf(meta, entry.cover.l));
@@ -140,11 +142,36 @@ async function main() {
   if (metaAfter.version !== meta.version) fail(`an unchanged pack republished the catalog (v${metaAfter.version})`);
   console.log(`✓ re-upload: ${unchanged.split('\n')[0]}`);
 
+  // A slow update of a live pack: two stickers swap places, 4 s apart, pack.json untouched. Only the settled
+  // folder may go live, as one new version.
+  const listed = JSON.parse(fs.readFileSync(path.join(pack.dir, 'pack.json'), 'utf8')).stickers.map((s) => (typeof s === 'string' ? s : s.file));
+  const [first, second] = listed;
+  const updateSince = Date.now() - 1000;
+  await uploadFile(bucket, path.join(pack.dir, second), `${prefix}${first}`, {});
+  await new Promise((r) => setTimeout(r, 4000));
+  await uploadFile(bucket, path.join(pack.dir, first), `${prefix}${second}`, {});
+  const updated = await poll('the update report', async () => {
+    const [m] = await bucket.file(`${prefix}_report.txt`).getMetadata();
+    if (Date.parse(m.updated) < updateSince) return null;
+    const text = (await bucket.file(`${prefix}_report.txt`).download())[0].toString('utf8');
+    return text.startsWith('✅') && !text.includes('unchanged') ? text : null;
+  }, 240000);
+  if (!updated.includes('version 2')) fail(`update report: ${updated}`);
+  const record = (await db.collection('packs').doc(entry.id).get()).data();
+  if (record.version !== 2) fail(`the update published version ${record.version}`);
+  const [publicFiles] = await bucket.getFiles({ prefix: `public/packs/${entry.id}/` });
+  const versions = [...new Set(publicFiles.map((f) => f.name.split('/')[3]))].sort();
+  if (versions.length !== 2 || !versions[1].startsWith('v2-')) fail(`version folders ${versions.join(', ')}`);
+  const v2 = unzipSync(new Uint8Array((await bucket.file(`public/packs/${entry.id}/${versions[1]}/pack.zip`).download())[0]));
+  if (Buffer.compare(Buffer.from(v2['01.webp']), Buffer.from(files['02.webp'])) !== 0) fail('version 2 does not hold both swapped stickers');
+  if (Buffer.compare(Buffer.from(v2['02.webp']), Buffer.from(files['01.webp'])) !== 0) fail('version 2 does not hold both swapped stickers');
+  console.log(`✓ slow update: ${updated.split('\n')[0]} (${versions.join(', ')})`);
+
   // Delete the folder: the pack leaves the catalog.
   await bucket.deleteFiles({ prefix });
   await poll('the pack to leave the catalog', async () => {
     const m = (await db.doc('catalog/meta').get()).data();
-    if (m.version === meta.version) return null;
+    if (m.version === metaAfter.version) return null;
     const c = await fetchCatalog(m);
     return c.packs.some((p) => p.id === entry.id) ? null : c;
   }, 180000);

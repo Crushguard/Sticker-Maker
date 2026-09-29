@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { slugify, parseLibraryPath, isImageName, naturalCompare } = require('../src/library');
+const { folderKey, slugify, parseLibraryPath, isImageName, naturalCompare } = require('../src/library');
 
 test('slugify turns a folder name into a pack id', () => {
   assert.equal(slugify('Sorry Wiggle'), 'sorry-wiggle');
@@ -77,4 +77,12 @@ test('isImageName accepts png, webp and gif in any case', () => {
 test('naturalCompare orders numbers inside names numerically', () => {
   const names = ['10.png', '2.png', '1.png', 'b 3.png', 'b 12.png'];
   assert.deepEqual([...names].sort(naturalCompare), ['1.png', '2.png', '10.png', 'b 3.png', 'b 12.png']);
+});
+
+test('folderKey gives each folder prefix a stable key Firestore accepts', () => {
+  const key = folderKey('library/cute/Love Notes/');
+  assert.match(key, /^[0-9a-f]{20}$/);
+  assert.equal(folderKey('library/cute/Love Notes/'), key);
+  assert.notEqual(folderKey('library/romantic/Love Notes/'), key);
+  assert.notEqual(folderKey('library/cute/love notes/'), key);
 });

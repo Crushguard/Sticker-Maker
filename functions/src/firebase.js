@@ -44,6 +44,16 @@ async function listFolder(prefix) {
     }));
 }
 
+/** Every object under a prefix, subfolders included. */
+async function listPaths(prefix) {
+  const [files] = await bucket().getFiles({ prefix, autoPaginate: true });
+  return files.map((f) => f.name);
+}
+
+function deletePath(path) {
+  return bucket().file(path).delete({ ignoreNotFound: true });
+}
+
 async function readBuffer(entry) {
   const [buf] = await entry.object.download();
   return buf;
@@ -68,4 +78,4 @@ function saveText(path, text) {
     });
 }
 
-module.exports = { app, db, bucket, functions, listFolder, readBuffer, readText, savePublic, saveText };
+module.exports = { app, db, bucket, functions, listFolder, listPaths, deletePath, readBuffer, readText, savePublic, saveText };

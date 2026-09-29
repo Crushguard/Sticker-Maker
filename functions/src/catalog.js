@@ -104,7 +104,7 @@ function assembleCatalog({ version, now, categories, packs }) {
     }));
 
   const catalogPacks = ranked.map((p) => {
-    const base = publicPackBase(p.id, p.version);
+    const base = publicPackBase(p.id, p.version, p.contentHash);
     const published = toMs(p.publishedAt);
     return {
       id: p.id,

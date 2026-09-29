@@ -2,127 +2,149 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { World } = require('./fakes');
 const { handleLibraryEvent } = require('../src/events');
+const { folderKey } = require('../src/library');
 
-/** Fake Storage folder + recorded side effects. */
-function fakes(folderFiles = {}, { quietPending = false } = {}) {
-  const calls = { builds: [], syncs: 0, touches: [] };
-  let pending = quietPending;
-  return {
-    calls,
-    deps: {
-      listFolder: async (prefix) =>
-        Object.entries(folderFiles).map(([file, { generation = '1', text }]) => ({ file, generation, text, prefix })),
-      readText: async (entry) => entry.text,
-      enqueueBuild: async (task) => calls.builds.push(task),
-      // Records the event; true when no quiet build is pending yet (the caller must schedule one).
-      recordEvent: async (packId, where, nowMs) => {
-        calls.touches.push({ packId, ...where, nowMs });
-        if (pending) return false;
-        pending = true;
-        return true;
-      },
-      syncCategories: async () => {
-        calls.syncs += 1;
-      },
-    },
-  };
-}
+const PACK = 'library/sorry/Sorry Wiggle/';
+const ID = 'sorry-wiggle';
+const png = Buffer.from('png');
+const listing = Buffer.from(JSON.stringify({ stickers: [{ file: '01.png' }, { file: '02.png' }, { file: '03.png' }] }));
 
-const NOW = 1790000000000;
+const builds = (world) => world.queue.map((t) => ({ ...t.task, delaySeconds: (t.dueMs - world.nowMs) / 1000, id: t.id }));
+const folderState = (world, prefix = PACK) => world.store.builds.get(ID).folders[folderKey(prefix)];
 
 test('the categories file syncs categories and nothing else', async () => {
-  const { calls, deps } = fakes();
-  await handleLibraryEvent('library/_categories.json', 'finalized', NOW, deps);
-  assert.equal(calls.syncs, 1);
-  assert.deepEqual(calls.builds, []);
+  const world = new World();
+  await world.upload('library/_categories.json', Buffer.from('{}'));
+  assert.equal(world.syncs, 1);
+  assert.deepEqual(world.queue, []);
 });
 
 test('deleting the categories file changes nothing', async () => {
-  const { calls, deps } = fakes();
-  await handleLibraryEvent('library/_categories.json', 'deleted', NOW, deps);
-  assert.equal(calls.syncs, 0);
-  assert.deepEqual(calls.builds, []);
+  const world = new World();
+  await handleLibraryEvent('library/_categories.json', 'deleted', world.nowMs, world.deps);
+  assert.equal(world.syncs, 0);
+  assert.deepEqual(world.queue, []);
 });
 
 test('reports, junk and staging never schedule builds', async () => {
-  const { calls, deps } = fakes();
+  const world = new World();
   for (const name of [
-    'library/sorry/Pack/_report.txt',
-    'library/sorry/Pack/.DS_Store',
-    'library/sorry/Pack/',
+    `${PACK}_report.txt`,
+    `${PACK}.DS_Store`,
+    PACK,
     'library/_staging/Pack/01.png',
-    'public/packs/x/v1/pack.zip',
+    'public/packs/x/v1-0123abcd/pack.zip',
   ]) {
-    await handleLibraryEvent(name, 'finalized', NOW, deps);
+    await handleLibraryEvent(name, 'finalized', world.nowMs, world.deps);
   }
-  assert.deepEqual(calls.builds, []);
+  assert.deepEqual(world.queue, []);
 });
 
 test('an upload without a listing pack.json schedules only the quiet build', async () => {
-  const { calls, deps } = fakes({ '01.png': {}, '02.png': {} });
-  await handleLibraryEvent('library/sorry/Sorry Wiggle/02.png', 'finalized', NOW, deps);
-  assert.equal(calls.builds.length, 1);
-  assert.equal(calls.builds[0].category, 'sorry');
-  assert.equal(calls.builds[0].folder, 'Sorry Wiggle');
-  assert.equal(calls.builds[0].delaySeconds, 45);
-  assert.equal(calls.builds[0].quiet, true);
-  assert.match(calls.builds[0].id, /^q-sorry-wiggle-[0-9a-z]+-[0-9a-z]+$/);
+  const world = new World();
+  await world.upload(`${PACK}01.png`, png);
+  await world.upload(`${PACK}02.png`, png);
+  const [only, ...rest] = builds(world);
+  assert.deepEqual(rest, []);
+  assert.equal(only.category, 'sorry');
+  assert.equal(only.folder, 'Sorry Wiggle');
+  assert.equal(only.delaySeconds, 45);
+  assert.equal(only.quiet, true);
+  assert.match(only.id, /^q-sorry-wiggle-[0-9a-z]+-[0-9a-z]+$/);
 });
 
-test('the upload that completes a listing pack.json also schedules a build right away', async () => {
-  const listing = JSON.stringify({ stickers: [{ file: '01.png' }, { file: '02.png' }, { file: '03.png' }] });
-  const { calls, deps } = fakes({
-    '01.png': { generation: '11' },
-    '02.png': { generation: '12' },
-    '03.png': { generation: '13' },
-    'pack.json': { generation: '14', text: listing },
-  });
-  await handleLibraryEvent('library/sorry/Sorry Wiggle/pack.json', 'finalized', NOW, deps);
-  assert.equal(calls.builds.length, 2);
-  assert.equal(calls.builds[0].delaySeconds, 45);
-  assert.equal(calls.builds[1].delaySeconds, 2);
-  assert.match(calls.builds[1].id, /^f-sorry-wiggle-[0-9a-f]{16}$/);
+test('the pack.json that completes a new listing, uploaded last, also schedules a build right away', async () => {
+  const world = new World();
+  for (const file of ['01.png', '02.png', '03.png']) await world.upload(`${PACK}${file}`, png);
+  await world.upload(`${PACK}pack.json`, listing);
+  const [quiet, fast, ...rest] = builds(world);
+  assert.deepEqual(rest, []);
+  assert.equal(quiet.delaySeconds, 45);
+  assert.equal(fast.delaySeconds, 2);
+  assert.equal(fast.quiet, false);
+  assert.match(fast.id, /^f-sorry-wiggle-[0-9a-f]{16}$/);
+});
+
+test('re-uploading a sticker of a complete folder schedules no fast build: only pack.json, written last, does', async () => {
+  const world = new World();
+  for (const file of ['01.png', '02.png', '03.png']) await world.upload(`${PACK}${file}`, png);
+  await world.upload(`${PACK}pack.json`, listing);
+  world.queue.splice(0);
+  world.store.builds.clear();
+
+  for (const file of ['01.png', '02.png', '03.png']) await world.upload(`${PACK}${file}`, Buffer.from('new art'));
+  assert.deepEqual(builds(world).map((b) => b.quiet), [true]);
 });
 
 test('a listing pack.json with files still missing waits for the quiet build', async () => {
-  const listing = JSON.stringify({ stickers: [{ file: '01.png' }, { file: '02.png' }, { file: '03.png' }] });
-  const { calls, deps } = fakes({ '01.png': {}, 'pack.json': { text: listing } });
-  await handleLibraryEvent('library/sorry/Sorry Wiggle/pack.json', 'finalized', NOW, deps);
-  assert.equal(calls.builds.length, 1);
-  assert.equal(calls.builds[0].delaySeconds, 45);
+  const world = new World();
+  await world.upload(`${PACK}01.png`, png);
+  await world.upload(`${PACK}pack.json`, listing);
+  assert.deepEqual(builds(world).map((b) => b.delaySeconds), [45]);
 });
 
 test('a deleted pack file schedules the quiet build (which may unpublish)', async () => {
-  const { calls, deps } = fakes({});
-  await handleLibraryEvent('library/sorry/Sorry Wiggle/01.png', 'deleted', NOW, deps);
-  assert.equal(calls.builds.length, 1);
-  assert.equal(calls.builds[0].delaySeconds, 45);
+  const world = new World();
+  await world.remove(`${PACK}01.png`);
+  assert.deepEqual(builds(world).map((b) => [b.quiet, b.delaySeconds]), [[true, 45]]);
 });
 
-test('every pack event records when it happened, before any build is scheduled', async () => {
-  const { calls, deps } = fakes({ '01.png': {} });
-  await handleLibraryEvent('library/sorry/Sorry Wiggle/01.png', 'deleted', NOW, deps);
-  await handleLibraryEvent('library/sorry/Sorry Wiggle/_report.txt', 'finalized', NOW, deps);
-  await handleLibraryEvent('library/_categories.json', 'finalized', NOW, deps);
-  assert.deepEqual(calls.touches, [{ packId: 'sorry-wiggle', category: 'sorry', folder: 'Sorry Wiggle', nowMs: NOW }]);
+test('every pack event records when it happened in its folder', async () => {
+  const world = new World();
+  await world.remove(`${PACK}01.png`);
+  const first = world.nowMs;
+  world.tick(5000);
+  await world.upload(`${PACK}_report.txt`, Buffer.from('report'));
+  await world.upload('library/_categories.json', Buffer.from('{}'));
+  assert.deepEqual(folderState(world), {
+    category: 'sorry',
+    folder: 'Sorry Wiggle',
+    lastEventMs: first,
+    pending: true,
+    pendingSinceMs: first,
+  });
 });
 
 test('while a quiet build is pending, more events only record their time', async () => {
-  const { calls, deps } = fakes({ '01.png': {}, '02.png': {} });
-  await handleLibraryEvent('library/sorry/Sorry Wiggle/01.png', 'finalized', NOW, deps);
-  await handleLibraryEvent('library/sorry/Sorry Wiggle/02.png', 'finalized', NOW + 1000, deps);
-  await handleLibraryEvent('library/sorry/Sorry Wiggle/02.png', 'deleted', NOW + 2000, deps);
-  assert.equal(calls.builds.filter((b) => b.quiet).length, 1);
-  assert.equal(calls.touches.length, 3);
+  const world = new World();
+  await world.upload(`${PACK}01.png`, png);
+  world.tick(1000);
+  await world.upload(`${PACK}02.png`, png);
+  world.tick(1000);
+  await world.remove(`${PACK}02.png`);
+  assert.equal(builds(world).filter((b) => b.quiet).length, 1);
+  assert.equal(folderState(world).lastEventMs, world.nowMs);
+});
+
+test('two folders that give the same pack id each get their own quiet build', async () => {
+  const world = new World();
+  const other = 'library/cute/Sorry Wiggle/';
+  await world.remove(`${PACK}01.png`);
+  await world.upload(`${other}01.png`, png);
+  assert.deepEqual(builds(world).map((b) => [b.category, b.quiet]), [['sorry', true], ['cute', true]]);
+  assert.equal(folderState(world).pending, true);
+  assert.equal(folderState(world, other).pending, true);
+});
+
+test('when the quiet build cannot be enqueued, the pending flag is cleared so the next event schedules it', async () => {
+  const world = new World();
+  world.fault('enqueueBuild');
+  await assert.rejects(world.upload(`${PACK}01.png`, png), /injected enqueueBuild failure/);
+  assert.equal(folderState(world).pending, false);
+  assert.deepEqual(world.queue, []);
+
+  await world.upload(`${PACK}02.png`, png);
+  assert.deepEqual(builds(world).map((b) => b.quiet), [true]);
 });
 
 test('quiet build ids never repeat, so an id that already ran can never swallow a later event', async () => {
   const ids = new Set();
   for (let i = 0; i < 50; i++) {
-    const { calls, deps } = fakes({});
-    await handleLibraryEvent('library/sorry/Sorry Wiggle/01.png', 'deleted', NOW, deps);
-    ids.add(calls.builds[0].id);
+    const world = new World();
+    await world.remove(`${PACK}01.png`);
+    ids.add(world.queue[0].id);
   }
   assert.equal(ids.size, 50);
 });

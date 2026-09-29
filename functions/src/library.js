@@ -54,6 +54,11 @@ function parseLibraryPath(objectName) {
   };
 }
 
+/** A Firestore-safe key for a library folder prefix (folder names may hold any character). */
+function folderKey(prefix) {
+  return crypto.createHash('sha1').update(prefix, 'utf8').digest('hex').slice(0, 20);
+}
+
 function isImageName(file) {
   return /\.(png|webp|gif)$/i.test(file);
 }
@@ -65,4 +70,4 @@ function naturalCompare(a, b) {
   return collator.compare(a, b);
 }
 
-module.exports = { slugify, parseLibraryPath, isImageName, naturalCompare, isJunk, REPORT_FILE, CATEGORIES_FILE };
+module.exports = { slugify, folderKey, parseLibraryPath, isImageName, naturalCompare, isJunk, REPORT_FILE, CATEGORIES_FILE };

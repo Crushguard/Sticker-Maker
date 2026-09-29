@@ -86,6 +86,26 @@ test('changed art against a live version becomes the next version', async () => 
   assert.equal(contents.version, 5);
 });
 
+test('a changed pack takes a version above every published one, even when its record is gone', async () => {
+  const files = await stickerFiles(3);
+  const result = await buildPackFromFiles(base(files, { published: [{ version: 4, hash: 'deadbeef' }, { version: 2, hash: null }] }));
+  assert.equal(result.version, 5);
+  const live = { version: 6, contentHash: 'f'.repeat(64), animated: false };
+  assert.equal((await buildPackFromFiles(base(files, { live, published: [{ version: 4, hash: 'deadbeef' }] }))).version, 7);
+});
+
+test('a retry reuses the version its earlier attempt published these exact files under', async () => {
+  const files = await stickerFiles(3);
+  const first = await buildPackFromFiles(base(files));
+  const hash = first.contentHash.slice(0, 8);
+  const retry = await buildPackFromFiles(base(files, { published: [{ version: 1, hash }] }));
+  assert.equal(retry.version, 1);
+  assert.deepEqual(retry.outputs.zip, first.outputs.zip);
+  // Files that went out under an older number never bring that number back.
+  const later = await buildPackFromFiles(base(files, { published: [{ version: 1, hash }, { version: 2, hash: 'deadbeef' }] }));
+  assert.equal(later.version, 3);
+});
+
 test('two stickers are not a pack', async () => {
   const result = await buildPackFromFiles(base(await stickerFiles(2)));
   assert.equal(result.ok, false);

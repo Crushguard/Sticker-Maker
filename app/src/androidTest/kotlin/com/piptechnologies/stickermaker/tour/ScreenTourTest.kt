@@ -152,7 +152,8 @@ class ScreenTourTest {
     fun t03_addStates() {
         Tour.installWhatsAppStub()
         awaitHome()
-        val brokenFile = "public/packs/sorry-love/v1/pack.zip"
+        // The pack's one published zip (its version folder is named after its content).
+        val brokenFile = StorageEmulator.list("public/packs/sorry-love/").single { it.endsWith("/pack.zip") }
         var savedBytes: ByteArray? = null
         step("Idle") {
             openPack("Sorry, My Love")

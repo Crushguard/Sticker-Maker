@@ -28,14 +28,27 @@ test('a folder is quiet 30 seconds after its newest object', () => {
 
 const OPTS = { folder: 'P', category: 'sorry', categoryIds: new Set(), defaultEmojis: [] };
 
+const entries = (times) => Object.entries(times).map(([file, updatedMs]) => ({ file, updatedMs }));
+
 test('the fast path needs a pack.json that lists stickers which all exist', () => {
   const listing = JSON.stringify({ stickers: [{ file: '1.png' }, { file: '2.png' }, { file: '3.png' }] });
-  assert.equal(fastPathReady(parsePackManifest(listing, ['1.png', '2.png', '3.png'], OPTS)), true);
-  assert.equal(fastPathReady(parsePackManifest(listing, ['1.png', '2.png'], OPTS)), false);
-  assert.equal(fastPathReady(parsePackManifest('{"name":"x"}', ['1.png', '2.png', '3.png'], OPTS)), false);
-  assert.equal(fastPathReady(parsePackManifest(null, ['1.png', '2.png', '3.png'], OPTS)), false);
-  assert.equal(fastPathReady(parsePackManifest('{oops', ['1.png'], OPTS)), false);
-  assert.equal(fastPathReady(parsePackManifest('{"stickers":[]}', ['1.png'], OPTS)), false);
+  const folder = entries({ '1.png': 1, '2.png': 2, '3.png': 3, 'pack.json': 4 });
+  const manifest = (text, images) => parsePackManifest(text, images, OPTS);
+  assert.equal(fastPathReady(manifest(listing, ['1.png', '2.png', '3.png']), folder), true);
+  assert.equal(fastPathReady(manifest(listing, ['1.png', '2.png']), folder), false);
+  assert.equal(fastPathReady(manifest('{"name":"x"}', ['1.png', '2.png', '3.png']), folder), false);
+  assert.equal(fastPathReady(manifest(null, ['1.png', '2.png', '3.png']), folder), false);
+  assert.equal(fastPathReady(manifest('{oops', ['1.png']), folder), false);
+  assert.equal(fastPathReady(manifest('{"stickers":[]}', ['1.png']), folder), false);
+});
+
+test('the fast path needs pack.json to be written after every image, as the export does', () => {
+  const listing = JSON.stringify({ stickers: [{ file: '1.png' }, { file: '2.png' }, { file: '3.png' }] });
+  const manifest = parsePackManifest(listing, ['1.png', '2.png', '3.png', 'tray.png'], OPTS);
+  assert.equal(fastPathReady(manifest, entries({ '1.png': 1, '2.png': 2, '3.png': 3, 'tray.png': 3, 'pack.json': 3 })), true);
+  assert.equal(fastPathReady(manifest, entries({ '1.png': 1, '2.png': 5, '3.png': 3, 'tray.png': 3, 'pack.json': 4 })), false);
+  assert.equal(fastPathReady(manifest, entries({ '1.png': 1, '2.png': 2, '3.png': 3, 'tray.png': 9, 'pack.json': 4 })), false);
+  assert.equal(fastPathReady(manifest, entries({ '1.png': 1, '2.png': 2, '3.png': 3, 'notes.txt': 9, 'pack.json': 4 })), true);
 });
 
 test('a build waits while files or deletions are recent, unless pack.json lists a complete set', () => {

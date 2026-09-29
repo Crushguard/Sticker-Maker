@@ -46,9 +46,15 @@ const COVER_TILES = { small: 96, large: 160, count: 6 };
 
 const IMMUTABLE_CACHE = 'public, max-age=31536000, immutable';
 
-/** Folder of one published version of a pack. */
-function publicPackBase(packId, version) {
-  return `${PUBLIC_PREFIX}packs/${packId}/v${version}/`;
+/** Cloud Tasks retries of a build. Waiting for a folder to settle is a retry too (see buildTask.runBuildTask). */
+const BUILD_RETRY = { maxAttempts: 8, minBackoffSeconds: 30, maxBackoffSeconds: 60 };
+
+/**
+ * Folder of one published version of a pack. The content hash in the name means a path only ever holds one set of
+ * bytes, whatever happens to the pack's record, so phones and CDNs may cache it forever.
+ */
+function publicPackBase(packId, version, contentHash) {
+  return `${PUBLIC_PREFIX}packs/${packId}/v${version}-${contentHash.slice(0, 8)}/`;
 }
 
 /** The catalog file of one catalog version. */
@@ -67,6 +73,7 @@ module.exports = {
   QUALITY,
   COVER_TILES,
   IMMUTABLE_CACHE,
+  BUILD_RETRY,
   publicPackBase,
   publicCatalogPath,
 };
