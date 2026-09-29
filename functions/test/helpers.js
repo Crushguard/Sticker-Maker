@@ -44,9 +44,18 @@ async function animated({ format = 'webp', delays = [100, 100, 100], size = 512 
     : joined.webp({ delay: delays, loop: 0, quality: 90 }).toBuffer();
 }
 
+/** An animated GIF of [count] frames, each [delay] ms. */
+async function animatedGif(count, delay) {
+  const colors = ['#C23359', '#2E9E6B', '#3B6DD4'];
+  const frames = await Promise.all(
+    Array.from({ length: count }, (_, i) => shapePng({ cx: 0.3 + (i % 5) * 0.1, color: colors[i % 3] }))
+  );
+  return sharp(frames, { join: { animated: true } }).gif({ delay: frames.map(() => delay), loop: 0 }).toBuffer();
+}
+
 async function meta(buf) {
   const m = await sharp(buf, { animated: true }).metadata();
   return { format: m.format, width: m.width, height: m.pageHeight || m.height, pages: m.pages || 1, delay: m.delay };
 }
 
-module.exports = { shapePng, noisyPng, animated, meta };
+module.exports = { shapePng, noisyPng, animated, animatedGif, meta };

@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const sharp = require('sharp');
 const { probe, isWhatsAppReady, encodeSticker, wiggle, firstFramePng, StickerError } = require('../src/stickers');
-const { shapePng, noisyPng, animated, meta } = require('./helpers');
+const { shapePng, noisyPng, animated, animatedGif, meta } = require('./helpers');
 
 test('probe reports per-frame size, pages and delays', async () => {
   const p = await probe(await animated({ delays: [100, 120, 140] }));
@@ -121,4 +121,19 @@ test('firstFramePng is a 512 PNG of the first frame', async () => {
   const png = await firstFramePng(await animated());
   const m = await meta(png);
   assert.deepEqual([m.format, m.width, m.height, m.pages], ['png', 512, 512, 1]);
+});
+
+test('GIF frames of 10 ms or less play at 100 ms, as browsers and the WebP encoder treat them', async () => {
+  const out = await encodeSticker(await animatedGif(4, 10), {});
+  const m = await meta(out.buffer);
+  assert.deepEqual(m.delay, [100, 100, 100, 100]);
+  assert.ok(out.notes.some((n) => n.includes('100 ms')));
+});
+
+test('a GIF whose 10 ms frames really loop longer than 10 s fails instead of breaking in WhatsApp', async () => {
+  await assert.rejects(encodeSticker(await animatedGif(120, 10), {}), (err) => {
+    assert.ok(err instanceof StickerError);
+    assert.match(err.message, /10 s/);
+    return true;
+  });
 });

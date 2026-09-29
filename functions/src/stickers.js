@@ -10,6 +10,8 @@ const SIZE = WHATSAPP.size;
 const TRANSPARENT = { r: 0, g: 0, b: 0, alpha: 0 };
 const FIT = { fit: 'contain', background: TRANSPARENT, kernel: 'lanczos3' };
 const DEFAULT_DELAY_MS = 100;
+/** Browsers and libwebp's encoder play GIF delays of 10 ms or less as 100 ms. */
+const FASTEST_REAL_DELAY_MS = 10;
 const WIGGLE_DELAY_MS = 150;
 const WIGGLE_POSES = [
   { angle: 0, dx: 0, dy: 0 },
@@ -90,9 +92,9 @@ async function encodeFrames(image, delays) {
 
 async function encodeAnimated(buf, p, notes) {
   let delays = p.delays.length === p.pages ? [...p.delays] : new Array(p.pages).fill(DEFAULT_DELAY_MS);
-  if (delays.some((d) => d < WHATSAPP.minFrameMs)) {
-    delays = delays.map((d) => (d < WHATSAPP.minFrameMs ? DEFAULT_DELAY_MS : d));
-    notes.push(`frames shorter than ${WHATSAPP.minFrameMs} ms now last ${DEFAULT_DELAY_MS} ms`);
+  if (delays.some((d) => d <= FASTEST_REAL_DELAY_MS)) {
+    delays = delays.map((d) => (d <= FASTEST_REAL_DELAY_MS ? DEFAULT_DELAY_MS : d));
+    notes.push(`frames of ${FASTEST_REAL_DELAY_MS} ms or less play at ${DEFAULT_DELAY_MS} ms, as in browsers`);
   }
   const total = sum(delays);
   if (total > WHATSAPP.maxLoopMs) {
@@ -137,11 +139,23 @@ async function wiggle(buf) {
  * One sticker to WhatsApp's rules. Ready art passes through byte for byte; everything else is fitted into
  * 512×512 on transparency and encoded at the best quality that fits.
  */
+/** The last word on a re-encoded sticker: it must meet WhatsApp's rules as written, whatever the encoder did. */
+async function assertWhatsAppReady(buffer) {
+  const p = await probe(buffer);
+  if (isWhatsAppReady(p)) return;
+  const loopMs = sum(p.delays);
+  if (p.pages > 1 && loopMs > WHATSAPP.maxLoopMs) {
+    throw new StickerError(`the animation lasts ${(loopMs / 1000).toFixed(1)} s; WhatsApp allows 10 s`);
+  }
+  throw new StickerError(`the encoded sticker breaks WhatsApp's rules (${p.width}×${p.height}, ${p.bytes} bytes)`);
+}
+
 async function encodeSticker(buf, { wiggle: wiggleIt = false } = {}) {
   const p = await probe(buf);
   const notes = [];
   if (wiggleIt && p.pages === 1) {
     const buffer = await wiggle(buf);
+    await assertWhatsAppReady(buffer);
     return { buffer, animated: true, passthrough: false, quality: null, lossless: false, notes };
   }
   if (isWhatsAppReady(p)) {
@@ -151,9 +165,11 @@ async function encodeSticker(buf, { wiggle: wiggleIt = false } = {}) {
   if (longer < SIZE) notes.push(`upscaled from ${longer} px; stickers look best from 512 px art`);
   if (p.pages > 1) {
     const { buffer, quality } = await encodeAnimated(buf, p, notes);
+    await assertWhatsAppReady(buffer);
     return { buffer, animated: true, passthrough: false, quality, lossless: false, notes };
   }
   const { buffer, lossless, quality } = await encodeStatic(buf);
+  await assertWhatsAppReady(buffer);
   return { buffer, animated: false, passthrough: false, quality, lossless, notes };
 }
 
