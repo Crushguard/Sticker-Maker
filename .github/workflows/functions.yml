@@ -1,0 +1,36 @@
+name: Functions
+
+# The stickermaker Cloud Functions: unit tests plus a build of every launch pack in library/,
+# the same code the cloud runs on each upload.
+on:
+  push:
+    branches: ["main", "claude/**"]
+    paths: ["functions/**", "library/**", ".github/workflows/functions.yml"]
+  pull_request:
+    paths: ["functions/**", "library/**"]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+
+      - name: Install
+        run: npm ci --prefix functions --no-audit --no-fund
+
+      - name: Test
+        run: npm test --prefix functions

@@ -75,11 +75,14 @@ async function inBatches(items, size, fn) {
   return results;
 }
 
-/** Uploads one pack: stickers and tray first, pack.json last. Returns counts per outcome. */
+/**
+ * Uploads one pack: stickers and tray first, pack.json last. Returns counts per outcome.
+ * options.concurrency: parallel uploads (default 6; 1 keeps the Functions emulator to one worker).
+ */
 async function uploadPack(bucket, pack, options) {
   const prefix = `library/${pack.category}/${pack.folder}/`;
   const first = pack.files.filter((f) => f !== 'pack.json');
-  const outcomes = await inBatches(first, UPLOAD_CONCURRENCY, (f) =>
+  const outcomes = await inBatches(first, options.concurrency || UPLOAD_CONCURRENCY, (f) =>
     uploadFile(bucket, path.join(pack.dir, f), prefix + f, options)
   );
   if (pack.files.includes('pack.json')) {

@@ -104,8 +104,9 @@ def main():
             f"- **Device:** {device.get('model', '?')}, Android API {device.get('sdk', '?')}, "
             f"{device.get('widthPx', '?')}×{device.get('heightPx', '?')} px at {device.get('densityDpi', '?')} dpi"
         )
-    out.append("- **Backend:** Firestore and Storage emulators seeded by `scripts/upload-pack.js` "
-               "(14 packs, 8 themes); the debug build points at them with `-PfirebaseEmulatorHost=10.0.2.2`")
+    out.append("- **Backend:** Firestore, Storage, Functions and Tasks emulators; `scripts/library/seed-emulators.js` "
+               "uploads `library/` and the stickermaker functions publish the catalog (14 packs, 11 categories); "
+               "the debug build points at them with `-PfirebaseEmulatorHost=10.0.2.2`")
     out.append("- **WhatsApp:** a test double (`testing/whatsapp-stub`) that reads each pack back "
                "through the app's ContentProvider and checks WhatsApp's pack rules before answering")
     out.append("- **Test log:** [`app/instrument.txt`](app/instrument.txt) · "
