@@ -188,3 +188,20 @@ test('the report says what went live, or why not', () => {
     /^❌ New was not published\. Checked/
   );
 });
+
+test('a corrupt tray.png fails the pack with a report line instead of crashing the build', async () => {
+  const files = await stickerFiles(3);
+  files.push({ name: 'tray.png', buffer: Buffer.from('not an image at all') });
+  const result = await buildPackFromFiles(base(files));
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some((e) => e.startsWith('tray.png: ')), result.errors.join(' | '));
+});
+
+test('a truncated sticker that cannot be decoded fails the pack and names the file', async () => {
+  const files = await stickerFiles(3);
+  const whole = await sharp(await shapePng({ color: '#123456' })).png({ compressionLevel: 0 }).toBuffer();
+  files[2] = { name: '3.png', buffer: whole.subarray(0, Math.floor(whole.length / 2)) };
+  const result = await buildPackFromFiles(base(files));
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some((e) => e.startsWith('3.png: ')), result.errors.join(' | '));
+});

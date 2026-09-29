@@ -13,6 +13,11 @@ const MAX_INPUT_BYTES = 10 * 1024 * 1024;
 
 const stickerName = (index) => `${String(index + 1).padStart(2, '0')}.webp`;
 
+/** A file's problem as a report line: our own message, or what the image decoder said. */
+function problem(err) {
+  return err instanceof StickerError ? err.message : `can't read the image (${err.message})`;
+}
+
 function failure(errors, notes) {
   return { ok: false, errors, notes, unchanged: false, version: null, contentHash: null, animated: false, count: 0, outputs: null, record: null };
 }
@@ -60,8 +65,7 @@ async function buildPackFromFiles({ packId, category, folder, files, manifestTex
       for (const note of out.notes) notes.push(`${sticker.file}: ${note}.`);
       encoded.push({ ...sticker, out });
     } catch (err) {
-      if (!(err instanceof StickerError)) throw err;
-      errors.push(`${sticker.file}: ${err.message}.`);
+      errors.push(`${sticker.file}: ${problem(err)}.`);
     }
   }
   const kinds = new Set(encoded.map((e) => (e.out.animated ? 'animated' : 'static')));
@@ -78,11 +82,22 @@ async function buildPackFromFiles({ packId, category, folder, files, manifestTex
   const animated = kinds.has('animated');
   const first = manifest.stickers[0].file;
   if (!manifest.tray) notes.push(`No tray.png: made from ${first}.`);
-  const tray = await makeTray(source.get(manifest.tray || first));
+  const trayFile = manifest.tray || first;
+  let tray;
+  try {
+    tray = await makeTray(source.get(trayFile));
+  } catch (err) {
+    return failure([`${trayFile}: ${problem(err)}.`], notes);
+  }
   if (tray.palette) notes.push('The tray icon was reduced to 256 colours to stay under 50 KB.');
 
   const stickers = encoded.map((e, i) => ({ name: stickerName(i), buffer: e.out.buffer }));
-  const coverFrames = await Promise.all(manifest.cover.map((file) => firstFramePng(source.get(file))));
+  let coverFrames;
+  try {
+    coverFrames = await Promise.all(manifest.cover.map((file) => firstFramePng(source.get(file))));
+  } catch (err) {
+    return failure([`cover: ${problem(err)}.`], notes);
+  }
   const coverS = await makeCoverStrip(coverFrames, COVER_TILES.small);
   const coverL = await makeCoverStrip(coverFrames, COVER_TILES.large);
 
