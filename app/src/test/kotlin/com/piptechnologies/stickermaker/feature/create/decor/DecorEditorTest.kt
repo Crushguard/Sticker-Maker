@@ -226,4 +226,128 @@ class DecorEditorTest {
         editor.add(emoji("😍"))
         assertEquals(listOf("😍", "🥺", "💕"), emojiTags(editor.state, listOf("❤️")))
     }
+
+    @Test
+    fun singleLetterTextStartsAtScale1() {
+        var idCounter = 0L
+        val contentSizeOf: (LayerContent) -> Size2 = { c ->
+            when (c) {
+                is LayerContent.Text -> Size2(30f * c.text.length, 60f)
+                is LayerContent.Drawing -> {
+                    val pts = c.strokes.flatMap { it.points }
+                    if (pts.isEmpty()) Size2(100f, 50f) else {
+                        val minX = pts.minOf { it.x }
+                        val maxX = pts.maxOf { it.x }
+                        val minY = pts.minOf { it.y }
+                        val maxY = pts.maxOf { it.y }
+                        Size2(maxX - minX + 20f, maxY - minY + 20f)
+                    }
+                }
+                else -> Size2(100f, 50f)
+            }
+        }
+        val e = DecorEditor(contentSizeOf, { null }, { ++idCounter })
+        val id = e.add(LayerContent.Text("i", TextStyleId.Sticker, DecorSpec.ROSE, FontMood.Round))!!
+        assertEquals(1f, e.state.layer(id)!!.scale, 1e-4f)
+    }
+
+    @Test
+    fun pinchClampsToMinNotStartScale() {
+        var idCounter = 0L
+        val contentSizeOf: (LayerContent) -> Size2 = { c ->
+            when (c) {
+                is LayerContent.Text -> Size2(30f * c.text.length, 60f)
+                is LayerContent.Drawing -> {
+                    val pts = c.strokes.flatMap { it.points }
+                    if (pts.isEmpty()) Size2(100f, 50f) else {
+                        val minX = pts.minOf { it.x }
+                        val maxX = pts.maxOf { it.x }
+                        val minY = pts.minOf { it.y }
+                        val maxY = pts.maxOf { it.y }
+                        Size2(maxX - minX + 20f, maxY - minY + 20f)
+                    }
+                }
+                else -> Size2(100f, 50f)
+            }
+        }
+        val e = DecorEditor(contentSizeOf, { null }, { ++idCounter })
+        val iId = e.add(LayerContent.Text("i", TextStyleId.Sticker, DecorSpec.ROSE, FontMood.Round))!!
+        e.beginGesture(iId)
+        e.pinch(iId, zoom = 0.5f, rotationDeg = 0f)
+        assertEquals(1f, e.state.layer(iId)!!.scale, 1e-4f)
+
+        val decorId = e.add(LayerContent.Decor("doodles.webp", listOf("💕")))!!
+        e.beginGesture(decorId)
+        e.pinch(decorId, zoom = 0.1f, rotationDeg = 0f)
+        assertEquals(0.512f, e.state.layer(decorId)!!.scale, 1e-3f)
+        e.endGesture()
+    }
+
+    @Test
+    fun textEditCapsScaleToNewMax() {
+        var idCounter = 0L
+        val contentSizeOf: (LayerContent) -> Size2 = { c ->
+            when (c) {
+                is LayerContent.Text -> Size2(30f * c.text.length, 60f)
+                is LayerContent.Drawing -> {
+                    val pts = c.strokes.flatMap { it.points }
+                    if (pts.isEmpty()) Size2(100f, 50f) else {
+                        val minX = pts.minOf { it.x }
+                        val maxX = pts.maxOf { it.x }
+                        val minY = pts.minOf { it.y }
+                        val maxY = pts.maxOf { it.y }
+                        Size2(maxX - minX + 20f, maxY - minY + 20f)
+                    }
+                }
+                else -> Size2(100f, 50f)
+            }
+        }
+        val e = DecorEditor(contentSizeOf, { null }, { ++idCounter })
+        val id = e.add(LayerContent.Text("a", TextStyleId.Sticker, DecorSpec.ROSE, FontMood.Round))!!
+        assertEquals(1f, e.state.layer(id)!!.scale, 1e-4f)
+
+        e.setText("a".repeat(30))
+        val expectedScale = 512f / (30f * 30f)
+        assertEquals(expectedScale, e.state.layer(id)!!.scale, 1e-4f)
+
+        e.setText("ab")
+        // Short edit doesn't raise the scale back; it stays capped
+        assertEquals(expectedScale, e.state.layer(id)!!.scale, 1e-4f)
+    }
+
+    @Test
+    fun noOpGestureDoesNotLeaveUndoStep() {
+        val id = editor.add(decor())!!
+        editor.beginGesture(id)
+        editor.endGesture()
+        assertEquals(UndoResult.Changed, editor.undo())
+        assertTrue(editor.state.layers.isEmpty())
+        assertEquals(UndoResult.Nothing, editor.undo())
+    }
+
+    @Test
+    fun emptyTextSessionDoesNotLeaveUndoStep() {
+        assertTrue(editor.setText("a"))
+        assertTrue(editor.setText(""))
+        editor.endTextSession()
+        assertFalse(editor.canUndo)
+    }
+
+    @Test
+    fun deleteLayerDuringGestureDoesNotCrash() {
+        val id = editor.add(decor())!!
+        editor.beginGesture(id)
+        editor.delete(id)
+        editor.pinch(id, zoom = 1.1f, rotationDeg = 0f)
+        assertTrue(editor.state.layers.isEmpty())
+    }
+
+    @Test
+    fun textWithTrailingEmojiDropsSurrogate() {
+        val textContent = "a".repeat(29) + "😍"
+        editor.setText(textContent)
+        val id = editor.selectedId!!
+        val actualText = (editor.state.layer(id)!!.content as LayerContent.Text).text
+        assertEquals("a".repeat(29), actualText)
+    }
 }

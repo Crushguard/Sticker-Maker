@@ -28,9 +28,10 @@ class DecorEditor(
 
     private var gesture: Gesture? = null
     private var textSession: Long? = null
+    private var textSessionPushed = false
     private var strokeDown = false
 
-    private class Gesture(val id: Long, var rawX: Float, var rawY: Float, var rawScale: Float, var rawRotation: Float)
+    private class Gesture(val id: Long, var rawX: Float, var rawY: Float, var rawScale: Float, var rawRotation: Float, val startScale: Float)
 
     // ---------------------------------------------------------------- queries
 
@@ -85,7 +86,8 @@ class DecorEditor(
         }
         val id = newId()
         val layer = Layer(id, content, cx.coerceIn(0f, c), cy.coerceIn(0f, c))
-        state = state.copy(layers = state.layers + layer.copy(scale = clampScale(layer, 1f)))
+        val initialScale = minOf(1f, maxScale(layer))
+        state = state.copy(layers = state.layers + layer.copy(scale = initialScale))
         selectedId = id
         return id
     }
@@ -114,6 +116,7 @@ class DecorEditor(
         history.push(EditStep.Decor(state))
         state = state.copy(layers = state.layers.filterNot { it.id == id })
         if (selectedId == id) selectedId = null
+        if (gesture?.id == id) gesture = null
     }
 
     private fun change(id: Long, f: (Layer) -> Layer) {
@@ -135,7 +138,7 @@ class DecorEditor(
         if (id != textSession) endTextSession()
         selectedId = id
         history.push(EditStep.Decor(state))
-        gesture = Gesture(id, l.cx, l.cy, l.scale, l.rotation)
+        gesture = Gesture(id, l.cx, l.cy, l.scale, l.rotation, l.scale)
     }
 
     /** Moves by a canvas-px delta, with centre snapping and the quarter-inside clamp. */
@@ -153,27 +156,41 @@ class DecorEditor(
     /** Multiplies the scale and adds rotation (two-finger pinch and twist). */
     fun pinch(id: Long, zoom: Float, rotationDeg: Float) {
         val g = gesture?.takeIf { it.id == id } ?: return
+        val layer = state.layer(id) ?: return
         g.rawScale *= zoom
         g.rawRotation += rotationDeg
-        update(id) { it.copy(scale = clampScale(it, g.rawScale), rotation = snapRotation(g.rawRotation)) }
-        g.rawScale = state.layer(id)!!.scale
+        val newScale = g.rawScale.coerceIn(minOf(minScale(layer), g.startScale), maxScale(layer))
+        update(id) { it.copy(scale = newScale, rotation = snapRotation(g.rawRotation)) }
+        g.rawScale = newScale
     }
 
     /** Absolute scale and rotation from the corner handle; [start] records the undo step. */
     fun setScaleRotation(id: Long, scale: Float, rotation: Float, start: Boolean = false) {
         if (start) beginGesture(id)
-        update(id) { it.copy(scale = clampScale(it, scale), rotation = snapRotation(rotation)) }
+        val layer = state.layer(id) ?: return
+        val g = gesture?.takeIf { it.id == id }
+        val startScale = g?.startScale ?: layer.scale
+        val newScale = scale.coerceIn(minOf(minScale(layer), startScale), maxScale(layer))
+        update(id) { it.copy(scale = newScale, rotation = snapRotation(rotation)) }
     }
 
     fun endGesture() {
+        if (gesture != null) {
+            history.dropIfUnchanged(state)
+        }
         gesture = null
         guides = Guides.NONE
     }
 
-    private fun clampScale(layer: Layer, scale: Float): Float {
+    private fun maxScale(layer: Layer): Float {
         val base = baseSize(layer).w.coerceAtLeast(1f)
         val maxW = if (layer.content is LayerContent.Emoji) DecorSpec.EMOJI_MAX_WIDTH else 1f
-        return scale.coerceIn(DecorSpec.MIN_WIDTH * DecorSpec.CANVAS / base, maxW * DecorSpec.CANVAS / base)
+        return maxW * DecorSpec.CANVAS / base
+    }
+
+    private fun minScale(layer: Layer): Float {
+        val base = baseSize(layer).w.coerceAtLeast(1f)
+        return DecorSpec.MIN_WIDTH * DecorSpec.CANVAS / base
     }
 
     private fun snapRotation(deg: Float): Float {
@@ -185,11 +202,12 @@ class DecorEditor(
 
     /** Edits the selected text layer, or creates one on the first character. False when 8 layers exist. */
     fun setText(text: String): Boolean {
-        val t = text.take(DecorSpec.TEXT_MAX_CHARS)
+        val t = dropHighSurrogateAtEnd(text.take(DecorSpec.TEXT_MAX_CHARS))
         val sel = selectedText()
         if (sel != null) {
             beginTextSession(sel.id)
-            update(sel.id) { it.copy(content = (it.content as LayerContent.Text).copy(text = t)) }
+            val updatedLayer = sel.copy(content = (sel.content as LayerContent.Text).copy(text = t))
+            update(sel.id) { it.copy(content = updatedLayer.content, scale = minOf(it.scale, maxScale(updatedLayer))) }
             return true
         }
         if (t.isEmpty()) return true
@@ -198,6 +216,7 @@ class DecorEditor(
         val id = place(LayerContent.Text(t, textDefaults.style, textDefaults.colour, textDefaults.font), headTop = false)
         history.push(EditStep.Decor(before))
         textSession = id
+        textSessionPushed = true
         return true
     }
 
@@ -209,7 +228,8 @@ class DecorEditor(
         remember()
         val sel = selectedText() ?: return
         beginTextSession(sel.id)
-        update(sel.id) { it.copy(content = f(it.content as LayerContent.Text)) }
+        val updatedLayer = sel.copy(content = f(sel.content as LayerContent.Text))
+        update(sel.id) { it.copy(content = updatedLayer.content, scale = minOf(it.scale, maxScale(updatedLayer))) }
     }
 
     /** Opens a text layer for editing (edit handle or double tap). */
@@ -227,16 +247,29 @@ class DecorEditor(
             state = state.copy(layers = state.layers.filterNot { it.id in empty })
             if (selectedId in empty) selectedId = null
         }
+        if (textSessionPushed) {
+            history.dropIfUnchanged(state)
+            textSessionPushed = false
+        }
     }
 
     private fun beginTextSession(id: Long) {
         if (textSession != id) {
             history.push(EditStep.Decor(state))
             textSession = id
+            textSessionPushed = true
         }
     }
 
     private fun selectedText(): Layer? = state.layer(selectedId)?.takeIf { it.content is LayerContent.Text }
+
+    private fun dropHighSurrogateAtEnd(text: String): String {
+        return if (text.isNotEmpty() && text.last().isHighSurrogate()) {
+            text.dropLast(1)
+        } else {
+            text
+        }
+    }
 
     // -------------------------------------------------------- outline, preset
 
@@ -304,6 +337,7 @@ class DecorEditor(
     fun undo(): UndoResult {
         val step = history.pop() ?: return UndoResult.Nothing
         textSession = null
+        textSessionPushed = false
         gesture = null
         guides = Guides.NONE
         return when (step) {

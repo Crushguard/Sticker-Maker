@@ -20,4 +20,11 @@ class EditHistory {
     fun removeMaskStrokes() { steps.removeAll { it == EditStep.MaskStroke } }
     /** Live strokes became a layer (one [EditStep.Decor] replaces them). */
     fun removeLiveStrokes() { steps.removeAll { it == EditStep.LiveStroke } }
+    /** Remove the last step if it's a no-op [Decor] step (before == current). */
+    fun dropIfUnchanged(current: DecorState) {
+        val last = steps.lastOrNull()
+        if (last is EditStep.Decor && last.before == current) {
+            steps.removeLast()
+        }
+    }
 }
