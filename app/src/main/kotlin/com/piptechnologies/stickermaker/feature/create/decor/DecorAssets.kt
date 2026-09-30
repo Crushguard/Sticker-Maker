@@ -34,6 +34,9 @@ class DecorAssets(private val openAsset: (String) -> InputStream, private val to
     /** A decoration piece; null when it can't be read. */
     fun decor(file: String): Bitmap? = cached("$DECOR$file") { decodeAsset("$DECOR$file") }
 
+    /** Drops every decoded bitmap; they are never recycled, so a frame still drawing one stays safe. */
+    fun clear() = bitmaps.evictAll()
+
     /** Height / width of the asset at [path] (e.g. `decor/props-7.webp`), from its header only; 1 when unreadable. */
     fun aspect(path: String): Float = aspects.getOrPut(path) {
         val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }

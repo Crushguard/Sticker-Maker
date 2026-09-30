@@ -75,6 +75,21 @@ class EditorUiMapperTest {
     }
 
     @Test
+    fun layerToolsNeedAFinishedCutOut() {
+        assertTrue(layerToolsEnabled(CutStatus.Done))
+        assertFalse(layerToolsEnabled(CutStatus.Pending))
+        assertFalse(layerToolsEnabled(CutStatus.None))
+        assertFalse("no sticker", layerToolsEnabled(null))
+        for (cut in listOf(CutStatus.None, CutStatus.Pending, null)) {
+            assertEquals(
+                listOf(EditorTool.Auto, EditorTool.Brush, EditorTool.Erase),
+                EditorTool.entries.filter { toolAllowed(it, cut) }
+            )
+        }
+        assertEquals(EditorTool.entries, EditorTool.entries.filter { toolAllowed(it, CutStatus.Done) })
+    }
+
+    @Test
     fun outlineAndPresetComeFromTheDecor() {
         editor.setOutlineThickness(OutlineThickness.Thick)
         editor.setPreset("heartbeat")

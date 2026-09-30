@@ -1,5 +1,6 @@
 package com.piptechnologies.stickermaker.feature.create.decor
 
+import kotlin.math.abs
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -126,6 +127,43 @@ class DecorEditorTest {
         val huge = DecorEditor({ Size2(40f, 1024f) }, { null }, { ++ids })
         val id = huge.add(decor())!!
         assertEquals(0.5f, huge.state.layer(id)!!.scale, 1e-4f)
+    }
+
+    @Test
+    fun theFloorIsOnTheLongerSideToo() {
+        // A thin upright piece (40 × 400) arrives at scale 1. With a floor on its width (10% of 512 = 51.2 px
+        // wide, scale 1.28) it could not shrink at all; on its longer side the floor is 51.2 / 400 = 0.128.
+        val e = DecorEditor({ Size2(40f, 400f) }, { null }, { ++ids })
+        val id = e.add(decor())!!
+        assertEquals(1f, e.state.layer(id)!!.scale, 0f)
+        e.beginGesture(id)
+        e.pinch(id, zoom = 0.5f, rotationDeg = 0f)
+        assertEquals(0.5f, e.state.layer(id)!!.scale, 1e-4f)          // below its arrival scale
+        e.pinch(id, zoom = 0.01f, rotationDeg = 0f)
+        assertEquals(0.1f * 512f / 400f, e.state.layer(id)!!.scale, 1e-4f)
+        e.endGesture()
+    }
+
+    @Test
+    fun aFullHeightDrawingKeepsItsDrawnSize() {
+        // The renderer's drawing box: the strokes' extent around the centre plus the widest ink (Medium 14 + 2 × 3).
+        val ink = 20f
+        val drawn: (LayerContent) -> Size2 = { c ->
+            val points = (c as LayerContent.Drawing).strokes.flatMap { it.points }
+            Size2(2f * points.maxOf { abs(it.x) } + ink, 2f * points.maxOf { abs(it.y) } + ink)
+        }
+        val e = DecorEditor(drawn, { null }, { ++ids })
+        e.beginStroke(256f, 0f, DecorSpec.ROSE, MarkerSize.M)
+        e.extendStroke(256f, 512f)
+        e.endStroke()
+        val id = e.flushLiveStrokes()!!
+        assertEquals("not shrunk to 512 / 532 when Draw is left", 1f, e.state.layer(id)!!.scale, 0f)
+        e.beginGesture(id)
+        e.pinch(id, zoom = 2f, rotationDeg = 0f)
+        assertEquals("it can't grow past its drawn size", 1f, e.state.layer(id)!!.scale, 0f)
+        e.pinch(id, zoom = 0.5f, rotationDeg = 0f)
+        assertEquals("but it can shrink", 0.5f, e.state.layer(id)!!.scale, 1e-4f)
+        e.endGesture()
     }
 
     @Test
@@ -295,7 +333,7 @@ class DecorEditorTest {
         val iId = e.add(LayerContent.Text("i", TextStyleId.Sticker, DecorSpec.ROSE, FontMood.Round))!!
         e.beginGesture(iId)
         e.pinch(iId, zoom = 0.5f, rotationDeg = 0f)
-        assertEquals(1f, e.state.layer(iId)!!.scale, 1e-4f)
+        assertEquals(0.1f * 512f / 60f, e.state.layer(iId)!!.scale, 1e-4f)   // the floor on its longer side (60)
 
         val decorId = e.add(LayerContent.Decor("doodles.webp", listOf("💕")))!!
         e.beginGesture(decorId)

@@ -191,19 +191,23 @@ class DecorEditor(
 
     /**
      * The largest scale: the layer's longer side stays within the canvas (half of it for emoji, whose
-     * art is 256 px), so a thin upright piece can't grow into a bitmap many canvases tall.
+     * art is 256 px), so a thin upright piece can't grow into a bitmap many canvases tall. A drawing
+     * is never capped below the size it was drawn at: its ink may reach a little past the canvas edge.
      */
     private fun maxScale(layer: Layer): Float {
-        val base = baseSize(layer).let { max(it.w, it.h) }.coerceAtLeast(1f)
-        val maxSide = if (layer.content is LayerContent.Emoji) DecorSpec.EMOJI_MAX_WIDTH else 1f
-        return maxSide * DecorSpec.CANVAS / base
+        val maxSide = if (layer.content is LayerContent.Emoji) DecorSpec.EMOJI_MAX_SIDE else 1f
+        val cap = maxSide * DecorSpec.CANVAS / longerSide(layer)
+        return if (layer.content is LayerContent.Drawing) max(1f, cap) else cap
     }
 
-    /** The 10% floor, on the width (a gesture never forces a layer below where it started). */
-    private fun minScale(layer: Layer): Float {
-        val base = baseSize(layer).w.coerceAtLeast(1f)
-        return DecorSpec.MIN_WIDTH * DecorSpec.CANVAS / base
-    }
+    /**
+     * The smallest scale a gesture reaches: the layer's longer side stays at 10% of the canvas or more.
+     * A layer that arrived smaller than that is not forced up to it.
+     */
+    private fun minScale(layer: Layer): Float = DecorSpec.MIN_SIDE * DecorSpec.CANVAS / longerSide(layer)
+
+    /** The longer side of the layer's base size, in canvas px (at least 1). */
+    private fun longerSide(layer: Layer): Float = baseSize(layer).let { max(it.w, it.h) }.coerceAtLeast(1f)
 
     private fun snapRotation(deg: Float): Float {
         val n = ((deg % 360f) + 540f) % 360f - 180f

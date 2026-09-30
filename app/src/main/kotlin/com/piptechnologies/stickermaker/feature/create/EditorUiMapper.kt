@@ -41,3 +41,12 @@ private fun kindOf(content: LayerContent): LayerKind = when (content) {
     is LayerContent.Decor -> LayerKind.Decor
     is LayerContent.Drawing -> LayerKind.Drawing
 }
+
+/** Add, Draw and Animate edit layers, so they need the active sticker's finished cut-out (spec §8). */
+private val LAYER_TOOLS = setOf(EditorTool.Add, EditorTool.Draw, EditorTool.Animate)
+
+/** Whether the layer tools can open: the active sticker's cut-out ([cut]; null without a sticker) is done. */
+internal fun layerToolsEnabled(cut: CutStatus?): Boolean = cut == CutStatus.Done
+
+/** Whether [tool] can be on while the active sticker's cut-out is [cut]: Auto, Brush and Erase always can. */
+internal fun toolAllowed(tool: EditorTool, cut: CutStatus?): Boolean = tool !in LAYER_TOOLS || layerToolsEnabled(cut)

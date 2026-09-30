@@ -66,8 +66,10 @@ data class Guides(val x: Boolean, val y: Boolean) { companion object { val NONE 
 object DecorSpec {
     const val CANVAS = 512f
     const val MAX_LAYERS = 8
-    const val MIN_WIDTH = 0.10f
-    const val EMOJI_MAX_WIDTH = 0.5f
+    /** The floor: a layer's longer side stays at 10% of the canvas or more (spec §3's 10–100%, on the longer side). */
+    const val MIN_SIDE = 0.10f
+    /** Emoji stop at half the canvas on their longer side: the art is 256 px. */
+    const val EMOJI_MAX_SIDE = 0.5f
     const val EMOJI_WIDTH = 0.30f
     const val SNAP_PX = 6f
     const val ROTATION_SNAP_DEG = 4f

@@ -24,6 +24,7 @@ internal class CreateDecor(
     val tones: EmojiTones,
     val fonts: DecorFonts,
     val painter: TextLayerPainter,
+    private val assets: DecorAssets,
     private val cache: LayerRenderCache,
     val renderer: SceneRenderer
 ) {
@@ -33,8 +34,11 @@ internal class CreateDecor(
     fun baseSize(content: LayerContent): Size2 =
         baseSizes.get(content) ?: cache.baseSize(content).also { baseSizes.put(content, it) }
 
-    /** Frees the cached layer bitmaps (a finished pack's layers won't be drawn again). */
-    fun clearCache() = cache.clear()
+    /** Frees the cached layer bitmaps and the decoded art (a finished pack's layers won't be drawn again). */
+    fun clearCache() {
+        cache.clear()
+        assets.clear()
+    }
 
     companion object {
         private const val BASE_SIZES = 64
@@ -50,8 +54,9 @@ internal class CreateDecor(
             // The faces of a first caption (Sticker style, Rounded, any script): typing it loads no font file.
             listOf(FontFile.BALOO, FontFile.BALOO_BHAIJAAN, FontFile.RUBIK).forEach { fonts.face(it) }
             val painter = TextLayerPainter(fonts, data.styles, rtlLanguage)
-            val cache = LayerRenderCache(DecorAssets.android(app), painter, data)
-            return CreateDecor(data, EmojiTones.android(app), fonts, painter, cache, SceneRenderer(cache, data))
+            val assets = DecorAssets.android(app)
+            val cache = LayerRenderCache(assets, painter, data)
+            return CreateDecor(data, EmojiTones.android(app), fonts, painter, assets, cache, SceneRenderer(cache, data))
         }
     }
 }

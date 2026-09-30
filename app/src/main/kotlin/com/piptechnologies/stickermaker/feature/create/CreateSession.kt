@@ -113,6 +113,11 @@ data class CreateUiState(
     val editorTick: Int = 0,
     /** The decor data and renderer are loaded: layers can be added and the scene drawn. */
     val dataReady: Boolean = false,
+    /**
+     * The active sticker's cut-out is done, so Add, Draw and Animate can open (the tool bar dims them
+     * otherwise; the view model refuses them, and a rail switch onto a sticker still being cut returns to Auto).
+     */
+    val layerToolsEnabled: Boolean = false,
     // Decor of the active sticker (spec §3-§8)
     val layers: List<LayerUi> = emptyList(),
     val selectedLayerId: Long? = null,

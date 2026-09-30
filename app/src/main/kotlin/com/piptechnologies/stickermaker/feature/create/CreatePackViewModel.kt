@@ -196,6 +196,8 @@ class CreatePackViewModel @Inject constructor(
     private var playing = false
     private var liveLayerId: Long? = null
     private var gestureStart: DecorState? = null
+    /** The layer-limit toast already showed in this text session (typing keeps being refused). */
+    private var limitToastShown = false
     private var trayIndex = 0
     private var packName = ""
     private var tick = 0
@@ -283,6 +285,7 @@ class CreatePackViewModel @Inject constructor(
             anyPending = selected.any { it.cut == CutStatus.Pending },
             editorTick = tick,
             dataReady = decor != null,
+            layerToolsEnabled = layerToolsEnabled(active?.cut),
             liveLayerId = liveLayerId,
             playing = playing,
             addTab = addTab,
@@ -393,6 +396,7 @@ class CreatePackViewModel @Inject constructor(
         item.selected = !item.selected
         activeIndex = activeIndex.coerceIn(0, max(0, selectedItems().size - 1))
         trayIndex = trayIndex.coerceIn(0, max(0, selectedItems().size - 1))
+        keepLayerToolsOnDoneCut()
         push()
     }
 
@@ -403,9 +407,11 @@ class CreatePackViewModel @Inject constructor(
     fun beginCutouts() {
         refreshLanguage()
         val targets = selectedItems().filter { it.cut == CutStatus.None }
-        if (targets.isEmpty()) return
         targets.forEach { it.cut = CutStatus.Pending }
+        // The editor may reopen on a sticker still being cut, with a layer tool left on.
+        keepLayerToolsOnDoneCut()
         push()
+        if (targets.isEmpty()) return
         val previous = cutoutJob
         cutoutJob = viewModelScope.launch {
             previous?.join()
@@ -422,16 +428,21 @@ class CreatePackViewModel @Inject constructor(
 
     // ------------------------------------------------------- editor: basics
 
-    /** The rail: switches to sticker [index]. What the old one had open is settled and nothing stays selected. */
+    /**
+     * The rail: switches to sticker [index]. What the old one had open is settled and nothing stays
+     * selected. On a sticker still being cut out, Add, Draw and Animate give way to Auto (no re-run).
+     */
     fun selectSticker(index: Int) {
         activeItem()?.let { leaving ->
-            val before = leaving.editor.state
+            val before = stateBefore(leaving)
             settle()
+            endTextSession(leaving)
             leaving.editor.select(null)
             if (leaving.editor.state != before) refreshDerived(leaving, THUMB_DEBOUNCE_MS)
         }
         activeIndex = index.coerceIn(0, max(0, selectedItems().size - 1))
         activeItem()?.editor?.select(null)
+        keepLayerToolsOnDoneCut()
         playing = false
         tick++
         push()
@@ -440,7 +451,8 @@ class CreatePackViewModel @Inject constructor(
     /**
      * A tool bar tap (spec §8). Leaving Draw turns its strokes into a layer; Add while the sheet is
      * open closes it; Auto, Brush, Erase and Draw deselect; Auto re-runs the cut-out, which resets the
-     * Brush and Erase strokes (layers, outline and preset stay).
+     * Brush and Erase strokes (layers, outline and preset stay). Add, Draw and Animate are refused
+     * while the active sticker's cut-out isn't done ([CreateUiState.layerToolsEnabled]).
      */
     fun selectTool(newTool: EditorTool) {
         if (newTool == EditorTool.Add && tool == EditorTool.Add) {
@@ -448,7 +460,8 @@ class CreatePackViewModel @Inject constructor(
             return
         }
         val item = activeItem()
-        val before = item?.editor?.state
+        if (!toolAllowed(newTool, item?.cut)) return
+        val before = item?.let(::stateBefore)
         applyTool(newTool)
         if (newTool != EditorTool.Add && newTool != EditorTool.Animate) item?.editor?.select(null)
         afterEdit(item, before)
@@ -470,10 +483,18 @@ class CreatePackViewModel @Inject constructor(
         endOpenGesture()
         activeItem()?.let { item ->
             if (tool == EditorTool.Draw && newTool != EditorTool.Draw) flushDrawing(item)
-            if (tool == EditorTool.Add && newTool != EditorTool.Add) item.editor.endTextSession()
+            if (tool == EditorTool.Add && newTool != EditorTool.Add) endTextSession(item)
         }
         if (newTool != EditorTool.Add) skinPopover = null
         tool = newTool
+    }
+
+    /**
+     * Keeps Add, Draw and Animate on a finished cut-out: when the active sticker has none (a rail switch,
+     * Import changes), the tool falls back to Auto without re-running the cut-out. Doesn't publish.
+     */
+    private fun keepLayerToolsOnDoneCut() {
+        if (!toolAllowed(tool, activeItem()?.cut)) applyTool(EditorTool.Auto)
     }
 
     fun toggleZoom() {
@@ -489,9 +510,9 @@ class CreatePackViewModel @Inject constructor(
     /** Before Next: live Draw strokes become a layer, a stroke or gesture left open ends, the text session closes. */
     fun flushEdits() {
         val item = activeItem() ?: return
-        val before = item.editor.state
+        val before = stateBefore(item)
         settle()
-        item.editor.endTextSession()
+        endTextSession(item)
         afterEdit(item, before)
     }
 
@@ -513,6 +534,21 @@ class CreatePackViewModel @Inject constructor(
         item.editor.flushLiveStrokes()
     }
 
+    /** Ends [item]'s text session (an emptied text layer goes); the next refused keystroke may toast again. */
+    private fun endTextSession(item: MediaItem) {
+        item.editor.endTextSession()
+        limitToastShown = false
+    }
+
+    /**
+     * The active [item]'s decor before an edit that may end its open gesture: the gesture's start, so
+     * the change the gesture made still counts toward the thumbnail.
+     */
+    private fun stateBefore(item: MediaItem): DecorState = gestureStart ?: item.editor.state
+
+    /** Brush, Erase and Draw take the canvas for strokes: layers ignore taps and gestures then (spec §6, §8). */
+    private fun strokeTool(): Boolean = tool == EditorTool.Brush || tool == EditorTool.Erase || tool == EditorTool.Draw
+
     /** Publishes an edit of [item]: the canvas redraws and, when its decor changed since [before], its thumbnail. */
     private fun afterEdit(item: MediaItem?, before: DecorState?) {
         tick++
@@ -520,9 +556,12 @@ class CreatePackViewModel @Inject constructor(
         if (item != null && item.editor.state != before) refreshDerived(item, THUMB_DEBOUNCE_MS)
     }
 
-    /** Runs [edit] on the active sticker's editor, then publishes it. */
-    private inline fun editDecor(edit: (DecorEditor) -> Unit) {
-        val item = activeItem() ?: return
+    /**
+     * Runs [edit] on [item]'s editor, then publishes it: layer tools pass [editableItem] (nothing
+     * happens before the cut-out is done), the outline setters the active sticker.
+     */
+    private inline fun editDecor(item: MediaItem?, edit: (DecorEditor) -> Unit) {
+        if (item == null) return
         val before = item.editor.state
         edit(item.editor)
         afterEdit(item, before)
@@ -536,24 +575,21 @@ class CreatePackViewModel @Inject constructor(
      */
     fun canvasTap(x: Float, y: Float) {
         val item = editableItem() ?: return
-        when (tool) {
-            EditorTool.Brush, EditorTool.Erase, EditorTool.Draw -> return
-            EditorTool.Animate -> if (reduceMotion()) {
-                togglePlaying()
-                return
-            }
-            else -> Unit
+        if (strokeTool()) return
+        if (tool == EditorTool.Animate && reduceMotion()) {
+            togglePlaying()
+            return
         }
         val before = item.editor.state
         item.editor.select(item.editor.hitTest(x, y))
-        item.editor.endTextSession()
+        endTextSession(item)
         afterEdit(item, before)
     }
 
     /** A double tap on a text layer edits it. */
     fun canvasDoubleTap(x: Float, y: Float) {
         val item = editableItem() ?: return
-        if (tool == EditorTool.Brush || tool == EditorTool.Erase || tool == EditorTool.Draw) return
+        if (strokeTool()) return
         val id = item.editor.hitTest(x, y) ?: return
         if (item.editor.state.layer(id)?.content is LayerContent.Text) editTextLayer(id)
     }
@@ -564,7 +600,7 @@ class CreatePackViewModel @Inject constructor(
      */
     fun beginLayerGesture(x: Float, y: Float): Boolean {
         val item = editableItem() ?: return false
-        if (tool == EditorTool.Brush || tool == EditorTool.Erase || tool == EditorTool.Draw) return false
+        if (strokeTool()) return false
         val id = item.editor.hitTest(x, y) ?: return false
         startGesture(item, id)
         return true
@@ -632,11 +668,11 @@ class CreatePackViewModel @Inject constructor(
 
     // ------------------------------------------------------ editor: layers
 
-    fun deleteLayer(id: Long) = editDecor { it.delete(id) }
+    fun deleteLayer(id: Long) = editDecor(editableItem()) { it.delete(id) }
 
     /** A copy of the selected layer, offset and selected; the 9th layer is refused with a toast. */
     fun duplicateSelected() {
-        val item = activeItem() ?: return
+        val item = editableItem() ?: return
         val id = item.editor.selectedId ?: return
         val before = item.editor.state
         flushDrawing(item)
@@ -644,18 +680,19 @@ class CreatePackViewModel @Inject constructor(
         afterEdit(item, before)
     }
 
-    fun flipSelected() = editDecor { editor -> editor.selectedId?.let(editor::flip) }
+    fun flipSelected() = editDecor(editableItem()) { editor -> editor.selectedId?.let(editor::flip) }
 
-    fun toggleBehindSelected() = editDecor { editor -> editor.selectedId?.let(editor::toggleBehind) }
+    fun toggleBehindSelected() = editDecor(editableItem()) { editor -> editor.selectedId?.let(editor::toggleBehind) }
 
     /** The edit handle or a double tap: opens Add › Text on text layer [id]. */
     fun editTextLayer(id: Long) {
-        val item = activeItem() ?: return
+        val item = editableItem() ?: return
         if (item.editor.state.layer(id)?.content !is LayerContent.Text) return
-        val before = item.editor.state
+        val before = stateBefore(item)
         applyTool(EditorTool.Add)
         addTab = AddTab.Text
         item.editor.editText(id)
+        limitToastShown = false
         afterEdit(item, before)
     }
 
@@ -678,37 +715,46 @@ class CreatePackViewModel @Inject constructor(
     fun closeAddSheet() {
         if (tool != EditorTool.Add) return
         val item = activeItem()
-        val before = item?.editor?.state
+        val before = item?.let(::stateBefore)
         applyTool(EditorTool.Auto)
         afterEdit(item, before)
     }
 
     /**
      * The Text field changed: it edits the selected text layer, or its first character (or a quick
-     * phrase) adds a text layer in the pending style, colour and font. The 9th layer is refused with a toast.
+     * phrase) adds a text layer in the pending style, colour and font. The 9th layer is refused, with a
+     * toast once per text session (every further keystroke is refused too).
      */
     fun setText(text: String) {
-        val item = activeItem() ?: return
+        val item = editableItem() ?: return
         if (decor == null) return
         val editor = item.editor
         val before = editor.state
         val editsLayer = before.layer(editor.selectedId)?.content is LayerContent.Text
         if (!editsLayer && text.isNotEmpty()) flushDrawing(item)
-        if (!editor.setText(text)) toastLayerLimit()
+        if (!editor.setText(text) && !limitToastShown) {
+            limitToastShown = true
+            toastLayerLimit()
+        }
         afterEdit(item, before)
     }
 
-    fun setTextStyle(style: TextStyleId) = editDecor { it.setTextStyle(style) }
+    fun setTextStyle(style: TextStyleId) = editDecor(editableItem()) { it.setTextStyle(style) }
 
-    fun setTextColour(colour: Int) = editDecor { it.setTextColour(colour) }
+    fun setTextColour(colour: Int) = editDecor(editableItem()) { it.setTextColour(colour) }
 
-    fun setTextFont(font: FontMood) = editDecor { it.setTextFont(font) }
+    fun setTextFont(font: FontMood) = editDecor(editableItem()) { it.setTextFont(font) }
 
-    /** An emoji pick: adds it at the centre in [tone], closes the sheet and records it in Recent. */
+    /**
+     * An emoji pick: adds it at the centre in [tone], closes the sheet and records it in Recent. A tone
+     * that isn't on disk does nothing (it would draw, and be cached, as the Default art).
+     */
     fun addEmoji(file: String, tone: SkinTone = SkinTone.Default) {
-        val item = activeItem() ?: return
-        val emoji = data?.emoji?.byFile(file) ?: return
-        val before = item.editor.state
+        val item = editableItem() ?: return
+        val decor = decor ?: return
+        val emoji = decor.data.emoji.byFile(file) ?: return
+        if (tone != SkinTone.Default && decor.tones.cached(emoji, tone) == null) return
+        val before = stateBefore(item)
         flushDrawing(item)
         if (item.editor.add(LayerContent.Emoji(file, emoji.glyph, tone)) != null) {
             viewModelScope.launch {
@@ -774,9 +820,9 @@ class CreatePackViewModel @Inject constructor(
 
     /** A decoration piece: added at its anchor at its default width, then the sheet closes. */
     fun addDecor(file: String) {
-        val item = activeItem() ?: return
+        val item = editableItem() ?: return
         val piece = data?.decor?.byFile(file) ?: return
-        val before = item.editor.state
+        val before = stateBefore(item)
         flushDrawing(item)
         if (item.editor.add(LayerContent.Decor(file, piece.emojis), headTop = piece.headTop) == null) toastLayerLimit()
         applyTool(EditorTool.Auto)
@@ -795,11 +841,14 @@ class CreatePackViewModel @Inject constructor(
         push()
     }
 
-    /** A Draw stroke starts (canvas px); refused with a toast when the sticker already holds 8 layers. */
+    /**
+     * A Draw stroke starts (canvas px, kept inside the canvas, so a flushed drawing never needs shrinking);
+     * refused with a toast when the sticker already holds 8 layers.
+     */
     fun beginMarker(x: Float, y: Float) {
         val item = editableItem() ?: return
         if (tool != EditorTool.Draw || decor == null || !x.isFinite() || !y.isFinite()) return
-        if (!item.editor.beginStroke(x, y, drawColour, drawSize)) {
+        if (!item.editor.beginStroke(onCanvas(x), onCanvas(y), drawColour, drawSize)) {
             toastLayerLimit()
             return
         }
@@ -810,7 +859,7 @@ class CreatePackViewModel @Inject constructor(
     fun extendMarker(x: Float, y: Float) {
         val item = activeItem() ?: return
         if (!x.isFinite() || !y.isFinite()) return
-        item.editor.extendStroke(x, y)
+        item.editor.extendStroke(onCanvas(x), onCanvas(y))
         tick++
         push()
     }
@@ -822,11 +871,13 @@ class CreatePackViewModel @Inject constructor(
         refreshDerived(item, THUMB_DEBOUNCE_MS)
     }
 
+    private fun onCanvas(v: Float): Float = v.coerceIn(0f, DecorSpec.CANVAS)
+
     // ------------------------------------------------------------ animate
 
     /** Picks motion preset [id] (spec §7); clips keep none. The loop restarts, so playing stops. */
     fun setPreset(id: String) {
-        val item = activeItem() ?: return
+        val item = editableItem() ?: return
         if (item.isVideo) return
         if (data?.motion?.presets?.any { it.id == id } != true) return
         val before = item.editor.state
@@ -849,7 +900,7 @@ class CreatePackViewModel @Inject constructor(
 
     // ------------------------------------------------------------ outline
 
-    fun setOutlineOn(on: Boolean) = editDecor { it.setOutlineOn(on) }
+    fun setOutlineOn(on: Boolean) = editDecor(activeItem()) { it.setOutlineOn(on) }
 
     /** A new thickness re-dilates the subject's silhouette at once (not debounced). */
     fun setOutlineThickness(thickness: OutlineThickness) {
@@ -861,7 +912,7 @@ class CreatePackViewModel @Inject constructor(
         if (item.editor.state != before) refreshDerived(item)
     }
 
-    fun setOutlineColour(colour: Int) = editDecor { it.setOutlineColour(colour) }
+    fun setOutlineColour(colour: Int) = editDecor(activeItem()) { it.setOutlineColour(colour) }
 
     // ------------------------------------------------------------- strokes
 
@@ -1007,6 +1058,7 @@ class CreatePackViewModel @Inject constructor(
                 _events.emit(CreateEvent.ShowToast(UiText.res(R.string.toast_added_to_whatsapp), check = true))
                 delay(900)
                 finished = true
+                decor?.clearCache()
                 _events.emit(CreateEvent.ExportComplete)
             }
         } else {
@@ -1092,6 +1144,7 @@ class CreatePackViewModel @Inject constructor(
             _events.emit(CreateEvent.ShowToast(UiText.res(R.string.create_toast_saved)))
             delay(900)
             finished = true
+            decor?.clearCache()
             _events.emit(CreateEvent.ExportComplete)
         }
     }
@@ -1176,13 +1229,9 @@ class CreatePackViewModel @Inject constructor(
 
     /** The sticker's scene at rest in a new 512 bitmap: outline, layers and [source] cut out by [mask]. */
     private fun renderStillOf(renderer: SceneRenderer, source: Bitmap, mask: Bitmap, decorState: DecorState): Bitmap {
-        val subject = StickerRenderer.maskedSubject(source, mask)
         val outline = decorState.outline
-        val silhouette = if (outline.on) {
-            StickerRenderer.outlineOf(mask, renderer.outlineRadius(outline.thickness))
-        } else {
-            null
-        }
+        val radius = if (outline.on) renderer.outlineRadius(outline.thickness) else null
+        val (subject, silhouette) = subjectAndSilhouette(source, mask, radius)
         val still = renderer.renderStill(SceneRenderer.Scene(subject, silhouette, decorState))
         subject.recycle()
         silhouette?.recycle()
@@ -1350,16 +1399,16 @@ class CreatePackViewModel @Inject constructor(
             val strokes = item.strokes.toList()
             val thickness = item.editor.state.outline.thickness
             val radius = renderer?.outlineRadius(thickness) ?: CreateSpec.OUTLINE_RADIUS
-            val made = withContext(Dispatchers.Default) {
+            val (mask, made) = withContext(Dispatchers.Default) {
                 val mask = StickerRenderer.rebuildMask(auto, strokes)
-                Triple(mask, StickerRenderer.maskedSubject(src, mask), StickerRenderer.outlineOf(mask, radius))
+                mask to subjectAndSilhouette(src, mask, radius)
             }
-            item.mask = made.first
+            item.mask = mask
             val version = ++item.maskVersion
             item.rebuildSeq++
-            item.subject = made.second
+            item.subject = made.first
             item.subjectVersion = version
-            item.silhouette = made.third
+            item.silhouette = made.second
             item.silhouetteVersion = version
             item.silhouetteThickness = thickness
             item.cut = CutStatus.Done
@@ -1443,8 +1492,7 @@ class CreatePackViewModel @Inject constructor(
             val keptSilhouette = item.silhouette
                 ?.takeIf { item.silhouetteVersion == version && item.silhouetteThickness == thickness }
             val (subject, silhouette, thumb) = withContext(Dispatchers.Default) {
-                val subject = keptSubject ?: StickerRenderer.maskedSubject(src, mask)
-                val silhouette = keptSilhouette ?: StickerRenderer.outlineOf(mask, radius)
+                val (subject, silhouette) = subjectAndSilhouette(src, mask, radius, keptSubject, keptSilhouette)
                 val still = renderer.renderStill(SceneRenderer.Scene(subject, silhouette, decorState, live))
                 val thumb = StickerRenderer.thumbOf(still)
                 still.recycle()
@@ -1462,6 +1510,22 @@ class CreatePackViewModel @Inject constructor(
             push()
         }
     }
+
+    /**
+     * A scene's subject ([source] cut out by [mask]) and silhouette ([mask] dilated by [radius]; none
+     * without a radius). A [subject] or [silhouette] the caller still holds current is reused rather
+     * than made again. Bitmap work: call it off the main thread.
+     */
+    private fun subjectAndSilhouette(
+        source: Bitmap,
+        mask: Bitmap,
+        radius: Float?,
+        subject: Bitmap? = null,
+        silhouette: Bitmap? = null
+    ): Pair<Bitmap, Bitmap?> = Pair(
+        subject ?: StickerRenderer.maskedSubject(source, mask),
+        silhouette ?: radius?.let { StickerRenderer.outlineOf(mask, it) }
+    )
 
     private fun getSegmenter(): Segmenter {
         segmenterOrNull?.let { return it }
@@ -1520,6 +1584,7 @@ class CreatePackViewModel @Inject constructor(
         playing = false
         liveLayerId = null
         gestureStart = null
+        limitToastShown = false
         trayIndex = 0
         packName = ""
         tick = 0

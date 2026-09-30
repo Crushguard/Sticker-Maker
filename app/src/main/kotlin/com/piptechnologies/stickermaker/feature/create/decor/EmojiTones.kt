@@ -11,23 +11,29 @@ import java.net.URL
 /**
  * The five downloadable skin tones of the Hands emoji (spec §2). Each tone's PNG is fetched once
  * from Fluent Emoji ([EmojiCatalog.toneUrl]) and kept in [dir] under the name [DecorAssets] reads
- * ([DecorAssets.toneFileName]). [fetch] returns a URL's body, or null on any failure.
+ * ([DecorAssets.toneFileName]). [fetch] returns a URL's body, or null on any failure. Part files a
+ * killed download left behind are deleted when the instance is made.
  */
 class EmojiTones(private val dir: File, private val fetch: (String) -> ByteArray? = ::httpGet) {
+
+    init {
+        dir.listFiles { file -> file.name.endsWith(PART_SUFFIX) }?.forEach { it.delete() }
+    }
 
     /** The downloaded [tone] of [item], or null while it isn't on disk. */
     fun cached(item: EmojiItem, tone: SkinTone): File? = fileOf(item, tone).takeIf { it.isFile && it.length() > 0 }
 
     /**
      * The [tone] of [item] on disk, downloaded first when it isn't there yet; null when the download
-     * fails, and then nothing is kept. The body goes to a `.part` file that is renamed into place, so a
+     * fails, and then nothing is kept. A body that isn't a PNG counts as a failure (a captive portal
+     * answers 200 with its own page). The body goes to a `.part` file that is renamed into place, so a
      * half-written file never counts as cached. Blocking I/O on the caller's dispatcher: call it on IO.
      * [tone] is never [SkinTone.Default], which is bundled.
      */
     suspend fun ensure(item: EmojiItem, tone: SkinTone): File? {
         require(tone != SkinTone.Default) { "the default tone is bundled" }
         cached(item, tone)?.let { return it }
-        val bytes = fetch(EmojiCatalog.toneUrl(item, tone))?.takeIf { it.isNotEmpty() } ?: return null
+        val bytes = fetch(EmojiCatalog.toneUrl(item, tone))?.takeIf(::isPng) ?: return null
         val target = fileOf(item, tone)
         return try {
             dir.mkdirs()
@@ -51,6 +57,12 @@ class EmojiTones(private val dir: File, private val fetch: (String) -> ByteArray
         const val DIR = "emoji-tones"
 
         private const val PART_SUFFIX = ".part"
+
+        /** The 8 bytes every PNG file starts with. */
+        private val PNG_SIGNATURE = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
+
+        private fun isPng(bytes: ByteArray): Boolean =
+            bytes.size >= PNG_SIGNATURE.size && PNG_SIGNATURE.indices.all { bytes[it] == PNG_SIGNATURE[it] }
 
         /** Production downloads, kept in `filesDir/emoji-tones/`. */
         fun android(context: Context): EmojiTones = EmojiTones(File(context.applicationContext.filesDir, DIR))
