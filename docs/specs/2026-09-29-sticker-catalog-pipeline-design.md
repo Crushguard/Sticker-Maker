@@ -294,6 +294,14 @@ later request); a publish whose catalog is identical to the live one writes noth
   `https://firebasestorage.googleapis.com/v0/b/play-console-f33dd-stickermaker/o/{path}?alt=media` (`{path}` is the
   URL-encoded object path). Moving public files to R2 later means copying them and setting the template to
   `https://<cdn host>/{rawPath}`; the app needs no update.
+- Since 2026-09-30 the catalog carries `"words": { "path": "public/catalog/words-<hash16>.json.gz" }` instead of the
+  inline `tags` and `languages`: they were 60% of the gzipped catalog (36 of 60 KB for 116 packs) and change only with
+  `_tags.json`, while every pack change republishes the catalog. The words file is written before the catalog that
+  names it, only when new, and again if it goes missing; the app keeps the last one and fetches another only when the
+  name changes.
+- Publishes are coalesced into 20 s windows (one Cloud Tasks id per window, run 5 s after it closes), so a bulk upload
+  of 116 packs makes a handful of catalog versions instead of about 80. The Cloud Tasks emulator ignores schedule
+  times, so there every request stays its own task.
 - `packs` is in rank order; category `packs` counts every pack the category's tags bring. An animated pack gets the
   `animated` tag. `category` and `alsoIn` are the pack's categories (main, then the rest), so app builds from before
   tags keep working; `tags` and `languages` hold only the entries the listed packs use.

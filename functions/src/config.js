@@ -62,6 +62,11 @@ function publicCatalogPath(version) {
   return `${PUBLIC_PREFIX}catalog/v${version}.json.gz`;
 }
 
+/** The search words file a catalog names, named by its content: phones download it again only when it changes. */
+function publicWordsPath(contentHash) {
+  return `${PUBLIC_PREFIX}catalog/words-${contentHash.slice(0, 16)}.json.gz`;
+}
+
 module.exports = {
   PROJECT_ID,
   BUCKET,
@@ -76,4 +81,5 @@ module.exports = {
   BUILD_RETRY,
   publicPackBase,
   publicCatalogPath,
+  publicWordsPath,
 };

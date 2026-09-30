@@ -161,6 +161,11 @@ library/                        (bucket play-console-f33dd-stickermaker, private
   only from 100 real adds.
 - **The app** reads one Firestore document (`catalog/meta`), downloads the gzipped catalog file it
   points to only when it changes, and fetches one `pack.zip` per pack (the pack page and Add share it).
+  The search words live in their own file, named by their content (`public/catalog/words-<hash>.json.gz`,
+  60% of the catalog's size): phones download it again only when `_tags.json` changes.
+- **Publishes are coalesced:** every build asks for a catalog publish, and requests made in the same
+  20-second window become one publish, so a bulk upload makes a few catalog versions, not one per
+  pack (every online phone downloads each). A pack goes live within about half a minute of its build.
 
 `library/` in this repo holds the 14 launch packs the emulators and the screen tour use (sources
 plus `pack.json`) and the real `_categories.json` and `_tags.json`; `packs/<id>/` keeps their built

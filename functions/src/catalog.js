@@ -90,12 +90,13 @@ function keywordsOf(p) {
 
 /**
  * The entries of a { id: words } dictionary that the catalog uses, in the order first used, under the ids the packs
- * use. A language code without an entry of its own takes its primary language's ("pt-BR" → "pt").
+ * use. With `primaryFallback`, a language code without an entry of its own takes its primary language's ("pt-BR" →
+ * "pt"); tag ids never do, since "good-night" is not "good".
  */
-function pick(dictionary, ids) {
+function pick(dictionary, ids, primaryFallback = false) {
   const out = {};
   for (const id of ids) {
-    const words = dictionary && (dictionary[id] || dictionary[id.split('-')[0]]);
+    const words = dictionary && (dictionary[id] || (primaryFallback ? dictionary[id.split('-')[0]] : undefined));
     if (words && !out[id]) out[id] = words;
   }
   return out;
@@ -162,7 +163,7 @@ function assembleCatalog({ version, now, categories, packs, vocabulary = {} }) {
     categories: catalogCategories,
     packs: catalogPacks,
     tags: pick(vocabulary.tags, catalogPacks.flatMap((p) => p.tags)),
-    languages: pick(vocabulary.languages, catalogPacks.flatMap((p) => p.langs)),
+    languages: pick(vocabulary.languages, catalogPacks.flatMap((p) => p.langs), true),
   };
 }
 

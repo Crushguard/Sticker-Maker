@@ -84,12 +84,25 @@ function storageBucket({ project, bucketName }) {
   return getStorage(app).bucket(bucketName);
 }
 
-async function uploadFile(bucket, localPath, remotePath, { dryRun, force = false }) {
+/** Every object's MD5 under a prefix, from one listing: comparing against it costs no request per file. */
+async function remoteHashes(bucket, prefix) {
+  const [files] = await bucket.getFiles({ prefix, autoPaginate: true });
+  return new Map(files.map((f) => [f.name, f.metadata.md5Hash]));
+}
+
+/**
+ * Uploads a file unless the bucket already holds the same bytes. `remote` (remoteHashes) answers that from one
+ * listing; without it each file is looked up.
+ */
+async function uploadFile(bucket, localPath, remotePath, { dryRun, force = false, remote }) {
   const file = bucket.file(remotePath);
-  const [exists] = await file.exists();
-  if (exists && !force) {
-    const [meta] = await file.getMetadata();
-    if (meta.md5Hash === md5(localPath)) return 'unchanged';
+  if (!force) {
+    let remoteMd5 = remote ? remote.get(remotePath) : undefined;
+    if (!remote) {
+      const [exists] = await file.exists();
+      if (exists) remoteMd5 = (await file.getMetadata())[0].md5Hash;
+    }
+    if (remoteMd5 && remoteMd5 === md5(localPath)) return 'unchanged';
   }
   if (dryRun) return 'would-upload';
   const contentType = CONTENT_TYPES[path.extname(localPath).toLowerCase()] || 'application/octet-stream';
@@ -173,8 +186,12 @@ async function main() {
   if (process.argv.includes('--emulator') && !process.env.FIREBASE_STORAGE_EMULATOR_HOST) {
     process.env.FIREBASE_STORAGE_EMULATOR_HOST = '127.0.0.1:9199';
   }
-  const options = { dryRun: process.argv.includes('--dry-run'), rebuild: process.argv.includes('--rebuild') };
   const bucket = storageBucket({ project, bucketName: arg('--bucket', `${project}-stickermaker`) });
+  const options = {
+    dryRun: process.argv.includes('--dry-run'),
+    rebuild: process.argv.includes('--rebuild'),
+    remote: await remoteHashes(bucket, 'library/'),
+  };
   const only = arg('--pack', null);
   const startedMs = Date.now() - 5000;
 

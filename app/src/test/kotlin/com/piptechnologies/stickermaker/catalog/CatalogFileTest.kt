@@ -91,6 +91,16 @@ class CatalogFileTest {
     }
 
     @Test
+    fun searchWordsCanComeFromTheCatalogsWordsFile() {
+        val catalog = """{ "version": 4, "words": { "path": "public/catalog/words-00ff.json.gz" }, "packs": [
+            { "id": "a", "name": "A", "langs": ["fa"], "tags": ["cat"], "zip": { "path": "public/packs/a/v1/pack.zip" } } ] }"""
+        val words = """{ "tags": { "cat": { "en": ["cat"], "fa": ["گربه"] } }, "languages": { "fa": { "en": ["persian"] } } }"""
+        assertEquals("public/catalog/words-00ff.json.gz", CatalogFile.wordsPath(catalog))
+        assertEquals(listOf("cat", "گربه", "persian"), CatalogFile.parse(catalog, urls, words).packs.single().keywords)
+        assertNull(CatalogFile.wordsPath(json))
+    }
+
+    @Test
     fun aCatalogWithoutWordsOrLanguageListsStillReads() {
         val old = """{ "version": 3, "packs": [ { "id": "a", "name": "A", "lang": "tr", "keywords": ["x"],
             "tags": ["bunny"], "zip": { "path": "public/packs/a/v1/pack.zip" } } ] }"""

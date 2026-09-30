@@ -2,7 +2,7 @@
 
 const crypto = require('crypto');
 const zlib = require('zlib');
-const { BUCKET, PUBLIC_PREFIX, publicCatalogPath } = require('./config');
+const { BUCKET, PUBLIC_PREFIX, publicCatalogPath, publicWordsPath } = require('./config');
 const { assembleCatalog } = require('./catalog');
 const { db, bucket, savePublic } = require('./firebase');
 const { TAGS_DOC } = require('./tagsTask');
@@ -33,9 +33,22 @@ async function deleteOldCatalogs(version) {
 }
 
 /**
- * Writes public/catalog/v<k>.json.gz and points catalog/meta at it. Nothing changes when the catalog's content
+ * The catalog without its search words, which move to their own file (60% of the catalog, and they change far less
+ * often than the packs): the catalog names the file by its content in "words".
+ *
+ * @returns {{catalog: object, wordsPath: string, wordsJson: string}}
+ */
+function withWordsFile(assembled) {
+  const { tags, languages, ...catalog } = assembled;
+  const wordsJson = JSON.stringify({ tags, languages });
+  const wordsPath = publicWordsPath(crypto.createHash('sha256').update(wordsJson).digest('hex'));
+  return { catalog: { ...catalog, words: { path: wordsPath } }, wordsPath, wordsJson };
+}
+
+/**
+ * Writes public/catalog/v<k>.json.gz (and its words file when that is new) and points catalog/meta at it. Nothing changes when the catalog's content
  * is identical to the live one, so phones never re-download an unchanged catalog, unless the live file is gone
- * from public/ (a wiped folder): then it is published again as a new version.
+ * from public/ (a wiped folder): then it is published again as a new version. A missing words file is written again.
  */
 async function runPublish({ now = new Date(), urlOverride = '' } = {}) {
   const metaRef = db().doc('catalog/meta');
@@ -50,17 +63,23 @@ async function runPublish({ now = new Date(), urlOverride = '' } = {}) {
   const packs = packsSnap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((p) => p.hidden !== true);
   const vocabulary = tagsSnap.exists ? tagsSnap.data() : {};
   const version = (meta ? meta.version : 0) + 1;
-  const catalog = assembleCatalog({ version, now, categories, packs, vocabulary });
+  const { catalog, wordsPath, wordsJson } = withWordsFile(assembleCatalog({ version, now, categories, packs, vocabulary }));
   const template = urlTemplate(urlOverride);
-  const { categories: catalogCategories, packs: catalogPacks, tags, languages } = catalog;
   const contentHash = crypto
     .createHash('sha256')
-    .update(JSON.stringify({ categories: catalogCategories, packs: catalogPacks, tags, languages, template }))
+    .update(JSON.stringify({ categories: catalog.categories, packs: catalog.packs, words: wordsPath, template }))
     .digest('hex');
+  const ensureWords = async () => {
+    const [exists] = await bucket().file(wordsPath).exists();
+    if (!exists) await savePublic(wordsPath, zlib.gzipSync(Buffer.from(wordsJson, 'utf8'), { level: 9 }), 'application/gzip');
+  };
   if (meta && meta.contentHash === contentHash) {
+    await ensureWords();
     const [exists] = await bucket().file(meta.path).exists();
     if (exists) return { outcome: 'unchanged', version: meta.version };
   }
+  // The words before the catalog that names them.
+  await ensureWords();
 
   const gz = zlib.gzipSync(Buffer.from(JSON.stringify(catalog), 'utf8'), { level: 9 });
   const path = publicCatalogPath(version);
@@ -78,4 +97,4 @@ async function runPublish({ now = new Date(), urlOverride = '' } = {}) {
   return { outcome: 'published', version, packs: catalog.packs.length, bytes: gz.length };
 }
 
-module.exports = { runPublish, urlTemplate };
+module.exports = { runPublish, urlTemplate, withWordsFile };

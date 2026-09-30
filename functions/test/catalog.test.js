@@ -128,14 +128,14 @@ test('a record built before tags decided categories keeps its folder category an
 
 test('the catalog carries the search words of the tags and languages its packs use', () => {
   const vocabulary = {
-    tags: { hug: { en: ['hug'], ar: ['حضن'] }, cat: { en: ['cat'] }, animated: { en: ['animated'], fr: ['animé'] } },
+    tags: { hug: { en: ['hug'], ar: ['حضن'] }, cat: { en: ['cat'] }, good: { en: ['good'] }, animated: { en: ['animated'], fr: ['animé'] } },
     languages: { ar: { en: ['arabic'], ar: ['عربي'] }, fr: { en: ['french'] } },
   };
   const catalog = assembleCatalog({
     version: 1,
     now: NOW,
     categories: CATEGORIES,
-    packs: [pack('a', { tags: ['sorry', 'hug'], langs: ['ar', 'en', 'fr-CA'], animated: true })],
+    packs: [pack('a', { tags: ['sorry', 'hug', 'good-night'], langs: ['ar', 'en', 'fr-CA'], animated: true })],
     vocabulary,
   });
   assert.deepEqual(catalog.tags, { hug: vocabulary.tags.hug, animated: vocabulary.tags.animated });

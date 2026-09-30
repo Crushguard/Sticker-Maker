@@ -98,6 +98,42 @@ class CatalogStoreTest {
         assertEquals(listOf(listOf("a"), listOf("b")), emissions.map { c -> c!!.packs.map { it.id } })
     }
 
+    private fun catalogWithWords(version: Int, packId: String, wordsPath: String) = """
+        {"schema":1,"version":$version,"categories":[],"words":{"path":"$wordsPath"},
+         "packs":[{"id":"$packId","name":"$packId","category":"","count":3,"version":1,"tags":["cat"],
+                   "zip":{"path":"public/packs/$packId/v1/pack.zip","bytes":10}}]}
+    """.trimIndent()
+
+    @Test
+    fun theSearchWordsFileIsDownloadedOncePerNameAndCachedWithTheCatalog() = runBlocking {
+        val words = "public/catalog/words-0123456789abcdef.json.gz"
+        val fetcher = FakeFetcher().apply {
+            this["https://cdn.example.com/public/catalog/v1.json.gz"] = gz(catalogWithWords(1, "a", words))
+            this["https://cdn.example.com/public/catalog/v2.json.gz"] = gz(catalogWithWords(2, "b", words))
+            this["https://cdn.example.com/$words"] = gz("""{"tags":{"cat":{"en":["cat"],"ar":["قطة"]}},"languages":{}}""")
+        }
+        val first = store(MutableStateFlow(meta(1)), fetcher).firstCatalog()!!
+        assertEquals(true, "قطة" in first.packs.single().keywords)
+
+        val second = withTimeout(5_000) { store(MutableStateFlow(meta(2)), fetcher).catalog.take(2).toList() }.last()!!
+        assertEquals(listOf("b"), second.packs.map { it.id })
+        assertEquals("the words file is fetched once", 1, fetcher.requests.count { it.endsWith(words) })
+
+        val offline = store(MutableStateFlow(null), FakeFetcher()).firstCatalog()!!
+        assertEquals(true, "قطة" in offline.packs.single().keywords)
+    }
+
+    @Test
+    fun aWordsFileThatCannotBeDownloadedKeepsThePreviousCatalog() = runBlocking {
+        val fetcher = FakeFetcher().apply {
+            this["https://cdn.example.com/public/catalog/v1.json.gz"] = gz(catalogJson(1, "a"))
+            this["https://cdn.example.com/public/catalog/v2.json.gz"] = gz(catalogWithWords(2, "b", "public/catalog/words-missing.json.gz"))
+        }
+        store(MutableStateFlow(meta(1)), fetcher).firstCatalog()
+        val catalog = store(MutableStateFlow(meta(2)), fetcher).firstCatalog()!!
+        assertEquals(listOf("a"), catalog.packs.map { it.id })
+    }
+
     @Test
     fun nothingCachedAndNoPointerMeansNoCatalog() = runBlocking {
         assertNull(store(MutableStateFlow(null), FakeFetcher()).firstCatalog())

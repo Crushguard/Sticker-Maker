@@ -11,6 +11,7 @@ import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
+import java.util.Collections
 import java.util.concurrent.Executors
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -18,6 +19,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -72,17 +74,25 @@ class AddTargetTest {
         assertThrows(CancellationException::class.java) { runBlocking { resolve() } }
     }
 
-    /** The queries can cold-start WhatsApp: never on the caller's (main) thread. */
+    /**
+     * The queries can cold-start WhatsApp: never on the caller's (main) thread. Compared by thread, not name: with
+     * assertions on, coroutines' debug mode renames a thread while a coroutine runs on it ("… @coroutine#5").
+     */
     @Test
     fun whatsAppIsAskedOnTheDispatcherGiven() = runBlocking {
         val provider = installWhatsApp(WhitelistProvider::class.java)
-        val io = Executors.newSingleThreadExecutor { Thread(it, "add-target-io") }
+        var ioThread: Thread? = null
+        val io = Executors.newSingleThreadExecutor { task -> Thread(task, "add-target-io").also { ioThread = it } }
         try {
             AddStickerPackFlow.resolveAddTarget(context, PACK_ID, PACK_NAME, SITE, io.asCoroutineDispatcher())
         } finally {
             io.shutdown()
         }
-        assertEquals("add-target-io", provider.queriedOn?.name)
+        val threads = provider.askedAboutPackOn.toList()
+        assertTrue(
+            "WhatsApp was asked about $PACK_ID on ${threads.map { it.name }}",
+            threads.isNotEmpty() && threads.all { it === ioThread },
+        )
     }
 
     private suspend fun resolve() = AddStickerPackFlow.resolveAddTarget(context, PACK_ID, PACK_NAME, SITE)
@@ -118,10 +128,14 @@ class AddTargetTest {
         override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?) = 0
     }
 
-    /** Answers like WhatsApp: one row whose "result" is 1 when the pack is already there. */
+    /**
+     * Answers like WhatsApp: one row whose "result" is 1 when the pack is already there. It notes the threads that asked
+     * about this test's pack only: Robolectric shares registered providers across tests, so a whitelist check another
+     * test left running may land here too, about its own pack.
+     */
     class WhitelistProvider : FakeWhitelistProvider() {
         @Volatile var whitelisted = false
-        @Volatile var queriedOn: Thread? = null
+        val askedAboutPackOn: MutableList<Thread> = Collections.synchronizedList(mutableListOf())
 
         override fun query(
             uri: Uri,
@@ -130,7 +144,7 @@ class AddTargetTest {
             selectionArgs: Array<out String>?,
             sortOrder: String?,
         ): Cursor {
-            queriedOn = Thread.currentThread()
+            if (uri.getQueryParameter("identifier") == PACK_ID) askedAboutPackOn += Thread.currentThread()
             return MatrixCursor(arrayOf("result")).apply { addRow(arrayOf(if (whitelisted) 1 else 0)) }
         }
     }
