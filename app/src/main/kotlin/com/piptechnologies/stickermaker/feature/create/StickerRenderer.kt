@@ -194,6 +194,18 @@ object StickerRenderer {
         }
     }
 
+    /**
+     * The cut-out subject: [source] with [mask] applied through DST_IN, as [drawComposite]
+     * does, in a new [SIZE] px bitmap (the scene renderer draws it between the layers).
+     */
+    fun maskedSubject(source: Bitmap, mask: Bitmap): Bitmap {
+        val out = Bitmap.createBitmap(SIZE, SIZE, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(out)
+        canvas.drawBitmap(source, 0f, 0f, bitmapPaint)
+        canvas.drawBitmap(mask, 0f, 0f, dstInPaint)
+        return out
+    }
+
     /** Renders the composite into a fresh transparent 512 bitmap. */
     fun renderComposite(
         source: Bitmap,
