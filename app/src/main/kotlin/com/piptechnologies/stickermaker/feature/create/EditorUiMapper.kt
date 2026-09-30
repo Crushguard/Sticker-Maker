@@ -20,7 +20,7 @@ internal fun CreateUiState.withDecor(editor: DecorEditor?): CreateUiState {
             val size = editor.renderedSize(layer)
             LayerUi(
                 layer.id, kindOf(layer.content), layer.cx, layer.cy, size.w, size.h,
-                layer.rotation, layer.flipped, layer.behind
+                layer.scale, layer.rotation, layer.flipped, layer.behind
             )
         },
         selectedLayerId = editor.selectedId,
@@ -42,11 +42,18 @@ private fun kindOf(content: LayerContent): LayerKind = when (content) {
     is LayerContent.Drawing -> LayerKind.Drawing
 }
 
-/** Add, Draw and Animate edit layers, so they need the active sticker's finished cut-out (spec §8). */
+/** Add, Draw and Animate edit layers: they need the decor data and the active sticker's finished cut-out (spec §8). */
 private val LAYER_TOOLS = setOf(EditorTool.Add, EditorTool.Draw, EditorTool.Animate)
 
-/** Whether the layer tools can open: the active sticker's cut-out ([cut]; null without a sticker) is done. */
-internal fun layerToolsEnabled(cut: CutStatus?): Boolean = cut == CutStatus.Done
+/**
+ * Whether the layer tools can open: the decor data has loaded ([dataReady]) and the active sticker's
+ * cut-out ([cut]; null without a sticker) is done.
+ */
+internal fun layerToolsEnabled(cut: CutStatus?, dataReady: Boolean): Boolean = dataReady && cut == CutStatus.Done
 
-/** Whether [tool] can be on while the active sticker's cut-out is [cut]: Auto, Brush and Erase always can. */
-internal fun toolAllowed(tool: EditorTool, cut: CutStatus?): Boolean = tool !in LAYER_TOOLS || layerToolsEnabled(cut)
+/**
+ * Whether [tool] can be on while the active sticker's cut-out is [cut] and the decor data is [dataReady]:
+ * Auto, Brush and Erase always can.
+ */
+internal fun toolAllowed(tool: EditorTool, cut: CutStatus?, dataReady: Boolean): Boolean =
+    tool !in LAYER_TOOLS || layerToolsEnabled(cut, dataReady)

@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PointF
 import android.net.Uri
-import android.provider.Settings
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
@@ -24,6 +23,7 @@ import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
 import com.piptechnologies.stickermaker.core.telemetry.CrashReporting
 import com.piptechnologies.stickermaker.core.ui.UiText
 import com.piptechnologies.stickermaker.core.ui.inAppLanguage
+import com.piptechnologies.stickermaker.core.ui.isReduceMotionOn
 import com.piptechnologies.stickermaker.feature.create.decor.DecorData
 import com.piptechnologies.stickermaker.feature.create.decor.DecorEditor
 import com.piptechnologies.stickermaker.feature.create.decor.DecorFonts
@@ -285,7 +285,7 @@ class CreatePackViewModel @Inject constructor(
             anyPending = selected.any { it.cut == CutStatus.Pending },
             editorTick = tick,
             dataReady = decor != null,
-            layerToolsEnabled = layerToolsEnabled(active?.cut),
+            layerToolsEnabled = layerToolsEnabled(active?.cut, dataReady = decor != null),
             liveLayerId = liveLayerId,
             playing = playing,
             addTab = addTab,
@@ -452,7 +452,7 @@ class CreatePackViewModel @Inject constructor(
      * A tool bar tap (spec §8). Leaving Draw turns its strokes into a layer; Add while the sheet is
      * open closes it; Auto, Brush, Erase and Draw deselect; Auto re-runs the cut-out, which resets the
      * Brush and Erase strokes (layers, outline and preset stay). Add, Draw and Animate are refused
-     * while the active sticker's cut-out isn't done ([CreateUiState.layerToolsEnabled]).
+     * until the decor data has loaded and the active sticker's cut-out is done ([CreateUiState.layerToolsEnabled]).
      */
     fun selectTool(newTool: EditorTool) {
         if (newTool == EditorTool.Add && tool == EditorTool.Add) {
@@ -460,7 +460,7 @@ class CreatePackViewModel @Inject constructor(
             return
         }
         val item = activeItem()
-        if (!toolAllowed(newTool, item?.cut)) return
+        if (!toolAllowed(newTool, item?.cut, dataReady = decor != null)) return
         val before = item?.let(::stateBefore)
         applyTool(newTool)
         if (newTool != EditorTool.Add && newTool != EditorTool.Animate) item?.editor?.select(null)
@@ -494,7 +494,7 @@ class CreatePackViewModel @Inject constructor(
      * Import changes), the tool falls back to Auto without re-running the cut-out. Doesn't publish.
      */
     private fun keepLayerToolsOnDoneCut() {
-        if (!toolAllowed(tool, activeItem()?.cut)) applyTool(EditorTool.Auto)
+        if (!toolAllowed(tool, activeItem()?.cut, dataReady = decor != null)) applyTool(EditorTool.Auto)
     }
 
     fun toggleZoom() {
@@ -1498,9 +1498,7 @@ class CreatePackViewModel @Inject constructor(
     private fun nextId(): String = "m${idSeq++}"
 
     /** Whether the user turned animations off (spec §6); false where the setting can't be read. */
-    private fun reduceMotion(): Boolean = runCatching {
-        Settings.Global.getFloat(appContext.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
-    }.getOrDefault(false)
+    private fun reduceMotion(): Boolean = isReduceMotionOn(appContext)
 
     private fun isRtl(tag: String): Boolean = AppLanguages.byTag(tag)?.rtl == true
 

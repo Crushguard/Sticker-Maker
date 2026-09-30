@@ -1,21 +1,15 @@
 package com.piptechnologies.stickermaker.feature.create.editor
 
-import android.graphics.Paint
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,30 +32,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -73,7 +56,6 @@ import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.Ink
 import com.piptechnologies.stickermaker.core.design.Ink2
 import com.piptechnologies.stickermaker.core.design.LoveIcons
-import com.piptechnologies.stickermaker.core.design.Mono
 import com.piptechnologies.stickermaker.core.design.Muted
 import com.piptechnologies.stickermaker.core.design.Rose
 import com.piptechnologies.stickermaker.core.design.Subtle
@@ -87,7 +69,6 @@ import com.piptechnologies.stickermaker.core.ui.asString
 import com.piptechnologies.stickermaker.feature.create.CreateEvent
 import com.piptechnologies.stickermaker.feature.create.CreateFooter
 import com.piptechnologies.stickermaker.feature.create.CreatePackViewModel
-import com.piptechnologies.stickermaker.feature.create.CreateSpec
 import com.piptechnologies.stickermaker.feature.create.CutStatus
 import com.piptechnologies.stickermaker.feature.create.EditorTool
 import com.piptechnologies.stickermaker.feature.create.FooterDivider
@@ -98,18 +79,14 @@ import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
 private val UndoDisabled = Color(0xFFB4BAC4)
-private val ToolIdle = Color(0xFFC3C9D2)
-private val CheckerGrey = 0xFFE6E9EE.toInt()
-
-/** Test tag of the cut-out canvas, used by the on-device screen tour. */
-const val EDITOR_CANVAS_TAG = "editorCanvas"
 
 /**
  * Create · step 2 (Cut out): the live editor. The on-device auto cut-out runs
- * per sticker; Brush restores, Erase removes (Porter-Duff strokes on the mask
- * bitmap), Zoom toggles a pinch/pan view, undo steps back
- * one touch, and the white-outline switch previews WhatsApp's recommended
- * die-cut edge. The rail carries a green check per finished sticker.
+ * per sticker; the canvas card ([EditorCanvasCard]) shows the decorated sticker
+ * with its layer overlay and Zoom button, the tool bar ([EditorToolbar]) picks
+ * Auto, Brush, Erase, Add, Draw or Animate, undo steps back one touch, and the
+ * outline switch previews WhatsApp's recommended die-cut edge. The rail carries
+ * a green check per finished sticker.
  */
 @Composable
 fun CreateEditorScreen(
@@ -160,21 +137,11 @@ fun CreateEditorScreen(
                     .padding(start = 20.dp, end = 20.dp, bottom = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                EditorCanvasCard(
-                    viewModel = viewModel,
-                    tool = state.tool,
-                    zoomed = state.zoomed,
-                    activeIndex = state.activeIndex,
-                    activeCut = state.activeCut,
-                    durationLabel = state.activeDurationLabel,
-                    editorTick = state.editorTick,
-                    liveLayerId = state.liveLayerId
-                )
+                EditorCanvasCard(state = state, viewModel = viewModel)
                 EditorToolbar(
                     tool = state.tool,
-                    zoomed = state.zoomed,
-                    onTool = viewModel::selectTool,
-                    onZoom = viewModel::toggleZoom
+                    layerToolsEnabled = state.layerToolsEnabled,
+                    onTool = viewModel::selectTool
                 )
                 if (state.tool == EditorTool.Brush || state.tool == EditorTool.Erase) {
                     BrushSizeRow(
@@ -228,248 +195,7 @@ fun CreateEditorScreen(
     }
 }
 
-// --------------------------------------------------------------- the canvas
-
-@Composable
-private fun EditorCanvasCard(
-    viewModel: CreatePackViewModel,
-    tool: EditorTool,
-    zoomed: Boolean,
-    activeIndex: Int,
-    activeCut: CutStatus,
-    durationLabel: String?,
-    editorTick: Int,
-    liveLayerId: Long?
-) {
-    val bitmapPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG) }
-    val checkerPaint = remember { Paint() }
-    var canvasSize by remember { mutableStateOf(IntSize.Zero) }
-    var scale by remember { mutableFloatStateOf(1f) }
-    var panX by remember { mutableFloatStateOf(0f) }
-    var panY by remember { mutableFloatStateOf(0f) }
-
-    // The Zoom toggle starts at the prototype's 1.6x; pinch refines it.
-    LaunchedEffect(zoomed, activeIndex) {
-        scale = if (zoomed) 1.6f else 1f
-        panX = 0f
-        panY = 0f
-    }
-
-    fun viewToImage(p: Offset): Offset {
-        val edge = canvasSize.width.toFloat()
-        if (edge <= 0f) return Offset.Zero
-        val centre = edge / 2f
-        val bx = (p.x - panX - centre) / scale + centre
-        val by = (p.y - panY - centre) / scale + centre
-        val s0 = edge / CreateSpec.CANVAS_SIZE
-        return Offset(bx / s0, by / s0)
-    }
-
-    val paintingTool = tool == EditorTool.Brush || tool == EditorTool.Erase
-    val hint = stringResource(
-        when {
-            zoomed -> R.string.create_hint_zoomed
-            tool == EditorTool.Auto ->
-                if (activeCut == CutStatus.Done) R.string.create_hint_auto_done else R.string.create_hint_auto
-            tool == EditorTool.Brush -> R.string.create_hint_brush
-            tool == EditorTool.Erase -> R.string.create_hint_erase
-            else -> R.string.create_hint_default
-        }
-    )
-
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Surface)
-            .border(1.dp, Border, RoundedCornerShape(20.dp))
-    ) {
-        Box(
-            Modifier
-                .fillMaxSize()
-                .padding(27.dp)
-        ) {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(Subtle)
-                    .testTag(EDITOR_CANVAS_TAG)
-                    .onSizeChanged { canvasSize = it }
-                    .pointerInput(zoomed, paintingTool, activeIndex) {
-                        if (zoomed) {
-                            detectTransformGestures { _, pan, zoom, _ ->
-                                scale = (scale * zoom).coerceIn(1f, 4f)
-                                val maxPan = (scale - 1f) * size.width / 2f
-                                panX = (panX + pan.x).coerceIn(-maxPan, maxPan)
-                                panY = (panY + pan.y).coerceIn(-maxPan, maxPan)
-                            }
-                        } else if (paintingTool) {
-                            detectDragGestures(
-                                onDragStart = { p ->
-                                    val ip = viewToImage(p)
-                                    viewModel.beginStroke(ip.x, ip.y)
-                                },
-                                onDrag = { change, _ ->
-                                    change.consume()
-                                    val ip = viewToImage(change.position)
-                                    viewModel.extendStroke(ip.x, ip.y)
-                                },
-                                onDragEnd = { viewModel.endStroke() },
-                                onDragCancel = { viewModel.endStroke() }
-                            )
-                        }
-                    }
-                    .pointerInput(paintingTool, activeIndex) {
-                        // Single taps dab with the brush/eraser — this also works while zoomed.
-                        if (paintingTool) {
-                            detectTapGestures { p ->
-                                val ip = viewToImage(p)
-                                viewModel.tapStroke(ip.x, ip.y)
-                            }
-                        }
-                    }
-            ) {
-                Canvas(Modifier.fillMaxSize()) {
-                    // editorTick invalidates this draw whenever something the scene shows changed.
-                    @Suppress("UNUSED_EXPRESSION") editorTick
-                    val scene = viewModel.activeScene()
-                    val renderer = viewModel.renderer
-                    val edge = size.width
-                    val s0 = edge / CreateSpec.CANVAS_SIZE
-                    drawIntoCanvas { canvas ->
-                        val nc = canvas.nativeCanvas
-                        nc.save()
-                        nc.translate(panX, panY)
-                        nc.scale(scale, scale, edge / 2f, edge / 2f)
-                        nc.scale(s0, s0)
-                        if (activeCut == CutStatus.Done && scene != null && renderer != null) {
-                            drawChecker(nc, checkerPaint)
-                            renderer.drawSticker(nc, scene, dimLayers = paintingTool, liveLayerId = liveLayerId)
-                        } else {
-                            viewModel.activeSource()?.let { nc.drawBitmap(it, 0f, 0f, bitmapPaint) }
-                        }
-                        nc.restore()
-                    }
-                }
-                if (durationLabel != null) {
-                    Text(
-                        durationLabel,
-                        style = TextStyle(fontFamily = Mono, fontWeight = FontWeight.W500, fontSize = 9.5.sp),
-                        color = Ink2,
-                        modifier = Modifier
-                            .align(Alignment.TopStart)
-                            .padding(start = 10.dp, top = 8.dp)
-                    )
-                }
-                if (activeCut == CutStatus.Pending) {
-                    Column(
-                        Modifier
-                            .fillMaxSize()
-                            .background(Color(0xB8FAFBFC)),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(22.dp),
-                            color = Rose,
-                            strokeWidth = 2.dp
-                        )
-                        Text(
-                            stringResource(R.string.create_cutting_out_on_phone),
-                            style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 12.5.sp),
-                            color = Ink2,
-                            modifier = Modifier.padding(top = 10.dp)
-                        )
-                    }
-                }
-            }
-        }
-        Text(
-            hint,
-            style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W500, fontSize = 11.sp),
-            color = Ink2,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 8.dp)
-        )
-    }
-}
-
-/** 512-space transparency checker behind the cut subject. */
-private fun drawChecker(canvas: android.graphics.Canvas, paint: Paint) {
-    val cell = 32f
-    val cells = (CreateSpec.CANVAS_SIZE / cell.toInt()).toInt()
-    paint.color = android.graphics.Color.WHITE
-    canvas.drawRect(0f, 0f, CreateSpec.CANVAS_SIZE.toFloat(), CreateSpec.CANVAS_SIZE.toFloat(), paint)
-    paint.color = CheckerGrey
-    for (y in 0 until cells) {
-        for (x in 0 until cells) {
-            if ((x + y) % 2 == 0) {
-                canvas.drawRect(x * cell, y * cell, (x + 1) * cell, (y + 1) * cell, paint)
-            }
-        }
-    }
-}
-
 // ---------------------------------------------------------------- controls
-
-@Composable
-private fun EditorToolbar(
-    tool: EditorTool,
-    zoomed: Boolean,
-    onTool: (EditorTool) -> Unit,
-    onZoom: () -> Unit
-) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(Ink)
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        ToolButton(stringResource(R.string.create_tool_auto), LoveIcons.Wand2, tool == EditorTool.Auto, Modifier.weight(1f)) {
-            onTool(EditorTool.Auto)
-        }
-        ToolButton(stringResource(R.string.create_tool_brush), LoveIcons.Brush, tool == EditorTool.Brush, Modifier.weight(1f)) {
-            onTool(EditorTool.Brush)
-        }
-        ToolButton(stringResource(R.string.create_tool_erase), LoveIcons.Eraser, tool == EditorTool.Erase, Modifier.weight(1f)) {
-            onTool(EditorTool.Erase)
-        }
-        ToolButton(stringResource(R.string.create_tool_zoom), LoveIcons.ZoomIn, zoomed, Modifier.weight(1f), onZoom)
-    }
-}
-
-@Composable
-private fun ToolButton(
-    label: String,
-    icon: ImageVector,
-    active: Boolean,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    val fg = if (active) Color.White else ToolIdle
-    Column(
-        modifier = modifier
-            .height(54.dp)
-            .clip(RoundedCornerShape(11.dp))
-            .background(if (active) Rose else Color.Transparent)
-            .clickable(role = Role.Button, onClickLabel = label, onClick = onClick),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Icon(icon, null, Modifier.size(20.dp), tint = fg)
-        Spacer(Modifier.height(3.dp))
-        Text(
-            label,
-            style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 10.sp),
-            color = fg
-        )
-    }
-}
 
 @Composable
 private fun BrushSizeRow(label: String, brush: Int, onBrush: (Int) -> Unit) {

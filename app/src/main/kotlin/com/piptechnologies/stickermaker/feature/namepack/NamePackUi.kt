@@ -1,6 +1,5 @@
 package com.piptechnologies.stickermaker.feature.namepack
 
-import android.provider.Settings
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -42,7 +41,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
@@ -93,21 +91,6 @@ private val NoteStyle = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W
 private val FieldText = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W400, fontSize = 16.sp, color = Ink)
 private val CounterText = TextStyle(fontFamily = Mono, fontWeight = FontWeight.W400, fontSize = 11.sp)
 private val TileLabel = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 11.sp)
-
-/**
- * Whether the user turned animations off (Developer options or accessibility). Compose already
- * scales its own animations by this setting; this switches off what it cannot see: the waiting
- * bob, the tile pop and the staggered delays. False where the setting cannot be read (previews).
- */
-@Composable
-internal fun rememberReduceMotion(): Boolean {
-    val context = LocalContext.current
-    return remember {
-        runCatching {
-            Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
-        }.getOrDefault(false)
-    }
-}
 
 /** While [blocked], consumes every touch before the content under it sees one, so nothing there clicks. */
 internal fun Modifier.blockTaps(blocked: Boolean): Modifier =

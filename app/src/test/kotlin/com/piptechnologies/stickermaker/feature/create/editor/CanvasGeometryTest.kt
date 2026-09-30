@@ -1,0 +1,215 @@
+package com.piptechnologies.stickermaker.feature.create.editor
+
+import androidx.compose.ui.geometry.Offset
+import com.piptechnologies.stickermaker.feature.create.LayerKind
+import com.piptechnologies.stickermaker.feature.create.LayerUi
+import com.piptechnologies.stickermaker.feature.create.decor.Affine
+import com.piptechnologies.stickermaker.feature.create.decor.Easing
+import com.piptechnologies.stickermaker.feature.create.decor.Keyframe
+import com.piptechnologies.stickermaker.feature.create.decor.MotionPreset
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+class CanvasGeometryTest {
+
+    private val still = Keyframe(0f, 1f, 1f, 0f, 0f, 0f, Easing.Linear)
+
+    /** Heartbeat's shape: shrunk to 0.88 at rest, 1.12× a seventh of the way in (about the centre). */
+    private val heartbeat = MotionPreset(
+        id = "heartbeat", durationMs = 1000, frames = 12, baseScale = 0.88f, pivotX = 0.5f, pivotY = 0.5f,
+        keyframes = listOf(
+            still.copy(easing = Easing.EaseInOut),
+            Keyframe(0.14f, 1.12f, 1.12f, 0f, 0f, 0f, Easing.EaseInOut),
+            still.copy(t = 1f)
+        ),
+        particles = null
+    )
+
+    /** Wiggle's shape: turns about a pivot low on the canvas. */
+    private val wiggle = MotionPreset(
+        id = "wiggle", durationMs = 900, frames = 12, baseScale = 0.9f, pivotX = 0.5f, pivotY = 0.8f,
+        keyframes = listOf(still, Keyframe(0.25f, 1f, 1f, -5f, 0f, 0f, Easing.Linear), still.copy(t = 1f)),
+        particles = null
+    )
+
+    private fun layer(cx: Float, cy: Float, w: Float, h: Float, rotation: Float = 0f) =
+        LayerUi(7L, LayerKind.Emoji, cx, cy, w, h, scale = 1f, rotation = rotation, flipped = false, behind = false)
+
+    private fun assertNear(message: String, expected: Offset, actual: Offset, tolerance: Float = 0.01f) {
+        assertEquals("$message: x of $actual", expected.x, actual.x, tolerance)
+        assertEquals("$message: y of $actual", expected.y, actual.y, tolerance)
+    }
+
+    private fun assertNear(expected: Offset, actual: Offset, tolerance: Float = 0.01f) =
+        assertNear("", expected, actual, tolerance)
+
+    // ------------------------------------------------------------- mapping
+
+    @Test
+    fun theViewFitsTheCanvasIntoTheBoxAndZoomsAboutItsCentre() {
+        val fit = viewTransform(edge = 1024f, zoom = 1f, panX = 0f, panY = 0f)
+        assertNear(Offset.Zero, fit.mapPoint(Offset.Zero))
+        assertNear(Offset(1024f, 1024f), fit.mapPoint(Offset(512f, 512f)))
+        val zoomed = viewTransform(edge = 1024f, zoom = 2f, panX = 30f, panY = -10f)
+        assertNear(
+            "the canvas centre stays at the box centre, panned",
+            Offset(542f, 502f),
+            zoomed.mapPoint(Offset(256f, 256f))
+        )
+        assertNear("a canvas px is 4 box px at 2×", Offset(942f, 502f), zoomed.mapPoint(Offset(356f, 256f)))
+    }
+
+    @Test
+    fun theRestPoseShrinksTheStickerAboutTheCentre() {
+        assertEquals(Affine.IDENTITY, motionPose(null, 500f))
+        val rest = motionPose(heartbeat, 0f)
+        assertNear(Offset(256f, 256f), rest.mapPoint(Offset(256f, 256f)))
+        val corner = 256f - 256f * 0.88f
+        assertNear("a corner comes in by 12%", Offset(corner, corner), rest.mapPoint(Offset.Zero))
+        val peak = motionPose(heartbeat, 140f)
+        val beat = Offset(256f + 100f * 1.12f * 0.88f, 256f)
+        assertNear("1.12 × 0.88 at the first beat", beat, peak.mapPoint(Offset(356f, 256f)))
+    }
+
+    @Test
+    fun theInverseTakesABoxPointBackToTheCanvasPointUnderIt() {
+        val frame = viewTransform(edge = 777f, zoom = 1.6f, panX = -40f, panY = 25f) * motionPose(wiggle, 225f)
+        val back = frame.inverse()
+        for (p in listOf(Offset.Zero, Offset(256f, 256f), Offset(100f, 400f), Offset(512f, 37f))) {
+            assertNear(p, back.mapPoint(frame.mapPoint(p)), 0.05f)
+        }
+        val move = Offset(12f, -30f)
+        assertNear("a move maps by the linear part alone", move, back.mapVector(frame.mapVector(move)), 0.01f)
+        assertEquals("a box not laid out yet maps nothing", Affine.IDENTITY, viewTransform(0f, 1f, 0f, 0f).inverse())
+    }
+
+    @Test
+    fun theZoomedViewKeepsCoveringItsBox() {
+        assertEquals(0f, clampPan(50f, zoom = 1f, edge = 800f), 0f)
+        assertEquals(240f, clampPan(500f, zoom = 1.6f, edge = 800f), 0.001f)
+        assertEquals(-240f, clampPan(-500f, zoom = 1.6f, edge = 800f), 0.001f)
+        assertEquals(100f, clampPan(100f, zoom = 1.6f, edge = 800f), 0f)
+    }
+
+    // ------------------------------------------------------- selection box
+
+    @Test
+    fun theBoxTurnsWithTheLayerAndItsCornersSitTheOutsetOut() {
+        val view = viewTransform(edge = 1024f, zoom = 1f, panX = 0f, panY = 0f)   // 2 box px per canvas px
+        val upright = layerBox(layer(256f, 256f, 100f, 50f), view)
+        assertNear(Offset(512f, 512f), upright.centre)
+        assertEquals(100f, upright.halfWidth, 0.001f)
+        assertEquals(50f, upright.halfHeight, 0.001f)
+        assertNear("top-left, 6 px out", Offset(512f - 106f, 512f - 56f), upright.corner(-1f, -1f, 6f))
+        val turned = layerBox(layer(256f, 256f, 100f, 50f, rotation = 90f), view)
+        assertEquals(90f, turned.angle, 0.01f)
+        // Turned a quarter clockwise, the layer's top-left corner is at the top-right on screen.
+        assertNear(Offset(512f + 56f, 512f - 106f), turned.corner(-1f, -1f, 6f))
+    }
+
+    @Test
+    fun theBoxFollowsTheZoomThePanAndTheMotionPose() {
+        val frame = viewTransform(edge = 512f, zoom = 2f, panX = 10f, panY = 0f) * motionPose(heartbeat, 0f)
+        val box = layerBox(layer(356f, 256f, 40f, 20f), frame)
+        assertNear(Offset(256f + 10f + 100f * 0.88f * 2f, 256f), box.centre)
+        assertEquals(20f * 0.88f * 2f, box.halfWidth, 0.001f)
+        assertEquals(10f * 0.88f * 2f, box.halfHeight, 0.001f)
+    }
+
+    @Test
+    fun handlesSitOnTheirCornersAndSwapStartAndEndInRightToLeft() {
+        val box = layerBox(layer(256f, 256f, 100f, 50f), viewTransform(512f, 1f, 0f, 0f))
+        val ltr = handleCorners(box, outset = 6f, rtl = false)
+        assertNear("delete top-left", Offset(200f, 225f), ltr.delete)
+        assertNear("edit top-right", Offset(312f, 225f), ltr.edit)
+        assertNear("resize bottom-right", Offset(312f, 287f), ltr.transform)
+        val rtl = handleCorners(box, outset = 6f, rtl = true)
+        assertNear("delete top-right", Offset(312f, 225f), rtl.delete)
+        assertNear("edit top-left", Offset(200f, 225f), rtl.edit)
+        assertNear("resize bottom-left", Offset(200f, 287f), rtl.transform)
+    }
+
+    @Test
+    fun theCornerHandleScalesWithTheDistanceAndTurnsWithTheAngle() {
+        val centre = Offset(100f, 100f)
+        val twice = handleTransform(centre, Offset(150f, 100f), Offset(100f, 200f), scale = 0.8f, rotation = 10f)
+        assertEquals(1.6f, twice.scale, 0.0001f)
+        assertEquals("a quarter turn clockwise", 100f, twice.rotation, 0.001f)
+        val back = handleTransform(centre, Offset(150f, 150f), Offset(125f, 125f), scale = 1f, rotation = 0f)
+        assertEquals(0.5f, back.scale, 0.0001f)
+        assertEquals(0f, back.rotation, 0.001f)
+        assertEquals(
+            "no reach, no change",
+            ScaleRotation(1.2f, 30f),
+            handleTransform(centre, from = centre, to = Offset(0f, 0f), scale = 1.2f, rotation = 30f)
+        )
+    }
+
+    // ---------------------------------------------------------------- rules
+
+    @Test
+    fun toolLabelsFallBackToNineAndAHalfThenHide() {
+        val widths = mapOf(10f to 60, 9.5f to 57)
+        assertEquals(10f, toolLabelSp(60f) { widths.getValue(it) }, 0f)
+        assertEquals(9.5f, toolLabelSp(58f) { widths.getValue(it) }, 0f)
+        assertEquals(0f, toolLabelSp(56.5f) { widths.getValue(it) }, 0f)
+    }
+
+    @Test
+    fun theActionPillAddsPaddingIconGapAndInsetToItsLabels() {
+        // 4 × (12 + 15 + 6 + 12) + 3 × 2 + 2 × 2 = 190 dp around the labels.
+        assertEquals(190f + 150f, actionPillWidth(listOf(60, 20, 40, 30), dp = 1f), 0.001f)
+        val atTwo = actionPillWidth(listOf(60, 20, 40, 30), dp = 2f)
+        assertEquals("the labels are px already", 190f * 2f + 150f, atTwo, 0.001f)
+    }
+
+    @Test
+    fun aTouchStaysATapUntilItPassesTheSlopThenCatchesUpAtOnce() {
+        val touch = TouchTracker(slop = 10f)
+        var asked = 0
+        val decide = { asked++; TouchKind.Layer }
+        assertEquals(Offset.Zero, touch.step(1, Offset(3f, 4f), decide))
+        assertEquals("10 px is still the slop", Offset.Zero, touch.step(1, Offset(3f, 4f), decide))
+        assertTrue(touch.isTap)
+        val caughtUp = touch.step(1, Offset(3f, 4f), decide)
+        assertEquals("the whole drift lands on the deciding event", Offset(9f, 12f), caughtUp)
+        assertEquals(TouchKind.Layer, touch.kind)
+        assertFalse(touch.isTap)
+        assertEquals(Offset(1f, -2f), touch.step(1, Offset(1f, -2f), decide))
+        assertEquals("decided once", 1, asked)
+    }
+
+    @Test
+    fun aSecondFingerDecidesAtOnceAndIsNeverATap() {
+        val touch = TouchTracker(slop = 10f)
+        assertEquals(Offset.Zero, touch.step(1, Offset.Zero) { TouchKind.View })
+        assertEquals(Offset.Zero, touch.step(2, Offset.Zero) { TouchKind.View })
+        assertEquals(TouchKind.View, touch.kind)
+        assertFalse(touch.isTap)
+        val still = TouchTracker(slop = 10f)
+        still.step(2, Offset.Zero) { TouchKind.Ignored }
+        still.step(1, Offset.Zero) { TouchKind.Ignored }
+        assertFalse("a two-finger touch that didn't move is no tap", still.isTap)
+    }
+
+    @Test
+    fun aTouchMovesTheLayerItStartedOnElseTheZoomedViewElseNothing() {
+        var asked = 0
+        assertEquals("never also the view", TouchKind.Layer, touchKind({ asked++; true }, zoomed = true))
+        assertEquals(TouchKind.View, touchKind({ asked++; false }, zoomed = true))
+        val empty = touchKind({ asked++; false }, zoomed = false)
+        assertEquals("a pinch on empty canvas does nothing unless zoomed", TouchKind.Ignored, empty)
+        assertEquals(3, asked)
+    }
+
+    @Test
+    fun aSecondTapCountsWithinTheTimeoutAndTheSlop() {
+        val first = CanvasTap(Offset(100f, 100f), upAt = 1_000L)
+        assertTrue(isSecondTap(first, downAt = 1_300L, at = Offset(110f, 90f), slop = 63f))
+        assertFalse("too late", isSecondTap(first, downAt = 1_301L, at = Offset(100f, 100f), slop = 63f))
+        assertFalse("too far", isSecondTap(first, downAt = 1_100L, at = Offset(100f, 164f), slop = 63f))
+        assertFalse("no first tap", isSecondTap(null, downAt = 1_100L, at = Offset(100f, 100f), slop = 63f))
+    }
+}

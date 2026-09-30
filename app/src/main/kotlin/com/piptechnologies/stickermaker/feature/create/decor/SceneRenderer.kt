@@ -53,12 +53,19 @@ class SceneRenderer(private val cache: LayerRenderCache, private val data: Decor
      * Draws [scene] onto [canvas] (512 space); [dimLayers] shows the layers at 40% (Brush and Erase).
      * [liveLayerId] is the layer a gesture is resizing: it draws from the nearest size already cached,
      * scaled, instead of rendering a new size on every frame; the exact size renders once it ends.
+     * [layerOpacity] (0–1) overrides [dimLayers], so the live canvas can fade the layers in and out.
      */
-    fun drawSticker(canvas: Canvas, scene: Scene, dimLayers: Boolean = false, liveLayerId: Long? = null) {
+    fun drawSticker(
+        canvas: Canvas,
+        scene: Scene,
+        dimLayers: Boolean = false,
+        liveLayerId: Long? = null,
+        layerOpacity: Float = if (dimLayers) DIM_OPACITY else 1f
+    ) {
         val outline = scene.decor.outline
         val radius = if (outline.on) outlineRadius(outline.thickness) else null
         val layers = scene.decor.layers.map { it to cache.render(it, radius, live = it.id == liveLayerId) }
-        val layerAlpha = if (dimLayers) DIM_ALPHA else OPAQUE
+        val layerAlpha = (layerOpacity.coerceIn(0f, 1f) * OPAQUE).roundToInt()
         if (radius != null) {
             val tint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG).apply {
                 colorFilter = PorterDuffColorFilter(outline.colour, PorterDuff.Mode.SRC_IN)
@@ -141,13 +148,14 @@ class SceneRenderer(private val cache: LayerRenderCache, private val data: Decor
 
     private fun starOf(size: Float): Path = Path().also { star.transform(Matrix().apply { setScale(size, size) }, it) }
 
-    private companion object {
-        const val OPAQUE = 255
+    /** The scene's constants; only the dimmed layers' opacity is shared with the live canvas. */
+    companion object {
         /** Layers at 40% while Brush or Erase is active (spec §6). */
-        const val DIM_ALPHA = 102
-        const val STAR_PATH = "M12 1c.7 6 5 10.3 11 11-6 .7-10.3 5-11 11-.7-6-5-10.3-11-11 6-.7 10.3-5 11-11z"
-        const val STAR_BOX = 24f
+        const val DIM_OPACITY = 0.4f
+        private const val OPAQUE = 255
+        private const val STAR_PATH = "M12 1c.7 6 5 10.3 11 11-6 .7-10.3 5-11 11-.7-6-5-10.3-11-11 6-.7 10.3-5 11-11z"
+        private const val STAR_BOX = 24f
         /** The sparkle's white core, as a share of the star (spec §7). */
-        const val SPARKLE_CORE = 0.4f
+        private const val SPARKLE_CORE = 0.4f
     }
 }

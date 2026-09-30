@@ -35,7 +35,7 @@ class EditorUiMapperTest {
         editor.pinch(decor, zoom = 1.5f, rotationDeg = 30f)
         editor.drag(decor, -2f, 40f)                       // x snaps back to the centre line
         var ui = CreateUiState().withDecor(editor)
-        val moved = LayerUi(decor, LayerKind.Decor, 256f, 296f, 150f, 75f, 30f, flipped = false, behind = false)
+        val moved = LayerUi(decor, LayerKind.Decor, 256f, 296f, 150f, 75f, 1.5f, 30f, flipped = false, behind = false)
         assertEquals(listOf(moved), ui.layers)
         assertEquals(decor, ui.selectedLayerId)
         assertTrue(ui.guideX)
@@ -75,18 +75,23 @@ class EditorUiMapperTest {
     }
 
     @Test
-    fun layerToolsNeedAFinishedCutOut() {
-        assertTrue(layerToolsEnabled(CutStatus.Done))
-        assertFalse(layerToolsEnabled(CutStatus.Pending))
-        assertFalse(layerToolsEnabled(CutStatus.None))
-        assertFalse("no sticker", layerToolsEnabled(null))
+    fun layerToolsNeedTheDataAndAFinishedCutOut() {
+        assertTrue(layerToolsEnabled(CutStatus.Done, dataReady = true))
+        assertFalse("the decor data is still loading", layerToolsEnabled(CutStatus.Done, dataReady = false))
+        assertFalse(layerToolsEnabled(CutStatus.Pending, dataReady = true))
+        assertFalse(layerToolsEnabled(CutStatus.None, dataReady = true))
+        assertFalse("no sticker", layerToolsEnabled(null, dataReady = true))
+        val cutOutTools = listOf(EditorTool.Auto, EditorTool.Brush, EditorTool.Erase)
         for (cut in listOf(CutStatus.None, CutStatus.Pending, null)) {
-            assertEquals(
-                listOf(EditorTool.Auto, EditorTool.Brush, EditorTool.Erase),
-                EditorTool.entries.filter { toolAllowed(it, cut) }
-            )
+            for (ready in listOf(true, false)) {
+                assertEquals(cutOutTools, EditorTool.entries.filter { toolAllowed(it, cut, ready) })
+            }
         }
-        assertEquals(EditorTool.entries, EditorTool.entries.filter { toolAllowed(it, CutStatus.Done) })
+        assertEquals(cutOutTools, EditorTool.entries.filter { toolAllowed(it, CutStatus.Done, dataReady = false) })
+        assertEquals(
+            EditorTool.entries,
+            EditorTool.entries.filter { toolAllowed(it, CutStatus.Done, dataReady = true) }
+        )
     }
 
     @Test

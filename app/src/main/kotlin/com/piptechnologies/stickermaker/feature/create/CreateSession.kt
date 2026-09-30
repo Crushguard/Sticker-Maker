@@ -43,8 +43,8 @@ enum class ToneState { Ready, Loading, Failed }
 
 /**
  * One layer of the active sticker for the overlay, in 512 canvas px: its centre, its rendered
- * size (base size × scale), its rotation in degrees clockwise, and whether it is mirrored or
- * drawn behind the cut-out.
+ * size (base size × [scale]), its [scale] (the corner handle resizes from it), its rotation in
+ * degrees clockwise, and whether it is mirrored or drawn behind the cut-out.
  */
 @Immutable
 data class LayerUi(
@@ -54,6 +54,7 @@ data class LayerUi(
     val cy: Float,
     val width: Float,
     val height: Float,
+    val scale: Float,
     val rotation: Float,
     val flipped: Boolean,
     val behind: Boolean
@@ -114,8 +115,9 @@ data class CreateUiState(
     /** The decor data and renderer are loaded: layers can be added and the scene drawn. */
     val dataReady: Boolean = false,
     /**
-     * The active sticker's cut-out is done, so Add, Draw and Animate can open (the tool bar dims them
-     * otherwise; the view model refuses them, and a rail switch onto a sticker still being cut returns to Auto).
+     * The decor data has loaded and the active sticker's cut-out is done, so Add, Draw and Animate can
+     * open (the tool bar dims them otherwise; the view model refuses them, and a rail switch onto a
+     * sticker still being cut returns to Auto).
      */
     val layerToolsEnabled: Boolean = false,
     // Decor of the active sticker (spec §3-§8)
