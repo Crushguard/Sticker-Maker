@@ -163,7 +163,6 @@
     <string name="create_hint_auto_done">बैकग्राउंड इसी फ़ोन पर हटाया गया। कुछ भी अपलोड नहीं हुआ।</string>
     <string name="create_hint_brush">हिस्से वापस लाने के लिए तस्वीर पर टैप करें</string>
     <string name="create_hint_erase">बचे हुए हिस्सों को मिटाने के लिए उन पर टैप करें</string>
-    <string name="create_hint_default">किनारे ठीक करने के लिए ज़ूम इन करें</string>
     <string name="create_cutting_out_on_phone">इसी फ़ोन पर बैकग्राउंड हटाया जा रहा है…</string>
     <string name="create_cutting_out">बैकग्राउंड हटाया जा रहा है…</string>
     <string name="create_brush_size">ब्रश का साइज़</string>

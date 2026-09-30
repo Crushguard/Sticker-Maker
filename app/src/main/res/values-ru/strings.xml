@@ -173,7 +173,6 @@
     <string name="create_hint_auto_done">Вырезано прямо на телефоне. Ничего никуда не отправлялось.</string>
     <string name="create_hint_brush">Нажимайте на изображение, чтобы вернуть удалённые части</string>
     <string name="create_hint_erase">Нажимайте на остатки фона, чтобы стереть их</string>
-    <string name="create_hint_default">Увеличьте масштаб, чтобы поправить края</string>
     <string name="create_cutting_out_on_phone">Вырезаем прямо на телефоне…</string>
     <string name="create_cutting_out">Вырезаем…</string>
     <string name="create_brush_size">Размер кисти</string>

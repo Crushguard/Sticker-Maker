@@ -163,7 +163,6 @@
     <string name="create_hint_auto_done">Bu telefonda kesip çıkarıldı. Hiçbir şey yüklenmedi.</string>
     <string name="create_hint_brush">Parçaları geri getirmek için resme dokunun</string>
     <string name="create_hint_erase">Silmek için kalıntılara dokunun</string>
-    <string name="create_hint_default">Kenarları düzeltmek için yakınlaştırın</string>
     <string name="create_cutting_out_on_phone">Bu telefonda kesip çıkarılıyor…</string>
     <string name="create_cutting_out">Kesip çıkarılıyor…</string>
     <string name="create_brush_size">Fırça boyutu</string>

@@ -163,7 +163,6 @@
     <string name="create_hint_auto_done">روی همین گوشی دوربری شد. چیزی بارگذاری نشد.</string>
     <string name="create_hint_brush">برای برگرداندن بخش‌ها، روی تصویر ضربه بزنید</string>
     <string name="create_hint_erase">برای پاک کردن باقی‌مانده‌ها، روی آن‌ها ضربه بزنید</string>
-    <string name="create_hint_default">برای اصلاح لبه‌ها زوم کنید</string>
     <string name="create_cutting_out_on_phone">در حال دوربری روی همین گوشی…</string>
     <string name="create_cutting_out">در حال دوربری…</string>
     <string name="create_brush_size">اندازهٔ قلم‌مو</string>

@@ -166,6 +166,23 @@ class CreatePackViewModelLayerToolsTest {
     }
 
     @Test
+    fun oneGestureStepMovesScalesAndTurnsTheLayerAndOneUndoTakesItBack() {
+        cutOut(1)
+        vm.addEmoji("red_heart.webp")
+        val before = state.layers.single()
+        assertTrue(vm.beginLayerGesture(before.cx, before.cy))
+        vm.layerTransform(40f, -20f, zoom = 1.5f, rotationDeg = 30f)
+        val moved = state.layers.single()
+        assertEquals(before.cx + 40f, moved.cx, 0.01f)
+        assertEquals(before.cy - 20f, moved.cy, 0.01f)
+        assertEquals(before.width * 1.5f, moved.width, 0.01f)
+        assertEquals(30f, moved.rotation, 0.01f)
+        vm.endLayerGesture()
+        vm.undo()
+        assertEquals("the gesture is one step", before, state.layers.single())
+    }
+
+    @Test
     fun aSwitchThatEndsAGestureRefreshesTheThumbnail() {
         cutOut(1)
         val bare = state.items[0].stickerThumb

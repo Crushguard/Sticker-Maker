@@ -49,6 +49,20 @@ internal fun Affine.inverse(): Affine {
 /** [p] through this map. */
 internal fun Affine.mapPoint(p: Offset): Offset = Offset(a * p.x + c * p.y + e, b * p.x + d * p.y + f)
 
+/** This map's `android.graphics.Matrix` values, as [Affine.matrixValues] gives them, written into [values]. */
+internal fun Affine.writeMatrix(values: FloatArray): FloatArray {
+    values[0] = a
+    values[1] = c
+    values[2] = e
+    values[3] = b
+    values[4] = d
+    values[5] = f
+    values[6] = 0f
+    values[7] = 0f
+    values[8] = 1f
+    return values
+}
+
 /** The move [v] through this map's linear part: a displacement, which translation leaves alone. */
 internal fun Affine.mapVector(v: Offset): Offset = Offset(a * v.x + c * v.y, b * v.x + d * v.y)
 
@@ -146,25 +160,46 @@ internal fun toolLabelSp(slotPx: Float, widest: (sp: Float) -> Int): Float = whe
 }
 
 /**
- * The action pill's width with its labels showing (spec §8), in px: per button 12 dp padding on both
- * sides, the 15 dp icon, 6 dp and its label ([labelWidths], px); 2 dp between buttons and 2 dp inset.
- * [dp] is px per dp.
+ * The action pill's width with its labels showing (spec §8), in px: per button [sidePadding] dp on both
+ * sides (12 in the spec), the 15 dp icon, 6 dp and its label ([labelWidths], px); 2 dp between buttons
+ * and 2 dp inset. [dp] is px per dp.
  */
-internal fun actionPillWidth(labelWidths: List<Int>, dp: Float): Float {
-    val buttons = labelWidths.sum() + labelWidths.size * (12f + 15f + 6f + 12f) * dp
+internal fun actionPillWidth(labelWidths: List<Int>, dp: Float, sidePadding: Float = PillFit.Full.sidePadding): Float {
+    val buttons = labelWidths.sum() + labelWidths.size * (2f * sidePadding + 15f + 6f) * dp
     return buttons + (labelWidths.size - 1).coerceAtLeast(0) * 2f * dp + 2f * 2f * dp
+}
+
+/** How the action pill's buttons fit its row: their side padding in dp, and whether they show labels. */
+internal enum class PillFit(val sidePadding: Float, val labels: Boolean) {
+    /** The spec's buttons: 12 dp padding, labels. */
+    Full(12f, true),
+
+    /** 8 dp padding, labels: where the spec's pill is too wide (long labels, 360 dp phones). */
+    Tight(8f, true),
+
+    /** Icons only, the labels kept for TalkBack: where even that is too wide. */
+    Icons(12f, false)
+}
+
+/** The first of [PillFit]'s steps whose pill ([labelWidths] in px, [dp] px per dp) fits [room] px. */
+internal fun actionPillFit(labelWidths: List<Int>, dp: Float, room: Float): PillFit = when {
+    actionPillWidth(labelWidths, dp, PillFit.Full.sidePadding) <= room -> PillFit.Full
+    actionPillWidth(labelWidths, dp, PillFit.Tight.sidePadding) <= room -> PillFit.Tight
+    else -> PillFit.Icons
 }
 
 /** What a touch on the canvas turned into once it moved or a second finger landed. */
 internal enum class TouchKind { Undecided, Layer, View, Ignored }
 
 /**
- * What a decided touch moves (spec §6, §8): the layer it started on ([startsOnLayer], asked once),
- * else the view while [zoomed], else nothing. A touch on a layer never also pans the view, and a
- * pinch that starts on empty canvas does nothing unless zoomed.
+ * What a decided touch moves (spec §6, §8): the layer under one of its [fingers] (canvas px: where the
+ * first finger landed, then, for a pinch, the other fingers down, the one that just landed first), else
+ * the view while [zoomed], else nothing. [startsLayerAt] starts a layer gesture at a point and says
+ * whether a layer was there; it is asked in that order and stops at the first layer. A touch on a layer
+ * never also pans the view, and a pinch with no finger on a layer does nothing unless zoomed.
  */
-internal fun touchKind(startsOnLayer: () -> Boolean, zoomed: Boolean): TouchKind = when {
-    startsOnLayer() -> TouchKind.Layer
+internal fun touchKind(fingers: List<Offset>, startsLayerAt: (Offset) -> Boolean, zoomed: Boolean): TouchKind = when {
+    fingers.any(startsLayerAt) -> TouchKind.Layer
     zoomed -> TouchKind.View
     else -> TouchKind.Ignored
 }
@@ -186,8 +221,9 @@ internal class TouchTracker(private val slop: Float) {
 
     /**
      * One pointer event with [pressed] fingers down and their [pan] (box px). Returns the pan to apply
-     * now: nothing while undecided, everything that moved so far on the event that decides, so the
-     * layer or view catches up with the finger, and the event's own pan after that.
+     * now: nothing while undecided; on the event that decides a one-finger drag, everything that moved
+     * so far, so the layer or view catches up with the finger; for a pinch, and after deciding, the
+     * event's own pan (a pinch may move a layer under another finger, which the drift never touched).
      */
     fun step(pressed: Int, pan: Offset, decide: () -> TouchKind): Offset {
         fingers = maxOf(fingers, pressed)
@@ -195,7 +231,7 @@ internal class TouchTracker(private val slop: Float) {
         drift += pan
         if (pressed <= 1 && drift.getDistance() <= slop) return Offset.Zero
         kind = decide()
-        return drift
+        return if (pressed <= 1) drift else pan
     }
 }
 

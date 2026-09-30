@@ -163,7 +163,6 @@
     <string name="create_hint_auto_done">Scontornato su questo telefono. Non è stato caricato nulla.</string>
     <string name="create_hint_brush">Tocca l\'immagine per ripristinare delle parti</string>
     <string name="create_hint_erase">Tocca i residui per cancellarli</string>
-    <string name="create_hint_default">Ingrandisci per sistemare i bordi</string>
     <string name="create_cutting_out_on_phone">Scontorno in corso su questo telefono…</string>
     <string name="create_cutting_out">Scontorno in corso…</string>
     <string name="create_brush_size">Dimensione pennello</string>

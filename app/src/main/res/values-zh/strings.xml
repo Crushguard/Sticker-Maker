@@ -158,7 +158,6 @@
     <string name="create_hint_auto_done">已在本机完成抠图，未上传任何内容。</string>
     <string name="create_hint_brush">点按图片，恢复被去掉的部分</string>
     <string name="create_hint_erase">点按残留部分即可擦除</string>
-    <string name="create_hint_default">放大以修整边缘</string>
     <string name="create_cutting_out_on_phone">正在本机上抠图…</string>
     <string name="create_cutting_out">正在抠图…</string>
     <string name="create_brush_size">画笔大小</string>

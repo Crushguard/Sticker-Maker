@@ -163,7 +163,6 @@
     <string name="create_hint_auto_done">شالید په همدې ټیلیفون کې لرې شو. هېڅ شی پورته نه شو.</string>
     <string name="create_hint_brush">په انځور کېکاږئ څو برخې بېرته راوګرځي</string>
     <string name="create_hint_erase">پاتې برخې کېکاږئ څو پاکې شي</string>
-    <string name="create_hint_default">د څنډو سمولو لپاره انځور لوی کړئ</string>
     <string name="create_cutting_out_on_phone">په همدې ټیلیفون کې شالید لرې کېږي…</string>
     <string name="create_cutting_out">شالید لرې کېږي…</string>
     <string name="create_brush_size">د برس اندازه</string>

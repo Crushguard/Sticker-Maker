@@ -183,7 +183,6 @@
     <string name="create_hint_auto_done">تم القصّ على هذا الهاتف. لم يُرفع أي شيء.</string>
     <string name="create_hint_brush">انقر على الصورة لاستعادة أجزاء منها</string>
     <string name="create_hint_erase">انقر على البقايا لمحوها</string>
-    <string name="create_hint_default">كبّر الصورة لإصلاح الحواف</string>
     <string name="create_cutting_out_on_phone">جارٍ القصّ على هذا الهاتف…</string>
     <string name="create_cutting_out">جارٍ القصّ…</string>
     <string name="create_brush_size">حجم الفرشاة</string>

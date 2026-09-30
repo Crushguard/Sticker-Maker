@@ -1,5 +1,7 @@
 package com.piptechnologies.stickermaker.feature.create.editor
 
+import android.os.Build
+import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -32,13 +34,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -46,6 +52,7 @@ import androidx.compose.ui.input.pointer.positionChangeIgnoreConsumed
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -83,7 +90,9 @@ private val CanvasCentre = Offset(DecorSpec.CANVAS / 2f, DecorSpec.CANVAS / 2f)
  * with the layer; the delete handle (top-start), the edit handle (top-end, text only) and the
  * resize-and-rotate handle (bottom-end), whose start and end swap in RTL; and the centre guides while
  * a drag snaps to them. The box and handles fade in over 120 ms and out over 100 ms, and follow the
- * sticker's motion preset as it plays. Handles leave a touch alone while the canvas holds one.
+ * sticker's motion preset as it plays. At 1× they may reach into the card's margin, so a handle at
+ * the canvas edge stays whole; zoomed in, they are clipped to the canvas box, drawing and touch alike.
+ * Handles leave a touch alone while the canvas holds one. Nothing else here takes a touch.
  */
 @Composable
 internal fun LayerOverlay(
@@ -103,7 +112,15 @@ internal fun LayerOverlay(
     // While the box fades out, it stays where the layer was, and its handles no longer act.
     val shown = layer ?: last.layer
     val selected = rememberUpdatedState(layer != null)
-    Box(modifier.fillMaxSize()) {
+    Box(
+        modifier
+            .fillMaxSize()
+            // Clips hit tests as well as drawing: no live handle is left in the margin, off-view.
+            .graphicsLayer {
+                clip = viewport.zoom > 1f
+                shape = CanvasBoxShape
+            }
+    ) {
         CentreGuides(guideX, guideY, viewport)
         AnimatedVisibility(
             visible = layer != null,
@@ -120,6 +137,15 @@ internal fun LayerOverlay(
 /** The layer the overlay last showed. */
 private class LastLayer {
     var layer: LayerUi? = null
+}
+
+/** The canvas box within the card: [CanvasInset] in from every side, rounded like it. */
+private object CanvasBoxShape : Shape {
+    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
+        val inset = with(density) { CanvasInset.toPx() }
+        val radius = with(density) { CanvasRadius.toPx() }
+        return Outline.Rounded(RoundRect(inset, inset, size.width - inset, size.height - inset, CornerRadius(radius)))
+    }
 }
 
 /**
@@ -216,15 +242,15 @@ private fun Modifier.transformGesture(
     awaitEachGesture {
         val down = awaitFirstDown()
         if (!selected.value || viewport.touchHeld) return@awaitEachGesture
-        viewport.touchHeld = true
-        down.consume()
-        val grabbed = layer.value
-        val centre = box.value.centre
-        // The finger in box px: the handle's centre plus where on the handle it landed.
-        val from = corners.value.transform + (down.position - Offset(half, half))
-        var finger = from
-        onStart.value(grabbed.id)
         try {
+            viewport.touchHeld = true
+            down.consume()
+            val grabbed = layer.value
+            val centre = box.value.centre
+            // The finger in box px: the handle's centre plus where on the handle it landed.
+            val from = corners.value.transform + (down.position - Offset(half, half))
+            var finger = from
+            onStart.value(grabbed.id)
             while (true) {
                 val event = awaitPointerEvent()
                 val change = event.changes.firstOrNull { it.id == down.id } ?: break
@@ -332,10 +358,16 @@ private fun CentreGuides(guideX: Boolean, guideY: Boolean, viewport: CanvasViewp
     val vertical by animateFloatAsState(if (guideX) 1f else 0f, fade, label = "guideX")
     val horizontal by animateFloatAsState(if (guideY) 1f else 0f, fade, label = "guideY")
     val haptics = LocalHapticFeedback.current
+    val view = LocalView.current
     val engaged = remember { BooleanArray(2) }
     LaunchedEffect(guideX, guideY) {
         if ((guideX && !engaged[0]) || (guideY && !engaged[1])) {
-            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            // The text-handle tick only exists from API 27; the clock tick is the light one before it.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            } else {
+                view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+            }
         }
         engaged[0] = guideX
         engaged[1] = guideY

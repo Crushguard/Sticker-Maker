@@ -163,7 +163,6 @@
     <string name="create_hint_auto_done">Recortado neste celular. Nada foi enviado.</string>
     <string name="create_hint_brush">Toque na imagem para recuperar partes</string>
     <string name="create_hint_erase">Toque nas sobras para apagá-las</string>
-    <string name="create_hint_default">Dê zoom para corrigir as bordas</string>
     <string name="create_cutting_out_on_phone">Recortando neste celular…</string>
     <string name="create_cutting_out">Recortando…</string>
     <string name="create_brush_size">Tamanho do pincel</string>

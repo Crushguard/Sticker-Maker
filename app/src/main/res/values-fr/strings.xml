@@ -163,7 +163,6 @@
     <string name="create_hint_auto_done">Détouré sur ce téléphone. Rien n\'a été envoyé.</string>
     <string name="create_hint_brush">Appuyez sur l\'image pour restaurer des zones</string>
     <string name="create_hint_erase">Appuyez sur les zones en trop pour les effacer</string>
-    <string name="create_hint_default">Zoomez pour retoucher les bords</string>
     <string name="create_cutting_out_on_phone">Détourage sur ce téléphone…</string>
     <string name="create_cutting_out">Détourage…</string>
     <string name="create_brush_size">Taille du pinceau</string>

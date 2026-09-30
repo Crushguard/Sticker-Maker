@@ -607,19 +607,18 @@ class CreatePackViewModel @Inject constructor(
     }
 
     /** Moves the gesture's layer by a canvas-px delta (centre snapping included). */
-    fun layerDrag(dx: Float, dy: Float) {
-        val item = activeItem() ?: return
-        val id = liveLayerId ?: return
-        item.editor.drag(id, dx, dy)
-        tick++
-        push()
-    }
+    fun layerDrag(dx: Float, dy: Float) = layerTransform(dx, dy, zoom = 1f, rotationDeg = 0f)
 
-    /** Two-finger pinch and twist on the gesture's layer: [zoom] multiplies its scale, [rotationDeg] adds up. */
-    fun layerPinch(zoom: Float, rotationDeg: Float) {
+    /**
+     * One step of a layer gesture, published once: the gesture's layer moves by a canvas-px delta
+     * (centre snapping included), then a two-finger pinch and twist multiplies its scale by [zoom]
+     * and adds [rotationDeg].
+     */
+    fun layerTransform(dx: Float, dy: Float, zoom: Float, rotationDeg: Float) {
         val item = activeItem() ?: return
         val id = liveLayerId ?: return
-        item.editor.pinch(id, zoom, rotationDeg)
+        if (dx != 0f || dy != 0f) item.editor.drag(id, dx, dy)
+        if (zoom != 1f || rotationDeg != 0f) item.editor.pinch(id, zoom, rotationDeg)
         tick++
         push()
     }

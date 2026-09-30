@@ -168,7 +168,6 @@
     <string name="create_hint_auto_done">הגזירה בוצעה בטלפון הזה. שום דבר לא הועלה.</string>
     <string name="create_hint_brush">יש להקיש על התמונה כדי להחזיר חלקים</string>
     <string name="create_hint_erase">יש להקיש על שאריות כדי למחוק אותן</string>
-    <string name="create_hint_default">אפשר להגדיל כדי לתקן את הקצוות</string>
     <string name="create_cutting_out_on_phone">גוזרים כאן בטלפון…</string>
     <string name="create_cutting_out">גוזרים…</string>
     <string name="create_brush_size">גודל המברשת</string>

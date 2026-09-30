@@ -158,7 +158,6 @@
     <string name="create_hint_auto_done">Dipotong di ponsel ini. Tidak ada yang diunggah.</string>
     <string name="create_hint_brush">Ketuk gambar untuk mengembalikan bagian yang terhapus</string>
     <string name="create_hint_erase">Ketuk sisa latar untuk menghapusnya</string>
-    <string name="create_hint_default">Perbesar untuk merapikan tepi</string>
     <string name="create_cutting_out_on_phone">Memotong objek di ponsel ini…</string>
     <string name="create_cutting_out">Memotong objek…</string>
     <string name="create_brush_size">Ukuran kuas</string>

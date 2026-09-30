@@ -37,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +56,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.AwaitPointerEventScope
+import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChangeIgnoreConsumed
@@ -103,6 +105,9 @@ const val EDITOR_CANVAS_TAG = "editorCanvas"
 /** The canvas sits this far inside its card (spec §8); the layer overlay works in the card's space. */
 internal val CanvasInset = 27.dp
 
+/** The canvas box's corner radius (spec §8). */
+internal val CanvasRadius = 14.dp
+
 /** The Zoom button's view scale (the prototype's 1.6×); a pinch refines it between 1× and [MAX_ZOOM]. */
 private const val ZOOM_SCALE = 1.6f
 private const val MAX_ZOOM = 4f
@@ -149,8 +154,11 @@ internal class CanvasViewport(private val motion: State<MotionPreset?>) {
     /** One touch owner at a time: set while the canvas or a handle holds a touch, which the other leaves alone. */
     var touchHeld = false
 
+    // Made again when the box, the zoom or the pan change, not on every frame of a preset.
+    private val viewMap = derivedStateOf { viewTransform(edge, zoom, panX, panY) }
+
     /** Canvas px → box px for what doesn't move with the sticker: the checker and the particles. */
-    fun view(): Affine = viewTransform(edge, zoom, panX, panY)
+    fun view(): Affine = viewMap.value
 
     /** Whether the sticker is drawn in a motion pose: it has a preset, playing or at rest. */
     val posed: Boolean get() = motion.value != null
@@ -186,9 +194,10 @@ internal class CanvasViewport(private val motion: State<MotionPreset?>) {
 
 /**
  * The Cut out canvas card (spec §6, §8): the live canvas with the checker, the sticker's scene (its
- * motion preset played by a frame clock) and every canvas gesture; the selected layer's box and
- * handles; the Zoom button; and the hint line, which becomes the action pill while a layer is
- * selected. While the cut-out runs, the canvas shows the raw picture under a veil.
+ * motion preset played by a frame clock) and every canvas gesture; the Zoom button; the hint line,
+ * which becomes the action pill while a layer is selected; and over them, the selected layer's box
+ * and handles. While the cut-out runs, the canvas shows the raw picture under a veil. The Zoom
+ * button and the pill leave a finger alone while the canvas or a handle holds a touch.
  */
 @Composable
 internal fun EditorCanvasCard(state: CreateUiState, viewModel: CreatePackViewModel, modifier: Modifier = Modifier) {
@@ -244,20 +253,10 @@ internal fun EditorCanvasCard(state: CreateUiState, viewModel: CreatePackViewMod
                 layerOpacity = { layerOpacity.value }
             )
         }
-        LayerOverlay(
-            layer = selected,
-            guideX = state.guideX && cutDone,
-            guideY = state.guideY && cutDone,
-            viewport = viewport,
-            onDelete = viewModel::deleteLayer,
-            onEdit = viewModel::editTextLayer,
-            onTransformStart = viewModel::beginHandleGesture,
-            onTransform = viewModel::handleGesture,
-            onTransformEnd = viewModel::endLayerGesture
-        )
         ZoomButton(
             zoomed = state.zoomed,
             onClick = viewModel::toggleZoom,
+            locked = { viewport.touchHeld },
             // The 44 dp target puts the 36 dp circle 10 dp from the top and the inline end.
             modifier = Modifier
                 .align(Alignment.TopEnd)
@@ -280,9 +279,22 @@ internal fun EditorCanvasCard(state: CreateUiState, viewModel: CreatePackViewMod
                 onFlip = viewModel::flipSelected,
                 onBehind = viewModel::toggleBehindSelected,
                 onDelete = { viewModel.deleteLayer(selected.id) },
+                locked = { viewport.touchHeld },
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
+        // Last, so a handle that shows over the pill or the Zoom button is the one a finger gets there.
+        LayerOverlay(
+            layer = selected,
+            guideX = state.guideX && cutDone,
+            guideY = state.guideY && cutDone,
+            viewport = viewport,
+            onDelete = viewModel::deleteLayer,
+            onEdit = viewModel::editTextLayer,
+            onTransformStart = viewModel::beginHandleGesture,
+            onTransform = viewModel::handleGesture,
+            onTransformEnd = viewModel::endLayerGesture
+        )
     }
 }
 
@@ -351,7 +363,9 @@ private fun LiveCanvas(
 ) {
     val bitmapPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG) }
     val checkerPaint = remember { Paint() }
+    val viewMatrix = remember { Matrix() }
     val poseMatrix = remember { Matrix() }
+    val matrixValues = remember { FloatArray(9) }
     val focusManager = LocalFocusManager.current
     val cutDone = state.activeCut == CutStatus.Done
     val editorTick = state.editorTick
@@ -359,7 +373,7 @@ private fun LiveCanvas(
     Box(
         Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(CanvasRadius))
             .background(Subtle)
             .testTag(EDITOR_CANVAS_TAG)
             .onSizeChanged { viewport.edge = it.width.toFloat() }
@@ -370,20 +384,17 @@ private fun LiveCanvas(
             @Suppress("UNUSED_EXPRESSION") editorTick
             val scene = if (cutDone) viewModel.activeScene() else null
             val renderer = viewModel.renderer
-            val edge = size.width
-            val zoom = viewport.zoom
             drawIntoCanvas { canvas ->
                 val nc = canvas.nativeCanvas
                 nc.save()
-                // viewTransform, step by step: the canvas fitted into the box, zoomed about its centre, panned.
-                nc.translate(viewport.panX, viewport.panY)
-                nc.scale(zoom, zoom, edge / 2f, edge / 2f)
-                nc.scale(edge / CreateSpec.CANVAS_SIZE, edge / CreateSpec.CANVAS_SIZE)
+                // The same maps the gestures and the overlay use, so what is drawn is what is touched.
+                viewMatrix.setValues(viewport.view().writeMatrix(matrixValues))
+                nc.concat(viewMatrix)
                 if (scene != null && renderer != null) {
                     drawChecker(nc, checkerPaint)
                     nc.save()
                     if (viewport.posed) {
-                        poseMatrix.setValues(viewport.pose().matrixValues())
+                        poseMatrix.setValues(viewport.pose().writeMatrix(matrixValues))
                         nc.concat(poseMatrix)
                     }
                     renderer.drawSticker(nc, scene, liveLayerId = liveLayerId, layerOpacity = layerOpacity())
@@ -445,10 +456,11 @@ private fun drawChecker(canvas: android.graphics.Canvas, paint: Paint) {
 
 /**
  * Every touch on the canvas (spec §6, §8). Brush and Erase paint the mask with one finger or, while
- * zoomed, pan and pinch the view and dab on a tap. Draw draws with one finger. In Auto, Add and
- * Animate, a drag, pinch or twist that starts on a layer moves that layer (one undo step), one that
- * starts on empty canvas pans and pinches the view while zoomed and does nothing otherwise, a tap
- * selects, deselects or plays (and closes the keyboard), and a double tap on a text layer edits it.
+ * zoomed, pan and pinch the view and dab on a tap. Draw draws with one finger; while zoomed, a second
+ * finger ends the stroke and the fingers pan and pinch the view. In Auto, Add and Animate, a drag
+ * that starts on a layer, or a pinch and twist with a finger on one, moves that layer (one undo step);
+ * otherwise the touch pans and pinches the view while zoomed and does nothing else; a tap selects,
+ * deselects or plays (and closes the keyboard), and a double tap on a text layer edits it.
  */
 private fun Modifier.canvasGestures(
     tool: EditorTool,
@@ -464,8 +476,8 @@ private fun Modifier.canvasGestures(
         val down = awaitFirstDown(requireUnconsumed = false)
         // A handle is being dragged: this finger is left alone.
         if (viewport.touchHeld) return@awaitEachGesture
-        viewport.touchHeld = true
         try {
+            viewport.touchHeld = true
             when (tool) {
                 EditorTool.Brush, EditorTool.Erase -> if (zoomed) {
                     val at = viewport.toCanvas(down.position)
@@ -475,8 +487,10 @@ private fun Modifier.canvasGestures(
                 } else {
                     stroke(down, viewport, viewModel::beginStroke, viewModel::extendStroke, viewModel::endStroke)
                 }
-                EditorTool.Draw ->
-                    stroke(down, viewport, viewModel::beginMarker, viewModel::extendMarker, viewModel::endMarker)
+                EditorTool.Draw -> stroke(
+                    down, viewport, viewModel::beginMarker, viewModel::extendMarker, viewModel::endMarker,
+                    yieldToView = zoomed
+                )
                 EditorTool.Auto, EditorTool.Add, EditorTool.Animate -> {
                     val at = viewport.toCanvas(down.position)
                     val lift = moveOrTap(down, at, layers = true, zoomed, viewport, viewModel)
@@ -500,9 +514,10 @@ private fun Modifier.canvasGestures(
 
 /**
  * A touch that stays a tap until it moves past the touch slop or a second finger lands. Then it moves
- * the layer under the first finger at [at] (canvas px) when [layers] allows, else the view when
- * [zoomed], else nothing (the page may scroll: nothing here consumes it). A layer never also pans the
- * view. Returns the finger's lift when the touch stayed a one-finger tap, else null.
+ * the layer under the first finger's landing point [at] (canvas px) or, for a pinch, under another
+ * finger, when [layers] allows; else the view when [zoomed]; else nothing (the page may scroll:
+ * nothing here consumes it). A layer never also pans the view. Returns the finger's lift when the
+ * touch stayed a one-finger tap, else null; a cancelled touch, whose lift comes consumed, is no tap.
  */
 private suspend fun AwaitPointerEventScope.moveOrTap(
     down: PointerInputChange,
@@ -517,9 +532,12 @@ private suspend fun AwaitPointerEventScope.moveOrTap(
         while (true) {
             val event = awaitPointerEvent()
             val pressed = event.changes.count { it.pressed }
-            if (pressed == 0) return event.changes.firstOrNull { it.id == down.id }?.takeIf { touch.isTap }
+            if (pressed == 0) {
+                return event.changes.firstOrNull { it.id == down.id }?.takeIf { touch.isTap && !it.isConsumed }
+            }
             val pan = touch.step(pressed, event.calculatePan()) {
-                touchKind(startsOnLayer = { layers && viewModel.beginLayerGesture(at.x, at.y) }, zoomed = zoomed)
+                val fingers = listOf(at) + otherFingers(event, down).map(viewport::toCanvas)
+                touchKind(fingers, startsLayerAt = { p -> layers && viewModel.beginLayerGesture(p.x, p.y) }, zoomed)
             }
             if (touch.kind == TouchKind.Undecided) continue
             // On the deciding event a new finger isn't in the zoom or the twist yet: they start at 1 and 0.
@@ -531,7 +549,14 @@ private suspend fun AwaitPointerEventScope.moveOrTap(
     }
 }
 
-/** One step of a decided touch: the layer drags by [pan] and pinches and twists; or the view pans and zooms. */
+/** Where the fingers other than [down]'s are (box px), the ones that just landed first. */
+private fun otherFingers(event: PointerEvent, down: PointerInputChange): List<Offset> =
+    event.changes.filter { it.pressed && it.id != down.id }.sortedBy { it.previousPressed }.map { it.position }
+
+/**
+ * One step of a decided touch, one call each: the layer drags by [pan] and pinches and twists; or the
+ * view pans and zooms.
+ */
 private fun move(
     kind: TouchKind,
     pan: Offset,
@@ -543,8 +568,9 @@ private fun move(
     when (kind) {
         TouchKind.Layer -> {
             val step = viewport.toCanvasMove(pan)
-            if (step != Offset.Zero) viewModel.layerDrag(step.x, step.y)
-            if (zoom != 1f || rotation != 0f) viewModel.layerPinch(zoom, rotation)
+            if (step != Offset.Zero || zoom != 1f || rotation != 0f) {
+                viewModel.layerTransform(step.x, step.y, zoom, rotation)
+            }
         }
         TouchKind.View -> if (pan != Offset.Zero || zoom != 1f) viewport.moveView(zoom, pan)
         TouchKind.Undecided, TouchKind.Ignored -> Unit
@@ -553,21 +579,35 @@ private fun move(
 
 /**
  * One finger drawing on the canvas: [begin] where it lands (a tap is a dab or a dot), [extend] as it
- * moves, [end] when it lifts or the gesture is dropped. Other fingers are ignored.
+ * moves, [end] when it lifts or the gesture is dropped. Other fingers are ignored, unless
+ * [yieldToView] (Draw while zoomed, spec §6): then a second finger ends the stroke where it is, and
+ * the fingers pan and pinch the view until they all lift.
  */
 private suspend fun AwaitPointerEventScope.stroke(
     down: PointerInputChange,
     viewport: CanvasViewport,
     begin: (Float, Float) -> Unit,
     extend: (Float, Float) -> Unit,
-    end: () -> Unit
+    end: () -> Unit,
+    yieldToView: Boolean = false
 ) {
     val start = viewport.toCanvas(down.position)
     begin(start.x, start.y)
+    var drawing = true
     try {
         while (true) {
             val event = awaitPointerEvent()
             event.changes.forEach { it.consume() }
+            if (!drawing) {
+                if (event.changes.none { it.pressed }) break
+                viewport.moveView(event.calculateZoom(), event.calculatePan())
+                continue
+            }
+            if (yieldToView && event.changes.count { it.pressed } > 1) {
+                drawing = false
+                end()
+                continue
+            }
             val finger = event.changes.firstOrNull { it.id == down.id }
             if (finger == null || !finger.pressed) break
             if (finger.positionChangeIgnoreConsumed() != Offset.Zero) {
@@ -576,7 +616,7 @@ private suspend fun AwaitPointerEventScope.stroke(
             }
         }
     } finally {
-        end()
+        if (drawing) end()
     }
 }
 
@@ -584,10 +624,10 @@ private suspend fun AwaitPointerEventScope.stroke(
 
 /**
  * The Zoom button (spec §8): a 36 dp circle in a 44 dp target; white with an Ink zoom-in, Rose with
- * a white zoom-out while zoomed.
+ * a white zoom-out while zoomed. A tap while [locked] (another touch is moving something) is ignored.
  */
 @Composable
-private fun ZoomButton(zoomed: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun ZoomButton(zoomed: Boolean, onClick: () -> Unit, locked: () -> Boolean, modifier: Modifier = Modifier) {
     val label = stringResource(R.string.create_tool_zoom)
     Box(
         modifier
@@ -596,7 +636,7 @@ private fun ZoomButton(zoomed: Boolean, onClick: () -> Unit, modifier: Modifier 
                 interactionSource = null,
                 indication = ripple(bounded = false, radius = 22.dp),
                 role = Role.Button,
-                onClick = onClick
+                onClick = { if (!locked()) onClick() }
             )
             .semantics {
                 contentDescription = label
@@ -628,7 +668,8 @@ private class PillAction(val icon: ImageVector, val label: String, val onClick: 
 /**
  * The action pill that replaces the hint while a layer is selected (spec §8): Duplicate · Flip ·
  * Behind (In front once behind) · Delete. Where the labels would push it past the card's sides, the
- * buttons show their icons only and keep the labels for TalkBack.
+ * buttons first narrow their padding to 8 dp, then show their icons only and keep the labels for
+ * TalkBack. A tap while [locked] (another touch is moving something) is ignored.
  */
 @Composable
 private fun ActionPill(
@@ -637,6 +678,7 @@ private fun ActionPill(
     onFlip: () -> Unit,
     onBehind: () -> Unit,
     onDelete: () -> Unit,
+    locked: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     val actions = listOf(
@@ -654,9 +696,9 @@ private fun ActionPill(
     val density = LocalDensity.current
     BoxWithConstraints(modifier.fillMaxWidth(), contentAlignment = Alignment.BottomCenter) {
         val room = with(density) { (maxWidth - PillMargin * 2).toPx() }
-        val withLabels = remember(labels, room, measurer) {
+        val fit = remember(labels, room, measurer) {
             val widths = labels.map { measurer.measure(it, PillLabel, maxLines = 1, softWrap = false).size.width }
-            actionPillWidth(widths, density.density) <= room
+            actionPillFit(widths, density.density, room)
         }
         Row(
             Modifier
@@ -666,29 +708,29 @@ private fun ActionPill(
                 .padding(2.dp),
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            actions.forEach { PillButton(it, withLabels) }
+            actions.forEach { PillButton(it, fit, locked) }
         }
     }
 }
 
-/** 36 dp high, 12 dp padding: a 15 dp icon and, [withLabel], the 11.5 sp label 6 dp after it. */
+/** 36 dp high, [fit]'s side padding: a 15 dp icon and, when [fit] has labels, the 11.5 sp label 6 dp after it. */
 @Composable
-private fun PillButton(action: PillAction, withLabel: Boolean) {
+private fun PillButton(action: PillAction, fit: PillFit, locked: () -> Boolean) {
     Row(
         Modifier
             .height(36.dp)
             .clip(LoveShapes.Pill)
-            .clickable(role = Role.Button, onClick = action.onClick)
-            .padding(horizontal = 12.dp),
+            .clickable(role = Role.Button) { if (!locked()) action.onClick() }
+            .padding(horizontal = fit.sidePadding.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             action.icon,
-            contentDescription = if (withLabel) null else action.label,
+            contentDescription = if (fit.labels) null else action.label,
             modifier = Modifier.size(15.dp),
             tint = Color.White
         )
-        if (withLabel) {
+        if (fit.labels) {
             Spacer(Modifier.width(6.dp))
             Text(action.label, style = PillLabel, color = Color.White, maxLines = 1, softWrap = false)
         }

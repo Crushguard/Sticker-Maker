@@ -158,7 +158,6 @@
     <string name="create_hint_auto_done">ဒီဖုန်းပေါ်မှာပဲ ဖြတ်ထုတ်ထားတာပါ။ ဘာမှ အပ်လုဒ် မလုပ်ထားပါဘူး။</string>
     <string name="create_hint_brush">ဖျက်မိတဲ့ နေရာတွေ ပြန်ပေါ်လာဖို့ ပုံပေါ်ကို နှိပ်ပါ</string>
     <string name="create_hint_erase">ကျန်နေတဲ့ အပိုင်းတွေကို နှိပ်ပြီး ဖျက်ပါ</string>
-    <string name="create_hint_default">အနားသတ်တွေ ပြင်ဖို့ ချဲ့ကြည့်ပါ</string>
     <string name="create_cutting_out_on_phone">ဒီဖုန်းပေါ်မှာ ဖြတ်ထုတ်နေပါတယ်…</string>
     <string name="create_cutting_out">ဖြတ်ထုတ်နေပါတယ်…</string>
     <string name="create_brush_size">စုတ်တံ အရွယ်အစား</string>

@@ -193,7 +193,6 @@
     <string name="create_hint_auto_done">Cut out on this phone. Nothing was uploaded.</string>
     <string name="create_hint_brush">Tap the picture to bring parts back</string>
     <string name="create_hint_erase">Tap leftovers to erase them</string>
-    <string name="create_hint_default">Zoom in to fix edges</string>
     <string name="create_cutting_out_on_phone">Cutting out on this phone…</string>
     <string name="create_cutting_out">Cutting out…</string>
     <string name="create_brush_size">Brush size</string>

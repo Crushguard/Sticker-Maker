@@ -7,6 +7,7 @@ import com.piptechnologies.stickermaker.feature.create.decor.Affine
 import com.piptechnologies.stickermaker.feature.create.decor.Easing
 import com.piptechnologies.stickermaker.feature.create.decor.Keyframe
 import com.piptechnologies.stickermaker.feature.create.decor.MotionPreset
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -83,6 +84,14 @@ class CanvasGeometryTest {
         val move = Offset(12f, -30f)
         assertNear("a move maps by the linear part alone", move, back.mapVector(frame.mapVector(move)), 0.01f)
         assertEquals("a box not laid out yet maps nothing", Affine.IDENTITY, viewTransform(0f, 1f, 0f, 0f).inverse())
+    }
+
+    @Test
+    fun theCanvasDrawsWithTheSameMatrixValuesTheMapGives() {
+        val frame = viewTransform(edge = 777f, zoom = 1.6f, panX = -40f, panY = 25f) * motionPose(wiggle, 225f)
+        val values = FloatArray(9) { -1f }
+        assertArrayEquals(frame.matrixValues(), frame.writeMatrix(values), 0f)
+        assertArrayEquals("written in place", frame.matrixValues(), values, 0f)
     }
 
     @Test
@@ -163,6 +172,19 @@ class CanvasGeometryTest {
         assertEquals(190f + 150f, actionPillWidth(listOf(60, 20, 40, 30), dp = 1f), 0.001f)
         val atTwo = actionPillWidth(listOf(60, 20, 40, 30), dp = 2f)
         assertEquals("the labels are px already", 190f * 2f + 150f, atTwo, 0.001f)
+        val tight = actionPillWidth(listOf(60, 20, 40, 30), dp = 1f, sidePadding = 8f)
+        assertEquals("8 dp padding saves 4 × 8 dp", 190f - 32f + 150f, tight, 0.001f)
+    }
+
+    @Test
+    fun theActionPillNarrowsItsPaddingBeforeItDropsItsLabels() {
+        val labels = listOf(60, 20, 40, 30)
+        assertEquals(PillFit.Full, actionPillFit(labels, dp = 1f, room = 340f))
+        assertEquals(PillFit.Tight, actionPillFit(labels, dp = 1f, room = 339f))
+        assertEquals(PillFit.Tight, actionPillFit(labels, dp = 1f, room = 308f))
+        assertEquals(PillFit.Icons, actionPillFit(labels, dp = 1f, room = 307f))
+        assertEquals(8f, PillFit.Tight.sidePadding, 0f)
+        assertFalse(PillFit.Icons.labels)
     }
 
     @Test
@@ -184,8 +206,9 @@ class CanvasGeometryTest {
     @Test
     fun aSecondFingerDecidesAtOnceAndIsNeverATap() {
         val touch = TouchTracker(slop = 10f)
-        assertEquals(Offset.Zero, touch.step(1, Offset.Zero) { TouchKind.View })
-        assertEquals(Offset.Zero, touch.step(2, Offset.Zero) { TouchKind.View })
+        assertEquals(Offset.Zero, touch.step(1, Offset(3f, 4f)) { TouchKind.View })
+        val pinch = touch.step(2, Offset(1f, 1f)) { TouchKind.View }
+        assertEquals("a pinch starts from its own pan, not the first finger's drift", Offset(1f, 1f), pinch)
         assertEquals(TouchKind.View, touch.kind)
         assertFalse(touch.isTap)
         val still = TouchTracker(slop = 10f)
@@ -196,12 +219,33 @@ class CanvasGeometryTest {
 
     @Test
     fun aTouchMovesTheLayerItStartedOnElseTheZoomedViewElseNothing() {
-        var asked = 0
-        assertEquals("never also the view", TouchKind.Layer, touchKind({ asked++; true }, zoomed = true))
-        assertEquals(TouchKind.View, touchKind({ asked++; false }, zoomed = true))
-        val empty = touchKind({ asked++; false }, zoomed = false)
-        assertEquals("a pinch on empty canvas does nothing unless zoomed", TouchKind.Ignored, empty)
-        assertEquals(3, asked)
+        val onLayer = Offset(300f, 300f)
+        val empty = Offset(10f, 10f)
+        val layerAt = { p: Offset -> p == onLayer }
+        assertEquals("never also the view", TouchKind.Layer, touchKind(listOf(onLayer), layerAt, zoomed = true))
+        assertEquals(TouchKind.View, touchKind(listOf(empty), layerAt, zoomed = true))
+        val nothing = touchKind(listOf(empty), layerAt, zoomed = false)
+        assertEquals("a drag on empty canvas does nothing unless zoomed", TouchKind.Ignored, nothing)
+    }
+
+    @Test
+    fun aPinchMovesTheLayerUnderAnyFingerTheFirstFingerFirst() {
+        val onLayer = Offset(300f, 300f)
+        val empty = Offset(10f, 10f)
+        val asked = mutableListOf<Offset>()
+        val layerAt = { p: Offset -> asked += p; p == onLayer }
+        assertEquals(
+            "only the second finger is on a layer: the pinch still takes it",
+            TouchKind.Layer,
+            touchKind(listOf(empty, onLayer), layerAt, zoomed = false)
+        )
+        assertEquals(listOf(empty, onLayer), asked)
+        asked.clear()
+        assertEquals(TouchKind.Layer, touchKind(listOf(onLayer, empty), layerAt, zoomed = true))
+        assertEquals("the first finger's layer wins; the others aren't asked", listOf(onLayer), asked)
+        val none = touchKind(listOf(empty, Offset(20f, 20f)), layerAt, zoomed = false)
+        assertEquals("a pinch with no finger on a layer does nothing unless zoomed", TouchKind.Ignored, none)
+        assertEquals(TouchKind.View, touchKind(listOf(empty, Offset(20f, 20f)), layerAt, zoomed = true))
     }
 
     @Test

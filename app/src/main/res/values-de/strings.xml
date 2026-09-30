@@ -163,7 +163,6 @@
     <string name="create_hint_auto_done">Auf diesem Handy freigestellt. Nichts wurde hochgeladen.</string>
     <string name="create_hint_brush">Tippe auf das Bild, um Teile zurückzuholen</string>
     <string name="create_hint_erase">Tippe auf Reste, um sie wegzuradieren</string>
-    <string name="create_hint_default">Zoome hinein, um Kanten nachzubessern</string>
     <string name="create_cutting_out_on_phone">Wird auf diesem Handy freigestellt …</string>
     <string name="create_cutting_out">Wird freigestellt …</string>
     <string name="create_brush_size">Pinselgröße</string>
