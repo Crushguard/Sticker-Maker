@@ -29,6 +29,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.piptechnologies.stickermaker.core.design.Hanken
@@ -50,6 +51,10 @@ private val ThumbShape = RoundedCornerShape(9.dp)
  *
  * @param icons optional 16dp leading glyphs, index-aligned with [options]
  * (null entries render text only).
+ * @param inset the track's padding around the segments.
+ * @param segmentHeight the height of a segment and of the thumb.
+ * @param gap the space between two segments.
+ * @param idleColor the text and icon colour of the options that aren't selected.
  */
 @Composable
 fun SegmentedControl(
@@ -57,7 +62,11 @@ fun SegmentedControl(
     selectedIndex: Int,
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    icons: List<ImageVector?>? = null
+    icons: List<ImageVector?>? = null,
+    inset: Dp = 4.dp,
+    segmentHeight: Dp = 38.dp,
+    gap: Dp = 2.dp,
+    idleColor: Color = Muted
 ) {
     require(options.isNotEmpty()) { "SegmentedControl needs at least one option" }
     BoxWithConstraints(
@@ -65,9 +74,8 @@ fun SegmentedControl(
             .fillMaxWidth()
             .clip(TrackShape)
             .background(Subtle)
-            .padding(4.dp)
+            .padding(inset)
     ) {
-        val gap = 2.dp
         val segmentWidth = (maxWidth - gap * (options.size - 1)) / options.size
         val thumbOffset by animateDpAsState(
             targetValue = (segmentWidth + gap) * selectedIndex.coerceIn(0, options.lastIndex),
@@ -78,7 +86,7 @@ fun SegmentedControl(
             Modifier
                 .offset(x = thumbOffset)
                 .width(segmentWidth)
-                .height(38.dp)
+                .height(segmentHeight)
                 .shadow(1.dp, ThumbShape, spotColor = Color(0x0F000000))
                 .clip(ThumbShape)
                 .background(Surface)
@@ -86,11 +94,11 @@ fun SegmentedControl(
         Row(horizontalArrangement = Arrangement.spacedBy(gap)) {
             options.forEachIndexed { index, label ->
                 val selected = index == selectedIndex
-                val fg = if (selected) Ink else Muted
+                val fg = if (selected) Ink else idleColor
                 Row(
                     modifier = Modifier
                         .width(segmentWidth)
-                        .height(38.dp)
+                        .height(segmentHeight)
                         .clip(ThumbShape)
                         .clickable(
                             role = Role.Tab,

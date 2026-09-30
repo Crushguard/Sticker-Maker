@@ -1,5 +1,6 @@
 package com.piptechnologies.stickermaker.feature.create.editor
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -27,12 +29,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -76,7 +81,8 @@ private val UndoDisabled = Color(0xFFB4BAC4)
  * Under the bar sits the tool's own row (the brush size, the [DrawRow] or the
  * [AnimateStrip]), then the [OutlineRow] with the die-cut's switch, thickness
  * and colour, which stays in every tool. The rail carries a green check per
- * finished sticker and an ANIM badge on the ones that move.
+ * finished sticker and an ANIM badge on the ones that move. Add opens the
+ * [AddSheet] over the footer; system back closes it first.
  */
 @Composable
 fun CreateEditorScreen(
@@ -101,12 +107,26 @@ fun CreateEditorScreen(
     val selected = state.selectedItems
     // Null until the decor data has loaded; state.dataReady brings the recomposition that reads it.
     val data = viewModel.data
+    // How high the Add sheet stands once it is up, and the footer it stands on, in px: under the sheet
+    // the content ends at the sheet's top, so the canvas and the tool bar can be scrolled into view.
+    val sheetHeight = remember { mutableIntStateOf(0) }
+    val footerHeight = remember { mutableIntStateOf(0) }
+    val clearOfSheet = remember {
+        Modifier.endAbove { sheetOverlap(sheetHeight.intValue, footerHeight.intValue) }
+    }
+
+    // System back closes the Add sheet before it leaves the screen.
+    BackHandler(enabled = state.tool == EditorTool.Add) { viewModel.closeAddSheet() }
 
     Box(Modifier.fillMaxSize().background(CanvasColor)) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             LoveTopBar(
                 title = stringResource(R.string.create_editor_title),
-                onBack = onBack,
+                // The editor is never left with the Add sheet open: it would cover the footer on return.
+                onBack = {
+                    viewModel.closeAddSheet()
+                    onBack()
+                },
                 height = 52.dp,
                 actions = {
                     Text(
@@ -125,6 +145,7 @@ fun CreateEditorScreen(
             Column(
                 Modifier
                     .weight(1f)
+                    .then(clearOfSheet)
                     .verticalScroll(rememberScrollState())
                     .padding(start = 20.dp, end = 20.dp, bottom = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -192,7 +213,7 @@ fun CreateEditorScreen(
                     }
                 }
             }
-            CreateFooter {
+            CreateFooter(Modifier.onSizeChanged { footerHeight.intValue = it.height }) {
                 PrimaryButton(
                     label = if (state.anyPending) {
                         stringResource(R.string.create_cutting_out)
@@ -207,13 +228,36 @@ fun CreateEditorScreen(
                 )
             }
         }
+        AddSheet(
+            state = state,
+            viewModel = viewModel,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onCovers = { sheetHeight.intValue = it }
+        )
+        // Over the sheet, and over the keyboard when it is up: a refused layer or tone says why.
         ToastHost(
             hostState = toaster,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .imePadding()
                 .padding(bottom = 88.dp)
         )
     }
+}
+
+/**
+ * Ends this box [overlap] px above its bottom, keeping its place in its parent: what lies under an
+ * overlay there can then be scrolled into view above it. [overlap] is read while measuring.
+ */
+private fun Modifier.endAbove(overlap: () -> Int): Modifier = layout { measurable, constraints ->
+    val cut = overlap().coerceIn(0, constraints.maxHeight)
+    val placeable = measurable.measure(
+        constraints.copy(
+            minHeight = (constraints.minHeight - cut).coerceAtLeast(0),
+            maxHeight = constraints.maxHeight - cut
+        )
+    )
+    layout(placeable.width, placeable.height + cut) { placeable.place(0, 0) }
 }
 
 // ---------------------------------------------------------------- controls

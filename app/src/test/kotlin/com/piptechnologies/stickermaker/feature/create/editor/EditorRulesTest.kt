@@ -2,16 +2,27 @@ package com.piptechnologies.stickermaker.feature.create.editor
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.GraphicsLayerScope
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import com.piptechnologies.stickermaker.R
+import com.piptechnologies.stickermaker.feature.create.AddTab
 import com.piptechnologies.stickermaker.feature.create.decor.Affine
+import com.piptechnologies.stickermaker.feature.create.decor.DecorCatalog
 import com.piptechnologies.stickermaker.feature.create.decor.DecorSpec
+import com.piptechnologies.stickermaker.feature.create.decor.EmojiCatalog
+import com.piptechnologies.stickermaker.feature.create.decor.FontFile
+import com.piptechnologies.stickermaker.feature.create.decor.FontMood
 import com.piptechnologies.stickermaker.feature.create.decor.MotionBook
 import com.piptechnologies.stickermaker.feature.create.decor.MotionMath
 import com.piptechnologies.stickermaker.feature.create.decor.MotionPreset
 import com.piptechnologies.stickermaker.feature.create.decor.OutlineStyle
 import com.piptechnologies.stickermaker.feature.create.decor.OutlineThickness
+import com.piptechnologies.stickermaker.feature.create.decor.SkinTone
 import com.piptechnologies.stickermaker.feature.create.decor.TextStyleBook
+import com.piptechnologies.stickermaker.feature.create.decor.TextStyleId
 import java.io.File
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -22,7 +33,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-/** The rules of the rows under the tool bar, on the data files the app ships. */
+/** The rules of the rows under the tool bar and of the Add sheet, on the data files the app ships. */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34], application = android.app.Application::class)
 class EditorRulesTest {
@@ -235,5 +246,103 @@ class EditorRulesTest {
         val clipNote = AnimateNote(null, R.string.create_animate_note_clip)
         assertEquals(clipNote, animateNote(clip = true, reduceMotion = false))
         assertEquals("a clip's presets are off either way", clipNote, animateNote(clip = true, reduceMotion = true))
+    }
+
+    // ----------------------------------------------------------- Add sheet
+
+    @Test
+    fun everyControlOfTheSheetHasItsOwnWord() {
+        assertEquals(3, AddTab.entries.map(::addTabLabel).toSet().size)
+        assertEquals(4, TextStyleId.entries.map(::textStyleLabel).toSet().size)
+        assertEquals(3, FontMood.entries.map(::fontMoodLabel).toSet().size)
+        assertEquals(6, SkinTone.entries.map(::skinToneLabel).toSet().size)
+        assertEquals(R.string.create_skin_medium_light, skinToneLabel(SkinTone.MediumLight))
+        assertEquals(R.string.create_text_style_stroke, textStyleLabel(TextStyleId.Stroke))
+    }
+
+    @Test
+    fun fontChipsAreLetteredInTheirOwnLatinFace() {
+        assertEquals(FontFile.BALOO, fontMoodFace(FontMood.Round))
+        assertEquals(FontFile.CAVEAT, fontMoodFace(FontMood.Hand))
+        assertEquals(FontFile.LILITA, fontMoodFace(FontMood.Display))
+        assertEquals(listOf(13f, 15f, 13f), FontMood.entries.map(::fontMoodSp))
+    }
+
+    @Test
+    fun recentIsTheLastChipOnceSomethingWasUsed() {
+        val categories = EmojiCatalog.parse(asset("emoji/subset.json")).tabs.keys - EmojiCatalog.LOVE
+        assertEquals("the chips are the grid's tabs, Love aside", categories.toList(), emojiChips(hasRecents = false))
+        val used = emojiChips(hasRecents = true)
+        assertEquals(EmojiCatalog.CATEGORIES + EMOJI_RECENT, used)
+        assertEquals(EMOJI_RECENT, used.last())
+        used.forEach { assertNotNull(it, emojiTabLabel(it)) }
+        assertEquals("seven chips, seven labels", 7, used.map(::emojiTabLabel).toSet().size)
+        assertNull(emojiTabLabel("flags"))
+    }
+
+    @Test
+    fun theGridsCanKeyTheirCellsByFile() {
+        val emoji = EmojiCatalog.parse(asset("emoji/subset.json"))
+        emoji.tabs.forEach { (tab, items) ->
+            assertEquals("$tab has an emoji twice", items.size, items.map { it.file }.toSet().size)
+        }
+        val pieces = DecorCatalog.parse(asset("decor/decor.json")).pieces
+        assertEquals("a decoration piece is listed twice", pieces.size, pieces.map { it.file }.toSet().size)
+    }
+
+    @Test
+    fun theChipThatIsOnFallsBackToTheFirst() {
+        val fresh = emojiChips(hasRecents = false)
+        assertEquals("hands", emojiChipOn("hands", fresh))
+        assertEquals("Recent before anything was used", "smileys", emojiChipOn(EMOJI_RECENT, fresh))
+        assertEquals(EMOJI_RECENT, emojiChipOn(EMOJI_RECENT, emojiChips(hasRecents = true)))
+    }
+
+    @Test
+    fun theSkinPopoverIsStartAlignedAndItsTailPointsAtTheEmoji() {
+        // The 390 dp reference in dp: a 358 grid of six 54.67 cells 6 apart; the card is 246 wide.
+        val cell = (358f - 5 * 6f) / 6f
+        fun column(n: Int) = (n - 1) * (cell + 6f) + cell / 2f
+        fun place(centre: Float) = skinPopoverPlacement(centre, room = 358f, width = 246f, inset = 4f, corner = 22f)
+
+        val first = place(column(1))
+        assertEquals(4f, first.start, 0f)
+        assertEquals(column(1) - 4f, first.tail, 1e-3f)
+        val fourth = place(column(4))
+        assertEquals("still start-aligned", 4f, fourth.start, 0f)
+        assertEquals(column(4) - 4f, fourth.tail, 1e-3f)
+        // Past the card's end, the card slides after the emoji; the tail stays at its last place.
+        val fifth = place(column(5))
+        assertEquals(column(5) - 224f, fifth.start, 1e-3f)
+        assertEquals(224f, fifth.tail, 1e-3f)
+        val sixth = place(column(6))
+        assertTrue("the card stays 4 dp inside the grid", sixth.start + 246f <= 358f - 4f)
+        assertEquals(column(6), sixth.start + sixth.tail, 1e-3f)
+
+        assertEquals("the tail keeps off the card's corner", PopoverPlacement(4f, 22f), place(10f))
+        val narrow = skinPopoverPlacement(200f, room = 240f, width = 246f, inset = 4f, corner = 22f)
+        assertEquals("a grid narrower than the card: start-aligned", 4f, narrow.start, 0f)
+    }
+
+    @Test
+    fun twoGroupsSitAtTheEndsOfALineAndOneAtItsStart() {
+        val density = Density(1f)
+        fun arrange(sizes: IntArray, direction: LayoutDirection) = IntArray(sizes.size).also { out ->
+            with(EndsApart) { density.arrange(100, sizes, direction, out) }
+        }
+        assertEquals(7.dp, EndsApart.spacing)
+        assertArrayEquals(intArrayOf(0, 60), arrange(intArrayOf(30, 40), LayoutDirection.Ltr))
+        assertArrayEquals(intArrayOf(0), arrange(intArrayOf(30), LayoutDirection.Ltr))
+        assertArrayEquals("mirrored", intArrayOf(70, 0), arrange(intArrayOf(30, 40), LayoutDirection.Rtl))
+        val wrapped = arrange(intArrayOf(30), LayoutDirection.Rtl)
+        assertArrayEquals("a wrapped group starts at the right", intArrayOf(70), wrapped)
+    }
+
+    @Test
+    fun theContentEndsWhereTheSheetStandsOverTheFooter() {
+        assertEquals(200, sheetOverlap(sheetHeight = 300, footerHeight = 100))
+        assertEquals("closed, or still sliding up", 0, sheetOverlap(sheetHeight = 0, footerHeight = 100))
+        val low = sheetOverlap(sheetHeight = 80, footerHeight = 100)
+        assertEquals("a sheet lower than the footer covers none of it", 0, low)
     }
 }

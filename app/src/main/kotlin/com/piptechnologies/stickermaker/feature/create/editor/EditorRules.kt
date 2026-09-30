@@ -4,15 +4,22 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.graphics.TransformOrigin
 import com.piptechnologies.stickermaker.R
+import com.piptechnologies.stickermaker.feature.create.AddTab
+import com.piptechnologies.stickermaker.feature.create.decor.EmojiCatalog
+import com.piptechnologies.stickermaker.feature.create.decor.FontFile
+import com.piptechnologies.stickermaker.feature.create.decor.FontMood
 import com.piptechnologies.stickermaker.feature.create.decor.MarkerSize
 import com.piptechnologies.stickermaker.feature.create.decor.MotionMath
 import com.piptechnologies.stickermaker.feature.create.decor.MotionPreset
 import com.piptechnologies.stickermaker.feature.create.decor.OutlineStyle
 import com.piptechnologies.stickermaker.feature.create.decor.OutlineThickness
+import com.piptechnologies.stickermaker.feature.create.decor.SkinTone
+import com.piptechnologies.stickermaker.feature.create.decor.TextStyleId
 
-// The small rules of the rows under the tool bar, free of Compose state so they can be unit-tested:
-// the words for the data files' ids, how the Draw row and the Outline sub-row fit their card, the
-// preset tiles' clock and pose, the note under them, and what an outline change fades from.
+// The small rules of the rows under the tool bar and of the Add sheet, free of Compose state so they
+// can be unit-tested: the words for the data files' ids, how the Draw row and the Outline sub-row fit
+// their card, the preset tiles' clock and pose, the note under them, what an outline change fades
+// from, the Emoji tab's chips, and where the skin-tone popover sits.
 
 // ------------------------------------------------------------------ words
 
@@ -65,6 +72,68 @@ internal fun thicknessLabel(thickness: OutlineThickness): Int = when (thickness)
     OutlineThickness.Thin -> R.string.create_outline_thin
     OutlineThickness.Medium -> R.string.create_outline_medium
     OutlineThickness.Thick -> R.string.create_outline_thick
+}
+
+/** The label of one of the Add sheet's tabs. */
+@StringRes
+internal fun addTabLabel(tab: AddTab): Int = when (tab) {
+    AddTab.Text -> R.string.create_add_tab_text
+    AddTab.Emoji -> R.string.create_add_tab_emoji
+    AddTab.Stickers -> R.string.create_add_tab_stickers
+}
+
+/** The label of a text style's chip. */
+@StringRes
+internal fun textStyleLabel(style: TextStyleId): Int = when (style) {
+    TextStyleId.Classic -> R.string.create_text_style_classic
+    TextStyleId.Sticker -> R.string.create_text_style_sticker
+    TextStyleId.Stroke -> R.string.create_text_style_stroke
+    TextStyleId.Bubble -> R.string.create_text_style_bubble
+}
+
+/** The label of a font mood's chip. */
+@StringRes
+internal fun fontMoodLabel(mood: FontMood): Int = when (mood) {
+    FontMood.Round -> R.string.create_text_font_round
+    FontMood.Hand -> R.string.create_text_font_hand
+    FontMood.Display -> R.string.create_text_font_display
+}
+
+/** The Latin face a font mood's chip is lettered in (spec §9): Baloo 2, Caveat or Lilita One. */
+internal fun fontMoodFace(mood: FontMood): FontFile = when (mood) {
+    FontMood.Round -> FontFile.BALOO
+    FontMood.Hand -> FontFile.CAVEAT
+    FontMood.Display -> FontFile.LILITA
+}
+
+/** A font chip's text size in sp (spec §9): Caveat is lettered at 15, the others at 13. */
+internal fun fontMoodSp(mood: FontMood): Float = if (mood == FontMood.Hand) 15f else 13f
+
+/**
+ * The label of an Emoji tab chip: `create_emoji_tab_<id>` for the categories of `subset.json` and for
+ * [EMOJI_RECENT]; null for an id the app has no word for.
+ */
+@StringRes
+internal fun emojiTabLabel(id: String): Int? = when (id) {
+    "smileys" -> R.string.create_emoji_tab_smileys
+    "hearts" -> R.string.create_emoji_tab_hearts
+    "hands" -> R.string.create_emoji_tab_hands
+    "animals" -> R.string.create_emoji_tab_animals
+    "food" -> R.string.create_emoji_tab_food
+    "symbols" -> R.string.create_emoji_tab_symbols
+    EMOJI_RECENT -> R.string.create_emoji_tab_recent
+    else -> null
+}
+
+/** What TalkBack calls a cell of the skin-tone popover. */
+@StringRes
+internal fun skinToneLabel(tone: SkinTone): Int = when (tone) {
+    SkinTone.Default -> R.string.create_skin_default
+    SkinTone.Light -> R.string.create_skin_light
+    SkinTone.MediumLight -> R.string.create_skin_medium_light
+    SkinTone.Medium -> R.string.create_skin_medium
+    SkinTone.MediumDark -> R.string.create_skin_medium_dark
+    SkinTone.Dark -> R.string.create_skin_dark
 }
 
 // ---------------------------------------------------------------- Draw row
@@ -181,3 +250,51 @@ internal fun animateNote(clip: Boolean, reduceMotion: Boolean): AnimateNote = wh
     reduceMotion -> AnimateNote(R.string.create_animate_note_reduced, R.string.create_animate_note)
     else -> AnimateNote(null, R.string.create_animate_note)
 }
+
+// --------------------------------------------------------------- Add sheet
+
+/** The Emoji tab's chip for the emoji used lately: the id the view model keeps for it. */
+internal const val EMOJI_RECENT = "recent"
+
+/**
+ * The Emoji tab's chips in order (spec §9): the categories of `subset.json`, then Recent at the end once
+ * something has been used ([hasRecents]).
+ */
+internal fun emojiChips(hasRecents: Boolean): List<String> =
+    if (hasRecents) EmojiCatalog.CATEGORIES + EMOJI_RECENT else EmojiCatalog.CATEGORIES
+
+/** The chip that is on: [selected] when [chips] has it, else the first (Recent before anything was used). */
+internal fun emojiChipOn(selected: String, chips: List<String>): String =
+    if (selected in chips) selected else chips.first()
+
+/**
+ * Where the skin-tone popover sits over the emoji grid, measured from the grid's start edge: its card's
+ * [start] and, within the card, its [tail]'s centre.
+ */
+internal data class PopoverPlacement(val start: Float, val tail: Float)
+
+/**
+ * The skin-tone popover's place (spec §9) over a grid [room] wide, for the pressed item whose centre is
+ * [itemCentre] from the grid's start: the [width]-wide card is start-aligned, [inset] in, and its tail
+ * points at the item. The tail keeps [corner] from the card's ends, so for an item further along than
+ * that the card slides after it, never past [inset] from the grid's end. All in one unit.
+ */
+internal fun skinPopoverPlacement(
+    itemCentre: Float,
+    room: Float,
+    width: Float,
+    inset: Float,
+    corner: Float
+): PopoverPlacement {
+    val furthest = (room - width - inset).coerceAtLeast(inset)
+    val start = (itemCentre - (width - corner)).coerceIn(inset, furthest)
+    val tail = (itemCentre - start).coerceIn(corner, (width - corner).coerceAtLeast(corner))
+    return PopoverPlacement(start, tail)
+}
+
+/**
+ * How much of the editor's scrolling content the Add sheet covers, in px: the sheet ([sheetHeight]; 0
+ * while it is closed or still sliding up) less the footer ([footerHeight]) it sits on. The content ends
+ * that much higher, so the canvas and the tool bar can be scrolled into view above the sheet.
+ */
+internal fun sheetOverlap(sheetHeight: Int, footerHeight: Int): Int = (sheetHeight - footerHeight).coerceAtLeast(0)
