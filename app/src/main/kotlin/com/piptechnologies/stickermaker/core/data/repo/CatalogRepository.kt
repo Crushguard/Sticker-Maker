@@ -52,6 +52,23 @@ class CatalogRepository @Inject constructor(
     /** One pack with all URLs resolved; null when unavailable. */
     suspend fun getPack(id: String): StickerPack? = catalog.getPack(id)
 
+    /** Tries the catalog download again (offline Retry); the result arrives through [observePacks]. */
+    fun retryCatalog() = catalog.retry()
+
+    /**
+     * Brings an installed pack up to [pack]'s version (the catalog pack as [getPack] returns it): the new files
+     * replace the old ones and the provider serves the new image_data_version, so WhatsApp reloads the stickers.
+     * The pack stays added and keeps its place. False when [pack] isn't installed or is already current.
+     */
+    suspend fun refreshInstalled(pack: StickerPack): Boolean = withContext(ioDispatcher) {
+        val installed = installedPackDao.get(pack.id) ?: return@withContext false
+        if (installed.imageDataVersion >= pack.version) return@withContext false
+        downloader.download(pack).collect { }
+        val current = catalog.withFiles(pack)
+        insertInstalled(current, current.stickerEmojis, previous = installed)
+        true
+    }
+
     /**
      * Downloads [pack] and registers it in Room. Emits
      * [AddState.Downloading] with fraction 0f..1f while files arrive, then a
@@ -64,10 +81,9 @@ class CatalogRepository @Inject constructor(
         downloader.download(pack).collect { progress ->
             emit(AddState.Downloading(progress.fraction))
         }
-        val emojis = pack.stickerEmojis.ifEmpty {
-            catalog.getPack(pack.id)?.stickerEmojis.orEmpty()
-        }
-        insertInstalled(pack, emojis)
+        // The pack is unpacked by now: its file list and emoji come from its contents.json.
+        val installed = catalog.withFiles(pack)
+        insertInstalled(installed, installed.stickerEmojis)
         emit(AddState.Sent)
     }
         .catch { error ->
@@ -92,7 +108,11 @@ class CatalogRepository @Inject constructor(
         installedPackDao.setWhitelisted(id, whitelisted)
     }
 
-    private suspend fun insertInstalled(pack: StickerPack, emojis: Map<String, List<String>>) {
+    private suspend fun insertInstalled(
+        pack: StickerPack,
+        emojis: Map<String, List<String>>,
+        previous: InstalledPackEntity? = null,
+    ) {
         val trayFile = pack.trayPath.substringAfterLast('/').ifBlank { "tray.png" }
         val stickerFiles = pack.stickerPaths
             .map { it.substringAfterLast('/') }
@@ -109,9 +129,10 @@ class CatalogRepository @Inject constructor(
                 animated = pack.animated,
                 category = pack.category,
                 sortOrder = pack.order,
-                addedAt = System.currentTimeMillis(),
+                addedAt = previous?.addedAt ?: System.currentTimeMillis(),
                 dirPath = downloader.packDir(pack.id).absolutePath,
-                whitelisted = false
+                whitelisted = previous?.whitelisted ?: false,
+                imageDataVersion = pack.version
             )
         )
         installedPackDao.deleteStickers(pack.id)
@@ -121,7 +142,11 @@ class CatalogRepository @Inject constructor(
                     packId = pack.id,
                     fileName = fileName,
                     emojis = (emojis[fileName] ?: DEFAULT_EMOJIS).joinToString(","),
-                    indexInPack = index
+                    indexInPack = index,
+                    accessibilityText = pack.stickerTexts[fileName]
+                        ?.trim()
+                        ?.ifBlank { null }
+                        ?.take(if (pack.animated) ANIMATED_TEXT_MAX else STATIC_TEXT_MAX)
                 )
             }
         )
@@ -130,5 +155,9 @@ class CatalogRepository @Inject constructor(
     private companion object {
         /** Fallback emoji tags when the catalog carries none for a sticker. */
         val DEFAULT_EMOJIS = listOf("❤️", "😊")
+
+        /** WhatsApp's accessibility text limits. */
+        const val STATIC_TEXT_MAX = 125
+        const val ANIMATED_TEXT_MAX = 255
     }
 }

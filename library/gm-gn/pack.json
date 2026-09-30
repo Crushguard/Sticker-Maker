@@ -1,0 +1,69 @@
+{
+  "name": "Good Morning, Good Night",
+  "lang": [
+    "en"
+  ],
+  "tags": [
+    "goodnight",
+    "good-morning",
+    "good-night",
+    "sun",
+    "moon",
+    "sleepy"
+  ],
+  "emojis": [
+    "☀️",
+    "🌙"
+  ],
+  "order": 20,
+  "stickers": [
+    {
+      "file": "01.webp",
+      "emojis": [
+        "☀️",
+        "☕"
+      ],
+      "text": "good morning"
+    },
+    {
+      "file": "02.webp",
+      "emojis": [
+        "☀️",
+        "🙌"
+      ],
+      "text": "rise & shine"
+    },
+    {
+      "file": "03.webp",
+      "emojis": [
+        "👋",
+        "☀️"
+      ],
+      "text": "hi love"
+    },
+    {
+      "file": "04.webp",
+      "emojis": [
+        "🌙",
+        "😴"
+      ],
+      "text": "good night"
+    },
+    {
+      "file": "05.webp",
+      "emojis": [
+        "🌙",
+        "⭐"
+      ],
+      "text": "sweet dreams"
+    },
+    {
+      "file": "06.webp",
+      "emojis": [
+        "🥱",
+        "🌙"
+      ],
+      "text": "sleepy?"
+    }
+  ]
+}

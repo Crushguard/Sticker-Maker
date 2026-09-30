@@ -15,8 +15,9 @@
     <!-- ============================== Firebase ============================== -->
     <!-- The app's own named Firestore database in project play-console-f33dd: like the other apps there (pdf-app,
          pedometer-app), each app keeps its catalog and rules in a database of its own. firebase.json deploys
-         firestore.rules to it and scripts/upload-pack.js seeds it: change all three together (ConfigXmlTest) -->
-    <string name="config_firestore_database" translatable="false">stickers-app</string>
+         firestore.rules to it and the stickermaker functions (functions/src/config.js) publish the catalog pointer
+         to it: change all three together (ConfigXmlTest) -->
+    <string name="config_firestore_database" translatable="false">stickermaker</string>
     <!-- ============================== Google Play ============================== -->
     <!-- Settings > More apps: the publisher's developer page. The id is the developer name exactly as Play shows it -->
     <string name="config_more_apps_url" translatable="false">https://play.google.com/store/apps/developer?id=PIP+TECHNOLOGIES</string>

@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "play-console-f33dd"
+  },
+  "targets": {
+    "play-console-f33dd": {
+      "storage": {
+        "stickermaker": [
+          "play-console-f33dd-stickermaker"
+        ]
+      }
+    }
+  }
+}

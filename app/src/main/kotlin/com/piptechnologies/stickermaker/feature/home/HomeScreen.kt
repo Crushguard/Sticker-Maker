@@ -34,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -58,7 +59,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Hanken
@@ -70,6 +70,9 @@ import com.piptechnologies.stickermaker.core.design.Rose
 import com.piptechnologies.stickermaker.core.design.Subtle
 import com.piptechnologies.stickermaker.core.design.Surface
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
+import com.piptechnologies.stickermaker.core.design.components.CoverTile
+import com.piptechnologies.stickermaker.core.design.components.PackCover
+import com.piptechnologies.stickermaker.core.design.components.rememberCoverStrip
 import com.piptechnologies.stickermaker.core.design.components.CategoryChip
 import com.piptechnologies.stickermaker.core.design.components.ChipRow
 import com.piptechnologies.stickermaker.core.design.components.ConfirmSheet
@@ -389,6 +392,7 @@ private fun PackList(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(state.packs, key = { it.id }) { pack ->
+            val strip = rememberCoverStrip(pack.cover.smallUrl, pack.cover.largeUrl)
             PackCard(
                 title = pack.name,
                 stickerCount = pack.stickerCount,
@@ -400,7 +404,7 @@ private fun PackList(
                 onFavoriteToggle = { onToggleFavorite(pack.id) },
                 onAdd = { onAdd(pack.id) },
                 onClick = { onOpenPack(pack.id) },
-                thumbnails = packThumbnails(pack)
+                thumbnails = packThumbnails(pack, strip)
             )
         }
         if (state.noResults) {
@@ -416,25 +420,21 @@ private fun PackList(
     }
 }
 
-/** Six round previews: thumb URLs via Coil, or hue-tinted hearts offline. */
-private fun packThumbnails(pack: HomePackUi): List<@Composable () -> Unit> =
-    if (pack.thumbUrls.isNotEmpty()) {
-        pack.thumbUrls.map { url -> { PackThumb(url) } }
+/** Round previews sliced from the pack's cover strip, or hue-tinted hearts while it loads or offline. */
+private fun packThumbnails(pack: HomePackUi, strip: ImageBitmap?): List<@Composable () -> Unit> =
+    if (strip != null && pack.cover.tiles > 0) {
+        List(pack.cover.tiles) { index -> { CoverThumb(strip, index, pack.cover.tiles) } }
     } else {
         List(minOf(pack.stickerCount, 6).coerceAtLeast(1)) { { HuePlaceholderThumb(pack.hue) } }
     }
 
 @Composable
-private fun PackThumb(url: String) {
+private fun CoverThumb(strip: ImageBitmap, index: Int, tiles: Int) {
     Box(
         modifier = Modifier.size(46.dp).background(Subtle),
         contentAlignment = Alignment.Center
     ) {
-        AsyncImage(
-            model = url,
-            contentDescription = null,
-            modifier = Modifier.size(42.dp)
-        )
+        CoverTile(strip, index, tiles, Modifier.size(42.dp))
     }
 }
 
@@ -488,7 +488,7 @@ private fun previewPack(
     downloadsLabel = UiText.Raw(adds),
     animated = animated,
     hue = hue,
-    thumbUrls = emptyList(),
+    cover = PackCover(smallUrl = null, largeUrl = null, tiles = 0),
     favorite = favorite,
     addState = addState,
     addProgress = addProgress

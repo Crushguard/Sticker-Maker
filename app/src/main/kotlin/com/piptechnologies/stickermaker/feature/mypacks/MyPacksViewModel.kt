@@ -12,6 +12,7 @@ import com.piptechnologies.stickermaker.core.data.repo.MyPacksRepository
 import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
 import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.addsLabel
 import com.piptechnologies.stickermaker.feature.rating.RatingPromptController
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
@@ -127,9 +128,7 @@ class MyPacksViewModel @Inject constructor(
                 name = pack.name,
                 animated = pack.animated,
                 stickerCount = pack.stickerFiles.size,
-                metaLabel = catalogById[pack.id]
-                    ?.let { UiText.res(R.string.pack_adds, UiText.Compact(it.downloads)) }
-                    ?: UiText.Raw(""),
+                metaLabel = catalogById[pack.id]?.let { addsLabel(it.downloads) } ?: UiText.Raw(""),
                 own = false,
                 whitelisted = pack.whitelisted,
                 addState = sessions[pack.id]

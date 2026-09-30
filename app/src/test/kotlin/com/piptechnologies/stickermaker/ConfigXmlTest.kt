@@ -75,14 +75,14 @@ class ConfigXmlTest {
     }
 
     @Test
-    fun `the app, the rules deploy and the seed script use the same Firestore database`() {
+    fun `the app, the rules deploy and the catalog functions use the same Firestore database`() {
         val database = ConfigXml.strings.getValue("config_firestore_database")
         // A named database like the other apps in the project (pdf-app, pedometer-app), never "(default)".
         assertTrue("config_firestore_database \"$database\" is not a named database id", DATABASE_ID.matches(database))
         val firebaseJson = ConfigXml.repoFile("firebase.json").readText()
         assertTrue("firebase.json deploys the Firestore rules to another database", "\"database\": \"$database\"" in firebaseJson)
-        val uploader = ConfigXml.repoFile("scripts/upload-pack.js").readText()
-        assertTrue("scripts/upload-pack.js seeds another database by default", "arg('--database', '$database')" in uploader)
+        val functionsConfig = ConfigXml.repoFile("functions/src/config.js").readText()
+        assertTrue("functions/src/config.js publishes to another database", "const DATABASE = '$database';" in functionsConfig)
     }
 
     @Test

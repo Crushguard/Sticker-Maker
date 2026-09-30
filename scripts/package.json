@@ -1,13 +1,13 @@
 {
   "name": "love-stickers-scripts",
   "private": true,
-  "description": "Asset pipeline and Firebase ops scripts for Love Stickers",
+  "description": "Sticker library tools for Love Stickers (upload, end-to-end check against the emulators)",
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "dependencies": {
+    "fflate": "^0.8.3",
     "firebase-admin": "^14.5.0",
-    "node-webpmux": "^3.2.0",
-    "sharp": "^0.33.5"
+    "sharp": "^0.35.5"
   }
 }

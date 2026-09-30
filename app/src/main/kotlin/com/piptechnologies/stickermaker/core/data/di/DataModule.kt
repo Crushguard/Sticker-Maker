@@ -5,18 +5,25 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.PersistentCacheSettings
-import com.google.firebase.storage.FirebaseStorage
 import com.piptechnologies.stickermaker.BuildConfig
 import com.piptechnologies.stickermaker.R
+import com.piptechnologies.stickermaker.core.data.catalog.CatalogStore
+import com.piptechnologies.stickermaker.core.data.catalog.FirestoreCatalogMetaSource
+import com.piptechnologies.stickermaker.core.data.catalog.HttpFetcher
+import com.piptechnologies.stickermaker.core.data.catalog.OkHttpFetcher
+import com.piptechnologies.stickermaker.core.data.catalog.PackArchive
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.io.File
+import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import okhttp3.OkHttpClient
 
 /** Qualifies the [CoroutineDispatcher] used for disk and network work. */
 @Qualifier
@@ -24,8 +31,8 @@ import kotlinx.coroutines.Dispatchers
 annotation class IoDispatcher
 
 /**
- * Firebase singletons and shared dispatchers. Data sources and repositories
- * are constructor-injected (@Inject @Singleton) and need no @Provides here.
+ * Firebase, HTTP and catalog singletons plus shared dispatchers. Data sources and repositories are
+ * constructor-injected (@Inject @Singleton) and need no @Provides here.
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,7 +40,7 @@ object DataModule {
 
     /**
      * The app's own named Firestore database (config.xml's config_firestore_database), with
-     * on-disk offline persistence so the catalog renders offline.
+     * on-disk offline persistence so the catalog pointer (catalog/meta) is there offline too.
      */
     @Provides
     @Singleton
@@ -50,18 +57,42 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideStorage(): FirebaseStorage =
-        FirebaseStorage.getInstance().apply {
-            emulatorHost()?.let { useEmulator(it, STORAGE_EMULATOR_PORT) }
-        }
+    fun provideOkHttp(): OkHttpClient =
+        OkHttpClient.Builder()
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideHttpFetcher(client: OkHttpClient): HttpFetcher = OkHttpFetcher(client)
+
+    /** The published catalog, cached in filesDir/catalog so Home opens from disk. */
+    @Provides
+    @Singleton
+    fun provideCatalogStore(
+        @ApplicationContext context: Context,
+        firestore: FirebaseFirestore,
+        fetcher: HttpFetcher,
+        @IoDispatcher io: CoroutineDispatcher,
+    ): CatalogStore =
+        CatalogStore(File(context.filesDir, "catalog"), FirestoreCatalogMetaSource(firestore), fetcher, emulatorHost(), io)
+
+    /** Unpacked pack.zip downloads, in the cache (installed packs are copied to filesDir/packs). */
+    @Provides
+    @Singleton
+    fun providePackArchive(
+        @ApplicationContext context: Context,
+        fetcher: HttpFetcher,
+        @IoDispatcher io: CoroutineDispatcher,
+    ): PackArchive = PackArchive(File(context.cacheDir, "packs"), fetcher, io)
 
     @Provides
     @IoDispatcher
     fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
-    // Default ports of `firebase emulators:start` (see README, "Local Firebase emulators").
+    // Default port of `firebase emulators:start` (see README, "Local Firebase emulators").
     private const val FIRESTORE_EMULATOR_PORT = 8080
-    private const val STORAGE_EMULATOR_PORT = 9199
 
     /**
      * Host of the local Firebase emulators, set only for debug builds made with
