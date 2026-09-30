@@ -127,4 +127,17 @@ class DecorDataTest {
         assertEquals(Easing.EaseInOut, book.byId("heartbeat").keyframes[0].easing)
         assertEquals("none", book.byId("does-not-exist").id)
     }
+
+    @Test
+    fun quickPhrasesShipForEveryAppLocale() {
+        val shipped = QuickPhrases.parse(asset("text/quick-phrases.json"))
+        val english = shipped.forLocale("en", null)
+        listOf("en", "ar", "de", "es", "fa", "fr", "ha", "hi", "in", "it", "iw", "my", "ps", "pt", "ru", "tr", "ur", "zh").forEach {
+            assertEquals(it, 14, shipped.forLocale(it, null).size)
+            // A locale missing from the file falls back to English, which would still be 14 long.
+            assertTrue("$it has no phrases of its own", it == "en" || shipped.forLocale(it, null) != english)
+        }
+        assertEquals(14, shipped.forLocale("pt", "BR").size)
+        assertTrue(shipped.forLocale("pt", "BR") !== shipped.forLocale("pt", null))
+    }
 }

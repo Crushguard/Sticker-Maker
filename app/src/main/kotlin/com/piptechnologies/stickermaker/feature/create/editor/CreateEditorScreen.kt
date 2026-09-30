@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -50,7 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -112,7 +110,7 @@ const val EDITOR_CANVAS_TAG = "editorCanvas"
 /**
  * Create · step 2 (Cut out): the live editor. The on-device auto cut-out runs
  * per sticker; Brush restores, Erase removes (Porter-Duff strokes on the mask
- * bitmap), Text adds a caption, Zoom toggles a pinch/pan view, undo steps back
+ * bitmap), Zoom toggles a pinch/pan view, undo steps back
  * one touch, and the white-outline switch previews WhatsApp's recommended
  * die-cut edge. The rail carries a green check per finished sticker.
  */
@@ -190,12 +188,6 @@ fun CreateEditorScreen(
                     onTool = viewModel::selectTool,
                     onZoom = viewModel::toggleZoom
                 )
-                if (state.tool == EditorTool.Text) {
-                    CaptionField(
-                        text = state.activeText,
-                        onTextChange = viewModel::setStickerText
-                    )
-                }
                 if (state.tool == EditorTool.Brush || state.tool == EditorTool.Erase) {
                     BrushSizeRow(
                         label = stringResource(if (state.tool == EditorTool.Brush) R.string.create_brush_size else R.string.create_eraser_size),
@@ -292,7 +284,6 @@ private fun EditorCanvasCard(
                 if (activeCut == CutStatus.Done) R.string.create_hint_auto_done else R.string.create_hint_auto
             tool == EditorTool.Brush -> R.string.create_hint_brush
             tool == EditorTool.Erase -> R.string.create_hint_erase
-            tool == EditorTool.Text -> R.string.create_hint_text
             else -> R.string.create_hint_default
         }
     )
@@ -467,9 +458,6 @@ private fun EditorToolbar(
         ToolButton(stringResource(R.string.create_tool_erase), LoveIcons.Eraser, tool == EditorTool.Erase, Modifier.weight(1f)) {
             onTool(EditorTool.Erase)
         }
-        ToolButton(stringResource(R.string.create_tool_text), LoveIcons.Type, tool == EditorTool.Text, Modifier.weight(1f)) {
-            onTool(EditorTool.Text)
-        }
         ToolButton(stringResource(R.string.create_tool_zoom), LoveIcons.ZoomIn, zoomed, Modifier.weight(1f), onZoom)
     }
 }
@@ -498,48 +486,6 @@ private fun ToolButton(
             label,
             style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 10.sp),
             color = fg
-        )
-    }
-}
-
-@Composable
-private fun CaptionField(text: String, onTextChange: (String) -> Unit) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .height(46.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Surface)
-            .border(1.dp, Border, RoundedCornerShape(12.dp))
-            .padding(horizontal = 14.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(LoveIcons.Type, null, Modifier.size(17.dp), tint = Muted)
-        Spacer(Modifier.width(9.dp))
-        BasicTextField(
-            value = text,
-            onValueChange = { onTextChange(it.take(CreateSpec.TEXT_MAX_CHARS)) },
-            singleLine = true,
-            textStyle = TextStyle(
-                fontFamily = Hanken,
-                fontWeight = FontWeight.W400,
-                fontSize = 15.sp,
-                color = Ink
-            ),
-            cursorBrush = SolidColor(Rose),
-            modifier = Modifier.weight(1f),
-            decorationBox = { inner ->
-                Box(contentAlignment = Alignment.CenterStart) {
-                    if (text.isEmpty()) {
-                        Text(
-                            stringResource(R.string.create_caption_placeholder),
-                            style = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W400, fontSize = 15.sp),
-                            color = Muted
-                        )
-                    }
-                    inner()
-                }
-            }
         )
     }
 }
