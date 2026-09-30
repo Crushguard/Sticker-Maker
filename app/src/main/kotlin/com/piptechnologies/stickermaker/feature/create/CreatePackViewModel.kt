@@ -37,14 +37,15 @@ import com.piptechnologies.stickermaker.feature.create.decor.OutlineThickness
 import com.piptechnologies.stickermaker.feature.create.decor.SceneRenderer
 import com.piptechnologies.stickermaker.feature.create.decor.Size2
 import com.piptechnologies.stickermaker.feature.create.decor.SkinTone
+import com.piptechnologies.stickermaker.feature.create.decor.StickerExporter
 import com.piptechnologies.stickermaker.feature.create.decor.TextLayerPainter
 import com.piptechnologies.stickermaker.feature.create.decor.TextStyleId
 import com.piptechnologies.stickermaker.feature.create.decor.UndoResult
+import com.piptechnologies.stickermaker.feature.create.decor.emojiTags
 import com.piptechnologies.stickermaker.feature.language.AppLanguages
 import com.piptechnologies.stickermaker.feature.language.effectiveTag
 import com.piptechnologies.stickermaker.feature.rating.RatingPromptController
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
-import com.piptechnologies.stickermaker.whatsapp.AnimatedWebpMuxer
 import com.piptechnologies.stickermaker.whatsapp.StickerContentProvider
 import com.piptechnologies.stickermaker.whatsapp.StickerPackValidator
 import com.piptechnologies.stickermaker.whatsapp.ValidatablePack
@@ -58,7 +59,6 @@ import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.max
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
@@ -76,7 +76,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-/** The design assigns no per-sticker emoji, so every sticker gets this default pair. */
+/** A sticker's WhatsApp tags when none of its layers brings an emoji (spec §3). */
 private val DEFAULT_EMOJIS = listOf("❤️", "😊")
 
 /** A burst of decor edits settles this long before the rail thumbnail is rendered again. */
@@ -1098,7 +1098,7 @@ class CreatePackViewModel @Inject constructor(
                 val (id, name) = exportPack(stickers, finalName, publisher, trayAt)
                 AppAnalytics.logPackCreated(
                     stickers = stickers.size,
-                    animated = stickers.any { it.isVideo },
+                    animated = stickers.any { it.isVideo || it.editor.state.animated },
                     toWhatsApp = toWhatsApp
                 )
                 savedPackId = id
@@ -1155,6 +1155,8 @@ class CreatePackViewModel @Inject constructor(
      * Renders, size-caps, validates, writes (tmp dir → rename) and registers
      * the pack. Returns the saved pack's id and name. Every sticker is its
      * scene (spec §5): outline, layers and subject, as the editor shows it.
+     * The pack animates when any sticker is a clip or has a motion preset
+     * (spec §7), and each sticker is tagged with its own emoji (spec §3).
      */
     private suspend fun exportPack(
         stickers: List<MediaItem>,
@@ -1162,30 +1164,39 @@ class CreatePackViewModel @Inject constructor(
         publisher: String,
         trayAt: Int
     ): Pair<String, String> {
-        val renderer = decorLoad.await()?.renderer ?: throw IOException("The sticker decor could not be loaded")
+        val decor = decorLoad.await() ?: throw IOException("The sticker decor could not be loaded")
+        val renderer = decor.renderer
+        val exporter = StickerExporter(renderer)
         // What each sticker shows, read on the main thread before the work moves off it.
         val decorStates = stickers.map { it.editor.state }
         return withContext(Dispatchers.Default) {
             check(stickers.size in CreateSpec.MIN_STICKERS..CreateSpec.MAX_STICKERS) {
                 "sticker count out of range: ${stickers.size}"
             }
-            // Only clips animate for now; motion presets join the export next.
-            val packAnimated = stickers.any { it.isVideo }
+            val packAnimated = stickers.indices.any { stickers[it].isVideo || decorStates[it].animated }
             val encoded = ArrayList<ByteArray>(stickers.size)
+            // One sticker at a time: its bitmaps are freed before the next one renders.
             stickers.forEachIndexed { index, item ->
-                encoded += if (packAnimated) {
-                    encodeAnimatedSticker(item, decorStates[index], renderer)
-                } else {
-                    encodeStaticStickerOf(item, decorStates[index], renderer)
+                val state = decorStates[index]
+                encoded += when {
+                    item.isVideo -> encodeClip(item, state, renderer, exporter)
+                    state.animated -> withRestScene(item, state, renderer) {
+                        exporter.presetSticker(it, decor.data.motion.byId(state.preset))
+                    }
+                    packAnimated -> withRestScene(item, state, renderer, exporter::stillInAnimatedPack)
+                    else -> withRestScene(item, state, renderer, exporter::staticSticker)
                 }
                 progress((index + 1).toFloat() / (stickers.size + 1))
             }
             val trayIndexInPack = if (trayAt in stickers.indices) trayAt else 0
-            val trayBytes = encodeTray(stickers[trayIndexInPack], decorStates[trayIndexInPack], renderer)
+            val trayBytes = withRestScene(
+                stickers[trayIndexInPack], decorStates[trayIndexInPack], renderer, exporter::tray
+            )
             progress(1f)
 
             val dirId = "own-" + UUID.randomUUID().toString().replace("-", "").take(8)
             val fileNames = List(stickers.size) { String.format(Locale.ROOT, "%02d.webp", it + 1) }
+            val tags = decorStates.map { emojiTags(it, DEFAULT_EMOJIS) }
 
             StickerPackValidator.verifyStickerPackValidity(
                 ValidatablePack(
@@ -1196,7 +1207,7 @@ class CreatePackViewModel @Inject constructor(
                     trayBytes = trayBytes,
                     animatedStickerPack = packAnimated,
                     stickers = encoded.mapIndexed { index, bytes ->
-                        ValidatableSticker(fileNames[index], bytes, DEFAULT_EMOJIS)
+                        ValidatableSticker(fileNames[index], bytes, tags[index])
                     },
                     // What StickerContentProvider will hand WhatsApp for this pack.
                     publisherEmail = appContext.getString(R.string.config_support_email),
@@ -1212,7 +1223,7 @@ class CreatePackViewModel @Inject constructor(
                 name = finalName,
                 publisher = publisher,
                 animated = packAnimated,
-                stickers = fileNames.map { it to DEFAULT_EMOJIS },
+                stickers = fileNames.zip(tags),
                 dir = dir.absolutePath,
                 trayFile = OwnPackFiles.TRAY_FILE
             )
@@ -1227,122 +1238,70 @@ class CreatePackViewModel @Inject constructor(
         }
     }
 
-    /** The sticker's scene at rest in a new 512 bitmap: outline, layers and [source] cut out by [mask]. */
-    private fun renderStillOf(renderer: SceneRenderer, source: Bitmap, mask: Bitmap, decorState: DecorState): Bitmap {
-        val outline = decorState.outline
-        val radius = if (outline.on) renderer.outlineRadius(outline.thickness) else null
-        val (subject, silhouette) = subjectAndSilhouette(source, mask, radius)
-        val still = renderer.renderStill(SceneRenderer.Scene(subject, silhouette, decorState))
-        subject.recycle()
-        silhouette?.recycle()
-        return still
-    }
-
-    /** 512 export frame: the still scene fitted into the 460 content square. */
-    private fun renderExportFrame(
-        renderer: SceneRenderer,
-        source: Bitmap,
-        mask: Bitmap,
-        decorState: DecorState
-    ): Bitmap {
-        val still = renderStillOf(renderer, source, mask, decorState)
-        val export = StickerRenderer.renderExportCanvas(still)
-        still.recycle()
-        return export
-    }
-
-    private suspend fun encodeStaticStickerOf(
+    /**
+     * [encode] on [item]'s scene at rest: [state] around the subject its mask cuts out of its picture (a
+     * clip's first frame). The subject and silhouette are made for the export and freed after it; the
+     * item's own stay with the live canvas.
+     */
+    private suspend fun withRestScene(
         item: MediaItem,
-        decorState: DecorState,
-        renderer: SceneRenderer
+        state: DecorState,
+        renderer: SceneRenderer,
+        encode: (SceneRenderer.Scene) -> ByteArray
     ): ByteArray {
         ensureCutReady(item)
-        val export = renderExportFrame(renderer, checkNotNull(item.source), checkNotNull(item.mask), decorState)
-        val bytes = StickerRenderer.encodeStaticSticker(export)
-        export.recycle()
-        return bytes
+        val radius = silhouetteRadius(renderer, state)
+        val (subject, silhouette) = subjectAndSilhouette(checkNotNull(item.source), checkNotNull(item.mask), radius)
+        try {
+            return encode(SceneRenderer.Scene(subject, silhouette, state))
+        } finally {
+            subject.recycle()
+            silhouette?.recycle()
+        }
     }
 
     /**
-     * One sticker of an animated pack. Video items get the full per-frame
-     * pipeline (auto mask on every frame + the shared manual strokes, and the
-     * sticker's layers and outline on every frame); still pictures inside an
-     * animated pack are muxed as two identical frames so WhatsApp's "all
-     * stickers animate" rule holds.
+     * A clip sticker (spec §7): every decoded frame is cut out again (its own segmentation plus [item]'s
+     * Brush and Erase strokes) and wears [state]'s layers and outline. The frames' subjects and
+     * silhouettes are freed once the clip is encoded.
      */
-    private suspend fun encodeAnimatedSticker(
+    private suspend fun encodeClip(
         item: MediaItem,
-        decorState: DecorState,
-        renderer: SceneRenderer
+        state: DecorState,
+        renderer: SceneRenderer,
+        exporter: StickerExporter
     ): ByteArray {
-        if (!item.isVideo) {
-            ensureCutReady(item)
-            val export = renderExportFrame(renderer, checkNotNull(item.source), checkNotNull(item.mask), decorState)
-            try {
-                var best: ByteArray? = null
-                for (quality in intArrayOf(80, 65, 50, 40, 30)) {
-                    val frame = StickerRenderer.encodeWebp(export, quality)
-                    val bytes = AnimatedWebpMuxer.mux(listOf(frame, frame), listOf(500, 500), 0)
-                    if (best == null || bytes.size < best.size) best = bytes
-                    if (bytes.size <= CreateSpec.ANIMATED_LIMIT_BYTES) return bytes
-                }
-                return checkNotNull(best)
-            } finally {
-                export.recycle()
-            }
-        }
-
         val uri = checkNotNull(item.uri) { "video item without uri" }
         val decoded = CreateMedia.decodeVideoFrames(appContext, uri)
             ?: throw IOException("Could not read the clip")
         val strokes = item.strokes.toList()
-        val exports = ArrayList<Bitmap>(decoded.frames.size)
+        val radius = silhouetteRadius(renderer, state)
+        val scenes = ArrayList<SceneRenderer.Scene>(decoded.frames.size)
         try {
             for (frame in decoded.frames) {
                 val auto = segment(frame)
                 val mask = StickerRenderer.rebuildMask(auto, strokes)
                 auto.recycle()
-                exports += renderExportFrame(renderer, frame, mask, decorState)
+                val (subject, silhouette) = subjectAndSilhouette(frame, mask, radius)
                 mask.recycle()
+                // Its subject is a copy: the frame can go now.
+                frame.recycle()
+                scenes += SceneRenderer.Scene(subject, silhouette, state)
             }
-
-            var best: ByteArray? = null
-            val counts = intArrayOf(exports.size, 8, 6)
-                .distinct()
-                .filter { it in 2..exports.size }
-            for (count in counts) {
-                val subset = pickEvenly(exports, count)
-                val perFrame = (decoded.totalDurationMs / count).coerceAtLeast(40)
-                for (quality in intArrayOf(80, 65, 50, 40, 30)) {
-                    val frames = subset.map { StickerRenderer.encodeWebp(it, quality) }
-                    val bytes = AnimatedWebpMuxer.mux(frames, List(count) { perFrame }, 0)
-                    if (best == null || bytes.size < best.size) best = bytes
-                    if (bytes.size <= CreateSpec.ANIMATED_LIMIT_BYTES) return bytes
-                }
-            }
-            return checkNotNull(best)
+            return exporter.clipSticker(scenes, decoded.totalDurationMs.toLong())
         } finally {
-            // recycle() on an already-recycled bitmap is a no-op, so both lists are safe here.
+            // recycle() on an already-recycled bitmap is a no-op.
             decoded.frames.forEach { it.recycle() }
-            exports.forEach { it.recycle() }
+            scenes.forEach { scene ->
+                scene.subject?.recycle()
+                scene.subjectSilhouette?.recycle()
+            }
         }
     }
 
-    private fun <T> pickEvenly(list: List<T>, count: Int): List<T> {
-        if (count >= list.size) return list
-        return (0 until count).map { i ->
-            list[(i.toFloat() * (list.size - 1) / (count - 1)).roundToInt()]
-        }
-    }
-
-    /** The tray icon from the sticker's scene at rest (a clip's first frame). */
-    private suspend fun encodeTray(item: MediaItem, decorState: DecorState, renderer: SceneRenderer): ByteArray {
-        ensureCutReady(item)
-        val still = renderStillOf(renderer, checkNotNull(item.source), checkNotNull(item.mask), decorState)
-        val bytes = StickerRenderer.encodeTrayPng(still)
-        still.recycle()
-        return bytes
-    }
+    /** How far [state]'s outline reaches around the subject, in canvas px; null when it is off (no silhouette then). */
+    private fun silhouetteRadius(renderer: SceneRenderer, state: DecorState): Float? =
+        state.outline.takeIf { it.on }?.let { renderer.outlineRadius(it.thickness) }
 
     /** Guarantees source + mask exist (export can outrun a skipped cut-out). */
     private suspend fun ensureCutReady(item: MediaItem) {
