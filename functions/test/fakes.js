@@ -36,13 +36,12 @@ function memoryStore(categories = CATEGORIES) {
     if (!builds.has(id)) builds.set(id, { folders: {} });
     return builds.get(id);
   };
-  const claim = (id, key, { category, folder }, nowMs, event) => {
+  const claim = (id, key, { folder }, nowMs, event) => {
     const doc = buildsDoc(id);
     const entry = doc.folders[key] || null;
     const schedule = !isPending(entry, nowMs);
     doc.folders[key] = {
       ...entry,
-      category,
       folder,
       ...(event ? { lastEventMs: nowMs } : {}),
       ...(schedule ? { pending: true, pendingSinceMs: nowMs } : {}),
@@ -191,12 +190,12 @@ class World {
 
   // ---- Build queue ----
 
-  enqueueBuild({ category = null, folder, quiet = false, delaySeconds = 0, id }) {
+  enqueueBuild({ folder, quiet = false, delaySeconds = 0, id }) {
     const taskId = id || `task-${this.usedIds.size + 1}`;
     // Cloud Tasks refuses an id it has seen; queue.js reports that as "not enqueued".
     if (this.usedIds.has(taskId)) return false;
     this.usedIds.add(taskId);
-    this.queue.push({ id: taskId, task: { category, folder, quiet }, dueMs: this.nowMs + delaySeconds * 1000, retryCount: 0 });
+    this.queue.push({ id: taskId, task: { folder, quiet }, dueMs: this.nowMs + delaySeconds * 1000, retryCount: 0 });
     return true;
   }
 

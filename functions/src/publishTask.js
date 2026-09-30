@@ -32,15 +32,24 @@ async function deleteOldCatalogs(version) {
   );
 }
 
+/** The value with every object's keys sorted, at every depth (lists keep their order): same content, same JSON. */
+function sortedKeys(value) {
+  if (Array.isArray(value)) return value.map(sortedKeys);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.keys(value).sort().map((key) => [key, sortedKeys(value[key])]));
+  }
+  return value;
+}
+
 /**
- * The catalog without its search words, which move to their own file (60% of the catalog, and they change far less
- * often than the packs): the catalog names the file by its content in "words".
+ * The catalog, naming its search words file: the whole vocabulary of _tags.json (the words of every tag and
+ * lettering language; 60% of the catalog's size), keys sorted. The file, and its name, change only when _tags.json
+ * does, whatever happens to the packs or their ranking, so phones keep theirs.
  *
  * @returns {{catalog: object, wordsPath: string, wordsJson: string}}
  */
-function withWordsFile(assembled) {
-  const { tags, languages, ...catalog } = assembled;
-  const wordsJson = JSON.stringify({ tags, languages });
+function withWordsFile(catalog, vocabulary = {}) {
+  const wordsJson = JSON.stringify(sortedKeys({ tags: vocabulary.tags || {}, languages: vocabulary.languages || {} }));
   const wordsPath = publicWordsPath(crypto.createHash('sha256').update(wordsJson).digest('hex'));
   return { catalog: { ...catalog, words: { path: wordsPath } }, wordsPath, wordsJson };
 }
@@ -63,7 +72,7 @@ async function runPublish({ now = new Date(), urlOverride = '' } = {}) {
   const packs = packsSnap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((p) => p.hidden !== true);
   const vocabulary = tagsSnap.exists ? tagsSnap.data() : {};
   const version = (meta ? meta.version : 0) + 1;
-  const { catalog, wordsPath, wordsJson } = withWordsFile(assembleCatalog({ version, now, categories, packs, vocabulary }));
+  const { catalog, wordsPath, wordsJson } = withWordsFile(assembleCatalog({ version, now, categories, packs }), vocabulary);
   const template = urlTemplate(urlOverride);
   const contentHash = crypto
     .createHash('sha256')

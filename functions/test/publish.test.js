@@ -4,19 +4,31 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { withWordsFile } = require('../src/publishTask');
 
-const assembled = (tags) => ({ schema: 1, version: 3, categories: [], packs: [{ id: 'a' }], tags, languages: { ar: { en: ['arabic'] } } });
+const catalog = (packs) => ({ schema: 1, version: 3, publishedAt: 'x', categories: [], packs });
+const vocabulary = {
+  tags: { hug: { en: ['hug'], ar: ['حضن'] }, cat: { en: ['cat', 'kitty'] } },
+  languages: { pt: { en: ['portuguese'] }, ar: { en: ['arabic'] } },
+  updatedAt: new Date(0),
+};
 
-test('the search words move to their own file, named by their content', () => {
-  const { catalog, wordsPath, wordsJson } = withWordsFile(assembled({ cat: { en: ['cat'] } }));
+test('the search words file is the whole vocabulary, keys sorted, and the catalog names it', () => {
+  const { catalog: named, wordsPath, wordsJson } = withWordsFile(catalog([{ id: 'a' }]), vocabulary);
   assert.match(wordsPath, /^public\/catalog\/words-[0-9a-f]{16}\.json\.gz$/);
-  assert.deepEqual(catalog, { schema: 1, version: 3, categories: [], packs: [{ id: 'a' }], words: { path: wordsPath } });
-  assert.deepEqual(JSON.parse(wordsJson), { tags: { cat: { en: ['cat'] } }, languages: { ar: { en: ['arabic'] } } });
+  assert.deepEqual(named, { ...catalog([{ id: 'a' }]), words: { path: wordsPath } });
+  assert.equal(
+    wordsJson,
+    JSON.stringify({
+      languages: { ar: { en: ['arabic'] }, pt: { en: ['portuguese'] } },
+      tags: { cat: { en: ['cat', 'kitty'] }, hug: { ar: ['حضن'], en: ['hug'] } },
+    })
+  );
 });
 
-test('the same words keep their file across catalog versions; other words get another', () => {
-  const a = withWordsFile(assembled({ cat: { en: ['cat'] } }));
-  const b = withWordsFile({ ...assembled({ cat: { en: ['cat'] } }), version: 9, packs: [] });
-  const c = withWordsFile(assembled({ cat: { en: ['cat', 'kitty'] } }));
+test('its name changes only with the vocabulary, not with the packs, their ranking or key order', () => {
+  const a = withWordsFile(catalog([{ id: 'a' }, { id: 'b' }]), vocabulary);
+  const reordered = { languages: { ar: vocabulary.languages.ar, pt: vocabulary.languages.pt }, tags: { cat: vocabulary.tags.cat, hug: vocabulary.tags.hug } };
+  const b = withWordsFile(catalog([{ id: 'b' }]), reordered);
+  const c = withWordsFile(catalog([{ id: 'a' }]), { ...vocabulary, tags: { ...vocabulary.tags, cat: { en: ['cat'] } } });
   assert.equal(a.wordsPath, b.wordsPath);
   assert.notEqual(a.wordsPath, c.wordsPath);
 });

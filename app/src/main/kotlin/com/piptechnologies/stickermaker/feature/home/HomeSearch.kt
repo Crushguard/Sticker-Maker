@@ -11,27 +11,45 @@ import java.util.concurrent.ConcurrentHashMap
  * and local search words of its categories in every language.
  *
  * A short query word (under 4 letters) has to start a word ("cat" finds "cat", not "location"); a longer one may
- * sit anywhere ("kitty", "saudade"). Case, accents and Arabic spelling variants don't matter ("اسف" finds "آسف").
+ * sit anywhere ("kitty", "saudade"). Case, accents, punctuation and Arabic spelling variants don't matter ("اسف"
+ * finds "آسف", "u up?" finds "u up").
  */
-fun matchesQuery(pack: StickerPack, query: String, categories: Map<String, Category>): Boolean {
-    val words = normalize(query).split(SPACES).filter { it.isNotEmpty() }
-    if (words.isEmpty()) return true
-    val texts = buildList {
-        add(pack.name)
-        addAll(pack.names.values)
-        addAll(pack.keywords)
-        for (id in listOf(pack.category) + pack.alsoIn) {
-            add(id)
-            val category = categories[id] ?: continue
-            add(category.name)
-            addAll(category.names.values)
-            category.keywords.values.forEach(::addAll)
-        }
-    }.map(::searchable)
-    return words.all { word -> texts.any { it.has(word) } }
+fun matchesQuery(pack: StickerPack, query: String, categories: Map<String, Category>): Boolean =
+    matches(searchTexts(pack, categories), queryWords(query))
+
+/**
+ * Every pack's search texts, prepared once per catalog (Home rebuilds its state on every keystroke). Packs missing
+ * from the index are prepared on the fly.
+ */
+class HomeSearchIndex(packs: List<StickerPack>, categories: List<Category>) {
+    private val categories = categories.associateBy { it.id }
+    private val texts: Map<String, List<Searchable>> = packs.associate { it.id to searchTexts(it, this.categories) }
+
+    fun filter(packs: List<StickerPack>, query: String): List<StickerPack> {
+        val words = queryWords(query)
+        if (words.isEmpty()) return packs
+        return packs.filter { pack -> matches(texts[pack.id] ?: searchTexts(pack, categories), words) }
+    }
 }
 
-private val SPACES = Regex("\\s+")
+private fun queryWords(query: String): List<String> = normalize(query).split(NOT_A_WORD).filter { it.isNotEmpty() }
+
+private fun matches(texts: List<Searchable>, words: List<String>): Boolean =
+    words.all { word -> texts.any { it.has(word) } }
+
+private fun searchTexts(pack: StickerPack, categories: Map<String, Category>): List<Searchable> = buildList {
+    add(pack.name)
+    addAll(pack.names.values)
+    addAll(pack.keywords)
+    for (id in listOf(pack.category) + pack.alsoIn) {
+        add(id)
+        val category = categories[id] ?: continue
+        add(category.name)
+        addAll(category.names.values)
+        category.keywords.values.forEach(::addAll)
+    }
+}.map(::searchable)
+
 private val NOT_A_WORD = Regex("[^\\p{L}\\p{M}\\p{N}]+")
 private val MARKS = Regex("[\\p{Mn}\\u0640]")
 private const val ANYWHERE_FROM = 4
@@ -43,7 +61,7 @@ private class Searchable(val text: String) {
     fun has(word: String): Boolean = if (word.length >= ANYWHERE_FROM) text.contains(word) else words.any { it.startsWith(word) }
 }
 
-/** Texts repeat across packs and keystrokes (tag words, category names), so each is prepared once. */
+/** Texts repeat across packs and catalogs (tag words, category names), so each is prepared once. */
 private val prepared = ConcurrentHashMap<String, Searchable>()
 
 private fun searchable(text: String): Searchable = prepared.getOrPut(text) { Searchable(normalize(text)) }

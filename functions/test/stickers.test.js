@@ -70,6 +70,15 @@ test('metadata chunks (C2PA content credentials, EXIF, XMP, unknown) are dropped
   assert.equal(out.buffer.readUInt32LE(4), out.buffer.length - 8);
 });
 
+test('metadata that pushes ready art past 100 KB never costs it its untouched image', async () => {
+  const ready = await sharp(await shapePng()).webp({ quality: 90 }).toBuffer();
+  const tagged = withChunks(ready, [['C2PA', Buffer.alloc(110 * 1024, 3)]]);
+  assert.ok(tagged.length > 100 * 1024);
+  const out = await encodeSticker(tagged, {});
+  assert.equal(out.passthrough, true, 'not re-encoded');
+  assert.ok(out.buffer.equals(ready));
+});
+
 test('an animated sticker loses its trailing C2PA chunk and keeps every frame', async () => {
   const ready = await animated();
   const out = await encodeSticker(withChunks(ready, [['C2PA', Buffer.alloc(5759, 1)]]), {});

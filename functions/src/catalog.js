@@ -89,31 +89,16 @@ function keywordsOf(p) {
 }
 
 /**
- * The entries of a { id: words } dictionary that the catalog uses, in the order first used, under the ids the packs
- * use. With `primaryFallback`, a language code without an entry of its own takes its primary language's ("pt-BR" →
- * "pt"); tag ids never do, since "good-night" is not "good".
- */
-function pick(dictionary, ids, primaryFallback = false) {
-  const out = {};
-  for (const id of ids) {
-    const words = dictionary && (dictionary[id] || (primaryFallback ? dictionary[id.split('-')[0]] : undefined));
-    if (words && !out[id]) out[id] = words;
-  }
-  return out;
-}
-
-/**
- * The catalog file the app downloads: categories in chip order (with live pack counts), live packs in rank order,
- * and the search words of the tags and languages those packs use (from _tags.json).
+ * The catalog file the app downloads: categories in chip order (with live pack counts) and live packs in rank order.
+ * The search words of the tags and languages go in their own file (publishTask.withWordsFile).
  *
  * A pack's categories come from its tags: it shows under every category one of its tags names (categoriesOf), the
  * first being its main one ("category"; the rest are "alsoIn"). A pack with no category tag has category "" and
  * shows in Trending and search only.
  *
- * @param {{version: number, now: Date, categories: object[], packs: object[], vocabulary?: {tags?: object,
- *   languages?: object}}} input
+ * @param {{version: number, now: Date, categories: object[], packs: object[]}} input
  */
-function assembleCatalog({ version, now, categories, packs, vocabulary = {} }) {
+function assembleCatalog({ version, now, categories, packs }) {
   const ranked = rankPacks(packs, now);
   const sorted = [...categories].sort((a, b) => a.order - b.order || (a.id < b.id ? -1 : 1));
   const membership = new Map(ranked.map((p) => [p.id, categoriesOf(tagsOf(p), sorted)]));
@@ -162,8 +147,6 @@ function assembleCatalog({ version, now, categories, packs, vocabulary = {} }) {
     publishedAt: now.toISOString(),
     categories: catalogCategories,
     packs: catalogPacks,
-    tags: pick(vocabulary.tags, catalogPacks.flatMap((p) => p.tags)),
-    languages: pick(vocabulary.languages, catalogPacks.flatMap((p) => p.langs), true),
   };
 }
 

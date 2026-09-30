@@ -31,31 +31,27 @@ function isJunk(file) {
   return file === '' || file.startsWith('.') || JUNK_FILES.has(file.toLowerCase());
 }
 
-/**
- * A pack's library folder: library/<folder>/, or library/<category>/<folder>/ in the older layout, whose
- * category folder still counts as one of the pack's tags.
- */
-function libraryPrefix(category, folder) {
-  return category ? `${LIBRARY_PREFIX}${category}/${folder}/` : `${LIBRARY_PREFIX}${folder}/`;
+/** A pack's library folder: library/<folder>/. */
+function libraryPrefix(folder) {
+  return `${LIBRARY_PREFIX}${folder}/`;
 }
 
 /**
  * What a library object is: the categories or tags file, a pack's build report, a file of a pack
- * (library/<folder>/<file>, or library/<category>/<folder>/<file>), or something the pipeline ignores (staging
- * folders, junk, folder placeholders, anything at another depth).
+ * (library/<folder>/<file>), or something the pipeline ignores (staging folders, junk, folder placeholders, and
+ * anything deeper: a subfolder inside a pack folder is not a pack).
  */
 function parseLibraryPath(objectName) {
   if (objectName === CATEGORIES_FILE) return { kind: 'categories' };
   if (objectName === TAGS_FILE) return { kind: 'tags' };
   if (!objectName.startsWith(LIBRARY_PREFIX)) return { kind: 'ignored' };
   const parts = objectName.slice(LIBRARY_PREFIX.length).split('/');
-  if (parts.length !== 2 && parts.length !== 3) return { kind: 'ignored' };
-  const [file, folder, category = null] = [...parts].reverse();
+  if (parts.length !== 2) return { kind: 'ignored' };
+  const [folder, file] = parts;
   if (!folder || folder.startsWith('_')) return { kind: 'ignored' };
-  if (category !== null && (!category || category.startsWith('_'))) return { kind: 'ignored' };
   if (file === REPORT_FILE) return { kind: 'report' };
   if (isJunk(file) || file.startsWith('_')) return { kind: 'ignored' };
-  return { kind: 'pack', category, folder, packId: slugify(folder), file, prefix: libraryPrefix(category, folder) };
+  return { kind: 'pack', folder, packId: slugify(folder), file, prefix: libraryPrefix(folder) };
 }
 
 /** A Firestore-safe key for a library folder prefix (folder names may hold any character). */

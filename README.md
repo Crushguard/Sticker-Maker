@@ -136,6 +136,7 @@ library/                        (bucket play-console-f33dd-stickermaker, private
   nothing of it reaches `public/`.
 - **Add or update packs:** upload the pack folders into `library/` (Google Cloud console: open the
   bucket, `library/`, drag the folders in; or `node scripts/library/upload.js <folder> --wait`).
+  Only folders directly in `library/` are packs; a subfolder inside a pack folder is ignored.
   `node scripts/library/prepare.js <exportDir>` first writes each folder's `pack.json` from
   `catalog/packs.json`, the reviewed metadata of every pack. The functions convert packs to
   WhatsApp's rules (ready 512×512 WebP ships byte for byte), make the tray and the Home cover

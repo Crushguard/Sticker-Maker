@@ -12,14 +12,14 @@ const { quietTaskId, fastTaskId, fastPathReady, QUIET_DELAY_S, FAST_DELAY_S } = 
  *
  * @returns {Promise<boolean>} whether a build was enqueued
  */
-async function scheduleQuietBuild(deps, { packId, key, category, folder, nowMs, delaySeconds = QUIET_DELAY_S, event = false }) {
-  const meta = { category, folder };
+async function scheduleQuietBuild(deps, { packId, key, folder, nowMs, delaySeconds = QUIET_DELAY_S, event = false }) {
+  const meta = { folder };
   const claimed = event
     ? await deps.store.recordEvent(packId, key, meta, nowMs)
     : await deps.store.claimPending(packId, key, meta, nowMs);
   if (!claimed) return false;
   try {
-    await deps.enqueueBuild({ category, folder, quiet: true, delaySeconds, id: quietTaskId(packId, nowMs) });
+    await deps.enqueueBuild({ folder, quiet: true, delaySeconds, id: quietTaskId(packId, nowMs) });
   } catch (err) {
     await deps.store.clearPending(packId, key);
     throw err;
@@ -50,8 +50,8 @@ async function handleLibraryEvent(objectName, kind, nowMs, deps) {
   }
   if (parsed.kind !== 'pack') return;
 
-  const { category, folder, packId, prefix, file } = parsed;
-  await scheduleQuietBuild(deps, { packId, key: folderKey(prefix), category, folder, nowMs, event: true });
+  const { folder, packId, prefix, file } = parsed;
+  await scheduleQuietBuild(deps, { packId, key: folderKey(prefix), folder, nowMs, event: true });
 
   // The export uploads pack.json last: when it lands on a complete listing, the pack can build without the quiet
   // wait. The build itself keeps that shortcut for packs that were never published.
@@ -68,7 +68,7 @@ async function handleLibraryEvent(objectName, kind, nowMs, deps) {
     .filter((e) => listed.has(e.file) || e.file === 'pack.json')
     .map((e) => `${e.file}#${e.generation}`)
     .sort();
-  await deps.enqueueBuild({ category, folder, delaySeconds: FAST_DELAY_S, id: fastTaskId(packId, generations) });
+  await deps.enqueueBuild({ folder, delaySeconds: FAST_DELAY_S, id: fastTaskId(packId, generations) });
 }
 
 module.exports = { handleLibraryEvent, scheduleQuietBuild };

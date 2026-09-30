@@ -43,34 +43,28 @@ const foldersIn = (dir) =>
   fs.readdirSync(dir).sort().filter((f) => !skipName(f) && fs.statSync(path.join(dir, f)).isDirectory());
 
 /**
- * Packs of a local library: [{ category, folder, dir, files: [names] }]. A folder with files is a pack
- * (library/<folder>/, category null); a folder holding only folders is a category folder of the older layout.
+ * Packs of a local library: [{ folder, dir, files: [names] }], one per folder that holds files. The pipeline only
+ * reads folders directly in library/, so a folder of folders is skipped with a warning.
  */
 function listLocalPacks(libraryDir) {
   const packs = [];
-  for (const name of foldersIn(libraryDir)) {
-    const dir = path.join(libraryDir, name);
+  for (const folder of foldersIn(libraryDir)) {
+    const dir = path.join(libraryDir, folder);
     const files = filesIn(dir);
-    if (files.length) {
-      packs.push({ category: null, folder: name, dir, files });
-      continue;
-    }
-    for (const folder of foldersIn(dir)) {
-      const packDir = path.join(dir, folder);
-      packs.push({ category: name, folder, dir: packDir, files: filesIn(packDir) });
-    }
+    if (files.length) packs.push({ folder, dir, files });
+    else if (foldersIn(dir).length) console.warn(`${folder}/ holds folders, not files: skipped (upload its folders instead)`);
   }
   return packs;
 }
 
 /** A pack's folder in the bucket. */
 function packPrefix(pack) {
-  return pack.category ? `library/${pack.category}/${pack.folder}/` : `library/${pack.folder}/`;
+  return `library/${pack.folder}/`;
 }
 
 /** How a pack is named on the command line and in logs. */
 function packName(pack) {
-  return pack.category ? `${pack.category}/${pack.folder}` : pack.folder;
+  return pack.folder;
 }
 
 function md5(file) {

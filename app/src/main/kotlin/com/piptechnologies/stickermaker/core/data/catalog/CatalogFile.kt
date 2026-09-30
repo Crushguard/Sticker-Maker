@@ -73,7 +73,8 @@ object CatalogFile {
         val langs = o.optJSONArray("langs").strings().ifEmpty { listOf(o.optString("lang", "en").ifBlank { "en" }) }
         val keywords = o.optJSONArray("keywords").strings() +
             o.optJSONArray("tags").strings().flatMap { words.tags[it].orEmpty() } +
-            langs.flatMap { words.languages[it].orEmpty() }
+            // A language code without words of its own takes its primary language's ("pt-BR" → "pt").
+            langs.flatMap { (words.languages[it] ?: words.languages[it.substringBefore('-')]).orEmpty() }
         return StickerPack(
             id = id,
             name = name,

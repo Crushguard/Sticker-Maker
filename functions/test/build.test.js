@@ -27,9 +27,8 @@ const CATEGORIES = [
 const base = (files, extra = {}) => ({
   packId: 'sorry-wiggle',
   folder: 'Sorry Wiggle',
-  folderTags: ['sorry'],
   files,
-  manifestText: null,
+  manifestText: '{"tags":["sorry"]}',
   categories: CATEGORIES,
   live: null,
   ...extra,
@@ -79,7 +78,7 @@ test("pack.json tags choose the categories; the pack's emoji fill stickers witho
     emojis: ['☕', '❤️'],
     stickers: { '2.png': { emojis: ['🌙'] } },
   });
-  const result = await buildPackFromFiles(base(await stickerFiles(3), { folderTags: [], manifestText }));
+  const result = await buildPackFromFiles(base(await stickerFiles(3), { manifestText }));
   assert.deepEqual(result.errors, []);
   assert.deepEqual(result.categories, ['saudi', 'couples']);
   assert.deepEqual(result.record.tags, ['gulf', 'coffee', 'couples']);
@@ -91,7 +90,7 @@ test("pack.json tags choose the categories; the pack's emoji fill stickers witho
 });
 
 test("a pack with no emoji of its own takes its first category's", async () => {
-  const result = await buildPackFromFiles(base(await stickerFiles(3), { folderTags: [], manifestText: '{"tags":["couples","sorry"]}' }));
+  const result = await buildPackFromFiles(base(await stickerFiles(3), { manifestText: '{"tags":["couples","sorry"]}' }));
   assert.deepEqual(result.record.stickers[0].emojis, ['💑']);
   assert.ok(result.notes.some((n) => n.includes("category's emoji 💑")));
 });

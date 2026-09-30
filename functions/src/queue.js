@@ -22,12 +22,9 @@ async function enqueue(functionName, data, options) {
   }
 }
 
-/**
- * A build of library/<folder>/ (library/<category>/<folder>/ in the older layout); quiet builds clear the pack's
- * pending flag when they start.
- */
-function enqueueBuild({ category = null, folder, quiet = false, delaySeconds, id }) {
-  return enqueue(BUILD_FUNCTION, { category, folder, quiet }, { scheduleDelaySeconds: delaySeconds, id });
+/** A build of library/<folder>/; quiet builds clear the pack's pending flag when they start. */
+function enqueueBuild({ folder, quiet = false, delaySeconds, id }) {
+  return enqueue(BUILD_FUNCTION, { folder, quiet }, { scheduleDelaySeconds: delaySeconds, id });
 }
 
 /**

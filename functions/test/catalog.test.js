@@ -126,21 +126,9 @@ test('a record built before tags decided categories keeps its folder category an
   assert.deepEqual([old.category, old.alsoIn, old.lang, old.langs], ['couples', ['sorry'], 'ar', ['ar']]);
 });
 
-test('the catalog carries the search words of the tags and languages its packs use', () => {
-  const vocabulary = {
-    tags: { hug: { en: ['hug'], ar: ['حضن'] }, cat: { en: ['cat'] }, good: { en: ['good'] }, animated: { en: ['animated'], fr: ['animé'] } },
-    languages: { ar: { en: ['arabic'], ar: ['عربي'] }, fr: { en: ['french'] } },
-  };
-  const catalog = assembleCatalog({
-    version: 1,
-    now: NOW,
-    categories: CATEGORIES,
-    packs: [pack('a', { tags: ['sorry', 'hug', 'good-night'], langs: ['ar', 'en', 'fr-CA'], animated: true })],
-    vocabulary,
-  });
-  assert.deepEqual(catalog.tags, { hug: vocabulary.tags.hug, animated: vocabulary.tags.animated });
-  assert.deepEqual(catalog.languages, { ar: vocabulary.languages.ar, 'fr-CA': vocabulary.languages.fr });
-  assert.deepEqual(assembleCatalog({ version: 1, now: NOW, categories: [], packs: [] }).tags, {});
+test('the catalog itself carries no search words: they have their own file', () => {
+  const catalog = assembleCatalog({ version: 1, now: NOW, categories: CATEGORIES, packs: [pack('a')] });
+  assert.deepEqual(Object.keys(catalog), ['schema', 'version', 'publishedAt', 'categories', 'packs']);
 });
 
 test('a catalog pack carries what the app needs and its public paths', () => {

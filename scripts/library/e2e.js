@@ -110,6 +110,14 @@ async function main() {
   if (!entry.category) fail('the pack has no category: its tags name none');
   if (!catalog.categories.some((c) => c.id === entry.category && c.packs >= 1)) fail('category count missing');
 
+  if (!catalog.words || !/^public\/catalog\/words-[0-9a-f]{16}\.json\.gz$/.test(catalog.words.path)) fail('the catalog names no words file');
+  if (catalog.tags || catalog.languages) fail('the catalog still carries its search words inline');
+  const wordsRes = await fetch(urlOf(meta, catalog.words.path));
+  if (!wordsRes.ok) fail(`words file HTTP ${wordsRes.status}`);
+  const words = JSON.parse(zlib.gunzipSync(Buffer.from(await wordsRes.arrayBuffer())).toString('utf8'));
+  if (!words.tags || !words.languages) fail('the words file has no tags or languages');
+  console.log(`✓ words file ${catalog.words.path.split('/').pop()}: ${Object.keys(words.tags).length} tags`);
+
   const cover = await fetch(urlOf(meta, entry.cover.l));
   if (!cover.ok || !(cover.headers.get('content-type') || '').startsWith('image/webp')) fail(`cover HTTP ${cover.status}`);
   const zipRes = await fetch(urlOf(meta, entry.zip.path));

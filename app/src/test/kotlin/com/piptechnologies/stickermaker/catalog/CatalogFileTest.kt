@@ -101,6 +101,14 @@ class CatalogFileTest {
     }
 
     @Test
+    fun aRegionalLanguageCodeTakesItsLanguagesWords() {
+        val catalog = """{ "version": 5, "packs": [
+            { "id": "a", "name": "A", "langs": ["pt-BR"], "zip": { "path": "public/packs/a/v1/pack.zip" } } ] }"""
+        val words = """{ "tags": {}, "languages": { "pt": { "en": ["portuguese"], "ar": ["برتغالي"] } } }"""
+        assertEquals(listOf("portuguese", "برتغالي"), CatalogFile.parse(catalog, urls, words).packs.single().keywords)
+    }
+
+    @Test
     fun aCatalogWithoutWordsOrLanguageListsStillReads() {
         val old = """{ "version": 3, "packs": [ { "id": "a", "name": "A", "lang": "tr", "keywords": ["x"],
             "tags": ["bunny"], "zip": { "path": "public/packs/a/v1/pack.zip" } } ] }"""

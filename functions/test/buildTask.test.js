@@ -11,18 +11,18 @@ const { folderKey } = require('../src/library');
 const { BUILD_RETRY } = require('../src/config');
 
 const A = 'library/Love Notes/';
-/** The same folder name in the older library/<category>/<folder>/ layout. */
-const B = 'library/romantic/Love Notes/';
+/** Another spelling of the same name: the same pack id. */
+const B = 'library/love notes/';
 const ID = 'love-notes';
-const IN_A = { category: null, folder: 'Love Notes' };
+const IN_A = { folder: 'Love Notes' };
 const FILES = ['1.png', '2.png', '3.png', 'pack.json'];
 
 const RED = ['#C23359', '#2E9E6B', '#3B6DD4'];
 const BLUE = ['#1F4E9E', '#9E1F7A', '#E0A64B'];
 
 const png = (color) => shapePng({ color });
-const listingJson = (count) =>
-  Buffer.from(JSON.stringify({ stickers: Array.from({ length: count }, (_, i) => ({ file: `${i + 1}.png` })) }));
+const listingJson = (count, extra = {}) =>
+  Buffer.from(JSON.stringify({ ...extra, stickers: Array.from({ length: count }, (_, i) => ({ file: `${i + 1}.png` })) }));
 
 /** Uploads a folder the way the export does: one sticker every stepMs, pack.json (a listing) last. */
 async function uploadFolder(world, prefix, colors, { listing = true, stepMs = 200 } = {}) {
@@ -241,33 +241,35 @@ test('a second folder with the same name reports a collision, and takes the id o
   const record = world.store.packs.get(ID);
   assert.equal(record.status, 'live');
   assert.equal(record.source.folder, B);
-  assert.deepEqual(record.tags, ['romantic'], 'the older layout\'s category folder counts as a tag');
   assert.equal(record.version, 2);
-  assert.match(world.text(`${B}_report.txt`), /^✅ Love Notes is live: version 2, 3 static stickers, in Romantic\./);
+  assert.match(world.text(`${B}_report.txt`), /^✅ love notes is live: version 2/, 'named after its folder');
 });
 
-test('moving a pack out of an older category folder (delete, then upload flat) publishes it from the new folder', async () => {
+test("renaming a pack's folder (the same id) moves the pack without taking it down", async () => {
   const world = new World();
-  await uploadFolder(world, B, RED);
+  await uploadFolder(world, A, RED);
   await world.settle();
+  const published = world.store.packs.get(ID).publishedAt;
   // A record written before tags decided categories.
   Object.assign(world.store.packs.get(ID), { category: 'romantic', alsoIn: ['cute'], lang: 'en' });
   world.tick(60000);
 
-  for (const file of FILES) await world.remove(`${B}${file}`);
-  await world.settle();
-  assert.equal(world.store.packs.get(ID).status, 'removed');
+  for (const file of FILES) await world.remove(`${A}${file}`);
   world.tick(5000);
-  await uploadFolder(world, A, RED);
+  await uploadFolder(world, B, RED, { listing: false });
+  // Named like the old folder, so the pack's content, and version, stay the same.
+  await world.upload(`${B}pack.json`, listingJson(3, { name: 'Love Notes' }));
   await world.settle();
 
+  const outcomes = world.runs.map((r) => r.outcome);
+  assert.ok(outcomes.includes('moving'), outcomes.join(', '));
+  assert.ok(!outcomes.includes('removed'), 'never taken down');
   const record = world.store.packs.get(ID);
   assert.equal(record.status, 'live');
-  assert.equal(record.source.folder, A);
+  assert.equal(record.source.folder, B);
   assert.equal(record.version, 1, 'the same files keep their version');
-  assert.deepEqual(record.tags, []);
+  assert.equal(record.publishedAt.getTime(), published.getTime(), 'and their date');
   assert.deepEqual([record.category, record.alsoIn, record.lang], [undefined, undefined, undefined]);
-  assert.match(world.text(`${A}_report.txt`), /^✅ Love Notes is live/);
 });
 
 test('an After Dark pack is parked: no build, nothing in public/, and a report that says why', async () => {
@@ -290,6 +292,7 @@ test('a live pack marked adult later is taken down', async () => {
   await world.upload(`${A}pack.json`, Buffer.from(JSON.stringify({ adult: true })));
   await world.settle();
   assert.equal(world.store.packs.get(ID).status, 'removed');
+  assert.deepEqual(world.paths(`public/packs/${ID}/`), [], 'nothing of it stays downloadable');
 });
 
 test('a pack whose public files were wiped gets them back from its next build, as the same version', async () => {
@@ -309,7 +312,7 @@ test('a pack whose public files were wiped gets them back from its next build, a
   assert.match(world.text(`${A}_report.txt`), /written again/);
 });
 
-test('a removed pack that comes back as the other kind is a new pack, one version up', async () => {
+test("a removed pack can't come back as the other kind under its id: phones that added it keep it", async () => {
   const world = new World();
   const moving = await animated();
   for (const i of [1, 2, 3]) await world.upload(`${A}${i}.webp`, moving);
@@ -324,7 +327,8 @@ test('a removed pack that comes back as the other kind is a new pack, one versio
   await world.settle();
 
   const record = world.store.packs.get(ID);
-  assert.deepEqual([record.status, record.animated, record.version], ['live', false, 2]);
+  assert.deepEqual([record.status, record.animated, record.build.status], ['removed', true, 'failed']);
+  assert.match(world.text(`${A}_report.txt`), /This pack was published animated, and WhatsApp can't switch/);
 });
 
 test('deleting every file of a live pack takes it down once the deletions settle, and keeps its files', async () => {

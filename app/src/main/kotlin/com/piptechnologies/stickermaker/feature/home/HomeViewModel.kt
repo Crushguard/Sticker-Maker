@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -204,9 +205,19 @@ class HomeViewModel @Inject constructor(
         HomeData(packs, installed, favorites, categories)
     }
 
+    // Built off the main thread: every keystroke and download-progress tick rebuilds the state, search included.
     val uiState: StateFlow<HomeUiState> =
         combine(dataFlow, controls) { data, c -> buildState(data, c) }
+            .flowOn(ioDispatcher)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState())
+
+    /** The search index of the catalog and categories last searched: rebuilt only when either changes. */
+    @Volatile private var searchIndex: Triple<List<StickerPack>, List<Category>, HomeSearchIndex>? = null
+
+    private fun searchIndexFor(packs: List<StickerPack>, categories: List<Category>): HomeSearchIndex {
+        searchIndex?.let { (p, c, index) -> if (p === packs && c === categories) return index }
+        return HomeSearchIndex(packs, categories).also { searchIndex = Triple(packs, categories, it) }
+    }
 
     // ------------------------------------------------------------- events //
 
@@ -411,10 +422,7 @@ class HomeViewModel @Inject constructor(
         val ordered = catalog.inLanguageOrder(appLanguageTag())
         var list = ordered
         if (searchOpen) {
-            if (query.isNotEmpty()) {
-                val categories = data.categories.associateBy { it.id }
-                list = ordered.filter { matchesQuery(it, query, categories) }
-            }
+            if (query.isNotEmpty()) list = searchIndexFor(catalog, data.categories).filter(ordered, query)
         } else {
             when (chip) {
                 CHIP_TRENDING -> Unit

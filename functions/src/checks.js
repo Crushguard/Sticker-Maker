@@ -16,8 +16,8 @@ function checkPack({ count, kinds, liveAnimated, emojiCounts }) {
     const animated = kinds.has('animated');
     if (animated !== liveAnimated) {
       errors.push(
-        `The live pack is ${liveAnimated ? 'animated' : 'static'} and WhatsApp can't switch an added pack; ` +
-          `put the ${animated ? 'animated' : 'static'} version in a new folder.`
+        `This pack was published ${liveAnimated ? 'animated' : 'static'}, and WhatsApp can't switch a pack people have ` +
+          `added; put the ${animated ? 'animated' : 'static'} version in a new folder.`
       );
     }
   }

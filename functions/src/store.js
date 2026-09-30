@@ -9,7 +9,6 @@ const toMs = (t) => (t && typeof t.toMillis === 'function' ? t.toMillis() : null
 /** builds/<packId>.folders.<key> as the build task reads it. */
 function folderEntry(raw) {
   return {
-    category: raw.category,
     folder: raw.folder,
     lastEventMs: toMs(raw.lastEventAt),
     pending: !!raw.pending,
@@ -26,14 +25,14 @@ function firestoreStore() {
   const buildsRef = (packId) => db().collection('builds').doc(packId);
 
   // Sets the folder's pending flag unless a quiet build is already pending; an event also stamps its time.
-  const claim = (packId, key, { category, folder }, nowMs, event) =>
+  const claim = (packId, key, { folder }, nowMs, event) =>
     db().runTransaction(async (tx) => {
       const ref = buildsRef(packId);
       const snap = await tx.get(ref);
       const raw = snap.exists ? (snap.data().folders || {})[key] : null;
       const schedule = !isPending(raw ? folderEntry(raw) : null, nowMs);
       const at = Timestamp.fromMillis(nowMs);
-      const entry = { category, folder };
+      const entry = { folder };
       if (event) entry.lastEventAt = at;
       if (schedule) Object.assign(entry, { pending: true, pendingSince: at });
       tx.set(ref, { folders: { [key]: entry } }, { merge: true });

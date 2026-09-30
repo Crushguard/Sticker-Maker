@@ -86,9 +86,10 @@ library/
 
 - Pack id: the folder name lowercased, accents stripped, runs of anything but `a-z0-9` turned into one `-`,
   trimmed; 2–64 characters. Renaming the folder makes a new pack; rename with `pack.json` `name` instead.
-- Categories: the pack's tags decide them (see `_categories.json`). The older `library/<category>/<Pack Name>/`
-  layout still builds, its category folder counting as the pack's first tag; it stays readable so the packs uploaded
-  that way can be deleted and moved.
+- Categories: the pack's tags decide them (see `_categories.json`).
+- Only folders directly in `library/` are packs. Anything deeper is ignored: a subfolder inside a pack folder is not
+  a pack. The older `library/<category>/<Pack Name>/` layout is gone (production moved to flat folders on
+  2026-09-30).
 - Inputs: PNG, WebP (static or animated) and GIF, up to 10 MB each. Anything else is skipped with a note.
 
 ### `pack.json` (all fields optional)
@@ -121,8 +122,8 @@ library/
 - `emojis`: 1–3, the default for stickers without their own (else the main category's, else ❤️).
 - `keywords` (≤ 40 phrases): extra search words, such as the stickers' lines.
 - `order`: tie-breaker in ranking (lower first; default 1000).
-- `adult: true`: After Dark (18+). The pack is parked: never built, nothing reaches `public/`, a live one is taken
-  down. The Google Play build never lists these packs.
+- `adult: true`: After Dark (18+). The pack is parked: never built, nothing reaches `public/`, and a live one is taken
+  down and its files deleted from `public/`. The Google Play build never lists these packs.
 - `animate: "wiggle"`: makes the pack animated. Static stickers get a synthesized 4-frame wiggle; animated ones ship as
   they are (the launch fixtures' "animated" packs). WhatsApp takes a pack all static or all animated.
 - `cover`: the 6 stickers on the Home card (default: the first 6).
@@ -238,12 +239,15 @@ tray ≤ 50 KB; the pack id is not used by another folder that still has files.
 - A failed build leaves the live version and its record; putting the live files back clears the failure.
 - An emptied folder whose pack came from it: status `removed`, catalog republished, and any other folder holding the
   same pack id builds next (a move out of an older category folder). People who added it keep it.
-- A removed pack that comes back is a new pack: its old static or animated kind no longer binds it, its version still
-  goes up, and it counts as new for ranking.
+- A removed pack that comes back keeps its id's kind: phones that added it keep it under that id, and WhatsApp can't
+  switch an added pack between static and animated. Its version still goes up, and it counts as new for ranking.
+- A folder renamed to another spelling of its name (the same id) moves the pack: the emptied folder's build sees the
+  new one and hands the pack over without taking it down, and the pack keeps its date.
 - Records written before tags decided categories carry `category`, `alsoIn` and `lang`; the catalog still reads them
   as tags until the pack's next build drops them.
 - Metadata never ships (2026-09-30): every sticker loses its metadata chunks (EXIF, XMP, C2PA content credentials,
-  unknown chunks); the image chunks stay byte for byte. Found on a device: WhatsApp's add sheet showed no stickers for
+  unknown chunks) before anything is decided, so a chunk can't push ready art past a size limit into a re-encode; the
+  image chunks stay byte for byte. Found on a device: WhatsApp's add sheet showed no stickers for
   any pack of the Claude Design export, whose every sticker carries a C2PA chunk (written by the AI image and video
   tools); the same packs without it showed and added normally. `upload.js --rebuild` rebuilds every pack after such a
   pipeline change.
@@ -296,9 +300,10 @@ later request); a publish whose catalog is identical to the live one writes noth
   `https://<cdn host>/{rawPath}`; the app needs no update.
 - Since 2026-09-30 the catalog carries `"words": { "path": "public/catalog/words-<hash16>.json.gz" }` instead of the
   inline `tags` and `languages`: they were 60% of the gzipped catalog (36 of 60 KB for 116 packs) and change only with
-  `_tags.json`, while every pack change republishes the catalog. The words file is written before the catalog that
-  names it, only when new, and again if it goes missing; the app keeps the last one and fetches another only when the
-  name changes.
+  `_tags.json`, while every pack change republishes the catalog. The file is the whole vocabulary with its keys
+  sorted, so its name changes only with `_tags.json`, never with the packs or their ranking. It is written before the
+  catalog that names it, only when new, and again if it goes missing; the app keeps the last one, fetches another
+  only when the name changes, and gives a regional code its language's words ("pt-BR" → "pt").
 - Publishes are coalesced into 20 s windows (one Cloud Tasks id per window, run 5 s after it closes), so a bulk upload
   of 116 packs makes a handful of catalog versions instead of about 80. The Cloud Tasks emulator ignores schedule
   times, so there every request stays its own task.

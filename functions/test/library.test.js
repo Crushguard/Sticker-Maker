@@ -35,7 +35,6 @@ test('parseLibraryPath recognizes the categories and tags files', () => {
 test('parseLibraryPath splits a pack file into folder, id and file', () => {
   assert.deepEqual(parseLibraryPath('library/Sorry Wiggle/01.webp'), {
     kind: 'pack',
-    category: null,
     folder: 'Sorry Wiggle',
     packId: 'sorry-wiggle',
     file: '01.webp',
@@ -43,20 +42,13 @@ test('parseLibraryPath splits a pack file into folder, id and file', () => {
   });
 });
 
-test('parseLibraryPath still reads the older library/<category>/<folder>/ layout', () => {
-  assert.deepEqual(parseLibraryPath('library/sorry/Sorry Wiggle/01.webp'), {
-    kind: 'pack',
-    category: 'sorry',
-    folder: 'Sorry Wiggle',
-    packId: 'sorry-wiggle',
-    file: '01.webp',
-    prefix: 'library/sorry/Sorry Wiggle/',
-  });
+test('a subfolder inside a pack folder is not a pack, nor is the older library/<category>/<folder>/ layout', () => {
+  assert.deepEqual(parseLibraryPath('library/Clingy Mango/extras/01.png'), { kind: 'ignored' });
+  assert.deepEqual(parseLibraryPath('library/sorry/Sorry Wiggle/01.webp'), { kind: 'ignored' });
 });
 
 test('parseLibraryPath reports the build report as its own kind', () => {
   assert.deepEqual(parseLibraryPath('library/Sorry Wiggle/_report.txt'), { kind: 'report' });
-  assert.deepEqual(parseLibraryPath('library/sorry/Sorry Wiggle/_report.txt'), { kind: 'report' });
 });
 
 test('parseLibraryPath ignores staging, underscored folders and junk', () => {
@@ -103,7 +95,6 @@ test('folderKey gives each folder prefix a stable key Firestore accepts', () => 
   assert.notEqual(folderKey('library/love notes/'), key);
 });
 
-test('libraryPrefix names a flat folder, or one inside a category folder', () => {
-  assert.equal(libraryPrefix(null, 'Love Notes'), 'library/Love Notes/');
-  assert.equal(libraryPrefix('cute', 'Love Notes'), 'library/cute/Love Notes/');
+test("libraryPrefix names a pack's folder", () => {
+  assert.equal(libraryPrefix('Love Notes'), 'library/Love Notes/');
 });

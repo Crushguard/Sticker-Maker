@@ -16,7 +16,7 @@ const RECORD_KEYS_COMPARED = ['name', 'names', 'langs', 'tags', 'keywords', 'ord
 /** Versions kept in public/: phones mid-download, or on a catalog a publish or two behind, still finish. */
 const KEEP_VERSIONS = 3;
 /** Outcomes of a build that looked at its folder: each ends with a publish request. */
-const LOOKED = new Set(['published', 'updated', 'restored', 'unchanged', 'failed', 'collision', 'removed', 'empty', 'parked']);
+const LOOKED = new Set(['published', 'updated', 'restored', 'unchanged', 'failed', 'collision', 'removed', 'moving', 'empty', 'parked']);
 /** The files of a published version, in its public/packs/<id>/v<n>-<hash8>/ folder. */
 const OUTPUT_FILES = [
   ['cover-s.webp', 'coverS', 'image/webp'],
@@ -57,17 +57,14 @@ async function deleteOldVersions(packId, version, deps) {
 async function otherFoldersWithFiles(prefix, folders, deps) {
   const others = [];
   for (const [key, f] of Object.entries(folders)) {
-    if (!f.folder || libraryPrefix(f.category, f.folder) === prefix) continue;
-    if ((await packEntries(libraryPrefix(f.category, f.folder), deps)).length) {
-      others.push({ key, category: f.category, folder: f.folder });
-    }
+    if (!f.folder || libraryPrefix(f.folder) === prefix) continue;
+    if ((await packEntries(libraryPrefix(f.folder), deps)).length) others.push({ key, folder: f.folder });
   }
   return others;
 }
 
 /**
- * Builds the pack in library/<folder>/ (library/<category>/<folder>/ in the older layout) and publishes it when it
- * passes. Safe to run any number of times, in any order: one build per pack id runs at a time (a lease in
+ * Builds the pack in library/<folder>/ and publishes it when it passes. Safe to run any number of times, in any order: one build per pack id runs at a time (a lease in
  * builds/<packId>), the record only moves on from the version the build started from, and every version's files sit
  * in a folder named after their content.
  *
@@ -75,16 +72,16 @@ async function otherFoldersWithFiles(prefix, folders, deps) {
  * changing they wait by retrying. Fast builds, scheduled by the pack.json that completes a new pack, only save that
  * wait: they stop whenever they can't build right away, because the folder's quiet build always follows.
  *
- * @param {{category?: string|null, folder: string, quiet?: boolean}} task
+ * @param {{folder: string, quiet?: boolean}} task
  * @param {object} deps the clock, the bucket, the store (packs/, builds/, categories/) and the queue: deps.js in the
  *   cloud, test/fakes.js in tests
  * @param {{holder?: string}} [options] who holds the pack's lease: the Cloud Tasks task id, so a retry of a task
  *   whose instance died mid-build takes its lease straight back
  */
-async function runBuild({ category = null, folder, quiet = false }, deps, { holder = crypto.randomUUID() } = {}) {
+async function runBuild({ folder, quiet = false }, deps, { holder = crypto.randomUUID() } = {}) {
   const now = deps.now();
-  const prefix = libraryPrefix(category, folder);
-  const job = { category, folder, quiet, now, nowMs: now.getTime(), prefix, packId: slugify(folder), key: folderKey(prefix) };
+  const prefix = libraryPrefix(folder);
+  const job = { folder, quiet, now, nowMs: now.getTime(), prefix, packId: slugify(folder), key: folderKey(prefix) };
   const { store } = deps;
   // A quiet build clears its folder's pending flag before it looks at the folder: any event from here on schedules
   // another quiet build, so no change can slip between this listing and the next build.
@@ -92,7 +89,7 @@ async function runBuild({ category = null, folder, quiet = false }, deps, { hold
   job.wait = async (reason) => {
     if (!quiet) return { outcome: 'deferred', packId: job.packId, reason };
     // Waiting, this build is the folder's pending one again, unless an event scheduled a newer one meanwhile.
-    const stillMine = await store.claimPending(job.packId, job.key, { category, folder }, job.nowMs);
+    const stillMine = await store.claimPending(job.packId, job.key, { folder }, job.nowMs);
     if (!stillMine) return { outcome: 'superseded', packId: job.packId, reason };
     throw new NotQuietYet(`${prefix}: ${reason}`);
   };
@@ -118,7 +115,7 @@ async function runBuild({ category = null, folder, quiet = false }, deps, { hold
 
 async function buildLocked(job, deps) {
   const { store } = deps;
-  const { category, folder, quiet, now, nowMs, prefix, packId, key } = job;
+  const { folder, quiet, now, nowMs, prefix, packId, key } = job;
   const reportPath = `${prefix}${REPORT_FILE}`;
   const [live, folders, entries] = await Promise.all([store.readPack(packId), store.readFolders(packId), packEntries(prefix, deps)]);
   const lastEventMs = folders[key] ? folders[key].lastEventMs : null;
@@ -127,10 +124,12 @@ async function buildLocked(job, deps) {
     if (!quiet) return job.wait('the folder is empty');
     if (mustWait({ fastReady: false, newestObjectMs: 0, lastEventMs, nowMs })) return job.wait('files are still being deleted');
     if (!(live && live.source && live.source.folder === prefix && live.status !== 'removed')) return { outcome: 'empty', packId };
+    // A renamed folder that keeps the id (another spelling of the name): the new folder builds next and takes the pack
+    // over, which stays live meanwhile, with its date.
+    const others = await otherFoldersWithFiles(prefix, folders, deps);
+    if (others.length) return { outcome: 'moving', packId, rebuild: others };
     await store.mergePack(packId, { status: 'removed', removedAt: now });
-    // The pack may live on in another folder with the same name (moved out of an older category folder, say): it
-    // builds next.
-    return { outcome: 'removed', packId, rebuild: await otherFoldersWithFiles(prefix, folders, deps) };
+    return { outcome: 'removed', packId };
   }
 
   // A file replaced, added or deleted while the build reads the folder would mix two uploads. The event that changed
@@ -159,8 +158,12 @@ async function buildLocked(job, deps) {
 
   const liveVersion = live && live.status === 'live' ? live.version : null;
   if (quick.adult) {
-    // After Dark packs are never built for the Google Play catalog: nothing of them reaches public/.
-    if (liveVersion && live.source && live.source.folder === prefix) await store.mergePack(packId, { status: 'removed', removedAt: now });
+    // After Dark packs are never built for the Google Play catalog: nothing of them reaches public/, and a live pack
+    // marked adult leaves it.
+    if (liveVersion && live.source && live.source.folder === prefix) {
+      await store.mergePack(packId, { status: 'removed', removedAt: now });
+      await Promise.all((await deps.listPaths(publicPrefix(packId))).map((path) => deps.deletePath(path)));
+    }
     await deps.saveText(reportPath, renderReport({ parked: true, name: quick.name, at: now }));
     return { outcome: 'parked', packId };
   }
@@ -189,16 +192,12 @@ async function buildLocked(job, deps) {
   const files = downloads.value;
   const published = await deps.listPaths(publicPrefix(packId));
 
-  // A removed pack that comes back is a new pack: its old kind (static or animated) no longer binds it, but its
-  // version number still only goes up.
-  const previous =
-    live && live.version
-      ? { version: live.version, contentHash: live.contentHash, animated: live.status === 'live' ? live.animated : null }
-      : null;
+  // Phones keep a pack under its id even after it leaves the catalog, and WhatsApp can't switch an added pack between
+  // static and animated: the kind binds the id for good, removed or not.
+  const previous = live && live.version ? { version: live.version, contentHash: live.contentHash, animated: live.animated } : null;
   const result = await buildPackFromFiles({
     packId,
     folder,
-    folderTags: category ? [category] : [],
     files,
     manifestText,
     categories,
@@ -274,14 +273,14 @@ async function buildLocked(job, deps) {
 }
 
 /** The report of a build that kept failing for a reason the pipeline didn't expect. */
-async function reportCrash({ category, folder }, err, deps) {
+async function reportCrash({ folder }, err, deps) {
   const live = await deps.store.readPack(slugify(folder));
   const errors = [
     `The build failed ${BUILD_RETRY.maxAttempts} times with an unexpected error (${err.message}). ` +
       'Upload any file of the folder again to retry.',
   ];
   await deps.saveText(
-    `${libraryPrefix(category, folder)}${REPORT_FILE}`,
+    `${libraryPrefix(folder)}${REPORT_FILE}`,
     renderReport({
       ok: false,
       name: (live && live.name) || folder,
@@ -298,7 +297,7 @@ async function reportCrash({ category, folder }, err, deps) {
  * backoff). On the last attempt a wait moves to a fresh task, so a long upload never runs out of retries, and an
  * unexpected error still leaves the author a report.
  *
- * @param {{category?: string|null, folder: string, quiet?: boolean}} task
+ * @param {{folder: string, quiet?: boolean}} task
  * @param {{retryCount?: number, taskId?: string}} attempt
  * @param {object} deps see runBuild
  */
@@ -310,11 +309,11 @@ async function runBuildTask(task, { retryCount = 0, taskId } = {}, deps) {
     if (!lastAttempt) throw err;
     const packId = slugify(task.folder);
     if (err instanceof NotQuietYet) {
-      const { category, folder } = task;
+      const { folder } = task;
       try {
-        await deps.enqueueBuild({ category, folder, quiet: true, delaySeconds: QUIET_DELAY_S, id: quietTaskId(packId, deps.now().getTime()) });
+        await deps.enqueueBuild({ folder, quiet: true, delaySeconds: QUIET_DELAY_S, id: quietTaskId(packId, deps.now().getTime()) });
       } catch (enqueueErr) {
-        await deps.store.clearPending(packId, folderKey(libraryPrefix(category, folder)));
+        await deps.store.clearPending(packId, folderKey(libraryPrefix(folder)));
         throw enqueueErr;
       }
       return { outcome: 'rescheduled', packId };

@@ -60,15 +60,14 @@ function failure(errors, notes) {
  * @param {object} input
  * @param {string} input.packId
  * @param {string} input.folder
- * @param {string[]} [input.folderTags] tags the folder's place gives it (the category folder of the older layout)
  * @param {{name: string, buffer: Buffer}[]} input.files every file of the folder except pack.json
  * @param {string|null} input.manifestText pack.json, if any
  * @param {{id: string, tags?: string[], emojis?: string[]}[]} [input.categories] the catalog's categories
- * @param {{version: number, contentHash: string, animated: boolean|null}|null} input.live the version the pack had,
- *   if any; animated is null when it isn't live, so its kind no longer binds the new files
+ * @param {{version: number, contentHash: string, animated: boolean}|null} input.live the version the pack had, if
+ *   any, live or removed: its kind binds the id for good
  * @param {{version: number, hash: string|null}[]} [input.published] the version folders already in public/
  */
-async function buildPackFromFiles({ packId, folder, folderTags = [], files, manifestText, categories = [], live, published = [] }) {
+async function buildPackFromFiles({ packId, folder, files, manifestText, categories = [], live, published = [] }) {
   const notes = [];
   const skipped = files.filter((f) => !isImageName(f.name)).map((f) => f.name);
   if (skipped.length) notes.push(`Skipped files that aren't PNG, WebP or GIF: ${skipped.join(', ')}.`);
@@ -84,7 +83,7 @@ async function buildPackFromFiles({ packId, folder, folderTags = [], files, mani
   notes.push(...manifest.notes);
   if (errors.length) return failure(errors, notes);
 
-  const tags = [...new Set([...folderTags, ...manifest.tags])];
+  const tags = manifest.tags;
   const packCategories = categoriesOf(tags, categories);
   const firstCategory = categories.find((c) => c.id === packCategories[0]);
   const filled = fillEmojis(manifest, firstCategory ? firstCategory.emojis : []);

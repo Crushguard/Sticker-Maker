@@ -57,7 +57,6 @@ test('an upload without a listing pack.json schedules only the quiet build', asy
   await world.upload(`${PACK}02.png`, png);
   const [only, ...rest] = builds(world);
   assert.deepEqual(rest, []);
-  assert.equal(only.category, null);
   assert.equal(only.folder, 'Sorry Wiggle');
   assert.equal(only.delaySeconds, 45);
   assert.equal(only.quiet, true);
@@ -108,7 +107,6 @@ test('every pack event records when it happened in its folder', async () => {
   await world.upload(`${PACK}_report.txt`, Buffer.from('report'));
   await world.upload('library/_categories.json', Buffer.from('{}'));
   assert.deepEqual(folderState(world), {
-    category: null,
     folder: 'Sorry Wiggle',
     lastEventMs: first,
     pending: true,
@@ -129,10 +127,10 @@ test('while a quiet build is pending, more events only record their time', async
 
 test('two folders that give the same pack id each get their own quiet build', async () => {
   const world = new World();
-  const other = 'library/cute/Sorry Wiggle/';
+  const other = 'library/sorry wiggle/';
   await world.remove(`${PACK}01.png`);
   await world.upload(`${other}01.png`, png);
-  assert.deepEqual(builds(world).map((b) => [b.category, b.quiet]), [[null, true], ['cute', true]]);
+  assert.deepEqual(builds(world).map((b) => [b.folder, b.quiet]), [['Sorry Wiggle', true], ['sorry wiggle', true]]);
   assert.equal(folderState(world).pending, true);
   assert.equal(folderState(world, other).pending, true);
 });

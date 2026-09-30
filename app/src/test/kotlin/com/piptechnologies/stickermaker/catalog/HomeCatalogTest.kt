@@ -84,6 +84,26 @@ class HomeCatalogTest {
     }
 
     @Test
+    fun punctuationInTheQueryIsIgnoredLikeInTheTexts() {
+        val p = pack(keywords = listOf("u up?", "i'm sorry"))
+        assertTrue(matchesQuery(p, "u up?", categories), "a query ending in ?")
+        assertTrue(matchesQuery(p, "i'm sorry", categories), "a query with an apostrophe")
+    }
+
+    @Test
+    fun theSearchIndexFindsWhatMatchesQueryFinds() {
+        val packs = listOf(
+            pack(id = "a", keywords = listOf("cat", "قطة")),
+            pack(id = "b", name = "Dance", keywords = listOf("dance")),
+            pack(id = "c", name = "Other", category = "couples"),
+        )
+        val index = com.piptechnologies.stickermaker.feature.home.HomeSearchIndex(packs, categories.values.toList())
+        for (query in listOf("cat", "قطه", "dance", "couples", "sorry", "wiggle", "")) {
+            assertEquals(query, packs.filter { matchesQuery(it, query, categories) }.map { it.id }, index.filter(packs, query).map { it.id })
+        }
+    }
+
+    @Test
     fun accentsCaseAndArabicSpellingVariantsDoNotMatter() {
         val p = pack(keywords = listOf("bebê", "آسف", "قطة", "मेरी जान", "دوستت دارم"), names = mapOf("ar" to "إشتقت لك"))
         assertTrue(matchesQuery(p, "BEBE", categories))

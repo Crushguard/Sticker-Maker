@@ -178,7 +178,8 @@ async function assertWhatsAppReady(buffer) {
  * into 512×512 on transparency and encoded at the best quality that fits. Metadata chunks never ship.
  */
 async function encodeSticker(buf, options = {}) {
-  const out = await encode(buf, options);
+  // Stripped first, so the chunk never decides whether ready art ships untouched (it can push it past 100 KB).
+  const out = await encode(withoutMetadata(buf), options);
   return { ...out, buffer: withoutMetadata(out.buffer) };
 }
 
