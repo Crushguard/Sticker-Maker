@@ -166,6 +166,19 @@ class CreatePackViewModelLayerToolsTest {
     }
 
     @Test
+    fun aCancelledMarkerLeavesNothingBehind() {
+        cutOut(1)
+        vm.selectTool(EditorTool.Draw)
+        vm.beginMarker(100f, 100f)
+        assertTrue("the stroke is an undo step while it is drawn", state.canUndo)
+        vm.cancelMarker()
+        assertFalse(state.canUndo)
+        vm.selectTool(EditorTool.Auto)                                // leaving Draw would make the drawing
+        assertTrue("no dot became a layer", state.layers.isEmpty())
+        assertFalse(state.canUndo)
+    }
+
+    @Test
     fun oneGestureStepMovesScalesAndTurnsTheLayerAndOneUndoTakesItBack() {
         cutOut(1)
         vm.addEmoji("red_heart.webp")

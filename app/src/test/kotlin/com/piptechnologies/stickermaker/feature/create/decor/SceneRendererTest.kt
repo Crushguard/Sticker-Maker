@@ -102,6 +102,42 @@ class SceneRendererTest {
     }
 
     @Test
+    fun anOutlineChangeCrossfadesAsOneOpaqueShape() {
+        val rose = OutlineStyle(true, OutlineThickness.Thick, DecorSpec.ROSE)
+        val inked = OutlineStyle(true, OutlineThickness.Thick, ink)
+        fun draw(outline: OutlineStyle, from: OutlineStyle?, blend: Float): Bitmap {
+            val out = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888)
+            renderer.drawSticker(Canvas(out), scene(emptyList(), outline), outlineFrom = from, outlineBlend = blend)
+            return out
+        }
+        // In the ring, 6 px outside the disc (the outline reaches 13 px).
+        val x = 256 + 100 + 6
+        val y = 256
+        fun ring(outline: OutlineStyle, from: OutlineStyle?, blend: Float) = draw(outline, from, blend).getPixel(x, y)
+        fun half(a: Int, b: Int) = (a + b) / 2
+        val mix = Color.rgb(
+            half(Color.red(DecorSpec.ROSE), Color.red(ink)),
+            half(Color.green(DecorSpec.ROSE), Color.green(ink)),
+            half(Color.blue(DecorSpec.ROSE), Color.blue(ink))
+        )
+        assertTrue("at 0 the old colour", Pixels.within(ring(inked, rose, 0f), DecorSpec.ROSE, 3))
+        val halfWay = ring(inked, rose, 0.5f)
+        assertTrue("half way, half of each", Pixels.within(halfWay, mix, 4))
+        assertTrue("and as opaque as either", Pixels.alpha(halfWay) >= 253)
+        assertEquals("at 1 the new outline, as without a fade", ring(inked, null, 1f), ring(inked, rose, 1f))
+
+        val off = OutlineStyle(on = false, thickness = OutlineThickness.Thick, colour = DecorSpec.ROSE)
+        assertEquals("switched off, the outline fades out", 191f, Pixels.alpha(ring(off, rose, 0.25f)).toFloat(), 3f)
+        assertEquals("switched on, it fades in", 64f, Pixels.alpha(ring(rose, off, 0.25f)).toFloat(), 3f)
+        assertEquals("nothing is left of an outline switched off", 0, Pixels.alpha(ring(off, rose, 1f)))
+
+        val thin = rose.copy(thickness = OutlineThickness.Thin)
+        assertEquals("a thickness change snaps", ring(inked, null, 1f), ring(inked, thin, 0.2f))
+        val centre = draw(inked, rose, 0.5f).getPixel(256, 256)
+        assertEquals("the subject is untouched by a fade", disc.getPixel(256, 256), centre)
+    }
+
+    @Test
     fun liveGestureDrawsTheCachedSizeAtTheLayersScale() {
         fun alone(layer: Layer) = SceneRenderer.Scene(null, null, DecorState(listOf(layer), OutlineStyle(on = false)))
         renderer.renderStill(alone(heart))

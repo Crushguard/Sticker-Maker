@@ -224,6 +224,30 @@ class DecorEditorTest {
     }
 
     @Test
+    fun aCancelledStrokeLeavesNoDotAndNoUndoStep() {
+        assertFalse("nothing to cancel", editor.cancelStroke())
+        editor.beginStroke(10f, 10f, DecorSpec.ROSE, MarkerSize.M)
+        assertTrue(editor.canUndo)
+        assertTrue(editor.cancelStroke())
+        assertTrue(editor.liveStrokes.isEmpty())
+        assertFalse(editor.canUndo)
+        editor.extendStroke(30f, 30f)                        // a stray move after the cancel is ignored
+        assertTrue(editor.liveStrokes.isEmpty())
+        assertNull(editor.flushLiveStrokes())
+
+        // Only the stroke being drawn goes: the one before it keeps its points and its step.
+        editor.beginStroke(10f, 10f, DecorSpec.ROSE, MarkerSize.M)
+        editor.extendStroke(40f, 10f); editor.endStroke()
+        editor.beginStroke(90f, 90f, DecorSpec.ROSE, MarkerSize.M)
+        assertTrue(editor.cancelStroke())
+        assertFalse("a finished stroke is not cancelled", editor.cancelStroke())
+        assertEquals(listOf(Pt(10f, 10f), Pt(40f, 10f)), editor.liveStrokes.single().points)
+        assertEquals(UndoResult.Changed, editor.undo())
+        assertTrue(editor.liveStrokes.isEmpty())
+        assertEquals(UndoResult.Nothing, editor.undo())
+    }
+
+    @Test
     fun strokesAreRefusedAtTheLayerLimit() {
         repeat(8) { editor.add(decor()) }
         assertFalse(editor.beginStroke(0f, 0f, DecorSpec.ROSE, MarkerSize.M))

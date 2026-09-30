@@ -3,6 +3,8 @@ package com.piptechnologies.stickermaker.feature.create.editor
 import android.graphics.Matrix
 import android.graphics.Paint
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -35,12 +37,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -96,8 +100,10 @@ import com.piptechnologies.stickermaker.feature.create.LayerUi
 import com.piptechnologies.stickermaker.feature.create.decor.Affine
 import com.piptechnologies.stickermaker.feature.create.decor.MotionMath
 import com.piptechnologies.stickermaker.feature.create.decor.MotionPreset
+import com.piptechnologies.stickermaker.feature.create.decor.OutlineStyle
 import com.piptechnologies.stickermaker.feature.create.decor.SceneRenderer
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 /** Test tag of the cut-out canvas, used by the on-device screen tour. */
 const val EDITOR_CANVAS_TAG = "editorCanvas"
@@ -113,6 +119,8 @@ private const val ZOOM_SCALE = 1.6f
 private const val MAX_ZOOM = 4f
 /** Layers fade to and from 40% over this long when Brush or Erase starts or ends (spec §6). */
 private const val DIM_FADE_MS = 120
+/** A change of the outline's switch or colour crossfades over this long (spec §5). */
+private const val OUTLINE_FADE_MS = 160
 /** A second tap this close to the first makes a double tap. */
 private val DoubleTapSlop = 24.dp
 /** The action pill keeps this far from the card's sides; where it can't, its labels hide. */
@@ -190,6 +198,51 @@ internal class CanvasViewport(private val motion: State<MotionPreset?>) {
     }
 }
 
+/**
+ * The die-cut outline's crossfade on the live canvas (spec §5): the outline the canvas fades [from] and
+ * how far the sticker's own is in ([blend]). [show] hears what each sticker shows as the canvas
+ * composes; a change that fades ([outlineFadeFrom]) starts at 0, for [play] to run.
+ */
+@Stable
+internal class OutlineFade {
+    private var sticker: Int? = null
+    private var shown: OutlineStyle? = null
+    private var run = 0
+
+    /** The outline fading out; null while none is. */
+    var from: OutlineStyle? = null
+        private set
+
+    /** How far the sticker's outline is in: 0 as a fade starts, 1 once it is over. Snapshot state. */
+    var blend by mutableFloatStateOf(1f)
+        private set
+
+    /**
+     * Sticker number [sticker] shows [outline] now. Returns true when that starts a fade: its switch or
+     * colour changed, and nothing asks to [snap] (reduced motion, no cut-out to draw yet). Another
+     * sticker, another thickness or a snap shows the outline at once and ends a fade in flight.
+     */
+    fun show(sticker: Int, outline: OutlineStyle, snap: Boolean): Boolean {
+        val previous = shown.takeIf { this.sticker == sticker }
+        this.sticker = sticker
+        shown = outline
+        if (previous == outline) return false
+        run++
+        from = if (snap) null else outlineFadeFrom(previous, outline)
+        blend = if (from == null) 1f else 0f
+        return from != null
+    }
+
+    /** Plays the fade [show] started last, over 160 ms; a change shown meanwhile takes over. */
+    suspend fun play() {
+        val mine = run
+        animate(0f, 1f, animationSpec = tween(OUTLINE_FADE_MS, easing = LinearEasing)) { value, _ ->
+            if (mine == run) blend = value
+        }
+        if (mine == run) from = null
+    }
+}
+
 // ------------------------------------------------------------------- card
 
 /**
@@ -250,7 +303,8 @@ internal fun EditorCanvasCard(state: CreateUiState, viewModel: CreatePackViewMod
                 viewModel = viewModel,
                 viewport = viewport,
                 particles = motion?.takeIf { animating },
-                layerOpacity = { layerOpacity.value }
+                layerOpacity = { layerOpacity.value },
+                reduceMotion = reduceMotion
             )
         }
         ZoomButton(
@@ -351,7 +405,8 @@ private suspend fun playMotion(
 /**
  * The canvas box: the checker and the sticker's scene in [viewport]'s view, in its motion pose, with
  * the layers at [layerOpacity] and, while a preset plays, its [particles] over it; the raw picture
- * while the cut-out runs, under the veil. The clip length sits in its corner.
+ * while the cut-out runs, under the veil. The clip length sits in its corner. A change of the
+ * outline's switch or colour crossfades over 160 ms, and snaps with [reduceMotion].
  */
 @Composable
 private fun LiveCanvas(
@@ -359,7 +414,8 @@ private fun LiveCanvas(
     viewModel: CreatePackViewModel,
     viewport: CanvasViewport,
     particles: MotionPreset?,
-    layerOpacity: () -> Float
+    layerOpacity: () -> Float,
+    reduceMotion: Boolean
 ) {
     val bitmapPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG) }
     val checkerPaint = remember { Paint() }
@@ -370,6 +426,15 @@ private fun LiveCanvas(
     val cutDone = state.activeCut == CutStatus.Done
     val editorTick = state.editorTick
     val liveLayerId = state.liveLayerId
+    val outlineFade = remember { OutlineFade() }
+    val fadeScope = rememberCoroutineScope()
+    val sticker = state.activeIndex
+    val outline = state.outline
+    val snapOutline = reduceMotion || !cutDone
+    // After the composition, before its draw: the first frame of a change already shows the old outline.
+    SideEffect {
+        if (outlineFade.show(sticker, outline, snapOutline)) fadeScope.launch { outlineFade.play() }
+    }
     Box(
         Modifier
             .fillMaxSize()
@@ -397,7 +462,13 @@ private fun LiveCanvas(
                         poseMatrix.setValues(viewport.pose().writeMatrix(matrixValues))
                         nc.concat(poseMatrix)
                     }
-                    renderer.drawSticker(nc, scene, liveLayerId = liveLayerId, layerOpacity = layerOpacity())
+                    renderer.drawSticker(
+                        nc, scene,
+                        liveLayerId = liveLayerId,
+                        layerOpacity = layerOpacity(),
+                        outlineFrom = outlineFade.from,
+                        outlineBlend = outlineFade.blend
+                    )
                     nc.restore()
                     particles?.let { renderer.drawParticles(nc, MotionMath.particles(it, viewport.timeMs)) }
                 } else {
@@ -457,10 +528,11 @@ private fun drawChecker(canvas: android.graphics.Canvas, paint: Paint) {
 /**
  * Every touch on the canvas (spec §6, §8). Brush and Erase paint the mask with one finger or, while
  * zoomed, pan and pinch the view and dab on a tap. Draw draws with one finger; while zoomed, a second
- * finger ends the stroke and the fingers pan and pinch the view. In Auto, Add and Animate, a drag
- * that starts on a layer, or a pinch and twist with a finger on one, moves that layer (one undo step);
- * otherwise the touch pans and pinches the view while zoomed and does nothing else; a tap selects,
- * deselects or plays (and closes the keyboard), and a double tap on a text layer edits it.
+ * finger ends the stroke (or drops it, if it hadn't moved yet) and the fingers pan and pinch the view.
+ * In Auto, Add and Animate, a drag that starts on a layer, or a pinch and twist with a finger on one,
+ * moves that layer (one undo step); otherwise the touch pans and pinches the view while zoomed and does
+ * nothing else; a tap selects, deselects or plays (and closes the keyboard), and a double tap on a text
+ * layer edits it.
  */
 private fun Modifier.canvasGestures(
     tool: EditorTool,
@@ -489,7 +561,7 @@ private fun Modifier.canvasGestures(
                 }
                 EditorTool.Draw -> stroke(
                     down, viewport, viewModel::beginMarker, viewModel::extendMarker, viewModel::endMarker,
-                    yieldToView = zoomed
+                    yieldToView = zoomed, discard = viewModel::cancelMarker
                 )
                 EditorTool.Auto, EditorTool.Add, EditorTool.Animate -> {
                     val at = viewport.toCanvas(down.position)
@@ -581,7 +653,8 @@ private fun move(
  * One finger drawing on the canvas: [begin] where it lands (a tap is a dab or a dot), [extend] as it
  * moves, [end] when it lifts or the gesture is dropped. Other fingers are ignored, unless
  * [yieldToView] (Draw while zoomed, spec §6): then a second finger ends the stroke where it is, and
- * the fingers pan and pinch the view until they all lift.
+ * the fingers pan and pinch the view until they all lift. A stroke that never left the touch slop
+ * around its first point by then was the first finger of that pinch, not a dot: [discard] drops it.
  */
 private suspend fun AwaitPointerEventScope.stroke(
     down: PointerInputChange,
@@ -589,11 +662,14 @@ private suspend fun AwaitPointerEventScope.stroke(
     begin: (Float, Float) -> Unit,
     extend: (Float, Float) -> Unit,
     end: () -> Unit,
-    yieldToView: Boolean = false
+    yieldToView: Boolean = false,
+    discard: () -> Unit = end
 ) {
     val start = viewport.toCanvas(down.position)
     begin(start.x, start.y)
+    val slop = viewConfiguration.touchSlop
     var drawing = true
+    var travelled = false
     try {
         while (true) {
             val event = awaitPointerEvent()
@@ -605,12 +681,13 @@ private suspend fun AwaitPointerEventScope.stroke(
             }
             if (yieldToView && event.changes.count { it.pressed } > 1) {
                 drawing = false
-                end()
+                if (travelled) end() else discard()
                 continue
             }
             val finger = event.changes.firstOrNull { it.id == down.id }
             if (finger == null || !finger.pressed) break
             if (finger.positionChangeIgnoreConsumed() != Offset.Zero) {
+                if (!travelled && (finger.position - down.position).getDistance() > slop) travelled = true
                 val p = viewport.toCanvas(finger.position)
                 extend(p.x, p.y)
             }

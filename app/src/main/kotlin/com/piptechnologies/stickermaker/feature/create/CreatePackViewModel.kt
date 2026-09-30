@@ -870,6 +870,17 @@ class CreatePackViewModel @Inject constructor(
         refreshDerived(item, THUMB_DEBOUNCE_MS)
     }
 
+    /**
+     * Drops the Draw stroke in progress without a trace: no dot, no undo step. The canvas calls it when,
+     * zoomed in, a second finger lands before the first one moved: the touch was a pinch of the view.
+     */
+    fun cancelMarker() {
+        val item = activeItem() ?: return
+        if (!item.editor.cancelStroke()) return
+        tick++
+        push()
+    }
+
     private fun onCanvas(v: Float): Float = v.coerceIn(0f, DecorSpec.CANVAS)
 
     // ------------------------------------------------------------ animate

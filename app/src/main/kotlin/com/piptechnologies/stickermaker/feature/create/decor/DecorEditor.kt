@@ -328,6 +328,18 @@ class DecorEditor(
 
     fun endStroke() { strokeDown = false }
 
+    /**
+     * Drops the stroke being drawn and its undo step, as if the finger had never landed (a second
+     * finger took the touch to move the zoomed view). False when no stroke is down.
+     */
+    fun cancelStroke(): Boolean {
+        if (!strokeDown || liveStrokes.isEmpty()) return false
+        strokeDown = false
+        liveStrokes = liveStrokes.dropLast(1)
+        history.removeLastLiveStroke()
+        return true
+    }
+
     /** Turns the live strokes into one Drawing layer (one undo step). */
     fun flushLiveStrokes(): Long? {
         strokeDown = false

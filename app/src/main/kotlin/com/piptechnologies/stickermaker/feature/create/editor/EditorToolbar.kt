@@ -42,8 +42,11 @@ private val ToolIdle = Color(0xFFC3C9D2)
 private val ToolGap = 4.dp
 /** Each button keeps 2 dp clear on both sides of its label. */
 private val ToolInset = 2.dp
-/** Add, Draw and Animate while the decor data or the cut-out isn't ready: the same dim as a disabled strip. */
-private const val DISABLED_ALPHA = 0.4f
+/**
+ * Add, Draw and Animate while the decor data or the cut-out isn't ready, and the preset strip on a clip:
+ * what can't be used now shows at 40%.
+ */
+internal const val DISABLED_ALPHA = 0.4f
 
 /** One button of the bar; [layers] marks the tools that edit layers (Add, Draw, Animate). */
 private class ToolSpec(val tool: EditorTool, @StringRes val label: Int, val icon: ImageVector, val layers: Boolean)

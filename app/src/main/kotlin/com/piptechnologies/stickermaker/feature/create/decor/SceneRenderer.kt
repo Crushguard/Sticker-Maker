@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.PorterDuffXfermode
 import androidx.core.graphics.PathParser
 import com.piptechnologies.stickermaker.feature.create.CreateSpec
 import com.piptechnologies.stickermaker.feature.namepack.engine.HeartPath
@@ -54,28 +55,34 @@ class SceneRenderer(private val cache: LayerRenderCache, private val data: Decor
      * [liveLayerId] is the layer a gesture is resizing: it draws from the nearest size already cached,
      * scaled, instead of rendering a new size on every frame; the exact size renders once it ends.
      * [layerOpacity] (0–1) overrides [dimLayers], so the live canvas can fade the layers in and out.
+     *
+     * While the live canvas crossfades an outline change (spec §5), [outlineFrom] is the outline it
+     * fades from and [outlineBlend] (0–1) how far the scene's own outline is in. An [outlineFrom] of
+     * another thickness is ignored: that change snaps.
      */
     fun drawSticker(
         canvas: Canvas,
         scene: Scene,
         dimLayers: Boolean = false,
         liveLayerId: Long? = null,
-        layerOpacity: Float = if (dimLayers) DIM_OPACITY else 1f
+        layerOpacity: Float = if (dimLayers) DIM_OPACITY else 1f,
+        outlineFrom: OutlineStyle? = null,
+        outlineBlend: Float = 1f
     ) {
         val outline = scene.decor.outline
-        val radius = if (outline.on) outlineRadius(outline.thickness) else null
+        val blend = outlineBlend.coerceIn(0f, 1f)
+        val fading = outlineFrom?.takeIf { blend < 1f && it != outline && it.thickness == outline.thickness }
+        val radius = if (outline.on || fading?.on == true) outlineRadius(outline.thickness) else null
         val layers = scene.decor.layers.map { it to cache.render(it, radius, live = it.id == liveLayerId) }
         val layerAlpha = (layerOpacity.coerceIn(0f, 1f) * OPAQUE).roundToInt()
         if (radius != null) {
-            val tint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG).apply {
-                colorFilter = PorterDuffColorFilter(outline.colour, PorterDuff.Mode.SRC_IN)
+            if (fading == null) {
+                drawOutline(canvas, scene, layers, radius, outline.colour, layerAlpha)
+            } else {
+                drawOutlineFade(canvas, fading, outline, blend) { colour ->
+                    drawOutline(canvas, scene, layers, radius, colour, layerAlpha)
+                }
             }
-            scene.subjectSilhouette?.let { canvas.drawBitmap(it, 0f, 0f, tint) }
-            tint.alpha = layerAlpha
-            layers.forEach { (layer, r) ->
-                r.silhouette?.let { canvas.drawBitmap(it, matrixOf(layer, r, it), tint) }
-            }
-            marker.drawOutline(canvas, scene.liveStrokes, radius, outline.colour)
         }
         val subjectPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
         val layerPaint = Paint(subjectPaint).apply { alpha = layerAlpha }
@@ -86,6 +93,62 @@ class SceneRenderer(private val cache: LayerRenderCache, private val data: Decor
         scene.subject?.let { canvas.drawBitmap(it, 0f, 0f, subjectPaint) }
         drawLayers(behind = false)
         drawStrokes(canvas, scene.liveStrokes)
+    }
+
+    /**
+     * The die-cut outline in [colour], as one shape [radius] px around the subject, every layer (its
+     * silhouette at [layerAlpha]) and the live Draw strokes.
+     */
+    private fun drawOutline(
+        canvas: Canvas,
+        scene: Scene,
+        layers: List<Pair<Layer, RenderedLayer>>,
+        radius: Float,
+        colour: Int,
+        layerAlpha: Int
+    ) {
+        val tint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG).apply {
+            colorFilter = PorterDuffColorFilter(colour, PorterDuff.Mode.SRC_IN)
+        }
+        scene.subjectSilhouette?.let { canvas.drawBitmap(it, 0f, 0f, tint) }
+        tint.alpha = layerAlpha
+        layers.forEach { (layer, r) ->
+            r.silhouette?.let { canvas.drawBitmap(it, matrixOf(layer, r, it), tint) }
+        }
+        marker.drawOutline(canvas, scene.liveStrokes, radius, colour)
+    }
+
+    /**
+     * The outline pass mid-crossfade: [from] going out and [to] coming in at [blend]. Each is drawn
+     * whole by [pass] into a layer of its own, so its overlapping shapes fade as one; where both are on,
+     * the two are added up, so a change of colour stays as opaque as either outline.
+     */
+    private fun drawOutlineFade(
+        canvas: Canvas,
+        from: OutlineStyle,
+        to: OutlineStyle,
+        blend: Float,
+        pass: (colour: Int) -> Unit
+    ) {
+        val incoming = (blend * OPAQUE).roundToInt()
+        val both = from.on && to.on
+        val count = canvas.saveCount
+        if (both) canvas.saveLayer(null, null)
+        if (from.on) {
+            canvas.saveLayerAlpha(null, OPAQUE - incoming)
+            pass(from.colour)
+            canvas.restore()
+        }
+        if (to.on) {
+            val paint = Paint().apply {
+                alpha = incoming
+                if (both) xfermode = PorterDuffXfermode(PorterDuff.Mode.ADD)
+            }
+            canvas.saveLayer(null, paint)
+            pass(to.colour)
+            canvas.restore()
+        }
+        canvas.restoreToCount(count)
     }
 
     /** [scene] in a new transparent 512 bitmap: the rest composite of an animated sticker. */
