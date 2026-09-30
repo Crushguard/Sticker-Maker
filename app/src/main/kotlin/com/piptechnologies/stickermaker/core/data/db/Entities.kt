@@ -21,15 +21,21 @@ data class InstalledPackEntity(
     val addedAt: Long,
     val dirPath: String,
     val whitelisted: Boolean = false,
+    /** WhatsApp's image_data_version: the catalog version these files came from. */
+    @ColumnInfo(defaultValue = "1") val imageDataVersion: Int = 1,
 )
 
-/** One sticker of an installed pack. [emojis] is the comma-joined emoji list. */
+/**
+ * One sticker of an installed pack. [emojis] is the comma-joined emoji list; [accessibilityText] is the
+ * sticker's lettering, served to WhatsApp as its accessibility text (null when the art has no text).
+ */
 @Entity(tableName = "installed_stickers", primaryKeys = ["packId", "fileName"])
 data class InstalledStickerEntity(
     val packId: String,
     val fileName: String,
     val emojis: String,
     val indexInPack: Int,
+    val accessibilityText: String? = null,
 )
 
 /** A pack the user created in the app; files live in [dirPath] like installed packs. */

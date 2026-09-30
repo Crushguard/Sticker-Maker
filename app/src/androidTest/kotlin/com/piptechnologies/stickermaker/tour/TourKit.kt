@@ -42,7 +42,6 @@ import coil.ImageLoader
 import coil.request.ErrorResult
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import com.google.firebase.FirebaseApp
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -380,17 +379,23 @@ object ImageTracker : EventListener {
 }
 
 /**
- * Admin access to the Storage emulator the app is pointed at (10.0.2.2 is the
+ * Admin access to the catalog bucket in the Storage emulator the app is pointed at (10.0.2.2 is the
  * CI host). "Bearer owner" bypasses the security rules, like the Admin SDK.
  */
 object StorageEmulator {
     private const val BASE = "http://10.0.2.2:9199/v0/b"
 
-    private val bucket: String
-        get() = FirebaseApp.getInstance().options.storageBucket
-            ?: throw IllegalStateException("google-services.json has no storage bucket")
+    /** The stickermaker bucket the functions publish packs to (not google-services.json's default). */
+    private const val bucket = "play-console-f33dd-stickermaker"
 
     fun read(path: String): ByteArray = call("GET", "$BASE/$bucket/o/${Uri.encode(path)}?alt=media")
+
+    /** Names of the objects under [prefix]. */
+    fun list(prefix: String): List<String> {
+        val json = JSONObject(String(call("GET", "$BASE/$bucket/o?prefix=${Uri.encode(prefix)}"), Charsets.UTF_8))
+        val items = json.optJSONArray("items") ?: return emptyList()
+        return (0 until items.length()).map { items.getJSONObject(it).getString("name") }
+    }
 
     fun delete(path: String) {
         call("DELETE", "$BASE/$bucket/o/${Uri.encode(path)}")

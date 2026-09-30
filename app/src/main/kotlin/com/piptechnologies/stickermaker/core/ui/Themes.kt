@@ -18,5 +18,9 @@ fun themeNameRes(categoryId: String): Int? = when (categoryId) {
     else -> null
 }
 
-/** A theme's name as UiText: translated when known, the published name otherwise. */
-fun Category.nameText(): UiText = themeNameRes(id)?.let { UiText.res(it) } ?: UiText.Raw(name)
+/**
+ * A theme's name as UiText: the catalog's name in the reader's language, else the app's own translation of a
+ * theme it knows, else the English name.
+ */
+fun Category.nameText(): UiText =
+    UiText.Localized(names, themeNameRes(id)?.let { UiText.res(it) } ?: UiText.Raw(names["en"] ?: name))

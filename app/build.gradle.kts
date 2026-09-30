@@ -159,7 +159,6 @@ dependencies {
     // Firebase (catalog + analytics + crash reporting + notifications)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
-    implementation(libs.firebase.storage)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.messaging)
@@ -174,6 +173,7 @@ dependencies {
 
     // Images, coroutines, prefs, ML Kit
     implementation(libs.coil.compose)
+    implementation(libs.okhttp)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.datastore.preferences)

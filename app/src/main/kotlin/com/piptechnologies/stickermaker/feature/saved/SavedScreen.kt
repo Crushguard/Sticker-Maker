@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -49,6 +50,8 @@ import com.piptechnologies.stickermaker.core.design.Mono
 import com.piptechnologies.stickermaker.core.design.Muted
 import com.piptechnologies.stickermaker.core.design.Subtle
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
+import com.piptechnologies.stickermaker.core.design.components.CoverTile
+import com.piptechnologies.stickermaker.core.design.components.rememberCoverStrip
 import com.piptechnologies.stickermaker.core.design.components.ConfirmSheet
 import com.piptechnologies.stickermaker.core.design.components.EmptyState
 import com.piptechnologies.stickermaker.core.design.components.LoveTopBar
@@ -213,9 +216,14 @@ private fun SavedCard(
     onToggleFavorite: (String) -> Unit,
     onAddClicked: (String) -> Unit
 ) {
-    val thumbnails: List<@Composable () -> Unit> = row.thumbModels.map { model ->
-        { SavedThumb(model) }
-    }
+    val strip = rememberCoverStrip(row.cover?.smallUrl, row.cover?.largeUrl)
+    val tiles = row.cover?.tiles ?: 0
+    val thumbnails: List<@Composable () -> Unit> =
+        if (strip != null && tiles > 0) {
+            List(tiles) { index -> { SavedCoverThumb(strip, index, tiles) } }
+        } else {
+            row.thumbModels.map { model -> { SavedThumb(model) } }
+        }
     PackCard(
         title = row.name,
         stickerCount = row.stickerCount,
@@ -246,6 +254,19 @@ private fun SavedThumb(model: Any) {
             modifier = Modifier.size(42.dp),
             contentScale = ContentScale.Fit
         )
+    }
+}
+
+/** 46dp circle preview cut from a catalog pack's cover strip. */
+@Composable
+private fun SavedCoverThumb(strip: ImageBitmap, index: Int, tiles: Int) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(Subtle),
+        contentAlignment = Alignment.Center
+    ) {
+        CoverTile(strip, index, tiles, Modifier.size(42.dp))
     }
 }
 

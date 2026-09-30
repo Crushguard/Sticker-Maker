@@ -8,14 +8,19 @@ import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.di.IoDispatcher
 import com.piptechnologies.stickermaker.core.data.prefs.PrefsRepository
 import com.piptechnologies.stickermaker.core.data.repo.CatalogRepository
+import com.piptechnologies.stickermaker.core.data.catalog.inLanguageOrder
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
+import com.piptechnologies.stickermaker.core.design.components.PackCover
 import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.model.Category
 import com.piptechnologies.stickermaker.core.model.FallbackCategories
 import com.piptechnologies.stickermaker.core.model.StickerPack
+import com.piptechnologies.stickermaker.core.model.inCategory
+import com.piptechnologies.stickermaker.core.model.withPacks
 import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
 import com.piptechnologies.stickermaker.core.ui.PendingToasts
 import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.core.ui.addsLabel
 import com.piptechnologies.stickermaker.core.ui.inAppLanguage
 import com.piptechnologies.stickermaker.core.ui.nameText
 import com.piptechnologies.stickermaker.core.ui.themeNameRes
@@ -33,8 +38,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -60,7 +65,8 @@ data class HomePackUi(
     val downloadsLabel: UiText,
     val animated: Boolean,
     val hue: Int,
-    val thumbUrls: List<String>,
+    /** One strip for the card's circles; tiles 0 = no cover (hue placeholders). */
+    val cover: PackCover,
     val favorite: Boolean,
     val addState: AddVisualState,
     val addProgress: Float
@@ -142,7 +148,6 @@ class HomeViewModel @Inject constructor(
     )
 
     private val controls = MutableStateFlow(Controls())
-    private val retrySignal = MutableStateFlow(0)
     private val packsMirror = MutableStateFlow<List<StickerPack>?>(null)
     private val installedMirror = MutableStateFlow<Set<String>>(emptySet())
     private val favoritesMirror = MutableStateFlow<Set<String>>(emptySet())
@@ -162,13 +167,12 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            retrySignal.collectLatest {
-                catalogRepository.observePacks().collect { packs ->
-                    packsMirror.value = packs
-                    if (pendingRetryToast) {
-                        pendingRetryToast = false
-                        if (packs.isEmpty()) _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_still_offline)))
-                    }
+            // One subscription for the screen's life: a Retry's outcome is the next list that arrives.
+            catalogRepository.observePacks().collect { packs ->
+                packsMirror.value = packs
+                if (pendingRetryToast) {
+                    pendingRetryToast = false
+                    if (packs.isEmpty()) _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_still_offline)))
                 }
             }
         }
@@ -201,9 +205,19 @@ class HomeViewModel @Inject constructor(
         HomeData(packs, installed, favorites, categories)
     }
 
+    // Built off the main thread: every keystroke and download-progress tick rebuilds the state, search included.
     val uiState: StateFlow<HomeUiState> =
         combine(dataFlow, controls) { data, c -> buildState(data, c) }
+            .flowOn(ioDispatcher)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState())
+
+    /** The search index of the catalog and categories last searched: rebuilt only when either changes. */
+    @Volatile private var searchIndex: Triple<List<StickerPack>, List<Category>, HomeSearchIndex>? = null
+
+    private fun searchIndexFor(packs: List<StickerPack>, categories: List<Category>): HomeSearchIndex {
+        searchIndex?.let { (p, c, index) -> if (p === packs && c === categories) return index }
+        return HomeSearchIndex(packs, categories).also { searchIndex = Triple(packs, categories, it) }
+    }
 
     // ------------------------------------------------------------- events //
 
@@ -215,10 +229,10 @@ class HomeViewModel @Inject constructor(
 
     fun onQueryChange(query: String) = controls.update { it.copy(query = query) }
 
-    /** Offline Retry: resubscribes the catalog stream. */
+    /** Offline Retry: downloads the catalog again, or says it is still offline. */
     fun onRetry() {
         pendingRetryToast = true
-        retrySignal.update { it + 1 }
+        catalogRepository.retryCatalog()
     }
 
     fun onToggleFavorite(packId: String) {
@@ -349,15 +363,17 @@ class HomeViewModel @Inject constructor(
         val offline = catalog != null && catalog.isEmpty()
         val catalogIds = catalog.orEmpty().mapTo(mutableSetOf()) { it.id }
         val favCount = data.favorites.count { it in catalogIds }
+        // Categories without live packs (none of their own, none through alsoIn) get no chip.
+        val categories = data.categories.withPacks()
         val chips = buildList {
             add(HomeChipUi(CHIP_TRENDING, UiText.res(R.string.home_chip_trending)))
             if (favCount > 0) {
                 add(HomeChipUi(CHIP_SAVED, UiText.res(R.string.home_chip_saved, favCount), showHeart = true))
             }
             add(HomeChipUi(CHIP_ANIMATED, UiText.res(R.string.home_chip_animated)))
-            data.categories.forEach { add(HomeChipUi(it.id, it.nameText())) }
+            categories.forEach { add(HomeChipUi(it.id, it.nameText())) }
         }
-        val chip = effectiveChip(c.chipId, favCount, data.categories.mapTo(mutableSetOf()) { it.id })
+        val chip = effectiveChip(c.chipId, favCount, categories.mapTo(mutableSetOf()) { it.id })
         val query = c.query.trim()
         val list = filterPacks(catalog.orEmpty(), data, c.searchOpen, query, chip)
         val packsUi = list.map { pack ->
@@ -366,10 +382,10 @@ class HomeViewModel @Inject constructor(
                 id = pack.id,
                 name = pack.name,
                 stickerCount = pack.stickerCount,
-                downloadsLabel = UiText.res(R.string.pack_adds, UiText.Compact(pack.downloads)),
+                downloadsLabel = addsLabel(pack.downloads) ?: UiText.Raw(""),
                 animated = pack.animated,
                 hue = pack.hue,
-                thumbUrls = pack.thumbUrls.take(6),
+                cover = PackCover(pack.coverSmallUrl, pack.coverLargeUrl, pack.coverTiles),
                 favorite = pack.id in data.favorites,
                 addState = addState.toVisual(),
                 addProgress = (addState as? AddState.Downloading)?.progress ?: 0f
@@ -391,7 +407,11 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    /** Prototype `homePacks()`: search, chips, trending sort. */
+    /**
+     * Prototype `homePacks()`: search and chips. The order is the catalog's rank (pinned, popular, newest)
+     * grouped by what the reader can read (see inLanguageOrder); a pack also shows under the categories it
+     * lists in alsoIn.
+     */
     private fun filterPacks(
         catalog: List<StickerPack>,
         data: HomeData,
@@ -399,39 +419,27 @@ class HomeViewModel @Inject constructor(
         query: String,
         chip: String
     ): List<StickerPack> {
-        var list = catalog
+        val ordered = catalog.inLanguageOrder(appLanguageTag())
+        var list = ordered
         if (searchOpen) {
-            if (query.isNotEmpty()) {
-                val q = query.lowercase()
-                val localized = appContext.inAppLanguage()
-                list = catalog.filter { pack ->
-                    pack.name.lowercase().contains(q) ||
-                        themeLabels(pack.category, data.categories, localized).any { it.lowercase().contains(q) }
-                }
-            }
+            if (query.isNotEmpty()) list = searchIndexFor(catalog, data.categories).filter(ordered, query)
         } else {
             when (chip) {
                 CHIP_TRENDING -> Unit
                 CHIP_SAVED -> {
-                    val saved = catalog.filter { it.id in data.favorites }
+                    val saved = ordered.filter { it.id in data.favorites }
                     if (saved.isNotEmpty()) list = saved
                 }
-                CHIP_ANIMATED -> list = catalog.filter { it.animated }
-                else -> list = list.filter { it.category == chip }
+                CHIP_ANIMATED -> list = ordered.filter { it.animated }
+                else -> list = list.filter { it.inCategory(chip) }
             }
         }
-        return list.sortedByDescending { it.downloads }
+        return list
     }
 
-    /** The theme's published name plus its name in the app language, for search. */
-    private fun themeLabels(
-        categoryId: String,
-        categories: List<Category>,
-        localized: Context
-    ): List<String> = listOfNotNull(
-        categories.firstOrNull { it.id == categoryId }?.name ?: categoryId,
-        themeNameRes(categoryId)?.let { localized.getString(it) }
-    )
+    /** The app language as a BCP 47 tag ("pt-BR"), or the device's when following the system. */
+    private fun appLanguageTag(): String =
+        appContext.inAppLanguage().resources.configuration.locales[0].toLanguageTag()
 
     private fun effectiveChip(
         chipId: String,

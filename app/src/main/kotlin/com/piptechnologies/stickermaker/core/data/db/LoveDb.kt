@@ -26,10 +26,16 @@ abstract class LoveDb : RoomDatabase() {
     abstract fun ownPackDao(): OwnPackDao
 
     companion object {
-        /** Version 2: own packs carry their own image data version (name packs are re-lettered in place). */
+        /**
+         * Version 2: every installed and own pack carries WhatsApp's image_data_version (existing packs
+         * stay at 1; a catalog update or a re-lettered name pack raises it), and each installed sticker
+         * its accessibility text.
+         */
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `installed_packs` ADD COLUMN `imageDataVersion` INTEGER NOT NULL DEFAULT 1")
                 db.execSQL("ALTER TABLE `own_packs` ADD COLUMN `imageDataVersion` INTEGER NOT NULL DEFAULT 1")
+                db.execSQL("ALTER TABLE `installed_stickers` ADD COLUMN `accessibilityText` TEXT")
             }
         }
     }

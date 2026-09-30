@@ -32,6 +32,12 @@ sealed interface UiText {
     /** Already-final text: pack names and anything else published as-is. */
     data class Raw(val text: String) : UiText
 
+    /**
+     * Catalog text published in several languages (BCP 47 keys): the reader's language, then its base
+     * language ("pt-PT" -> "pt"), then [fallback].
+     */
+    data class Localized(val texts: Map<String, String>, val fallback: UiText) : UiText
+
     companion object {
         fun res(@StringRes id: Int, vararg args: Any): UiText = Res(id, args.toList())
         fun plural(@PluralsRes id: Int, count: Int, vararg args: Any): UiText =
@@ -47,6 +53,10 @@ fun UiText.asString(context: Context): String = when (this) {
     is UiText.Plural -> context.resources.getQuantityString(id, count, *resolved(args, context))
     is UiText.Compact -> compactNumber(value, context.resources.configuration.locales[0])
     is UiText.Raw -> text
+    is UiText.Localized -> {
+        val tag = context.resources.configuration.locales[0].toLanguageTag()
+        texts[tag] ?: texts[tag.substringBefore('-')] ?: fallback.asString(context)
+    }
 }
 
 @Composable

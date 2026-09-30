@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.piptechnologies.stickermaker.core.data.di.DatabaseModule
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,13 +38,21 @@ class LoveDbMigrationTest {
         SQLiteDatabase.openOrCreateDatabase(file, null).use { db ->
             v1.forEach(db::execSQL)
             db.execSQL("INSERT INTO own_packs VALUES('own-1234abcd','Us','Made by you','tray.png',0,1,'/data/own',1)")
+            db.execSQL("INSERT INTO installed_packs VALUES('gm-gn','Good Morning, Good Night','PIP Technologies','tray.png',0,'goodnight',6,1700000000000,'/data/packs/gm-gn',1)")
+            db.execSQL("INSERT INTO installed_stickers VALUES('gm-gn','01.webp','☀️,☕',0)")
             db.version = 1
         }
 
         val room = DatabaseModule.provideDatabase(context)
-        val pack = room.ownPackDao().get("own-1234abcd")!!
-        assertEquals(1, pack.imageDataVersion)
-        assertTrue(pack.whitelisted)
+        val own = room.ownPackDao().get("own-1234abcd")!!
+        assertEquals(1, own.imageDataVersion)
+        assertTrue(own.whitelisted)
+        val installed = room.installedPackDao().get("gm-gn")!!
+        assertEquals(1, installed.imageDataVersion)
+        assertTrue(installed.whitelisted)
+        val sticker = room.installedPackDao().stickers("gm-gn").single()
+        assertEquals("☀️,☕", sticker.emojis)
+        assertNull(sticker.accessibilityText)
         room.close()
     }
 }

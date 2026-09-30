@@ -38,8 +38,9 @@ import org.junit.runners.MethodSorters
 
 /**
  * Drives the real app on a device through every state of design/Screens.dc.html
- * and screenshots each one. The app talks to the Firebase emulators seeded by
- * scripts/upload-pack.js, and a WhatsApp test double (testing/whatsapp-stub)
+ * and screenshots each one. The app talks to the Firebase emulators, whose catalog was
+ * published by the real pipeline (scripts/library/seed-emulators.js uploads library/ and the
+ * stickermaker functions build it), and a WhatsApp test double (testing/whatsapp-stub)
  * reads packs back through the app's ContentProvider and checks WhatsApp's
  * pack rules. Tests run in order and build on each other's state, like a user
  * would: first run, adds, own packs, settings.
@@ -158,22 +159,25 @@ class ScreenTourTest {
     fun t03_addStates() {
         Tour.installWhatsAppStub()
         awaitHome()
-        val brokenFile = "packs/sorry-love/07.webp"
+        // The pack's one published zip (its version folder is named after its content).
+        val brokenFile = StorageEmulator.list("public/packs/sorry-love/").single { it.endsWith("/pack.zip") }
         var savedBytes: ByteArray? = null
         step("Idle") {
             openPack("Sorry, My Love")
-            shot(Frame.ADD_IDLE, "Idle bar with its hint; 18 stickers stream from the Storage emulator.")
+            shot(Frame.ADD_IDLE, "Idle bar with its hint; the 18 stickers come from the pack's one zip in the Storage emulator.")
         }
         try {
             step("Download failed") {
                 savedBytes = StorageEmulator.read(brokenFile)
                 StorageEmulator.delete(brokenFile)
+                // The pack page already unpacked the zip and Add would reuse it: drop that copy too.
+                File(Tour.targetContext.cacheDir, "packs").deleteRecursively()
                 compose.tap(addBar("Add to WhatsApp"))
                 compose.waitFor(addBar("Download failed · Retry"), 90_000)
-                shot(Frame.ADD_FAILED, "Real failure: $brokenFile was deleted from the Storage emulator mid-catalog, so getFile() 404s.")
+                shot(Frame.ADD_FAILED, "Real failure: $brokenFile was deleted from the Storage emulator and its unpacked copy cleared, so the download 404s.")
             }
         } finally {
-            savedBytes?.let { StorageEmulator.write(brokenFile, it, "image/webp") }
+            savedBytes?.let { StorageEmulator.write(brokenFile, it, "application/zip") }
         }
         step("Downloading") {
             // Against the local Storage emulator the pack arrives in half a second,

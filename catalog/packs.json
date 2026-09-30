@@ -1,0 +1,5007 @@
+{
+  "_about": "The reviewed metadata of every catalog pack, by pack id (= its folder name). scripts/library/prepare.js writes each into its folder's pack.json. Tags: category ids first (they decide the Home categories), then what the pack shows and is for; every tag has search words in library/_tags.json.",
+  "generated": "2026-09-30",
+  "source": "Claude Design: the Stickers page manifest (packs.json: theme, lang, adult), Pack Ideas (moods, characters, sticker lines) and the WhatsApp export of 2026-09-30 (120 folders; animated variants are packs of their own).",
+  "packs": {
+    "clingy-mango": {
+      "name": "Clingy Mango",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "funny",
+        "cat",
+        "needy",
+        "miss-you",
+        "jealous",
+        "reply",
+        "hug",
+        "mango"
+      ],
+      "emojis": [
+        "🐱",
+        "🥺"
+      ],
+      "order": 1,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🥺",
+            "❤️"
+          ],
+          "text": "miss u"
+        },
+        "02.webp": {
+          "emojis": [
+            "📱",
+            "🥺"
+          ],
+          "text": "pls reply"
+        },
+        "03.webp": {
+          "emojis": [
+            "😭",
+            "📱"
+          ],
+          "text": "where r u"
+        },
+        "04.webp": {
+          "emojis": [
+            "😼",
+            "❤️"
+          ],
+          "text": "MINE"
+        },
+        "05.webp": {
+          "emojis": [
+            "🤗",
+            "🥺"
+          ],
+          "text": "hug me"
+        },
+        "06.webp": {
+          "emojis": [
+            "😴",
+            "❤️",
+            "🌙"
+          ],
+          "text": "gn love"
+        },
+        "07.webp": {
+          "emojis": [
+            "😘",
+            "❤️"
+          ],
+          "text": "mwah"
+        },
+        "08.webp": {
+          "emojis": [
+            "👀",
+            "🌙"
+          ],
+          "text": "u up?"
+        },
+        "09.webp": {
+          "emojis": [
+            "💪",
+            "😼"
+          ],
+          "text": "ur mine"
+        },
+        "10.webp": {
+          "emojis": [
+            "😍",
+            "💞"
+          ],
+          "text": "obsessed"
+        },
+        "11.webp": {
+          "emojis": [
+            "☕",
+            "☀️"
+          ],
+          "text": "gm babe"
+        },
+        "12.webp": {
+          "emojis": [
+            "🥳",
+            "❤️"
+          ],
+          "text": "yay u"
+        },
+        "13.webp": {
+          "emojis": [
+            "💌",
+            "🥰"
+          ],
+          "text": "for u"
+        },
+        "14.webp": {
+          "emojis": [
+            "🤨",
+            "😾"
+          ],
+          "text": "who is she"
+        },
+        "15.webp": {
+          "emojis": [
+            "🤗",
+            "🥰"
+          ],
+          "text": "cuddle?"
+        },
+        "16.webp": {
+          "emojis": [
+            "😍",
+            "❤️"
+          ],
+          "text": "wow u"
+        },
+        "17.webp": {
+          "emojis": [
+            "😒",
+            "🙄"
+          ],
+          "text": "ignore me then"
+        },
+        "18.webp": {
+          "emojis": [
+            "🌹",
+            "❤️"
+          ],
+          "text": "be mine"
+        }
+      }
+    },
+    "fragile-baby": {
+      "name": "Fragile Baby",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "needy",
+        "hug",
+        "care"
+      ],
+      "emojis": [
+        "🥺",
+        "🤗"
+      ],
+      "keywords": [
+        "handle with care",
+        "i'm baby",
+        "carry me",
+        "hold me",
+        "be nice to me",
+        "need attention",
+        "tuck me in",
+        "no.",
+        "soft hours",
+        "pick me up",
+        "i'm smol",
+        "don't yell"
+      ],
+      "order": 2
+    },
+    "couple-therapy": {
+      "name": "Couple Therapy",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "couple",
+        "sorry",
+        "angry",
+        "blob",
+        "hug"
+      ],
+      "emojis": [
+        "🤝",
+        "💗"
+      ],
+      "keywords": [
+        "i hear you",
+        "same team",
+        "i need a minute",
+        "not mad, hurt",
+        "pause",
+        "hug first, talk after",
+        "i was wrong",
+        "start over?",
+        "my turn to listen",
+        "we good?",
+        "love language: snacks",
+        "session over, kiss"
+      ],
+      "order": 3
+    },
+    "big-words": {
+      "name": "Big Words",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "words",
+        "love",
+        "miss-you",
+        "kiss"
+      ],
+      "emojis": [
+        "💕",
+        "🥰"
+      ],
+      "order": 4,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🥺",
+            "💕"
+          ],
+          "text": "miss u"
+        },
+        "02.webp": {
+          "emojis": [
+            "💖",
+            "😌"
+          ],
+          "text": "mine"
+        },
+        "03.webp": {
+          "emojis": [
+            "📞",
+            "❤️"
+          ],
+          "text": "call me"
+        },
+        "04.webp": {
+          "emojis": [
+            "❤️",
+            "😊"
+          ],
+          "text": "ok but i love you"
+        },
+        "05.webp": {
+          "emojis": [
+            "🏠",
+            "❤️"
+          ],
+          "text": "home"
+        },
+        "06.webp": {
+          "emojis": [
+            "♾️",
+            "❤️"
+          ],
+          "text": "forever"
+        },
+        "07.webp": {
+          "emojis": [
+            "💭",
+            "💕"
+          ],
+          "text": "thinking of u"
+        },
+        "08.webp": {
+          "emojis": [
+            "😍",
+            "💋"
+          ],
+          "text": "obsessed"
+        },
+        "09.webp": {
+          "emojis": [
+            "🥰",
+            "💕"
+          ],
+          "text": "babe"
+        },
+        "10.webp": {
+          "emojis": [
+            "💑",
+            "❤️"
+          ],
+          "text": "u + me"
+        },
+        "11.webp": {
+          "emojis": [
+            "💞",
+            "✨"
+          ],
+          "text": "always"
+        },
+        "12.webp": {
+          "emojis": [
+            "💋",
+            "😘"
+          ],
+          "text": "kiss?"
+        },
+        "13.webp": {
+          "emojis": [
+            "☀️",
+            "❤️"
+          ],
+          "text": "good morning love"
+        },
+        "14.webp": {
+          "emojis": [
+            "🌙",
+            "💤"
+          ],
+          "text": "sweet dreams"
+        },
+        "15.webp": {
+          "emojis": [
+            "🥺",
+            "💔"
+          ],
+          "text": "i'm sorry"
+        },
+        "16.webp": {
+          "emojis": [
+            "🏠",
+            "🥺"
+          ],
+          "text": "come home"
+        },
+        "17.webp": {
+          "emojis": [
+            "🥰",
+            "❤️"
+          ],
+          "text": "my person"
+        },
+        "18.webp": {
+          "emojis": [
+            "😘",
+            "💋"
+          ],
+          "text": "xoxo"
+        }
+      }
+    },
+    "cuddle-positions": {
+      "name": "Cuddle Positions",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "funny",
+        "couple",
+        "hug",
+        "sleepy",
+        "cozy",
+        "doodle"
+      ],
+      "emojis": [
+        "🤗",
+        "🛌"
+      ],
+      "keywords": [
+        "the spoon",
+        "the koala",
+        "starfish (u) · edge (me)",
+        "the leg-over",
+        "face in neck",
+        "back to back, feet touching",
+        "human blanket",
+        "the pretzel",
+        "u stole the duvet",
+        "phone in my face",
+        "sunrise cuddle",
+        "5 more min"
+      ],
+      "order": 5
+    },
+    "say-it-loud": {
+      "name": "Say It Loud",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "flirty",
+        "words",
+        "flirt",
+        "kiss"
+      ],
+      "emojis": [
+        "😏",
+        "💋"
+      ],
+      "keywords": [
+        "come here",
+        "kiss me. now.",
+        "ur mine tonight",
+        "need u",
+        "get over here",
+        "stop being cute",
+        "closer",
+        "stay",
+        "u smell good",
+        "look at me",
+        "bed. now. (to sleep)",
+        "yours."
+      ],
+      "order": 6
+    },
+    "clingy-mango-animated": {
+      "name": "Clingy Mango",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "funny",
+        "cat",
+        "needy",
+        "miss-you",
+        "jealous",
+        "reply",
+        "hug",
+        "mango"
+      ],
+      "emojis": [
+        "🐱",
+        "🥺"
+      ],
+      "order": 7,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🥺",
+            "❤️"
+          ],
+          "text": "miss u"
+        },
+        "02.webp": {
+          "emojis": [
+            "📱",
+            "🥺"
+          ],
+          "text": "pls reply"
+        },
+        "03.webp": {
+          "emojis": [
+            "😭",
+            "📱"
+          ],
+          "text": "where r u"
+        },
+        "04.webp": {
+          "emojis": [
+            "😼",
+            "❤️"
+          ],
+          "text": "MINE"
+        },
+        "05.webp": {
+          "emojis": [
+            "🤗",
+            "🥺"
+          ],
+          "text": "hug me"
+        },
+        "06.webp": {
+          "emojis": [
+            "😴",
+            "❤️",
+            "🌙"
+          ],
+          "text": "gn love"
+        }
+      }
+    },
+    "flirty-shy": {
+      "name": "Flirty & Shy",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "flirty",
+        "cute",
+        "bunny",
+        "shy",
+        "flirt",
+        "tease",
+        "compliment"
+      ],
+      "emojis": [
+        "🐰",
+        "😳"
+      ],
+      "order": 8,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "😉",
+            "👋"
+          ],
+          "text": "HEY U"
+        },
+        "02.webp": {
+          "emojis": [
+            "🙈",
+            "😳"
+          ],
+          "text": "STOP IT"
+        },
+        "03.webp": {
+          "emojis": [
+            "😊",
+            "💗"
+          ],
+          "text": "HEHE"
+        },
+        "04.webp": {
+          "emojis": [
+            "😏",
+            "👉"
+          ],
+          "text": "CUTE?"
+        },
+        "05.webp": {
+          "emojis": [
+            "🥺",
+            "💋"
+          ],
+          "text": "NOTICE ME"
+        },
+        "06.webp": {
+          "emojis": [
+            "😍",
+            "✨"
+          ],
+          "text": "WOW"
+        },
+        "07.webp": {
+          "emojis": [
+            "🌹",
+            "🥰"
+          ],
+          "text": "for u"
+        },
+        "08.webp": {
+          "emojis": [
+            "👉",
+            "😳"
+          ]
+        },
+        "09.webp": {
+          "emojis": [
+            "🤗",
+            "💕"
+          ]
+        },
+        "10.webp": {
+          "emojis": [
+            "😏",
+            "💘"
+          ],
+          "text": "date?"
+        },
+        "11.webp": {
+          "emojis": [
+            "😳",
+            "💥"
+          ],
+          "text": "omg"
+        },
+        "12.webp": {
+          "text": "look at me"
+        },
+        "13.webp": {
+          "text": "for u"
+        },
+        "14.webp": {
+          "text": "peekaboo"
+        },
+        "15.webp": {
+          "text": "boop"
+        },
+        "16.webp": {
+          "text": "ur hot"
+        },
+        "17.webp": {
+          "text": "read this"
+        }
+      }
+    },
+    "birthday": {
+      "name": "Happy Birthday, My Love",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "occasions",
+        "birthday",
+        "celebration",
+        "sweets"
+      ],
+      "emojis": [
+        "🎂",
+        "🥳"
+      ],
+      "keywords": [
+        "3 days!",
+        "it's ur day",
+        "midnight kiss",
+        "older, hotter",
+        "my favourite person was born today",
+        "make a wish",
+        "gift = me",
+        "party of 2",
+        "cake first",
+        "another year of us",
+        "blow the candles",
+        "ur age? still perfect"
+      ],
+      "order": 9
+    },
+    "sad-hours": {
+      "name": "Sad Hours",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "sad",
+        "miss-you",
+        "cloud",
+        "sun",
+        "care",
+        "rainy"
+      ],
+      "emojis": [
+        "🌧️",
+        "😢"
+      ],
+      "keywords": [
+        "miss u so much",
+        "not ok",
+        "cried a bit",
+        "3am thoughts",
+        "wish u were here",
+        "it hurts",
+        "still love u",
+        "heart on the floor",
+        "don't leave",
+        "i'm here",
+        "we'll be ok",
+        "talk to me"
+      ],
+      "order": 10
+    },
+    "fragile-baby-animated": {
+      "name": "Fragile Baby",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "needy",
+        "hug",
+        "care"
+      ],
+      "emojis": [
+        "🥺",
+        "🤗"
+      ],
+      "keywords": [
+        "handle with care",
+        "i'm baby",
+        "carry me",
+        "hold me",
+        "be nice to me",
+        "need attention",
+        "tuck me in",
+        "no.",
+        "soft hours",
+        "pick me up",
+        "i'm smol",
+        "don't yell"
+      ],
+      "order": 11
+    },
+    "blue-ticks": {
+      "name": "Blue Ticks",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "phone",
+        "seen",
+        "reply",
+        "typing",
+        "jealous",
+        "petty",
+        "chat"
+      ],
+      "emojis": [
+        "📱",
+        "😒"
+      ],
+      "keywords": [
+        "seen. no reply.",
+        "typing… for 5 min",
+        "left on read",
+        "online but not for me",
+        "last seen: my heart",
+        "who's she",
+        "hmph",
+        "k.",
+        "fine.",
+        "reply pls",
+        "double tick, single heart",
+        "read receipts on = love"
+      ],
+      "order": 12
+    },
+    "mango-moves": {
+      "name": "Mango Moves",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "cat",
+        "happy",
+        "dance",
+        "mango"
+      ],
+      "emojis": [
+        "🐱",
+        "🥳"
+      ],
+      "order": 13,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🥳",
+            "🙌"
+          ],
+          "text": "LETS GOOO"
+        },
+        "02.webp": {
+          "emojis": [
+            "💫",
+            "❤️"
+          ]
+        },
+        "03.webp": {
+          "emojis": [
+            "🥳",
+            "🎉"
+          ],
+          "text": "YAY"
+        },
+        "04.webp": {
+          "emojis": [
+            "👋",
+            "😸"
+          ],
+          "text": "HIII"
+        },
+        "05.webp": {
+          "emojis": [
+            "❤️",
+            "💓"
+          ],
+          "text": "BA-DUM"
+        },
+        "06.webp": {
+          "emojis": [
+            "🏃",
+            "💨"
+          ],
+          "text": "COMING!"
+        },
+        "07.webp": {
+          "emojis": [
+            "🌪️",
+            "😆"
+          ],
+          "text": "wheee"
+        },
+        "08.webp": {
+          "emojis": [
+            "🥰",
+            "❤️"
+          ],
+          "text": "love u"
+        },
+        "09.webp": {
+          "emojis": [
+            "👋",
+            "😼"
+          ],
+          "text": "hey"
+        },
+        "10.webp": {
+          "emojis": [
+            "😼",
+            "🐾"
+          ],
+          "text": "ready"
+        },
+        "11.webp": {
+          "emojis": [
+            "📦",
+            "😼"
+          ],
+          "text": "mine"
+        },
+        "12.webp": {
+          "emojis": [
+            "😴",
+            "💤"
+          ],
+          "text": "tired, THUD"
+        },
+        "13.webp": {
+          "text": "brb zoomies"
+        },
+        "14.webp": {
+          "text": "love u!!"
+        },
+        "15.webp": {
+          "text": "nope"
+        },
+        "16.webp": {
+          "text": "incoming"
+        },
+        "17.webp": {
+          "text": "excited"
+        },
+        "18.webp": {
+          "text": "ur cute / ur too"
+        }
+      }
+    },
+    "delulu": {
+      "name": "Delulu in Love",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "words",
+        "slang",
+        "flirt"
+      ],
+      "emojis": [
+        "🤪",
+        "✨"
+      ],
+      "keywords": [
+        "delulu",
+        "delulu is the solulu",
+        "situationship",
+        "talking phase",
+        "dtr?",
+        "boo'd up",
+        "i ship us",
+        "dry texter",
+        "green flag",
+        "soft launch",
+        "let him cook",
+        "my roman empire = u"
+      ],
+      "order": 14
+    },
+    "sad-hours-animated": {
+      "name": "Sad Hours",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "sad",
+        "miss-you",
+        "cloud",
+        "sun",
+        "care",
+        "rainy"
+      ],
+      "emojis": [
+        "🌧️",
+        "😢"
+      ],
+      "keywords": [
+        "miss u so much",
+        "not ok",
+        "cried a bit",
+        "3am thoughts",
+        "wish u were here",
+        "it hurts",
+        "still love u",
+        "heart on the floor",
+        "don't leave",
+        "i'm here",
+        "we'll be ok",
+        "talk to me"
+      ],
+      "order": 15
+    },
+    "did-you-eat": {
+      "name": "Did You Eat?",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "food",
+        "care",
+        "snacks",
+        "dumpling",
+        "date"
+      ],
+      "emojis": [
+        "🥟",
+        "😋"
+      ],
+      "keywords": [
+        "did u eat?",
+        "eat first, love later",
+        "hungry = grumpy",
+        "snack?",
+        "cook for me",
+        "feed me",
+        "share a bite",
+        "boba date?",
+        "dinner at mine",
+        "pizza is my love language",
+        "u + me + fries",
+        "full & happy"
+      ],
+      "order": 16
+    },
+    "sorry-love": {
+      "name": "Sorry, My Love",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "cute",
+        "sorry",
+        "blob",
+        "angry",
+        "pinky"
+      ],
+      "emojis": [
+        "🥺",
+        "🙏"
+      ],
+      "order": 17,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🥺",
+            "🙏"
+          ],
+          "text": "SORRY"
+        },
+        "02.webp": {
+          "emojis": [
+            "🥺",
+            "🌸"
+          ],
+          "text": "FORGIVE ME?"
+        },
+        "03.webp": {
+          "emojis": [
+            "🤞",
+            "🥺"
+          ],
+          "text": "NEVER AGAIN"
+        },
+        "04.webp": {
+          "emojis": [
+            "✌️",
+            "🏳️"
+          ],
+          "text": "TRUCE"
+        },
+        "05.webp": {
+          "emojis": [
+            "🥺",
+            "😢"
+          ],
+          "text": "DON'T BE MAD"
+        },
+        "06.webp": {
+          "emojis": [
+            "🥺",
+            "🙏"
+          ],
+          "text": "PLS"
+        },
+        "07.webp": {
+          "emojis": [
+            "😔",
+            "❤️"
+          ],
+          "text": "MY BAD"
+        },
+        "08.webp": {
+          "emojis": [
+            "😣",
+            "😔"
+          ],
+          "text": "I MESSED UP"
+        },
+        "09.webp": {
+          "emojis": [
+            "🍫",
+            "🥺"
+          ],
+          "text": "PEACE?"
+        },
+        "10.webp": {
+          "emojis": [
+            "💌",
+            "✍️"
+          ],
+          "text": "DEAR U"
+        },
+        "11.webp": {
+          "emojis": [
+            "🥺",
+            "😟"
+          ],
+          "text": "UR MAD?"
+        },
+        "12.webp": {
+          "emojis": [
+            "🤗",
+            "❤️"
+          ],
+          "text": "MADE UP?"
+        },
+        "13.webp": {
+          "emojis": [
+            "😔",
+            "🙇"
+          ],
+          "text": "MY FAULT"
+        },
+        "14.webp": {
+          "emojis": [
+            "💍",
+            "🥺"
+          ],
+          "text": "PLS SMILE"
+        },
+        "15.webp": {
+          "emojis": [
+            "💍",
+            "😊"
+          ],
+          "text": "PLS SMILE"
+        },
+        "16.webp": {
+          "emojis": [
+            "😢",
+            "💔"
+          ],
+          "text": "I MISS US"
+        },
+        "17.webp": {
+          "emojis": [
+            "🤝",
+            "🥺"
+          ],
+          "text": "FRIENDS?"
+        },
+        "18.webp": {
+          "emojis": [
+            "🌸",
+            "❤️"
+          ],
+          "text": "LOVE U MORE"
+        }
+      }
+    },
+    "proud-of-you": {
+      "name": "Proud of You",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "support",
+        "celebration",
+        "compliment",
+        "trophy"
+      ],
+      "emojis": [
+        "🏆",
+        "👏"
+      ],
+      "keywords": [
+        "so proud",
+        "u got this",
+        "my winner",
+        "go get it",
+        "knew u could",
+        "rest, u earned it",
+        "big day, big love",
+        "look at u!",
+        "clap clap",
+        "boss",
+        "champion",
+        "star of my day"
+      ],
+      "order": 18
+    },
+    "blue-ticks-animated": {
+      "name": "Blue Ticks",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "phone",
+        "seen",
+        "reply",
+        "typing",
+        "jealous",
+        "petty",
+        "chat"
+      ],
+      "emojis": [
+        "📱",
+        "😒"
+      ],
+      "keywords": [
+        "seen. no reply.",
+        "typing… for 5 min",
+        "left on read",
+        "online but not for me",
+        "last seen: my heart",
+        "who's she",
+        "hmph",
+        "k.",
+        "fine.",
+        "reply pls",
+        "double tick, single heart",
+        "read receipts on = love"
+      ],
+      "order": 19
+    },
+    "gm-gn": {
+      "name": "Good Morning, Good Night",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "goodnight",
+        "good-morning",
+        "good-night",
+        "sun",
+        "moon",
+        "sleepy"
+      ],
+      "emojis": [
+        "☀️",
+        "🌙"
+      ],
+      "order": 20,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "☀️",
+            "☕"
+          ],
+          "text": "good morning"
+        },
+        "02.webp": {
+          "emojis": [
+            "☀️",
+            "🙌"
+          ],
+          "text": "rise & shine"
+        },
+        "03.webp": {
+          "emojis": [
+            "👋",
+            "☀️"
+          ],
+          "text": "hi love"
+        },
+        "04.webp": {
+          "emojis": [
+            "🌙",
+            "😴"
+          ],
+          "text": "good night"
+        },
+        "05.webp": {
+          "emojis": [
+            "🌙",
+            "⭐"
+          ],
+          "text": "sweet dreams"
+        },
+        "06.webp": {
+          "emojis": [
+            "🥱",
+            "🌙"
+          ],
+          "text": "sleepy?"
+        },
+        "07.webp": {
+          "text": "breakfast?"
+        },
+        "08.webp": {
+          "text": "morning love"
+        },
+        "09.webp": {
+          "text": "one more chapter"
+        },
+        "10.webp": {
+          "text": "morning love"
+        },
+        "11.webp": {
+          "text": "one more chapter"
+        },
+        "12.webp": {
+          "text": "can't sleep thinking of u"
+        }
+      }
+    },
+    "every-love": {
+      "name": "Every Love",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "couple",
+        "together",
+        "doodle"
+      ],
+      "emojis": [
+        "💑",
+        "💞"
+      ],
+      "keywords": [
+        "us",
+        "still us",
+        "my person",
+        "home is u",
+        "grow old w me",
+        "team us",
+        "hand in hand",
+        "forehead kiss",
+        "piggyback",
+        "one umbrella",
+        "slow dance",
+        "always"
+      ],
+      "order": 21
+    },
+    "habibi-jaan-amor": {
+      "name": "Habibi · Jaan · Mi Amor",
+      "lang": [
+        "ar",
+        "hi",
+        "es"
+      ],
+      "tags": [
+        "world",
+        "words",
+        "love",
+        "pet-names",
+        "miss-you"
+      ],
+      "emojis": [
+        "💕",
+        "😘"
+      ],
+      "keywords": [
+        "habibi · حبيبي",
+        "ya rouhi",
+        "ya omri",
+        "wahashtini",
+        "nawartni",
+        "meri jaan · मेरी जान",
+        "pyaar",
+        "main hoon na",
+        "mi amor",
+        "te quiero",
+        "mi vida",
+        "contigo"
+      ],
+      "order": 22
+    },
+    "mango-moves-animated": {
+      "name": "Mango Moves",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "cat",
+        "happy",
+        "dance",
+        "mango"
+      ],
+      "emojis": [
+        "🐱",
+        "🥳"
+      ],
+      "order": 23,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🥳",
+            "🙌"
+          ],
+          "text": "LETS GOOO"
+        },
+        "02.webp": {
+          "emojis": [
+            "💫",
+            "❤️"
+          ]
+        },
+        "03.webp": {
+          "emojis": [
+            "🥳",
+            "🎉"
+          ],
+          "text": "YAY"
+        },
+        "04.webp": {
+          "emojis": [
+            "👋",
+            "😸"
+          ],
+          "text": "HIII"
+        },
+        "05.webp": {
+          "emojis": [
+            "❤️",
+            "💓"
+          ],
+          "text": "BA-DUM"
+        },
+        "06.webp": {
+          "emojis": [
+            "🏃",
+            "💨"
+          ],
+          "text": "COMING!"
+        }
+      }
+    },
+    "heartbeat": {
+      "name": "Heartbeat",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "heart",
+        "love",
+        "happy"
+      ],
+      "emojis": [
+        "💓",
+        "😍"
+      ],
+      "order": 24,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "💥",
+            "❤️"
+          ],
+          "text": "BOOM"
+        },
+        "02.webp": {
+          "emojis": [
+            "💘",
+            "❤️"
+          ],
+          "text": "TO U"
+        },
+        "03.webp": {
+          "emojis": [
+            "💞",
+            "😵"
+          ]
+        },
+        "04.webp": {
+          "emojis": [
+            "🔥",
+            "❤️"
+          ],
+          "text": "HOT"
+        },
+        "05.webp": {
+          "emojis": [
+            "🥺",
+            "💗"
+          ],
+          "text": "AWW"
+        },
+        "06.webp": {
+          "emojis": [
+            "🥳",
+            "❤️"
+          ],
+          "text": "YAY"
+        },
+        "07.webp": {
+          "text": "boing"
+        },
+        "08.webp": {
+          "text": "landed on u"
+        },
+        "09.webp": {
+          "text": "thump thump"
+        },
+        "10.webp": {
+          "text": "got u"
+        },
+        "11.webp": {
+          "text": "yay us"
+        },
+        "12.webp": {
+          "text": "shy"
+        }
+      }
+    },
+    "our-story": {
+      "name": "Our Story in 24",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "couples",
+        "couple",
+        "story",
+        "anniversary",
+        "doodle"
+      ],
+      "emojis": [
+        "📖",
+        "💑"
+      ],
+      "keywords": [
+        "01 first hi",
+        "03 talking phase",
+        "05 first date",
+        "07 first kiss",
+        "09 official",
+        "11 first fight",
+        "12 sorry",
+        "14 meet the parents",
+        "16 i love you",
+        "19 moved in",
+        "22 sick day",
+        "24 forever"
+      ],
+      "order": 25
+    },
+    "capy-calm": {
+      "name": "Capy Calm",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "capybara",
+        "calm",
+        "cozy",
+        "together"
+      ],
+      "emojis": [
+        "😌",
+        "🍊"
+      ],
+      "keywords": [
+        "no thoughts, just us",
+        "unbothered",
+        "chill w me",
+        "we're fine",
+        "slow morning",
+        "come float",
+        "no drama",
+        "soft day",
+        "us > everything",
+        "peace",
+        "vibing",
+        "zen"
+      ],
+      "order": 26
+    },
+    "delulu-animated": {
+      "name": "Delulu in Love",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "words",
+        "slang",
+        "flirt"
+      ],
+      "emojis": [
+        "🤪",
+        "✨"
+      ],
+      "keywords": [
+        "delulu",
+        "delulu is the solulu",
+        "situationship",
+        "talking phase",
+        "dtr?",
+        "boo'd up",
+        "i ship us",
+        "dry texter",
+        "green flag",
+        "soft launch",
+        "let him cook",
+        "my roman empire = u"
+      ],
+      "order": 27
+    },
+    "bunny-bounce": {
+      "name": "Bunny Bounce",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "flirty",
+        "cute",
+        "bunny",
+        "hug",
+        "kiss",
+        "happy"
+      ],
+      "emojis": [
+        "🐰",
+        "🤗"
+      ],
+      "order": 28,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🐰",
+            "💗"
+          ],
+          "text": "boing"
+        },
+        "02.webp": {
+          "emojis": [
+            "🤗",
+            "🐰"
+          ],
+          "text": "hug"
+        },
+        "03.webp": {
+          "emojis": [
+            "😘",
+            "🐰"
+          ],
+          "text": "mwah"
+        },
+        "04.webp": {
+          "emojis": [
+            "😊",
+            "🐰"
+          ],
+          "text": "hehe"
+        },
+        "05.webp": {
+          "emojis": [
+            "🥳",
+            "🐰"
+          ],
+          "text": "yay"
+        },
+        "06.webp": {
+          "emojis": [
+            "👋",
+            "🐰"
+          ],
+          "text": "hiii"
+        },
+        "07.webp": {
+          "text": "boing boing boing"
+        },
+        "08.webp": {
+          "text": "coming!"
+        },
+        "09.webp": {
+          "text": "wheee"
+        },
+        "10.webp": {
+          "text": "hi hi hi"
+        },
+        "11.webp": {
+          "text": "tackle hug"
+        },
+        "12.webp": {
+          "text": "oof love u"
+        }
+      }
+    },
+    "player-2": {
+      "name": "Player 2",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "gaming",
+        "football",
+        "waiting",
+        "tease"
+      ],
+      "emojis": [
+        "🎮",
+        "⚽"
+      ],
+      "keywords": [
+        "one more game",
+        "5 more minutes",
+        "controller down, kiss",
+        "player 2 = u",
+        "co-op forever",
+        "gg love",
+        "it's just 90 min",
+        "extra time cuddle",
+        "goal = kiss",
+        "ur reply is lagging",
+        "team us",
+        "rematch?"
+      ],
+      "order": 29
+    },
+    "pop-words": {
+      "name": "Pop Words",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "words",
+        "love",
+        "miss-you",
+        "happy"
+      ],
+      "emojis": [
+        "💥",
+        "💕"
+      ],
+      "order": 30,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "❤️",
+            "😍"
+          ],
+          "text": "LOVE U!!"
+        },
+        "02.webp": {
+          "emojis": [
+            "😲",
+            "💖"
+          ],
+          "text": "omg"
+        },
+        "03.webp": {
+          "emojis": [
+            "😆",
+            "💕"
+          ],
+          "text": "hehe"
+        },
+        "04.webp": {
+          "emojis": [
+            "🥰",
+            "✨"
+          ],
+          "text": "ur cute"
+        },
+        "05.webp": {
+          "emojis": [
+            "🙌",
+            "💖"
+          ],
+          "text": "yesss"
+        },
+        "06.webp": {
+          "emojis": [
+            "🥺",
+            "💕"
+          ],
+          "text": "miss u!!"
+        },
+        "07.webp": {
+          "text": "pop!"
+        },
+        "08.webp": {
+          "text": "boom"
+        },
+        "09.webp": {
+          "text": "miss u!!"
+        },
+        "10.webp": {
+          "text": "omg"
+        },
+        "11.webp": {
+          "text": "yesss"
+        },
+        "12.webp": {
+          "text": "love!"
+        }
+      }
+    },
+    "did-you-eat-animated": {
+      "name": "Did You Eat?",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "food",
+        "care",
+        "snacks",
+        "dumpling",
+        "date"
+      ],
+      "emojis": [
+        "🥟",
+        "😋"
+      ],
+      "keywords": [
+        "did u eat?",
+        "eat first, love later",
+        "hungry = grumpy",
+        "snack?",
+        "cook for me",
+        "feed me",
+        "share a bite",
+        "boba date?",
+        "dinner at mine",
+        "pizza is my love language",
+        "u + me + fries",
+        "full & happy"
+      ],
+      "order": 31
+    },
+    "lazy-sunday": {
+      "name": "Lazy Sunday",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "couple",
+        "cozy",
+        "weekend",
+        "together",
+        "movies"
+      ],
+      "emojis": [
+        "🛋️",
+        "☕"
+      ],
+      "keywords": [
+        "no plans, just u",
+        "come nap",
+        "couch date",
+        "blanket fort",
+        "pyjamas all day",
+        "coffee in bed",
+        "cancel everything",
+        "stay in",
+        "movie?",
+        "cosy",
+        "home = u",
+        "sunday us"
+      ],
+      "order": 32
+    },
+    "special-days": {
+      "name": "Special Days",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "occasions",
+        "anniversary",
+        "valentine",
+        "new-year",
+        "seasons",
+        "date",
+        "heart"
+      ],
+      "emojis": [
+        "🎉",
+        "💝"
+      ],
+      "keywords": [
+        "100 days",
+        "happy monthsary",
+        "1 year of us",
+        "our day",
+        "be my valentine",
+        "new year kiss",
+        "first snow w u",
+        "summer us",
+        "date night",
+        "save the date",
+        "still choosing u",
+        "forever starts today"
+      ],
+      "order": 33
+    },
+    "dance-w-me": {
+      "name": "Dance With Me",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "couple",
+        "dance",
+        "together",
+        "music"
+      ],
+      "emojis": [
+        "💃",
+        "🕺"
+      ],
+      "order": 34,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "💃",
+            "🕺"
+          ],
+          "text": "dance w me"
+        },
+        "02.webp": {
+          "emojis": [
+            "🤗",
+            "💕"
+          ]
+        },
+        "03.webp": {
+          "emojis": [
+            "👫",
+            "❤️"
+          ],
+          "text": "us"
+        },
+        "04.webp": {
+          "emojis": [
+            "💏",
+            "❤️"
+          ]
+        },
+        "05.webp": {
+          "emojis": [
+            "🙌",
+            "💪"
+          ],
+          "text": "team"
+        },
+        "06.webp": {
+          "emojis": [
+            "🥳",
+            "🎉"
+          ],
+          "text": "yay"
+        },
+        "07.webp": {
+          "text": "spin me"
+        },
+        "08.webp": {
+          "text": "slow one"
+        },
+        "09.webp": {
+          "text": "kitchen disco"
+        },
+        "10.webp": {
+          "text": "dip!"
+        },
+        "11.webp": {
+          "text": "our song!"
+        },
+        "12.webp": {
+          "text": "again?"
+        }
+      }
+    },
+    "sorry-love-animated": {
+      "name": "Sorry, My Love",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "cute",
+        "sorry",
+        "blob",
+        "angry",
+        "pinky"
+      ],
+      "emojis": [
+        "🥺",
+        "🙏"
+      ],
+      "order": 35,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🥺",
+            "🙏"
+          ],
+          "text": "SORRY"
+        },
+        "02.webp": {
+          "emojis": [
+            "🥺",
+            "🌸"
+          ],
+          "text": "FORGIVE ME?"
+        },
+        "03.webp": {
+          "emojis": [
+            "🤞",
+            "🥺"
+          ],
+          "text": "NEVER AGAIN"
+        },
+        "04.webp": {
+          "emojis": [
+            "✌️",
+            "🏳️"
+          ],
+          "text": "TRUCE"
+        },
+        "05.webp": {
+          "emojis": [
+            "🥺",
+            "😢"
+          ],
+          "text": "DON'T BE MAD"
+        },
+        "06.webp": {
+          "emojis": [
+            "🥺",
+            "🙏"
+          ],
+          "text": "PLS"
+        }
+      }
+    },
+    "caught-web": {
+      "name": "Caught in Your Web",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "cute",
+        "spider",
+        "flirt",
+        "compliment"
+      ],
+      "emojis": [
+        "🕷️",
+        "🕸️"
+      ],
+      "keywords": [
+        "caught u",
+        "stuck on u",
+        "hang w me?",
+        "swing by",
+        "brand new day w us",
+        "8 legs, 1 heart",
+        "my hero",
+        "night patrol: checking on u",
+        "tangled in u",
+        "sense says: hug",
+        "web of lies? never",
+        "saved my day"
+      ],
+      "order": 36
+    },
+    "one-night": {
+      "name": "One Night",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "flirty",
+        "couples",
+        "date",
+        "couple",
+        "story"
+      ],
+      "emojis": [
+        "🥂",
+        "🌃"
+      ],
+      "keywords": [
+        "tonight?",
+        "7pm. be ready.",
+        "outfit check",
+        "running late",
+        "found u",
+        "one drink",
+        "walk w me",
+        "side quest",
+        "dance w me",
+        "it's midnight",
+        "don't go home",
+        "stay",
+        "last train",
+        "sunrise",
+        "worth it",
+        "again tomorrow?"
+      ],
+      "order": 37
+    },
+    "miles-apart": {
+      "name": "Miles Apart",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "distance",
+        "miss-you",
+        "travel",
+        "waiting"
+      ],
+      "emojis": [
+        "✈️",
+        "🥺"
+      ],
+      "order": 38,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "✈️",
+            "❤️"
+          ],
+          "text": "ON MY WAY"
+        },
+        "02.webp": {
+          "emojis": [
+            "📱",
+            "🥺"
+          ],
+          "text": "MISS U, MISSED CALLS"
+        },
+        "03.webp": {
+          "emojis": [
+            "📅",
+            "⏳"
+          ],
+          "text": "COUNTING DAYS"
+        },
+        "04.webp": {
+          "emojis": [
+            "📱",
+            "💕"
+          ],
+          "text": "VIDEO CALL?"
+        },
+        "05.webp": {
+          "emojis": [
+            "🌍",
+            "❤️"
+          ],
+          "text": "FAR BUT CLOSE"
+        },
+        "06.webp": {
+          "emojis": [
+            "🧳",
+            "🥰"
+          ],
+          "text": "SEE U SOON"
+        },
+        "07.webp": {
+          "text": "letter for u"
+        },
+        "08.webp": {
+          "text": "ur 9pm my 3pm"
+        },
+        "09.webp": {
+          "text": "ur side is cold"
+        },
+        "10.webp": {
+          "text": "booked!"
+        },
+        "11.webp": {
+          "text": "movie night apart"
+        },
+        "12.webp": {
+          "text": "closer every day"
+        }
+      }
+    },
+    "heartbeat-animated": {
+      "name": "Heartbeat",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "heart",
+        "love",
+        "happy"
+      ],
+      "emojis": [
+        "💓",
+        "😍"
+      ],
+      "order": 39,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "💥",
+            "❤️"
+          ],
+          "text": "BOOM"
+        },
+        "02.webp": {
+          "emojis": [
+            "💘",
+            "❤️"
+          ],
+          "text": "TO U"
+        },
+        "03.webp": {
+          "emojis": [
+            "💞",
+            "😵"
+          ]
+        },
+        "04.webp": {
+          "emojis": [
+            "🔥",
+            "❤️"
+          ],
+          "text": "HOT"
+        },
+        "05.webp": {
+          "emojis": [
+            "🥺",
+            "💗"
+          ],
+          "text": "AWW"
+        },
+        "06.webp": {
+          "emojis": [
+            "🥳",
+            "❤️"
+          ],
+          "text": "YAY"
+        }
+      }
+    },
+    "waiting": {
+      "name": "Waiting for Something",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "waiting",
+        "miss-you",
+        "sad",
+        "love"
+      ],
+      "emojis": [
+        "⏳",
+        "🥺"
+      ],
+      "keywords": [
+        "waiting for something",
+        "i remember everything",
+        "still wearing it",
+        "u don't know me yet",
+        "we start over",
+        "i'd choose u again",
+        "light's on for u",
+        "read the letter",
+        "slow burn",
+        "not yet, but soon",
+        "find me again",
+        "always was u"
+      ],
+      "order": 40
+    },
+    "friends-to-lovers": {
+      "name": "Friends to Lovers",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "friends",
+        "couple",
+        "love",
+        "doodle"
+      ],
+      "emojis": [
+        "👫",
+        "💘"
+      ],
+      "keywords": [
+        "it was always u",
+        "just friends (lie)",
+        "missed timing",
+        "say it first",
+        "10 summers",
+        "u knew?",
+        "the trip changed everything",
+        "best friend → more",
+        "finally",
+        "we wasted years",
+        "worth the wait",
+        "still my best friend"
+      ],
+      "order": 41
+    },
+    "couple-doodles": {
+      "name": "Couple Doodles",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "couple",
+        "together",
+        "doodle",
+        "hug"
+      ],
+      "emojis": [
+        "👫",
+        "💕"
+      ],
+      "order": 42,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "👫",
+            "❤️"
+          ],
+          "text": "U"
+        },
+        "02.webp": {
+          "emojis": [
+            "😘",
+            "🥰"
+          ]
+        },
+        "03.webp": {
+          "emojis": [
+            "🥰",
+            "💕"
+          ],
+          "text": "my fav"
+        },
+        "04.webp": {
+          "emojis": [
+            "☂️",
+            "❤️"
+          ]
+        },
+        "05.webp": {
+          "emojis": [
+            "🤗",
+            "❤️"
+          ]
+        },
+        "06.webp": {
+          "emojis": [
+            "🍳",
+            "❤️"
+          ],
+          "text": "always"
+        },
+        "07.webp": {
+          "text": "our song"
+        },
+        "08.webp": {
+          "text": "family walk"
+        },
+        "09.webp": {
+          "text": "errands date"
+        },
+        "10.webp": {
+          "text": "our place"
+        },
+        "11.webp": {
+          "text": "wish granted"
+        },
+        "12.webp": {
+          "text": "quiet love"
+        }
+      }
+    },
+    "capy-calm-animated": {
+      "name": "Capy Calm",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "capybara",
+        "calm",
+        "cozy",
+        "together"
+      ],
+      "emojis": [
+        "😌",
+        "🍊"
+      ],
+      "keywords": [
+        "no thoughts, just us",
+        "unbothered",
+        "chill w me",
+        "we're fine",
+        "slow morning",
+        "come float",
+        "no drama",
+        "soft day",
+        "us > everything",
+        "peace",
+        "vibing",
+        "zen"
+      ],
+      "order": 43
+    },
+    "dr-love": {
+      "name": "Dr. Love",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "doctor",
+        "heart",
+        "care",
+        "tv-series"
+      ],
+      "emojis": [
+        "🩺",
+        "💗"
+      ],
+      "keywords": [
+        "you're my person",
+        "diagnosis: in love",
+        "prescription: u, twice daily",
+        "code blue: miss u",
+        "vitals: racing",
+        "stat! hug needed",
+        "paging dr. cutie",
+        "on call for u",
+        "scrub in w me",
+        "get well soon, my love",
+        "heartbeat: yours",
+        "not lupus. love."
+      ],
+      "order": 44
+    },
+    "dearest": {
+      "name": "Dearest",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "couple",
+        "tv-series",
+        "dance",
+        "flirt"
+      ],
+      "emojis": [
+        "💌",
+        "🌹"
+      ],
+      "keywords": [
+        "dearest reader: i'm in love",
+        "burning for u",
+        "save me a dance",
+        "the season's diamond: u",
+        "scandal! (we kissed)",
+        "promenade?",
+        "my card is full (of u)",
+        "masked, but i knew u",
+        "a most ardent yes",
+        "society can wait",
+        "meet me in the garden",
+        "courting u"
+      ],
+      "order": 45
+    },
+    "sorry-wiggle": {
+      "name": "Sorry Wiggle",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "cute",
+        "sorry",
+        "blob",
+        "angry",
+        "pinky"
+      ],
+      "emojis": [
+        "🥺",
+        "🙏"
+      ],
+      "order": 46,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🥺",
+            "😢"
+          ],
+          "text": "sorryyy"
+        },
+        "02.webp": {
+          "emojis": [
+            "🙇",
+            "🥺"
+          ],
+          "text": "forgive me"
+        },
+        "03.webp": {
+          "emojis": [
+            "😭",
+            "🙏"
+          ],
+          "text": "pls"
+        },
+        "04.webp": {
+          "emojis": [
+            "😬",
+            "💦"
+          ],
+          "text": "oops"
+        },
+        "05.webp": {
+          "emojis": [
+            "🏳️",
+            "🌸"
+          ],
+          "text": "truce?"
+        },
+        "06.webp": {
+          "emojis": [
+            "🥳",
+            "❤️"
+          ],
+          "text": "yay ur back"
+        },
+        "07.webp": {
+          "text": "sorryyy"
+        },
+        "08.webp": {
+          "text": "pls?"
+        },
+        "09.webp": {
+          "text": "forgive meee"
+        },
+        "10.webp": {
+          "text": "i was wrong!!"
+        },
+        "11.webp": {
+          "text": "don't be mad"
+        },
+        "12.webp": {
+          "text": "love"
+        }
+      }
+    },
+    "bunny-bounce-animated": {
+      "name": "Bunny Bounce",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "flirty",
+        "cute",
+        "bunny",
+        "hug",
+        "kiss",
+        "happy"
+      ],
+      "emojis": [
+        "🐰",
+        "🤗"
+      ],
+      "order": 47,
+      "stickers": {
+        "01.webp": {
+          "text": "boing boing boing"
+        },
+        "02.webp": {
+          "text": "coming!"
+        },
+        "03.webp": {
+          "text": "wheee"
+        },
+        "04.webp": {
+          "text": "hi hi hi"
+        },
+        "05.webp": {
+          "text": "tackle hug"
+        },
+        "06.webp": {
+          "text": "oof love u"
+        }
+      }
+    },
+    "kdrama-hearts": {
+      "name": "K-Drama Hearts",
+      "lang": [
+        "en",
+        "ko"
+      ],
+      "tags": [
+        "anime",
+        "romantic",
+        "k-drama",
+        "korean",
+        "couple",
+        "love",
+        "hug"
+      ],
+      "emojis": [
+        "💕",
+        "🥰"
+      ],
+      "keywords": [
+        "saranghae",
+        "finger heart",
+        "back hug",
+        "wrist grab (gently)",
+        "piggyback home",
+        "one umbrella",
+        "want ramyeon?",
+        "our 100 days",
+        "jagiya",
+        "in this life and the next",
+        "cold? my jacket",
+        "ep 16 ending",
+        "slow-mo hair flip",
+        "soju night",
+        "fate",
+        "aegyo attack"
+      ],
+      "order": 48
+    },
+    "love-spell": {
+      "name": "Love Spell",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "occasions",
+        "cat",
+        "halloween",
+        "flirt"
+      ],
+      "emojis": [
+        "🐈",
+        "👻"
+      ],
+      "keywords": [
+        "under ur spell",
+        "love potion no. 9",
+        "u're my type (of magic)",
+        "bewitched",
+        "brew me a coffee",
+        "full moon date",
+        "my familiar",
+        "spellbound",
+        "charmed",
+        "wicked cute",
+        "boo (i love u)",
+        "hex my ex? no, kiss me"
+      ],
+      "order": 49
+    },
+    "sunny-sleepy": {
+      "name": "Sunny & Sleepy",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "goodnight",
+        "good-morning",
+        "good-night",
+        "sun",
+        "moon",
+        "sleepy"
+      ],
+      "emojis": [
+        "☀️",
+        "😴"
+      ],
+      "order": 50,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "☀️",
+            "😊"
+          ],
+          "text": "GOOD MORNING!"
+        },
+        "02.webp": {
+          "emojis": [
+            "☀️",
+            "☕"
+          ],
+          "text": "WAKEY WAKEY"
+        },
+        "03.webp": {
+          "emojis": [
+            "☀️",
+            "👋"
+          ],
+          "text": "HI LOVE"
+        },
+        "04.webp": {
+          "emojis": [
+            "🌙",
+            "😴"
+          ],
+          "text": "NITE NITE"
+        },
+        "05.webp": {
+          "emojis": [
+            "💤",
+            "🌙"
+          ],
+          "text": "SWEET DREAMS"
+        },
+        "06.webp": {
+          "emojis": [
+            "⭐",
+            "🌙"
+          ],
+          "text": "GN"
+        },
+        "07.webp": {
+          "text": "wakey wakey"
+        },
+        "08.webp": {
+          "text": "goood morning"
+        },
+        "09.webp": {
+          "text": "hiii love"
+        },
+        "10.webp": {
+          "text": "sleepyyy"
+        },
+        "11.webp": {
+          "text": "lullaby"
+        },
+        "12.webp": {
+          "text": "nighty night"
+        }
+      }
+    },
+    "caught-web-animated": {
+      "name": "Caught in Your Web",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "cute",
+        "spider",
+        "flirt",
+        "compliment"
+      ],
+      "emojis": [
+        "🕷️",
+        "🕸️"
+      ],
+      "keywords": [
+        "caught u",
+        "stuck on u",
+        "hang w me?",
+        "swing by",
+        "brand new day w us",
+        "8 legs, 1 heart",
+        "my hero",
+        "night patrol: checking on u",
+        "tangled in u",
+        "sense says: hug",
+        "web of lies? never",
+        "saved my day"
+      ],
+      "order": 51
+    },
+    "coupled-up": {
+      "name": "Coupled Up",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "reality-show",
+        "blob",
+        "flirt",
+        "couple"
+      ],
+      "emojis": [
+        "🔥",
+        "🏝️"
+      ],
+      "keywords": [
+        "here for the right reasons",
+        "my type on paper",
+        "the ick? never",
+        "coupled up",
+        "grafting",
+        "villa vibes",
+        "recoupling: u again",
+        "green flag",
+        "final two: us",
+        "i've got a text (from u)",
+        "bombshell alert",
+        "10/10 would swipe"
+      ],
+      "order": 52
+    },
+    "lobsters": {
+      "name": "Lobsters",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "lobster",
+        "couple",
+        "tv-series",
+        "together"
+      ],
+      "emojis": [
+        "🦞",
+        "💕"
+      ],
+      "keywords": [
+        "ur my lobster",
+        "claws off, mine",
+        "never on a break",
+        "pinch me, ur real",
+        "mate for life",
+        "how u doin ;)",
+        "tank for two",
+        "shell yeah",
+        "butter me up",
+        "boiling for u",
+        "lobster date",
+        "pivot! (to u)"
+      ],
+      "order": 53
+    },
+    "filmy-love": {
+      "name": "Filmy Love",
+      "lang": [
+        "en",
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "romantic",
+        "bollywood",
+        "movies",
+        "couple",
+        "drama"
+      ],
+      "emojis": [
+        "🎬",
+        "💃"
+      ],
+      "keywords": [
+        "palat!",
+        "train scene",
+        "rain dance w u",
+        "dhak dhak",
+        "chai + u",
+        "hero entry",
+        "background music: my heart",
+        "filmy but true",
+        "interval? no, forever",
+        "dupatta drama",
+        "family approves",
+        "shaadi? soon"
+      ],
+      "order": 54
+    },
+    "one-night-animated": {
+      "name": "One Night",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "flirty",
+        "couples",
+        "date",
+        "couple",
+        "story"
+      ],
+      "emojis": [
+        "🥂",
+        "🌃"
+      ],
+      "keywords": [
+        "tonight?",
+        "7pm. be ready.",
+        "outfit check",
+        "running late",
+        "found u",
+        "one drink",
+        "walk w me",
+        "side quest",
+        "dance w me",
+        "it's midnight",
+        "don't go home",
+        "stay",
+        "last train",
+        "sunrise",
+        "worth it",
+        "again tomorrow?"
+      ],
+      "order": 55
+    },
+    "dizi-love": {
+      "name": "Dizi Love",
+      "lang": [
+        "tr"
+      ],
+      "tags": [
+        "world",
+        "romantic",
+        "dizi",
+        "turkish",
+        "couple",
+        "pet-names",
+        "drama"
+      ],
+      "emojis": [
+        "📺",
+        "😍"
+      ],
+      "keywords": [
+        "aşkım",
+        "canım",
+        "hayatım",
+        "sevgilim",
+        "seni seviyorum",
+        "çay for two",
+        "istanbul w u",
+        "dramatic stare",
+        "3-hour episode, 3-hour hug",
+        "kismet",
+        "bosphorus date",
+        "the slap-turn (jk)"
+      ],
+      "order": 56
+    },
+    "just-faces": {
+      "name": "Just Faces",
+      "lang": [
+        "none"
+      ],
+      "tags": [
+        "cute",
+        "faces",
+        "wordless",
+        "shy"
+      ],
+      "emojis": [
+        "😊",
+        "🥺"
+      ],
+      "keywords": [
+        "blush",
+        "pout",
+        "heart eyes",
+        "side-eye",
+        "sleepy",
+        "crying-laughing",
+        "smug",
+        "shy",
+        "sulk",
+        "gasp",
+        "melting",
+        "zoned out"
+      ],
+      "order": 57
+    },
+    "hands": {
+      "name": "Hands",
+      "lang": [
+        "none"
+      ],
+      "tags": [
+        "cute",
+        "gestures",
+        "wordless",
+        "doodle",
+        "hug",
+        "kiss"
+      ],
+      "emojis": [
+        "🥰",
+        "🤙"
+      ],
+      "keywords": [
+        "heart hands",
+        "pinky promise",
+        "finger heart",
+        "hand hold",
+        "blown kiss",
+        "come here",
+        "high five",
+        "hug arms",
+        "call me",
+        "peace",
+        "cheek pinch",
+        "fist bump"
+      ],
+      "order": 58
+    },
+    "dr-love-animated": {
+      "name": "Dr. Love",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "doctor",
+        "heart",
+        "care",
+        "tv-series"
+      ],
+      "emojis": [
+        "🩺",
+        "💗"
+      ],
+      "keywords": [
+        "you're my person",
+        "diagnosis: in love",
+        "prescription: u, twice daily",
+        "code blue: miss u",
+        "vitals: racing",
+        "stat! hug needed",
+        "paging dr. cutie",
+        "on call for u",
+        "scrub in w me",
+        "get well soon, my love",
+        "heartbeat: yours",
+        "not lupus. love."
+      ],
+      "order": 59
+    },
+    "reaction-hearts": {
+      "name": "Reaction Hearts",
+      "lang": [
+        "none"
+      ],
+      "tags": [
+        "romantic",
+        "heart",
+        "faces",
+        "wordless"
+      ],
+      "emojis": [
+        "❤️",
+        "🔥"
+      ],
+      "keywords": [
+        "exploding",
+        "melting",
+        "shy",
+        "cracked",
+        "on fire",
+        "sleeping",
+        "dizzy",
+        "crying",
+        "laughing",
+        "bandaged",
+        "spinning",
+        "tiny"
+      ],
+      "order": 60
+    },
+    "love-words-world-1": {
+      "name": "Love Words: World (1/2)",
+      "lang": [
+        "multi",
+        "pt-BR",
+        "id",
+        "fr",
+        "tr",
+        "tl"
+      ],
+      "tags": [
+        "world",
+        "words",
+        "love",
+        "pet-names",
+        "miss-you",
+        "good-night",
+        "kiss",
+        "sorry"
+      ],
+      "emojis": [
+        "🌍",
+        "💕"
+      ],
+      "keywords": [
+        "meu amor · saudade",
+        "sayang · aku cinta kamu",
+        "mon amour · bisous",
+        "aşkım · seni seviyorum",
+        "mahal kita",
+        "ti amo · amore",
+        "schatz · ich liebe dich",
+        "sayang · rindu",
+        "nakupenda · mpenzi"
+      ],
+      "order": 61
+    },
+    "love-words-world-2": {
+      "name": "Love Words: World (2/2)",
+      "lang": [
+        "multi",
+        "tl",
+        "it",
+        "de",
+        "ms",
+        "sw"
+      ],
+      "tags": [
+        "world",
+        "words",
+        "love",
+        "pet-names",
+        "miss-you",
+        "good-night",
+        "kiss",
+        "sorry"
+      ],
+      "emojis": [
+        "🌍",
+        "💕"
+      ],
+      "keywords": [
+        "meu amor · saudade",
+        "sayang · aku cinta kamu",
+        "mon amour · bisous",
+        "aşkım · seni seviyorum",
+        "mahal kita",
+        "ti amo · amore",
+        "schatz · ich liebe dich",
+        "sayang · rindu",
+        "nakupenda · mpenzi"
+      ],
+      "order": 62
+    },
+    "sorry-wiggle-animated": {
+      "name": "Sorry Wiggle",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "cute",
+        "sorry",
+        "blob",
+        "angry",
+        "pinky"
+      ],
+      "emojis": [
+        "🥺",
+        "🙏"
+      ],
+      "order": 63,
+      "stickers": {
+        "01.webp": {
+          "text": "sorryyy"
+        },
+        "02.webp": {
+          "text": "pls?"
+        },
+        "03.webp": {
+          "text": "forgive meee"
+        },
+        "04.webp": {
+          "text": "i was wrong!!"
+        },
+        "05.webp": {
+          "text": "don't be mad"
+        },
+        "06.webp": {
+          "text": "love"
+        }
+      }
+    },
+    "i-love-you-world": {
+      "name": "I Love You, Everywhere",
+      "lang": [
+        "multi",
+        "en",
+        "es",
+        "fr",
+        "pt-BR",
+        "it",
+        "de",
+        "ar",
+        "fa",
+        "tr",
+        "hi",
+        "bn",
+        "el",
+        "ja",
+        "ko",
+        "zh",
+        "th",
+        "vi",
+        "id",
+        "tl",
+        "sw",
+        "ru",
+        "nl",
+        "pl",
+        "ms"
+      ],
+      "tags": [
+        "world",
+        "words",
+        "love"
+      ],
+      "emojis": [
+        "💕",
+        "🌍"
+      ],
+      "order": 64
+    },
+    "pet-names": {
+      "name": "Pet Names",
+      "lang": [
+        "multi",
+        "en",
+        "ar",
+        "hi",
+        "es",
+        "pt-BR",
+        "id",
+        "ms",
+        "fr",
+        "tr",
+        "tl",
+        "de",
+        "fa"
+      ],
+      "tags": [
+        "world",
+        "pet-names",
+        "words",
+        "love"
+      ],
+      "emojis": [
+        "💬",
+        "🥰"
+      ],
+      "keywords": [
+        "babe",
+        "habibi",
+        "jaan",
+        "amor",
+        "bebê",
+        "sayang",
+        "chérie",
+        "canım",
+        "mahal",
+        "schatz",
+        "joonam",
+        "boo"
+      ],
+      "order": 65
+    },
+    "wedding": {
+      "name": "Wedding & Engagement",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "occasions",
+        "wedding",
+        "engagement",
+        "couple",
+        "celebration"
+      ],
+      "emojis": [
+        "💍",
+        "👰"
+      ],
+      "keywords": [
+        "she said yes",
+        "ring box",
+        "save the date",
+        "countdown: 30 days",
+        "henna hands",
+        "mr & mrs",
+        "first dance",
+        "our day",
+        "nervous, happy",
+        "to the aisle",
+        "family approves",
+        "honeymoon"
+      ],
+      "order": 66
+    },
+    "kdrama-hearts-animated": {
+      "name": "K-Drama Hearts",
+      "lang": [
+        "en",
+        "ko"
+      ],
+      "tags": [
+        "anime",
+        "romantic",
+        "k-drama",
+        "korean",
+        "couple",
+        "love",
+        "hug"
+      ],
+      "emojis": [
+        "💕",
+        "🥰"
+      ],
+      "keywords": [
+        "saranghae",
+        "finger heart",
+        "back hug",
+        "wrist grab (gently)",
+        "piggyback home",
+        "one umbrella",
+        "want ramyeon?",
+        "our 100 days",
+        "jagiya",
+        "in this life and the next",
+        "cold? my jacket",
+        "ep 16 ending",
+        "slow-mo hair flip",
+        "soju night",
+        "fate",
+        "aegyo attack"
+      ],
+      "order": 67
+    },
+    "baby": {
+      "name": "Baby on the Way",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "family",
+        "pregnancy",
+        "couple",
+        "mom",
+        "dad"
+      ],
+      "emojis": [
+        "👶",
+        "🍼"
+      ],
+      "keywords": [
+        "we're expecting",
+        "bump hug",
+        "kick!",
+        "tiny socks",
+        "sleepless together",
+        "mama",
+        "papa",
+        "3am shift",
+        "first smile",
+        "team us",
+        "nap when baby naps",
+        "we made this"
+      ],
+      "order": 68
+    },
+    "family-love": {
+      "name": "Family Love",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "family",
+        "mom",
+        "dad",
+        "siblings",
+        "grandparents",
+        "care"
+      ],
+      "emojis": [
+        "👪",
+        "🤗"
+      ],
+      "keywords": [
+        "call your mum",
+        "love you, mama",
+        "papa's girl",
+        "sibling war, still love u",
+        "grandma's hug",
+        "family dinner?",
+        "proud of u, son",
+        "did u reach?",
+        "send location",
+        "come home soon",
+        "blessings",
+        "family first"
+      ],
+      "order": 69
+    },
+    "valentines": {
+      "name": "Valentine's Countdown",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "occasions",
+        "valentine",
+        "festival",
+        "heart"
+      ],
+      "emojis": [
+        "💘",
+        "🌹"
+      ],
+      "keywords": [
+        "14 days",
+        "13 days…",
+        "be my valentine",
+        "roses are red",
+        "dinner's booked",
+        "my valentine, always",
+        "feliz dia dos namorados",
+        "happy qixi",
+        "white day",
+        "iftar with u",
+        "happy diwali, my love",
+        "every day is the 14th"
+      ],
+      "order": 70
+    },
+    "love-spell-animated": {
+      "name": "Love Spell",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "cute",
+        "occasions",
+        "cat",
+        "halloween",
+        "flirt"
+      ],
+      "emojis": [
+        "🐈",
+        "👻"
+      ],
+      "keywords": [
+        "under ur spell",
+        "love potion no. 9",
+        "u're my type (of magic)",
+        "bewitched",
+        "brew me a coffee",
+        "full moon date",
+        "my familiar",
+        "spellbound",
+        "charmed",
+        "wicked cute",
+        "boo (i love u)",
+        "hex my ex? no, kiss me"
+      ],
+      "order": 71
+    },
+    "two-part": {
+      "name": "Two-Part Stickers",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "couples",
+        "matching",
+        "together",
+        "love",
+        "heart"
+      ],
+      "emojis": [
+        "🧩",
+        "💞"
+      ],
+      "keywords": [
+        "left half · right half",
+        "i love · you more",
+        "reach left · reach right",
+        "key · lock",
+        "question · answer",
+        "puzzle a · puzzle b",
+        "sun · moon",
+        "hi · hi back",
+        "miss u · miss u more",
+        "come · coming",
+        "sorry · forgiven",
+        "yours · mine"
+      ],
+      "order": 72
+    },
+    "seasons-of-us": {
+      "name": "Seasons of Us",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "occasions",
+        "couples",
+        "seasons",
+        "new-year",
+        "couple",
+        "anniversary"
+      ],
+      "emojis": [
+        "🍂",
+        "❄️"
+      ],
+      "keywords": [
+        "new year kiss",
+        "first snow",
+        "first sun",
+        "summer us",
+        "rainy day in",
+        "road trip",
+        "harvest moon",
+        "cosy autumn",
+        "longest night",
+        "spring date",
+        "beach day",
+        "another year of us"
+      ],
+      "order": 73
+    },
+    "chat-fillers": {
+      "name": "Chat Fillers",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "funny",
+        "chat",
+        "typing",
+        "words"
+      ],
+      "emojis": [
+        "💬",
+        "👋"
+      ],
+      "keywords": [
+        "typing…",
+        "brb",
+        "on my way",
+        "call?",
+        "5 min",
+        "in a meeting, love u",
+        "sleeping",
+        "driving",
+        "at the gym",
+        "eating",
+        "charging",
+        "home"
+      ],
+      "order": 74
+    },
+    "just-faces-animated": {
+      "name": "Just Faces",
+      "lang": [
+        "none"
+      ],
+      "tags": [
+        "cute",
+        "faces",
+        "wordless",
+        "shy"
+      ],
+      "emojis": [
+        "😊",
+        "🥺"
+      ],
+      "keywords": [
+        "blush",
+        "pout",
+        "heart eyes",
+        "side-eye",
+        "sleepy",
+        "crying-laughing",
+        "smug",
+        "shy",
+        "sulk",
+        "gasp",
+        "melting",
+        "zoned out"
+      ],
+      "order": 75
+    },
+    "sticker-cards": {
+      "name": "Sticker Cards",
+      "lang": [
+        "en"
+      ],
+      "tags": [
+        "romantic",
+        "cards",
+        "words",
+        "love",
+        "support",
+        "thank-you"
+      ],
+      "emojis": [
+        "💌",
+        "🥰"
+      ],
+      "keywords": [
+        "good morning, my whole world",
+        "proud of you today",
+        "you are my calm",
+        "thank you for choosing me, again",
+        "rest, i've got us",
+        "you make home a person",
+        "safe with you",
+        "today was better because of you",
+        "i'm grateful for us",
+        "still my favourite",
+        "sleep well, my love",
+        "always your side"
+      ],
+      "order": 76
+    },
+    "ya-amar": {
+      "name": "Ya Amar",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "romantic",
+        "arab",
+        "gulf",
+        "love",
+        "pet-names",
+        "moon",
+        "miss-you"
+      ],
+      "emojis": [
+        "🌙",
+        "😍"
+      ],
+      "keywords": [
+        "يا قمر · ya amar",
+        "يا روحي · ya rouhi",
+        "نورتني · nawartni",
+        "على راسي · 3ala rasi",
+        "وحشتني · wahashtini",
+        "يا عمري · ya omri",
+        "أحبك · a7ebbik",
+        "وش فيك · wesh feek",
+        "أبشر · abshir",
+        "يا بعد حيي · ya ba3d 7ayyi",
+        "حبيب قلبي",
+        "الله يخليك لي"
+      ],
+      "order": 77
+    },
+    "yalla-habibi": {
+      "name": "Yalla Habibi",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "funny",
+        "arab",
+        "couple",
+        "chat"
+      ],
+      "emojis": [
+        "😂",
+        "☕"
+      ],
+      "keywords": [
+        "yalla!",
+        "khalas, habibi",
+        "5 min = 1 hour",
+        "mama says hi",
+        "shay?",
+        "wallah i miss u",
+        "habibi, where are u",
+        "inshallah soon",
+        "3adi",
+        "bel hana",
+        "ya zalama",
+        "yalla bye ♥"
+      ],
+      "order": 78
+    },
+    "reaction-hearts-animated": {
+      "name": "Reaction Hearts",
+      "lang": [
+        "none"
+      ],
+      "tags": [
+        "romantic",
+        "heart",
+        "faces",
+        "wordless"
+      ],
+      "emojis": [
+        "❤️",
+        "🔥"
+      ],
+      "keywords": [
+        "exploding",
+        "melting",
+        "shy",
+        "cracked",
+        "on fire",
+        "sleeping",
+        "dizzy",
+        "crying",
+        "laughing",
+        "bandaged",
+        "spinning",
+        "tiny"
+      ],
+      "order": 79
+    },
+    "joonam": {
+      "name": "Joonam",
+      "lang": [
+        "fa"
+      ],
+      "tags": [
+        "world",
+        "romantic",
+        "persian",
+        "pet-names",
+        "love",
+        "miss-you"
+      ],
+      "emojis": [
+        "😘",
+        "🥰"
+      ],
+      "keywords": [
+        "جونم · joonam",
+        "عزیزم · azizam",
+        "عشقم · eshgham",
+        "نفسم · nafasam",
+        "دلبر · delbar",
+        "قربونت برم · ghorbunet beram",
+        "دلم تنگ شده · delam tang shode",
+        "عاشقتم · asheghetam",
+        "جیگر · jigar",
+        "چشم · cheshm",
+        "شب یلدا · yalda night",
+        "نوروز مبارک · nowruz"
+      ],
+      "order": 80
+    },
+    "laddoo": {
+      "name": "Laddoo",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "cute",
+        "needy",
+        "hug",
+        "sweets",
+        "laddoo"
+      ],
+      "emojis": [
+        "🥺",
+        "💛"
+      ],
+      "keywords": [
+        "mera laddoo",
+        "godi lo",
+        "uthao mujhe",
+        "ignore mat karo",
+        "bas thoda aur",
+        "cute hoon na?",
+        "gol matol",
+        "pyaar karo",
+        "mujhse baat karo",
+        "nahi jaana",
+        "attention do",
+        "sulk mode"
+      ],
+      "order": 81
+    },
+    "khana-khaya": {
+      "name": "Khana Khaya?",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "cute",
+        "food",
+        "care",
+        "tea",
+        "snacks",
+        "chai",
+        "samosa"
+      ],
+      "emojis": [
+        "☕",
+        "🍛"
+      ],
+      "keywords": [
+        "khana khaya?",
+        "chai peelo",
+        "biryani date?",
+        "pani puri chalega?",
+        "maa ke haath ka",
+        "bhookh lagi",
+        "ek bite do",
+        "midnight maggi",
+        "chai pe charcha",
+        "samosa bina chutney = main bina tum",
+        "gulab jamun = u",
+        "pet bhar gaya, dil bhi"
+      ],
+      "order": 82
+    },
+    "laddoo-animated": {
+      "name": "Laddoo",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "cute",
+        "needy",
+        "hug",
+        "sweets",
+        "laddoo"
+      ],
+      "emojis": [
+        "🥺",
+        "💛"
+      ],
+      "keywords": [
+        "mera laddoo",
+        "godi lo",
+        "uthao mujhe",
+        "ignore mat karo",
+        "bas thoda aur",
+        "cute hoon na?",
+        "gol matol",
+        "pyaar karo",
+        "mujhse baat karo",
+        "nahi jaana",
+        "attention do",
+        "sulk mode"
+      ],
+      "order": 83
+    },
+    "sharmaana": {
+      "name": "Sharmaana",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "flirty",
+        "shy",
+        "flirt",
+        "couple",
+        "compliment",
+        "babu-shona"
+      ],
+      "emojis": [
+        "🙈",
+        "😍"
+      ],
+      "keywords": [
+        "uff",
+        "hayee",
+        "kya baat hai",
+        "line maar rahe ho?",
+        "nazar mat lagana",
+        "dil le gaya",
+        "chhup!",
+        "sharam aati hai",
+        "aankh maar",
+        "tumhari smile…",
+        "setting ho gayi",
+        "kya dekh rahe ho"
+      ],
+      "order": 84
+    },
+    "kaan-pakad": {
+      "name": "Kaan Pakad Ke Sorry",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "cute",
+        "sorry",
+        "angry",
+        "sweets",
+        "laddoo"
+      ],
+      "emojis": [
+        "🙏",
+        "🥺"
+      ],
+      "keywords": [
+        "maaf kar do",
+        "galti ho gayi",
+        "kaan pakad liye",
+        "sorry na yaar",
+        "gussa mat karo",
+        "naraz ho?",
+        "mana lo mujhe",
+        "muh mat phulao",
+        "pls na",
+        "ice cream se maafi",
+        "last time, promise",
+        "dil se sorry"
+      ],
+      "order": 85
+    },
+    "seen-zone": {
+      "name": "Seen Zone",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "funny",
+        "phone",
+        "seen",
+        "reply",
+        "typing",
+        "petty",
+        "chat"
+      ],
+      "emojis": [
+        "📱",
+        "😒"
+      ],
+      "keywords": [
+        "seen kyu kiya?",
+        "reply karo na",
+        "kahan ho?",
+        "busy ho?",
+        "blue tick, no reply",
+        "typing… 10 min",
+        "online, par mere liye nahi",
+        "last seen: 2 min ago",
+        "hmm.",
+        "theek hai.",
+        "ok ji.",
+        "ignore mat karo"
+      ],
+      "order": 86
+    },
+    "kaan-pakad-animated": {
+      "name": "Kaan Pakad Ke Sorry",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "cute",
+        "sorry",
+        "angry",
+        "sweets",
+        "laddoo"
+      ],
+      "emojis": [
+        "🙏",
+        "🥺"
+      ],
+      "keywords": [
+        "maaf kar do",
+        "galti ho gayi",
+        "kaan pakad liye",
+        "sorry na yaar",
+        "gussa mat karo",
+        "naraz ho?",
+        "mana lo mujhe",
+        "muh mat phulao",
+        "pls na",
+        "ice cream se maafi",
+        "last time, promise",
+        "dil se sorry"
+      ],
+      "order": 87
+    },
+    "good-morning-ji": {
+      "name": "Good Morning Ji",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "goodnight",
+        "good-morning",
+        "good-night",
+        "sun",
+        "moon",
+        "tea"
+      ],
+      "emojis": [
+        "🌞",
+        "🌙"
+      ],
+      "keywords": [
+        "good morning ji",
+        "शुभ प्रभात",
+        "uth jao",
+        "chai ready hai",
+        "subah ki dhoop = tum",
+        "din shubh ho",
+        "good night ji",
+        "शुभ रात्रि",
+        "so jao ab",
+        "sapno mein milte hain",
+        "sweet dreams, jaan",
+        "kal baat karte hain"
+      ],
+      "order": 88
+    },
+    "shaadi-season": {
+      "name": "Shaadi Season",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "occasions",
+        "wedding",
+        "engagement",
+        "couple",
+        "celebration",
+        "babu-shona"
+      ],
+      "emojis": [
+        "💍",
+        "🎊"
+      ],
+      "keywords": [
+        "rishta pakka",
+        "mummy ne haan bol di",
+        "roka done",
+        "mehendi ceremony",
+        "haldi glow",
+        "sangeet night",
+        "baraat aa gayi",
+        "varmala",
+        "saat phere",
+        "joota chupai",
+        "vidaai tears",
+        "mr & mrs"
+      ],
+      "order": 89
+    },
+    "kab-aaoge": {
+      "name": "Kab Aaoge?",
+      "lang": [
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "distance",
+        "miss-you",
+        "travel",
+        "waiting",
+        "auto-rickshaw"
+      ],
+      "emojis": [
+        "🛺",
+        "🥺"
+      ],
+      "keywords": [
+        "kab aaoge?",
+        "ticket book karo",
+        "video call karein?",
+        "diwali pe milenge",
+        "flight le lo bas",
+        "ist mein miss kar rahi hoon",
+        "train se aa rahe ho?",
+        "airport pe milte hain",
+        "1 mahina aur",
+        "dur ho, par dil mein",
+        "chhutti kab?",
+        "ghar = tum"
+      ],
+      "order": 90
+    },
+    "briga-animated": {
+      "name": "Briga",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "cute",
+        "needy",
+        "hug",
+        "sweets",
+        "brigadeiro"
+      ],
+      "emojis": [
+        "🥺",
+        "🍫"
+      ],
+      "keywords": [
+        "sem briga, só brigadeiro",
+        "tô carente",
+        "colo!",
+        "me pega",
+        "me faz carinho",
+        "quero atenção",
+        "manhoso",
+        "não briga comigo",
+        "cadê meu beijo?",
+        "tô mimado",
+        "só mais um pouquinho",
+        "fofinho"
+      ],
+      "order": 91
+    },
+    "pyaar-calendar": {
+      "name": "Pyaar Ka Calendar",
+      "lang": [
+        "en",
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "occasions",
+        "valentine",
+        "festival",
+        "heart"
+      ],
+      "emojis": [
+        "🌹",
+        "🪔"
+      ],
+      "keywords": [
+        "rose day",
+        "propose day",
+        "chocolate day",
+        "teddy day",
+        "promise day",
+        "hug day",
+        "kiss day",
+        "happy valentine's, jaan",
+        "happy diwali, meri jaan",
+        "holi hai!",
+        "karva chauth: fasting for u",
+        "garba night date?"
+      ],
+      "order": 92
+    },
+    "howzzat": {
+      "name": "Howzzat!",
+      "lang": [
+        "en",
+        "hi"
+      ],
+      "tags": [
+        "india",
+        "funny",
+        "cricket",
+        "waiting",
+        "tease"
+      ],
+      "emojis": [
+        "🏏",
+        "🥰"
+      ],
+      "keywords": [
+        "howzzat!",
+        "bowled over by u",
+        "my man of the match",
+        "caught (my heart) behind",
+        "just 2 overs more",
+        "third umpire: mummy",
+        "not out",
+        "chhakka!",
+        "drs: kiss review",
+        "team us",
+        "ipl season = don't disturb",
+        "century of kisses"
+      ],
+      "order": 93
+    },
+    "briga": {
+      "name": "Briga",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "cute",
+        "needy",
+        "hug",
+        "sweets",
+        "brigadeiro"
+      ],
+      "emojis": [
+        "🥺",
+        "🍫"
+      ],
+      "keywords": [
+        "sem briga, só brigadeiro",
+        "tô carente",
+        "colo!",
+        "me pega",
+        "me faz carinho",
+        "quero atenção",
+        "manhoso",
+        "não briga comigo",
+        "cadê meu beijo?",
+        "tô mimado",
+        "só mais um pouquinho",
+        "fofinho"
+      ],
+      "order": 94
+    },
+    "sofrencia-animated": {
+      "name": "Sofrência",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "romantic",
+        "sad",
+        "miss-you",
+        "music",
+        "guitar",
+        "care",
+        "sun"
+      ],
+      "emojis": [
+        "😭",
+        "🎸"
+      ],
+      "keywords": [
+        "modo sofrência on",
+        "tô sofrendo",
+        "saudade de vc",
+        "chorei um pouquinho",
+        "não tô bem",
+        "volta pra mim",
+        "3 da manhã pensando em vc",
+        "coração na mão",
+        "ainda te amo",
+        "vem cá",
+        "tô aqui",
+        "vai ficar tudo bem"
+      ],
+      "order": 95
+    },
+    "bora-comer": {
+      "name": "Bora Comer?",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "cute",
+        "food",
+        "snacks",
+        "sweets",
+        "care",
+        "coxinha"
+      ],
+      "emojis": [
+        "😋",
+        "🍽️"
+      ],
+      "keywords": [
+        "comeu?",
+        "café?",
+        "bora comer?",
+        "pão de queijo quentinho",
+        "açaí date?",
+        "churrasco de domingo",
+        "pastel de feira",
+        "faz um miojo",
+        "fome de vc",
+        "sobremesa = vc",
+        "pizza no sofá",
+        "brigadeiro pra vc"
+      ],
+      "order": 96
+    },
+    "mozao": {
+      "name": "Mozão",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "romantic",
+        "pet-names",
+        "words",
+        "love"
+      ],
+      "emojis": [
+        "💬",
+        "😘"
+      ],
+      "keywords": [
+        "mozão",
+        "mô",
+        "amor",
+        "bebê",
+        "vida",
+        "gata / gato",
+        "neném",
+        "meu bem",
+        "xuxu",
+        "benzinho",
+        "bb",
+        "meu tudo"
+      ],
+      "order": 97
+    },
+    "vacuo": {
+      "name": "Vácuo",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "funny",
+        "phone",
+        "seen",
+        "reply",
+        "typing",
+        "petty",
+        "chat"
+      ],
+      "emojis": [
+        "📱",
+        "😒"
+      ],
+      "keywords": [
+        "deu vácuo",
+        "visualizou e não respondeu",
+        "online pra quem?",
+        "digitando… 10 min",
+        "áudio de 5 min chegando",
+        "cadê vc?",
+        "sumido(a)",
+        "kkkk e nada",
+        "só um \"ok\"?",
+        "tá ocupado?",
+        "responde, mozão",
+        "última vez online: meu coração"
+      ],
+      "order": 98
+    },
+    "luqaimat-animated": {
+      "name": "Luqaimat",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "cute",
+        "needy",
+        "hug",
+        "sweets",
+        "dumpling",
+        "arab",
+        "gulf",
+        "luqaimat"
+      ],
+      "emojis": [
+        "🥺",
+        "🍯"
+      ],
+      "keywords": [
+        "أبي حضن · abi 7dhen",
+        "شيلني · shilni",
+        "فديتك · fdaitik",
+        "أبيك · abeek",
+        "لا تروح · la troo7",
+        "دلّعني · dalla3ni",
+        "زعلان · za3lan",
+        "بس شوي · bas shway",
+        "طالبك · talbik",
+        "تعال · ta3al",
+        "ما عليه · ma3alaih",
+        "ردّ عليّ · rudd 3alay"
+      ],
+      "order": 99
+    },
+    "dr": {
+      "name": "DR",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "couples",
+        "couple",
+        "sorry",
+        "angry",
+        "blob",
+        "hug"
+      ],
+      "emojis": [
+        "🤝",
+        "💗"
+      ],
+      "keywords": [
+        "bora ter uma dr?",
+        "não é briga, é dr",
+        "te escuto",
+        "mesmo time",
+        "preciso de 5 min",
+        "não tô bravo, tô magoado",
+        "eu errei",
+        "recomeça?",
+        "abraço primeiro, dr depois",
+        "a gente se resolve",
+        "linguagem do amor: comida",
+        "dr encerrada, beijo"
+      ],
+      "order": 100
+    },
+    "sofrencia": {
+      "name": "Sofrência",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "romantic",
+        "sad",
+        "miss-you",
+        "music",
+        "guitar",
+        "care",
+        "sun"
+      ],
+      "emojis": [
+        "😭",
+        "🎸"
+      ],
+      "keywords": [
+        "modo sofrência on",
+        "tô sofrendo",
+        "saudade de vc",
+        "chorei um pouquinho",
+        "não tô bem",
+        "volta pra mim",
+        "3 da manhã pensando em vc",
+        "coração na mão",
+        "ainda te amo",
+        "vem cá",
+        "tô aqui",
+        "vai ficar tudo bem"
+      ],
+      "order": 101
+    },
+    "saudade": {
+      "name": "Saudade",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "distance",
+        "miss-you",
+        "travel",
+        "waiting",
+        "toucan",
+        "bird"
+      ],
+      "emojis": [
+        "🐦",
+        "🥺"
+      ],
+      "keywords": [
+        "saudade",
+        "sdds",
+        "tô com saudade",
+        "quando vc vem?",
+        "chamada de vídeo?",
+        "conta os dias",
+        "longe mas junto",
+        "vem logo",
+        "passagem comprada",
+        "no natal a gente se vê",
+        "manda foto",
+        "sonhei com vc"
+      ],
+      "order": 102
+    },
+    "samahni-animated": {
+      "name": "Sama7ni",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "cute",
+        "sorry",
+        "angry",
+        "sweets",
+        "dumpling",
+        "arab",
+        "gulf",
+        "luqaimat"
+      ],
+      "emojis": [
+        "🙏",
+        "🥺"
+      ],
+      "keywords": [
+        "سامحني · sama7ni",
+        "غلطت · ghelat",
+        "ما قصدت · ma gasadt",
+        "لا تزعل · la tiz3al",
+        "راضيني · radhini",
+        "طالب رضاك · talib redhak",
+        "خلاص ترى · khalas tara",
+        "بلا زعل · bala za3al",
+        "ورد لك · ward lik",
+        "كرك سلام؟ · karak peace?",
+        "تراني آسف · tarani asif",
+        "يد على قلبي · hand on my heart"
+      ],
+      "order": 103
+    },
+    "bom-dia-mozao": {
+      "name": "Bom Dia, Mozão",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "goodnight",
+        "good-morning",
+        "good-night",
+        "sun",
+        "moon",
+        "coffee",
+        "weekend"
+      ],
+      "emojis": [
+        "🌞",
+        "☕"
+      ],
+      "keywords": [
+        "bom dia, mozão",
+        "acorda, amor",
+        "café tá pronto",
+        "bom dia com café",
+        "sextou!",
+        "boa noite, meu bem",
+        "sonha comigo",
+        "vai dormir, mozão",
+        "fica com deus",
+        "boa noite e beijo",
+        "amanhã a gente se fala",
+        "bom dia, flor do dia"
+      ],
+      "order": 104
+    },
+    "casal-de-novela": {
+      "name": "Casal de Novela",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "romantic",
+        "telenovela",
+        "couple",
+        "drama"
+      ],
+      "emojis": [
+        "📺",
+        "💋"
+      ],
+      "keywords": [
+        "casal de novela",
+        "capítulo de hoje",
+        "plot twist: te amo",
+        "vilã: a sogra (brincadeira)",
+        "cena do beijo",
+        "merecemos um final feliz",
+        "novela das 9 = nós",
+        "trilha sonora: meu coração",
+        "próximo capítulo: nós",
+        "drama, mas te amo",
+        "gravando: nosso amor",
+        "fim… por hoje"
+      ],
+      "order": 105
+    },
+    "hoje-tem-jogo": {
+      "name": "Hoje Tem Jogo",
+      "lang": [
+        "pt-BR"
+      ],
+      "tags": [
+        "brazil",
+        "funny",
+        "football",
+        "couple",
+        "kiss",
+        "waiting"
+      ],
+      "emojis": [
+        "⚽",
+        "💛"
+      ],
+      "keywords": [
+        "hoje tem jogo",
+        "só 90 minutos, amor",
+        "gol = beijo",
+        "var do amor: confirmado",
+        "prorrogação de abraço",
+        "time rival? te amo mesmo assim",
+        "torcida de 2",
+        "pênalti: me beija",
+        "intervalo: carinho",
+        "zaga do meu coração",
+        "campeão do meu coração",
+        "copa de casal"
+      ],
+      "order": 106
+    },
+    "luqaimat": {
+      "name": "Luqaimat",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "cute",
+        "needy",
+        "hug",
+        "sweets",
+        "dumpling",
+        "arab",
+        "gulf",
+        "luqaimat"
+      ],
+      "emojis": [
+        "🥺",
+        "🍯"
+      ],
+      "keywords": [
+        "أبي حضن · abi 7dhen",
+        "شيلني · shilni",
+        "فديتك · fdaitik",
+        "أبيك · abeek",
+        "لا تروح · la troo7",
+        "دلّعني · dalla3ni",
+        "زعلان · za3lan",
+        "بس شوي · bas shway",
+        "طالبك · talbik",
+        "تعال · ta3al",
+        "ما عليه · ma3alaih",
+        "ردّ عليّ · rudd 3alay"
+      ],
+      "order": 107
+    },
+    "gahwa-tamr": {
+      "name": "Gahwa & Tamr",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "cute",
+        "coffee",
+        "dates",
+        "food",
+        "care",
+        "arab",
+        "gulf",
+        "dallah"
+      ],
+      "emojis": [
+        "☕",
+        "🌴"
+      ],
+      "keywords": [
+        "تغديت؟ · tghaddait?",
+        "قهوة؟ · gahwa?",
+        "كرك بالليل · karak at night",
+        "فطور الجمعة · friday breakfast",
+        "مجبوس أمي · machboos ummi",
+        "جوعان · yo3an",
+        "حلا لك · 7ala lik",
+        "شاورما؟ · shawarma?",
+        "عزيمة عندي · 3azeema 3indi",
+        "تمر وقهوة = أنا وأنت",
+        "بالعافية · bel3afya",
+        "لقيمات لك · luqaimat lik"
+      ],
+      "order": 108
+    },
+    "hala-wallah": {
+      "name": "Hala Wallah",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "flirty",
+        "shy",
+        "flirt",
+        "couple",
+        "compliment",
+        "pet-names",
+        "arab",
+        "gulf"
+      ],
+      "emojis": [
+        "🤭",
+        "😍"
+      ],
+      "keywords": [
+        "هلا والله · hala wallah",
+        "فديتك · fdaitik",
+        "يا بعد عمري · ya ba3d 3omri",
+        "عيونك · 3yoonik",
+        "أموت فيك · amoot feek",
+        "قلبي · galbi",
+        "يا بو عيوني · ya bu 3yooni",
+        "أستحي · asta7i",
+        "خجّلتني · khajjaltni",
+        "لا تطالعني چذي · don't look at me like that",
+        "يا قمر · ya gamar",
+        "بيت شعر لك · a verse for you"
+      ],
+      "order": 109
+    },
+    "samahni": {
+      "name": "Sama7ni",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "cute",
+        "sorry",
+        "angry",
+        "sweets",
+        "dumpling",
+        "arab",
+        "gulf",
+        "luqaimat"
+      ],
+      "emojis": [
+        "🙏",
+        "🥺"
+      ],
+      "keywords": [
+        "سامحني · sama7ni",
+        "غلطت · ghelat",
+        "ما قصدت · ma gasadt",
+        "لا تزعل · la tiz3al",
+        "راضيني · radhini",
+        "طالب رضاك · talib redhak",
+        "خلاص ترى · khalas tara",
+        "بلا زعل · bala za3al",
+        "ورد لك · ward lik",
+        "كرك سلام؟ · karak peace?",
+        "تراني آسف · tarani asif",
+        "يد على قلبي · hand on my heart"
+      ],
+      "order": 110
+    },
+    "wainak": {
+      "name": "Wainak?",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "funny",
+        "phone",
+        "seen",
+        "reply",
+        "typing",
+        "petty",
+        "chat",
+        "arab",
+        "gulf"
+      ],
+      "emojis": [
+        "📱",
+        "😒"
+      ],
+      "keywords": [
+        "وينك؟ · wainak?",
+        "شفت ورديت؟ لا · seen, no reply",
+        "متصل بس مو لي · online, not for me",
+        "يكتب… ١٠ دقايق · typing… 10 min",
+        "آخر ظهور: قلبي · last seen: my heart",
+        "طيب. · tayyib.",
+        "زين. · zain.",
+        "٥ دقايق خليجية · gulf 5 minutes",
+        "بالسيارة (دايماً) · in the car (always)",
+        "ردّ! · rudd!",
+        "مشغول عني؟ · busy from me?",
+        "تمام."
+      ],
+      "order": 111
+    },
+    "sabah-el-khair": {
+      "name": "Saba7 el Khair",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "goodnight",
+        "good-morning",
+        "good-night",
+        "moon",
+        "coffee",
+        "arab",
+        "gulf",
+        "dallah"
+      ],
+      "emojis": [
+        "🌅",
+        "🌙"
+      ],
+      "keywords": [
+        "صباح الخير يا قلبي · saba7 el khair ya galbi",
+        "الله يسعد صباحك",
+        "صباح الورد",
+        "قوم · goom",
+        "القهوة جاهزة · gahwa ready",
+        "صباحك سكر",
+        "يومك سعيد",
+        "تصبح على خير · tisba7 3ala khair",
+        "أحلام سعيدة",
+        "نام يا عمري · nam ya 3omri",
+        "ليلة سعيدة",
+        "باچر نتكلم · bacher we talk"
+      ],
+      "order": 112
+    },
+    "mabrook": {
+      "name": "Mabrook",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "occasions",
+        "wedding",
+        "engagement",
+        "couple",
+        "celebration",
+        "arab",
+        "gulf"
+      ],
+      "emojis": [
+        "💍",
+        "🎉"
+      ],
+      "keywords": [
+        "ألف مبروك · alf mabrook",
+        "خطوبة · khatooba",
+        "ملچة · melcha",
+        "شبكة · shabka",
+        "ليلة الحنة · henna night",
+        "دزّة · dazza",
+        "زفّة · zaffa",
+        "عرس · 3ers",
+        "يا أحلى عروس",
+        "ما شاء الله عليكم",
+        "عقبال أولادكم",
+        "بيت جديد · new home"
+      ],
+      "order": 113
+    },
+    "ishtagt-lik": {
+      "name": "Ishtagt Lik",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "distance",
+        "miss-you",
+        "travel",
+        "waiting",
+        "falcon",
+        "bird",
+        "arab",
+        "gulf"
+      ],
+      "emojis": [
+        "🦅",
+        "🥺"
+      ],
+      "keywords": [
+        "اشتقت لك · ishtagt lik",
+        "متى ترجع؟ · when do you return?",
+        "الإجازة قربت · leave is near",
+        "فيديو كول؟ · video call?",
+        "الله يردّك بالسلامة",
+        "أحسب الأيام · counting days",
+        "طيران الخميس · thursday flight",
+        "عيدك عندي · your eid is with me",
+        "الصيف في لندن · summer in london",
+        "الرياض – دبي ساعة ونص",
+        "معك بقلبي · with you in my heart",
+        "المطار الساعة ٧ · airport at 7"
+      ],
+      "order": 114
+    },
+    "kel-3am": {
+      "name": "Kel 3am w Enta Habibi",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "occasions",
+        "ramadan",
+        "eid",
+        "festival",
+        "seasons",
+        "new-year",
+        "valentine",
+        "heart",
+        "arab",
+        "gulf"
+      ],
+      "emojis": [
+        "🌙",
+        "🎉"
+      ],
+      "keywords": [
+        "رمضان كريم يا قلبي",
+        "فطور معك · iftar with you",
+        "سحور؟ · suhoor?",
+        "عيدك مبارك يا عمري",
+        "عيدية لك: أنا · eidiya lik: ana",
+        "كل عام وأنت حبي",
+        "أول مطر · first rain",
+        "جا الشتا · winter's here",
+        "اليوم الوطني · national day",
+        "يوم التأسيس · founding day",
+        "ليلة رأس السنة",
+        "١٤ فبراير · 14 feb"
+      ],
+      "order": 115
+    },
+    "kashta": {
+      "name": "Kashta",
+      "lang": [
+        "ar"
+      ],
+      "tags": [
+        "saudi",
+        "funny",
+        "weekend",
+        "camel",
+        "date",
+        "arab",
+        "gulf"
+      ],
+      "emojis": [
+        "🐪",
+        "🏜️"
+      ],
+      "keywords": [
+        "كشتة؟ · kashta?",
+        "تطعيس · tat3ees",
+        "كرك على البحر · karak by the sea",
+        "طلعة · tal3a",
+        "درايف بلا وجهة · drive to nowhere",
+        "مول؟ · mall?",
+        "كوفي؟ · coffee?",
+        "بادل؟ · padel?",
+        "استراحة · istira7a weekend",
+        "قيمنق: ٥ دقايق وأخلص · gaming: 5 more min",
+        "المباراة ٩٠ دقيقة بس",
+        "الخميس لك · thursday is yours"
+      ],
+      "order": 116
+    },
+    "filthy-faces": {
+      "name": "Filthy Faces",
+      "lang": [
+        "none"
+      ],
+      "emojis": [
+        "😏",
+        "🔥"
+      ],
+      "adult": true
+    },
+    "one-night-ad": {
+      "name": "One Night · After Dark",
+      "lang": [
+        "en"
+      ],
+      "emojis": [
+        "😈",
+        "🔥"
+      ],
+      "adult": true
+    },
+    "rude-love": {
+      "name": "Rude Love",
+      "lang": [
+        "en"
+      ],
+      "emojis": [
+        "🤬",
+        "❤️"
+      ],
+      "adult": true
+    },
+    "say-it-loud-ad": {
+      "name": "Say It Loud · After Dark",
+      "lang": [
+        "en"
+      ],
+      "emojis": [
+        "😈",
+        "🔥"
+      ],
+      "adult": true
+    }
+  }
+}
