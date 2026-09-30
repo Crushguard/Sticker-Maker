@@ -1,16 +1,23 @@
 package com.piptechnologies.stickermaker.feature.create.editor
 
+import android.content.Context
+import android.content.res.Configuration
+import android.graphics.Typeface
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.test.core.app.ApplicationProvider
 import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.feature.create.AddTab
 import com.piptechnologies.stickermaker.feature.create.decor.Affine
 import com.piptechnologies.stickermaker.feature.create.decor.DecorCatalog
+import com.piptechnologies.stickermaker.feature.create.decor.DecorFonts
 import com.piptechnologies.stickermaker.feature.create.decor.DecorSpec
+import com.piptechnologies.stickermaker.feature.create.decor.DecorTestFonts
 import com.piptechnologies.stickermaker.feature.create.decor.EmojiCatalog
+import com.piptechnologies.stickermaker.feature.create.decor.FontFace
 import com.piptechnologies.stickermaker.feature.create.decor.FontFile
 import com.piptechnologies.stickermaker.feature.create.decor.FontMood
 import com.piptechnologies.stickermaker.feature.create.decor.MotionBook
@@ -22,19 +29,23 @@ import com.piptechnologies.stickermaker.feature.create.decor.SkinTone
 import com.piptechnologies.stickermaker.feature.create.decor.TextStyleBook
 import com.piptechnologies.stickermaker.feature.create.decor.TextStyleId
 import java.io.File
+import java.util.Locale
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
 
 /** The rules of the rows under the tool bar and of the Add sheet, on the data files the app ships. */
 @RunWith(RobolectricTestRunner::class)
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(sdk = [34], application = android.app.Application::class)
 class EditorRulesTest {
 
@@ -261,11 +272,49 @@ class EditorRulesTest {
     }
 
     @Test
-    fun fontChipsAreLetteredInTheirOwnLatinFace() {
-        assertEquals(FontFile.BALOO, fontMoodFace(FontMood.Round))
-        assertEquals(FontFile.CAVEAT, fontMoodFace(FontMood.Hand))
-        assertEquals(FontFile.LILITA, fontMoodFace(FontMood.Display))
+    fun fontChipsAreLetteredInTheFaceTheirLabelGets() {
+        val fonts = DecorFonts(styles, DecorTestFonts::load)
+        val app = ApplicationProvider.getApplicationContext<Context>()
+        // The face of each chip in a UI language: what a caption of that very label would get.
+        fun faces(language: String): List<FontFile> {
+            val config = Configuration(app.resources.configuration).apply { setLocale(Locale.forLanguageTag(language)) }
+            val words = app.createConfigurationContext(config)
+            return FontMood.entries.map { mood ->
+                val face = fonts.forText(words.getString(fontMoodLabel(mood)), uiFont = false, mood = mood)
+                FontFile.entries.first { fonts.face(it) === face }
+            }
+        }
+        assertEquals(listOf(FontFile.BALOO, FontFile.CAVEAT, FontFile.LILITA), faces("en"))
+        val arabic = listOf(FontFile.BALOO_BHAIJAAN, FontFile.MIRZA, FontFile.LALEZAR)
+        assertEquals("Arabic labels: the mood's Arabic faces", arabic, faces("ar"))
+        assertEquals(arabic, faces("fa"))
+        assertEquals(arabic, faces("ur"))
+        assertEquals(listOf(FontFile.RUBIK, FontFile.AMATIC, FontFile.KARANTINA), faces("iw"))
+        assertEquals(listOf(FontFile.RUBIK, FontFile.CAVEAT, FontFile.RUSLAN), faces("ru"))
+        assertEquals(listOf(FontFile.BALOO, FontFile.KALAM, FontFile.YATRA), faces("hi"))
         assertEquals(listOf(13f, 15f, 13f), FontMood.entries.map(::fontMoodSp))
+    }
+
+    @Test
+    fun aFakeBoldFaceLettersItsChipInBold() {
+        val plain = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
+        assertSame(plain, chipTypeface(FontFace(plain)))
+        assertTrue(chipTypeface(FontFace(plain, fakeBold = true)).isBold)
+    }
+
+    @Test
+    fun theColumnScrollsUntilTheCardIsClearOfTheSheet() {
+        // The card (350 high) ends 100 px under the sheet's top: scroll on by 100.
+        assertEquals(100, scrollClearOfSheet(scroll = 0, cardBottom = 350, viewport = 250, maxScroll = 400))
+        // Already scrolled past that: stays.
+        assertEquals(160, scrollClearOfSheet(scroll = 160, cardBottom = 350, viewport = 250, maxScroll = 400))
+        // The card ends above the sheet: nothing to do, and no scrolling back.
+        assertEquals(30, scrollClearOfSheet(scroll = 30, cardBottom = 350, viewport = 400, maxScroll = 400))
+        // A card taller than the room: its bottom meets the sheet, its top is cut.
+        assertEquals(200, scrollClearOfSheet(scroll = 0, cardBottom = 350, viewport = 150, maxScroll = 400))
+        // Never past the content, never negative.
+        assertEquals(120, scrollClearOfSheet(scroll = 0, cardBottom = 350, viewport = 150, maxScroll = 120))
+        assertEquals(0, scrollClearOfSheet(scroll = 0, cardBottom = 350, viewport = 150, maxScroll = -5))
     }
 
     @Test

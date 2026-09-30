@@ -70,9 +70,9 @@ import com.piptechnologies.stickermaker.feature.create.LayerUi
 import com.piptechnologies.stickermaker.feature.create.decor.DecorSpec
 
 /** The selection box grows this far beyond the layer on every side; the handles sit on its corners (spec §8). */
-private val BoxOutset = 6.dp
+internal val BoxOutset = 6.dp
 private val HandleTarget = 44.dp
-private val HandleSize = 22.dp
+internal val HandleSize = 22.dp
 private const val SELECT_FADE_IN_MS = 120
 private const val SELECT_FADE_OUT_MS = 100
 /** The guide eases in as the drag snaps to the centre (handoff: 90 ms ease-out). */

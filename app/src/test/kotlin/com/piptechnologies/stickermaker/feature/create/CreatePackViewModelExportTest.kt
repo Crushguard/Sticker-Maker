@@ -86,6 +86,49 @@ class CreatePackViewModelExportTest {
         }
     }
 
+    @Test
+    fun anExportAfterEditsMakesANewPackAndTheOldOneGoes() {
+        cutOut(3)
+        vm.addEmoji("red_heart.webp")
+        val first = exportToWhatsApp()
+        assertEquals(listOf("❤️", "❤️,😊", "❤️,😊"), db.ownPackDao().stickersBlocking(first.id).map { it.emojis })
+
+        // Nothing changed: the same pack is sent again, no new export.
+        vm.addToWhatsApp()
+        waitFor("the re-send to settle") { !state.exportState.isBusy() }
+        assertEquals(listOf(first.id), db.ownPackDao().getAllBlocking().map { it.id })
+
+        // A layer changed: a new pack with the new content; the old one is gone, files and all.
+        vm.selectSticker(1)
+        vm.addDecor("doodles-1.webp")
+        val second = exportToWhatsApp()
+        assertEquals(listOf(second.id), db.ownPackDao().getAllBlocking().map { it.id })
+        assertEquals(listOf("❤️", "👑", "❤️,😊"), db.ownPackDao().stickersBlocking(second.id).map { it.emojis })
+        assertFalse("the replaced pack's files are gone", File(first.dirPath).exists())
+        assertTrue(File(second.dirPath).isDirectory)
+
+        // The tray or the name changing counts too.
+        vm.setPackName("Us")
+        val third = exportToWhatsApp()
+        assertEquals("Us", third.name)
+        assertEquals(listOf(third.id), db.ownPackDao().getAllBlocking().map { it.id })
+    }
+
+    /**
+     * Adds the pack to WhatsApp. There is none here, so the confirm comes back cancelled and the session
+     * goes on; returns the saved pack once its stickers are registered and the state is idle again.
+     */
+    private fun exportToWhatsApp(): OwnPackEntity {
+        val before = db.ownPackDao().getAllBlocking().map { it.id }
+        vm.addToWhatsApp()
+        var pack: OwnPackEntity? = null
+        waitFor("the exported pack") {
+            pack = db.ownPackDao().getAllBlocking().firstOrNull { it.id !in before }
+            pack?.let { db.ownPackDao().stickersBlocking(it.id).size == 3 } == true && !state.exportState.isBusy()
+        }
+        return checkNotNull(pack)
+    }
+
     /** Saves the pack to My Packs only and returns it once its stickers are registered. */
     private fun saveOnly(): OwnPackEntity {
         vm.saveToMyPacksOnly()

@@ -1,6 +1,8 @@
 package com.piptechnologies.stickermaker.feature.create.editor
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import com.piptechnologies.stickermaker.feature.create.LayerKind
 import com.piptechnologies.stickermaker.feature.create.LayerUi
 import com.piptechnologies.stickermaker.feature.create.decor.Affine
@@ -185,6 +187,69 @@ class CanvasGeometryTest {
         assertEquals(PillFit.Icons, actionPillFit(labels, dp = 1f, room = 307f))
         assertEquals(8f, PillFit.Tight.sidePadding, 0f)
         assertFalse(PillFit.Icons.labels)
+    }
+
+    @Test
+    fun theActionPillWithIconsOnlyIsItsPaddingAndIcons() {
+        val labels = listOf(60, 20, 40, 30)
+        assertEquals(actionPillWidth(labels, dp = 2f), actionPillWidth(PillFit.Full, labels, dp = 2f), 0.001f)
+        val tight = actionPillWidth(labels, dp = 2f, sidePadding = 8f)
+        assertEquals(tight, actionPillWidth(PillFit.Tight, labels, dp = 2f), 0.001f)
+        // 4 × (12 + 15 + 12) + 3 × 2 + 2 × 2 = 166 dp, no labels.
+        assertEquals(166f * 2f, actionPillWidth(PillFit.Icons, labels, dp = 2f), 0.001f)
+    }
+
+    @Test
+    fun theSelectionBoundsGrowByTheOutsetAndFollowTheTurn() {
+        val view = viewTransform(edge = 512f, zoom = 1f, panX = 0f, panY = 0f)
+        val upright = layerBox(layer(256f, 256f, 100f, 50f), view).bounds(17f)
+        assertEquals(Rect(256f - 67f, 256f - 42f, 256f + 67f, 256f + 42f), upright)
+        val turned = layerBox(layer(256f, 256f, 100f, 50f, rotation = 90f), view).bounds(17f)
+        assertEquals(256f - 42f, turned.left, 0.001f)
+        assertEquals(256f - 67f, turned.top, 0.001f)
+        assertEquals(256f + 42f, turned.right, 0.001f)
+        assertEquals(256f + 67f, turned.bottom, 0.001f)
+    }
+
+    @Test
+    fun thePillZonesSitCentredAtTheCardsBottomOrTop() {
+        val card = Size(350f, 350f)
+        val pill = Size(300f, 40f)
+        assertEquals(Rect(25f, 350f - 6f - 40f, 325f, 350f - 6f), pillZone(card, pill, PillPlace.Bottom, gap = 6f))
+        assertEquals(Rect(25f, 52f, 325f, 92f), pillZone(card, pill, PillPlace.Top, gap = 52f))
+    }
+
+    @Test
+    fun thePillMovesToTheTopOnlyWhenTheSelectionIsUnderItAndNotOverTheTop() {
+        val bottom = Rect(25f, 304f, 325f, 344f)
+        val top = Rect(25f, 52f, 325f, 92f)
+        // A caption low on the sticker: its handles reach into the pill.
+        assertEquals(PillPlace.Top, pillPlace(Rect(120f, 280f, 230f, 320f), bottom, top))
+        // An emoji at the centre: clear of both.
+        assertEquals(PillPlace.Bottom, pillPlace(Rect(150f, 150f, 200f, 200f), bottom, top))
+        // A frame over the whole card: both zones are under it, so the spec's bottom stays.
+        assertEquals(PillPlace.Bottom, pillPlace(Rect(0f, 0f, 350f, 350f), bottom, top))
+        // A layer at the top: the bottom is free.
+        assertEquals(PillPlace.Bottom, pillPlace(Rect(100f, 30f, 250f, 100f), bottom, top))
+        // Touching edges don't overlap.
+        assertEquals(PillPlace.Bottom, pillPlace(Rect(100f, 200f, 250f, 304f), bottom, top))
+    }
+
+    @Test
+    fun thePillKeepsItsPlaceThroughAGestureAndDecidesForANewLayerAtOnce() {
+        val placer = PillPlacer()
+        var decided = 0
+        val place = { at: PillPlace -> { decided++; at } }
+        assertEquals(PillPlace.Top, placer.place(1L, live = false, decide = place(PillPlace.Top)))
+        val kept = placer.place(1L, live = true, decide = place(PillPlace.Bottom))
+        assertEquals("kept through the gesture", PillPlace.Top, kept)
+        assertEquals(1, decided)
+        val lifted = placer.place(1L, live = false, decide = place(PillPlace.Bottom))
+        assertEquals("decided again once the finger lifts", PillPlace.Bottom, lifted)
+        val other = placer.place(2L, live = true, decide = place(PillPlace.Top))
+        assertEquals("another layer, mid-gesture: its own place, now", PillPlace.Top, other)
+        assertEquals(PillPlace.Top, placer.place(2L, live = true, decide = place(PillPlace.Bottom)))
+        assertEquals(3, decided)
     }
 
     @Test

@@ -13,8 +13,10 @@ import com.piptechnologies.stickermaker.core.data.repo.MyPacksRepository
 import com.piptechnologies.stickermaker.core.ui.UiText
 import com.piptechnologies.stickermaker.feature.create.decor.DecorSpec
 import com.piptechnologies.stickermaker.feature.create.decor.EmojiTones
+import com.piptechnologies.stickermaker.feature.create.decor.LayerContent
 import com.piptechnologies.stickermaker.feature.create.decor.MarkerSize
 import com.piptechnologies.stickermaker.feature.create.decor.SkinTone
+import com.piptechnologies.stickermaker.feature.create.decor.TextStyleId
 import java.io.File
 import java.time.Duration
 import kotlinx.coroutines.CoroutineScope
@@ -111,6 +113,46 @@ class CreatePackViewModelLayerToolsTest {
         assertEquals("no second re-run: still the first one", CutStatus.Pending, state.activeCut)
         vm.selectSticker(0)
         assertEquals("the strokes became a drawing", listOf(LayerKind.Drawing), state.layers.map { it.kind })
+    }
+
+    @Test
+    fun aTapOnEmptySpaceInAddTextKeepsTheCaptionBeingStyled() {
+        cutOut(1)
+        vm.addEmoji("red_heart.webp")                                 // at the centre; closes the sheet
+        vm.selectTool(EditorTool.Add)
+        vm.setText("hi")
+        val caption = checkNotNull(state.selectedLayerId)
+        vm.canvasTap(30f, 30f)                                        // empty space: the tap that drops the keyboard
+        assertEquals("the caption stays selected", caption, state.selectedLayerId)
+        vm.setTextStyle(TextStyleId.Bubble)
+        val styled = vm.activeScene()!!.decor.layer(caption)!!.content as LayerContent.Text
+        assertEquals("the chip styles the caption, not just the defaults", TextStyleId.Bubble, styled.style)
+        vm.canvasTap(256f, 256f)                                      // another layer: selected as ever
+        assertEquals(LayerKind.Emoji, state.layers.first { it.id == state.selectedLayerId }.kind)
+        vm.editTextLayer(caption)
+        vm.setAddTab(AddTab.Emoji)
+        vm.canvasTap(30f, 30f)
+        assertNull("on another tab a tap on empty space deselects", state.selectedLayerId)
+        vm.closeAddSheet()
+        vm.canvasTap(256f, 256f)
+        vm.canvasTap(30f, 30f)
+        assertNull("and so in Auto", state.selectedLayerId)
+    }
+
+    @Test
+    fun autoRunsTheCutOutAgainOnlyWhenTappedWhileItIsTheTool() {
+        cutOut(1)
+        vm.selectTool(EditorTool.Brush)
+        vm.tapStroke(100f, 100f)
+        assertTrue(state.canUndo)
+        vm.selectTool(EditorTool.Auto)
+        assertEquals(EditorTool.Auto, state.tool)
+        assertEquals("a switch to Auto keeps the cut-out and the stroke", CutStatus.Done, state.activeCut)
+        assertTrue(state.canUndo)
+        vm.selectTool(EditorTool.Auto)
+        assertEquals("Auto again runs the cut-out again", CutStatus.Pending, state.activeCut)
+        waitFor("the cut-out") { state.activeCut == CutStatus.Done }
+        assertFalse("which reset the stroke", state.canUndo)
     }
 
     @Test

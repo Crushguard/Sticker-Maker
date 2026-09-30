@@ -40,10 +40,43 @@ class DecorEditor(
     fun renderedSize(layer: Layer): Size2 = baseSize(layer).let { Size2(it.w * layer.scale, it.h * layer.scale) }
 
     /** Top-most layer under a point: front layers first, then behind ones. */
-    fun hitTest(x: Float, y: Float): Long? {
+    fun hitTest(x: Float, y: Float): Long? = hits(x, y).firstOrNull()
+
+    /** Every layer under a point, top-most first: the front layers, then the ones behind the subject. */
+    private fun hits(x: Float, y: Float): List<Long> {
         val front = state.layers.filter { !it.behind }.asReversed()
         val back = state.layers.filter { it.behind }.asReversed()
-        return (front + back).firstOrNull { contains(it, x, y, DecorSpec.HIT_SLOP_PX) }?.id
+        return (front + back).filter { contains(it, x, y, DecorSpec.HIT_SLOP_PX) }.map { it.id }
+    }
+
+    /**
+     * The layer a drag or pinch starting at a point moves: the selected layer when the point is inside
+     * its box, even under another layer (a frame-like piece over it), else the top-most layer there.
+     */
+    fun gestureTarget(x: Float, y: Float): Long? {
+        val hits = hits(x, y)
+        return selectedId?.takeIf { it in hits } ?: hits.firstOrNull()
+    }
+
+    /**
+     * The layer a tap at a point selects: with the selected layer under the point among others, the
+     * next one down the stack (wrapping to the top-most), so every layer under a frame-like piece can
+     * be reached; the selected layer alone there stays; else the top-most layer there, or nothing.
+     */
+    fun tapTarget(x: Float, y: Float): Long? {
+        val hits = hits(x, y)
+        val at = hits.indexOf(selectedId)
+        return if (at < 0) hits.firstOrNull() else hits[(at + 1) % hits.size]
+    }
+
+    /**
+     * The text layer a double tap at a point edits: the selected layer when it is text and under the
+     * point, else the top-most text layer there, or nothing.
+     */
+    fun doubleTapTarget(x: Float, y: Float): Long? {
+        val hits = hits(x, y)
+        val text = hits.filter { state.layer(it)?.content is LayerContent.Text }
+        return selectedId?.takeIf { it in text } ?: text.firstOrNull()
     }
 
     private fun contains(layer: Layer, x: Float, y: Float, slop: Float): Boolean {

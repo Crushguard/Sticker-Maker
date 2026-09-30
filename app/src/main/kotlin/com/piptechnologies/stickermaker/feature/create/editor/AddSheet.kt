@@ -684,8 +684,9 @@ private fun StyleChip(
 }
 
 /**
- * Rounded · Hand · Display, 7 dp apart: 32 dp pills, each lettered in its own face ([fonts]). The
- * [selected] one is Rose on a Rose tint; the others Ink on white.
+ * Rounded · Hand · Display, 7 dp apart: 32 dp pills, each lettered in the face a caption of its own
+ * label would get ([fonts]: Baloo 2, Caveat and Lilita One in English; the Arabic or Hebrew faces of
+ * the mood where the label is). The [selected] one is Rose on a Rose tint; the others Ink on white.
  */
 @Composable
 private fun FontChips(
@@ -694,12 +695,13 @@ private fun FontChips(
     onFont: (FontMood) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val families = remember(fonts) {
-        FontMood.entries.associateWith { mood -> fonts?.let { FontFamily(it.face(fontMoodFace(mood)).typeface) } }
-    }
     Row(modifier.selectableGroup(), horizontalArrangement = Arrangement.spacedBy(SWATCH_GAP_DP.dp)) {
         FontMood.entries.forEach { mood ->
             val on = mood == selected
+            val label = stringResource(fontMoodLabel(mood))
+            val family = remember(fonts, label, mood) {
+                fonts?.let { FontFamily(chipTypeface(it.forText(label, uiFont = false, mood = mood))) }
+            }
             Box(
                 Modifier
                     .height(32.dp)
@@ -711,8 +713,8 @@ private fun FontChips(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    stringResource(fontMoodLabel(mood)),
-                    style = TextStyle(fontFamily = families[mood] ?: Hanken, fontSize = fontMoodSp(mood).sp),
+                    label,
+                    style = TextStyle(fontFamily = family ?: Hanken, fontSize = fontMoodSp(mood).sp),
                     color = if (on) Rose else Ink,
                     maxLines = 1,
                     softWrap = false

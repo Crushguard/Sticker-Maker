@@ -3,6 +3,7 @@ package com.piptechnologies.stickermaker.feature.create.editor
 import android.graphics.Matrix
 import android.graphics.Paint
 import androidx.annotation.StringRes
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
@@ -55,6 +56,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -98,6 +101,7 @@ import com.piptechnologies.stickermaker.feature.create.CutStatus
 import com.piptechnologies.stickermaker.feature.create.EditorTool
 import com.piptechnologies.stickermaker.feature.create.LayerUi
 import com.piptechnologies.stickermaker.feature.create.decor.Affine
+import com.piptechnologies.stickermaker.feature.create.decor.DecorSpec
 import com.piptechnologies.stickermaker.feature.create.decor.MotionMath
 import com.piptechnologies.stickermaker.feature.create.decor.MotionPreset
 import com.piptechnologies.stickermaker.feature.create.decor.OutlineStyle
@@ -125,6 +129,14 @@ private const val OUTLINE_FADE_MS = 160
 private val DoubleTapSlop = 24.dp
 /** The action pill keeps this far from the card's sides; where it can't, its labels hide. */
 private val PillMargin = 8.dp
+/** The pill's 36 dp buttons in their 2 dp inset. */
+private val PillHeight = 40.dp
+/** The pill's bottom edge sits this far over the card's bottom (spec §8). */
+private val PillBottomGap = 6.dp
+/** Moved over the canvas, the pill's top edge sits this far under the card's top: clear of the 36 dp Zoom button. */
+private val PillTopGap = 52.dp
+/** The pill fades from one place to the other over this long. */
+private const val PILL_MOVE_MS = 120
 private val CheckerGrey = 0xFFE6E9EE.toInt()
 private val VeilColour = Color(0xB8FAFBFC)
 /** `0 2 6 rgba(20,22,28,.12)` */
@@ -164,9 +176,13 @@ internal class CanvasViewport(private val motion: State<MotionPreset?>) {
 
     // Made again when the box, the zoom or the pan change, not on every frame of a preset.
     private val viewMap = derivedStateOf { viewTransform(edge, zoom, panX, panY) }
+    private val restMap = derivedStateOf { viewMap.value * motionPose(motion.value, 0f) }
 
     /** Canvas px → box px for what doesn't move with the sticker: the checker and the particles. */
     fun view(): Affine = viewMap.value
+
+    /** Canvas px → box px for the sticker at rest: the view after its preset's rest pose (frame 0). */
+    fun rest(): Affine = restMap.value
 
     /** Whether the sticker is drawn in a motion pose: it has a preset, playing or at rest. */
     val posed: Boolean get() = motion.value != null
@@ -329,12 +345,13 @@ internal fun EditorCanvasCard(state: CreateUiState, viewModel: CreatePackViewMod
         } else {
             ActionPill(
                 layer = selected,
+                live = state.liveLayerId != null,
+                viewport = viewport,
                 onDuplicate = viewModel::duplicateSelected,
                 onFlip = viewModel::flipSelected,
                 onBehind = viewModel::toggleBehindSelected,
                 onDelete = { viewModel.deleteLayer(selected.id) },
-                locked = { viewport.touchHeld },
-                modifier = Modifier.align(Alignment.BottomCenter)
+                locked = { viewport.touchHeld }
             )
         }
         // Last, so a handle that shows over the pill or the Zoom button is the one a finger gets there.
@@ -462,6 +479,8 @@ private fun LiveCanvas(
                         poseMatrix.setValues(viewport.pose().writeMatrix(matrixValues))
                         nc.concat(poseMatrix)
                     }
+                    // What the export keeps of the sticker before its pose: nothing past the 512 canvas.
+                    nc.clipRect(0f, 0f, DecorSpec.CANVAS, DecorSpec.CANVAS)
                     renderer.drawSticker(
                         nc, scene,
                         liveLayerId = liveLayerId,
@@ -742,21 +761,28 @@ private fun ZoomButton(zoomed: Boolean, onClick: () -> Unit, locked: () -> Boole
 /** One action of the pill. */
 private class PillAction(val icon: ImageVector, val label: String, val onClick: () -> Unit)
 
+/** The pill's two zones on the card, in card px. */
+private class PillZones(val bottom: Rect, val top: Rect)
+
 /**
  * The action pill that replaces the hint while a layer is selected (spec §8): Duplicate · Flip ·
  * Behind (In front once behind) · Delete. Where the labels would push it past the card's sides, the
  * buttons first narrow their padding to 8 dp, then show their icons only and keep the labels for
- * TalkBack. A tap while [locked] (another touch is moving something) is ignored.
+ * TalkBack. It sits 6 dp over the card's bottom, or, where the selected [layer]'s box and handles
+ * would lie under it there and not over its top, 52 dp under the card's top ([pillPlace]), decided
+ * while no gesture is [live] and kept through one; the move is a short fade. A tap while [locked]
+ * (another touch is moving something) is ignored.
  */
 @Composable
 private fun ActionPill(
     layer: LayerUi,
+    live: Boolean,
+    viewport: CanvasViewport,
     onDuplicate: () -> Unit,
     onFlip: () -> Unit,
     onBehind: () -> Unit,
     onDelete: () -> Unit,
-    locked: () -> Boolean,
-    modifier: Modifier = Modifier
+    locked: () -> Boolean
 ) {
     val actions = listOf(
         PillAction(LoveIcons.Copy, stringResource(R.string.create_action_duplicate), onDuplicate),
@@ -771,21 +797,56 @@ private fun ActionPill(
     val labels = actions.map { it.label }
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
-    BoxWithConstraints(modifier.fillMaxWidth(), contentAlignment = Alignment.BottomCenter) {
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val card = with(density) { Size(maxWidth.toPx(), maxHeight.toPx()) }
         val room = with(density) { (maxWidth - PillMargin * 2).toPx() }
-        val fit = remember(labels, room, measurer) {
+        val (fit, width) = remember(labels, room, measurer) {
             val widths = labels.map { measurer.measure(it, PillLabel, maxLines = 1, softWrap = false).size.width }
-            actionPillFit(widths, density.density, room)
+            val fit = actionPillFit(widths, density.density, room)
+            fit to actionPillWidth(fit, widths, density.density)
         }
-        Row(
-            Modifier
-                .padding(bottom = 6.dp)
-                .shadow(8.dp, LoveShapes.Pill, ambientColor = Color.Transparent, spotColor = PillShadow)
-                .background(Ink, LoveShapes.Pill)
-                .padding(2.dp),
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            actions.forEach { PillButton(it, fit, locked) }
+        val zones = remember(card, width, density) {
+            with(density) {
+                val pill = Size(width, PillHeight.toPx())
+                PillZones(
+                    bottom = pillZone(card, pill, PillPlace.Bottom, PillBottomGap.toPx()),
+                    top = pillZone(card, pill, PillPlace.Top, PillTopGap.toPx())
+                )
+            }
+        }
+        // The layer's box in card px: the canvas box sits the inset in; the handles reach past the box.
+        val origin = with(density) { CanvasInset.toPx() }
+        val reach = with(density) { (BoxOutset + HandleSize / 2).toPx() }
+        val placer = remember { PillPlacer() }
+        val layerNow = rememberUpdatedState(layer)
+        val liveNow = rememberUpdatedState(live)
+        val place by remember(viewport, zones, origin, reach) {
+            derivedStateOf {
+                val shown = layerNow.value
+                placer.place(shown.id, liveNow.value) {
+                    val selection = layerBox(shown, viewport.rest()).bounds(reach).translate(origin, origin)
+                    pillPlace(selection, zones.bottom, zones.top)
+                }
+            }
+        }
+        Crossfade(place, Modifier.fillMaxSize(), animationSpec = tween(PILL_MOVE_MS), label = "pillPlace") { at ->
+            Box(Modifier.fillMaxSize()) {
+                Row(
+                    Modifier
+                        .align(if (at == PillPlace.Top) Alignment.TopCenter else Alignment.BottomCenter)
+                        .padding(
+                            top = if (at == PillPlace.Top) PillTopGap else 0.dp,
+                            bottom = if (at == PillPlace.Bottom) PillBottomGap else 0.dp
+                        )
+                        .shadow(8.dp, LoveShapes.Pill, ambientColor = Color.Transparent, spotColor = PillShadow)
+                        .background(Ink, LoveShapes.Pill)
+                        .padding(2.dp),
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    // The pill on its way out takes no taps.
+                    actions.forEach { PillButton(it, fit, locked = { locked() || at != place }) }
+                }
+            }
         }
     }
 }

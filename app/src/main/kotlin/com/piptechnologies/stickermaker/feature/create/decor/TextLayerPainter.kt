@@ -9,7 +9,6 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextDirectionHeuristics
 import android.text.TextPaint
-import com.piptechnologies.stickermaker.feature.namepack.engine.LetteringFonts
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
@@ -18,8 +17,8 @@ import kotlin.math.max
  * Letters a text layer in its style (spec §5) into a bitmap with the text block at its centre.
  * The size is 52 px × scale and every style measure scales with it, so a render at scale 2 is
  * twice the size of one at scale 1. Lines are chosen once at scale 1, so they never re-wrap
- * while the layer is resized. [rtlLanguage] is read at render time (the bubble tail's side
- * and the paragraph direction follow it).
+ * while the layer is resized. [rtlLanguage] is read at render time: a caption with no strong
+ * letter reads in that direction (the bubble tail's side and the paragraph direction follow).
  *
  * The style box is the text block (or bubble) padded by the stroke half-width, the largest
  * shadow reach and the bubble border plus tail, plus 2 px. Letters can still reach past it
@@ -35,8 +34,19 @@ class TextLayerPainter(
     /** The style box at scale 1, without drawing: what the editor scales, hit-tests and boxes. */
     fun baseSize(t: LayerContent.Text): Size2 = plan(t, 1f).let { Size2(it.width.toFloat(), it.height.toFloat()) }
 
-    /** Whether [t] reads right to left: this decides the paragraph direction and the bubble tail's side. */
-    fun isRtl(t: LayerContent.Text): Boolean = LetteringFonts.isRtlParagraph(t.text, rtlLanguage())
+    /**
+     * Whether [t] reads right to left: its first strong letter decides (an Arabic phrase in an English
+     * app is RTL, "OK!" in an Arabic app is LTR), and a caption with no strong letter (an emoji, a
+     * number) follows the app language. This decides the paragraph direction and the bubble tail's side.
+     */
+    fun isRtl(t: LayerContent.Text): Boolean {
+        val heuristic = if (rtlLanguage()) {
+            TextDirectionHeuristics.FIRSTSTRONG_RTL
+        } else {
+            TextDirectionHeuristics.FIRSTSTRONG_LTR
+        }
+        return heuristic.isRtl(t.text, 0, t.text.length)
+    }
 
     /**
      * [t] drawn at [scale] into a new transparent bitmap: the style box, or larger where letters

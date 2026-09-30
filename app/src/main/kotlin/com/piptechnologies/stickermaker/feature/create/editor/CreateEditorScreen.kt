@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -68,7 +69,11 @@ import com.piptechnologies.stickermaker.feature.create.EditorTool
 import com.piptechnologies.stickermaker.feature.create.MonoCounterText
 import com.piptechnologies.stickermaker.feature.create.PrimaryButton
 import com.piptechnologies.stickermaker.feature.create.createPackViewModel
+import kotlin.coroutines.coroutineContext
 import kotlin.math.roundToInt
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.launch
 
 private val UndoDisabled = Color(0xFFB4BAC4)
@@ -114,6 +119,26 @@ fun CreateEditorScreen(
     val clearOfSheet = remember {
         Modifier.endAbove { sheetOverlap(sheetHeight.intValue, footerHeight.intValue) }
     }
+    val scroll = rememberScrollState()
+    // The canvas card is the column's first child: its height is where its bottom edge is.
+    val cardHeight = remember { mutableIntStateOf(0) }
+    // The sheet stands up, or changes height with the keyboard: the card scrolls clear of it, once the
+    // column has been laid out to end at the sheet's top (its viewport and range say when).
+    LaunchedEffect(scroll) {
+        snapshotFlow { Triple(sheetHeight.intValue, scroll.viewportSize, scroll.maxValue) }
+            .conflate()
+            .collect { (sheet, viewport, maxScroll) ->
+                if (sheet <= 0 || viewport <= 0) return@collect
+                val target = scrollClearOfSheet(scroll.value, cardHeight.intValue, viewport, maxScroll)
+                if (target == scroll.value) return@collect
+                try {
+                    scroll.animateScrollTo(target)
+                } catch (e: CancellationException) {
+                    // A finger took the scroll: it stays where the finger leaves it.
+                    coroutineContext.ensureActive()
+                }
+            }
+    }
 
     // System back closes the Add sheet before it leaves the screen.
     BackHandler(enabled = state.tool == EditorTool.Add) { viewModel.closeAddSheet() }
@@ -146,11 +171,15 @@ fun CreateEditorScreen(
                 Modifier
                     .weight(1f)
                     .then(clearOfSheet)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(scroll)
                     .padding(start = 20.dp, end = 20.dp, bottom = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                EditorCanvasCard(state = state, viewModel = viewModel)
+                EditorCanvasCard(
+                    state = state,
+                    viewModel = viewModel,
+                    modifier = Modifier.onSizeChanged { cardHeight.intValue = it.height }
+                )
                 EditorToolbar(
                     tool = state.tool,
                     layerToolsEnabled = state.layerToolsEnabled,

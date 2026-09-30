@@ -50,6 +50,7 @@ import com.piptechnologies.stickermaker.whatsapp.StickerContentProvider
 import com.piptechnologies.stickermaker.whatsapp.StickerPackValidator
 import com.piptechnologies.stickermaker.whatsapp.ValidatablePack
 import com.piptechnologies.stickermaker.whatsapp.ValidatableSticker
+import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -205,6 +206,8 @@ class CreatePackViewModel @Inject constructor(
     private var exportProgress = 0f
     private var savedPackId: String? = null
     private var savedPackName: String = ""
+    /** What the saved pack was made of: the same again is re-sent, anything else is exported again. */
+    private var savedSignature: ExportSignature? = null
     private var finished = false
 
     private var segmenterOrNull: Segmenter? = null
@@ -450,8 +453,9 @@ class CreatePackViewModel @Inject constructor(
 
     /**
      * A tool bar tap (spec §8). Leaving Draw turns its strokes into a layer; Add while the sheet is
-     * open closes it; Auto, Brush, Erase and Draw deselect; Auto re-runs the cut-out, which resets the
-     * Brush and Erase strokes (layers, outline and preset stay). Add, Draw and Animate are refused
+     * open closes it; Auto, Brush, Erase and Draw deselect. A switch to Auto only switches (it is the
+     * way back to moving layers); Auto tapped while it is the tool re-runs the cut-out, which resets
+     * the Brush and Erase strokes (layers, outline and preset stay). Add, Draw and Animate are refused
      * until the decor data has loaded and the active sticker's cut-out is done ([CreateUiState.layerToolsEnabled]).
      */
     fun selectTool(newTool: EditorTool) {
@@ -461,12 +465,13 @@ class CreatePackViewModel @Inject constructor(
         }
         val item = activeItem()
         if (!toolAllowed(newTool, item?.cut, dataReady = decor != null)) return
+        val rerun = newTool == EditorTool.Auto && tool == EditorTool.Auto
         val before = item?.let(::stateBefore)
         applyTool(newTool)
         if (newTool != EditorTool.Add && newTool != EditorTool.Animate) item?.editor?.select(null)
         afterEdit(item, before)
-        if (newTool == EditorTool.Auto && item != null && item.cut != CutStatus.Pending) {
-            // Auto re-runs the cut-out on the current sticker and resets its strokes.
+        if (rerun && item != null && item.cut != CutStatus.Pending) {
+            // Auto again: the cut-out runs again on the current sticker and resets its strokes.
             item.cut = CutStatus.Pending
             push()
             viewModelScope.launch { runCutout(item, resetStrokes = true) }
@@ -571,7 +576,9 @@ class CreatePackViewModel @Inject constructor(
 
     /**
      * A tap on the canvas (canvas px). Nothing in Brush, Erase and Draw; in Animate with reduced motion
-     * it plays one loop; otherwise it selects the top-most layer there, or deselects on empty space.
+     * it plays one loop; otherwise it selects the layer there ([DecorEditor.tapTarget]: under the
+     * selected layer, the next one down the stack), or deselects on empty space. In Add › Text a tap on
+     * empty space keeps the selected caption: that tap drops the keyboard, and the chips still style it.
      */
     fun canvasTap(x: Float, y: Float) {
         val item = editableItem() ?: return
@@ -581,27 +588,30 @@ class CreatePackViewModel @Inject constructor(
             return
         }
         val before = item.editor.state
-        item.editor.select(item.editor.hitTest(x, y))
+        val target = item.editor.tapTarget(x, y)
+        val keepsCaption = target == null && tool == EditorTool.Add && addTab == AddTab.Text &&
+            before.layer(item.editor.selectedId)?.content is LayerContent.Text
+        if (!keepsCaption) item.editor.select(target)
         endTextSession(item)
         afterEdit(item, before)
     }
 
-    /** A double tap on a text layer edits it. */
+    /** A double tap edits a text layer: the selected one under the point, else the top-most one there. */
     fun canvasDoubleTap(x: Float, y: Float) {
         val item = editableItem() ?: return
         if (strokeTool()) return
-        val id = item.editor.hitTest(x, y) ?: return
-        if (item.editor.state.layer(id)?.content is LayerContent.Text) editTextLayer(id)
+        item.editor.doubleTapTarget(x, y)?.let(::editTextLayer)
     }
 
     /**
-     * A finger lands on the canvas (canvas px): true when it is on a layer, which the gesture then
-     * moves, resizes and turns (one undo step). False on empty space: the UI pans the view instead.
+     * A finger lands on the canvas (canvas px): true when it is on a layer (the selected one first,
+     * even under another; [DecorEditor.gestureTarget]), which the gesture then moves, resizes and turns
+     * (one undo step). False on empty space: the UI pans the view instead.
      */
     fun beginLayerGesture(x: Float, y: Float): Boolean {
         val item = editableItem() ?: return false
         if (strokeTool()) return false
-        val id = item.editor.hitTest(x, y) ?: return false
+        val id = item.editor.gestureTarget(x, y) ?: return false
         startGesture(item, id)
         return true
     }
@@ -1080,9 +1090,18 @@ class CreatePackViewModel @Inject constructor(
 
     private fun startExport(toWhatsApp: Boolean) {
         if (exportState.isBusy()) return
+        val stickers = selectedItems()
+        // Next already did this for the sticker left open; nothing may export half-drawn.
+        stickers.forEach(::flushDrawing)
+        // Resolved now, in the app language, and kept with the pack.
+        val words = appContext.inAppLanguage()
+        val finalName = packName.trim().ifEmpty { words.getString(R.string.create_untitled) }
+        val publisher = words.getString(R.string.create_publisher)
+        val trayAt = trayIndex.coerceIn(0, max(0, stickers.size - 1))
+        val signature = ExportSignature.of(stickers, trayAt, finalName)
         val existing = savedPackId
-        if (existing != null) {
-            // Already exported this session (e.g. the WhatsApp confirm was cancelled).
+        if (existing != null && signature == savedSignature) {
+            // Already exported as it is (the WhatsApp confirm was cancelled): the same pack goes again.
             if (toWhatsApp) {
                 exportState = AddVisualState.Sent
                 push()
@@ -1092,17 +1111,9 @@ class CreatePackViewModel @Inject constructor(
             }
             return
         }
-        val stickers = selectedItems()
-        // Next already did this for the sticker left open; nothing may export half-drawn.
-        stickers.forEach(::flushDrawing)
         exportState = AddVisualState.Downloading
         exportProgress = 0f
         push()
-        // Resolved now, in the app language, and kept with the pack.
-        val words = appContext.inAppLanguage()
-        val finalName = packName.trim().ifEmpty { words.getString(R.string.create_untitled) }
-        val publisher = words.getString(R.string.create_publisher)
-        val trayAt = trayIndex.coerceIn(0, max(0, stickers.size - 1))
         exportJob = viewModelScope.launch {
             try {
                 val (id, name) = exportPack(stickers, finalName, publisher, trayAt)
@@ -1113,7 +1124,10 @@ class CreatePackViewModel @Inject constructor(
                 )
                 savedPackId = id
                 savedPackName = name
+                savedSignature = signature
                 exportProgress = 1f
+                // Edited since an earlier export: that pack goes, unless WhatsApp has it already.
+                if (existing != null) dropReplacedPack(existing)
                 if (toWhatsApp) {
                     exportState = AddVisualState.Sent
                     push()
@@ -1129,6 +1143,34 @@ class CreatePackViewModel @Inject constructor(
                 push()
             }
         }
+    }
+
+    /**
+     * The pack of an earlier export, exported again after edits: deleted, unless one of the WhatsApp apps
+     * already has it (then it stays in My Packs, as it is in WhatsApp). What can't be told is kept.
+     */
+    private suspend fun dropReplacedPack(id: String) {
+        try {
+            withContext(ioDispatcher) {
+                if (!inWhatsApp(id)) myPacksRepository.deleteOwnPack(id)
+            }
+        } catch (ce: CancellationException) {
+            throw ce
+        } catch (e: Exception) {
+            CrashReporting.record(e, "pack_replace")
+        }
+    }
+
+    /** Whether an installed WhatsApp (consumer or business) has pack [id]; true when it can't be asked. */
+    private fun inWhatsApp(id: String): Boolean = try {
+        val packages = appContext.packageManager
+        val consumer = WhitelistCheck.isWhatsAppConsumerAppInstalled(packages) &&
+            WhitelistCheck.isStickerPackWhitelistedInWhatsAppConsumer(appContext, id)
+        val business = WhitelistCheck.isWhatsAppSmbAppInstalled(packages) &&
+            WhitelistCheck.isStickerPackWhitelistedInWhatsAppSmb(appContext, id)
+        consumer || business
+    } catch (e: Exception) {
+        true
     }
 
     /** Asks WhatsApp, off the main thread, what the add launches; the screen fires it as it arrives. */
@@ -1559,6 +1601,7 @@ class CreatePackViewModel @Inject constructor(
         exportProgress = 0f
         savedPackId = null
         savedPackName = ""
+        savedSignature = null
         finished = false
         viewModelScope.launch(ioDispatcher) {
             File(appContext.cacheDir, "create").deleteRecursively()
@@ -1577,4 +1620,19 @@ class CreatePackViewModel @Inject constructor(
         File(appContext.cacheDir, "create").deleteRecursively()
         super.onCleared()
     }
+
+    /**
+     * What an export was made of: per sticker its id, mask version and decor, the tray index and the
+     * trimmed pack name. Export again with the same signature sends the saved pack; a different one
+     * makes a new pack.
+     */
+    private data class ExportSignature(val stickers: List<StickerSignature>, val tray: Int, val name: String) {
+        companion object {
+            fun of(stickers: List<MediaItem>, trayAt: Int, name: String) = ExportSignature(
+                stickers.map { StickerSignature(it.id, it.maskVersion, it.editor.state) }, trayAt, name
+            )
+        }
+    }
+
+    private data class StickerSignature(val id: String, val maskVersion: Int, val decor: DecorState)
 }

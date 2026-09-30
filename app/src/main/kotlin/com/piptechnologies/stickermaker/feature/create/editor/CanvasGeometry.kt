@@ -1,6 +1,8 @@
 package com.piptechnologies.stickermaker.feature.create.editor
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import com.piptechnologies.stickermaker.feature.create.CreateSpec
 import com.piptechnologies.stickermaker.feature.create.LayerUi
 import com.piptechnologies.stickermaker.feature.create.decor.Affine
@@ -12,7 +14,7 @@ import kotlin.math.sin
 
 // The Cut out canvas's geometry, free of Compose state so it can be unit-tested: the map between
 // the 512 canvas and the canvas box, the selection box and its handles, and the small rules of the
-// tool bar, the action pill, and the taps, drags and pinches on the canvas.
+// tool bar, the action pill (its fit and its place), and the taps, drags and pinches on the canvas.
 
 /** The second tap of a double tap lands within this many ms of the first one lifting. */
 internal const val DOUBLE_TAP_MS = 300L
@@ -186,6 +188,64 @@ internal fun actionPillFit(labelWidths: List<Int>, dp: Float, room: Float): Pill
     actionPillWidth(labelWidths, dp, PillFit.Full.sidePadding) <= room -> PillFit.Full
     actionPillWidth(labelWidths, dp, PillFit.Tight.sidePadding) <= room -> PillFit.Tight
     else -> PillFit.Icons
+}
+
+/**
+ * The action pill's width in [fit], in px: with labels, [actionPillWidth]; icons only, each button is its
+ * side padding around the 15 dp icon, 2 dp between buttons and the 2 dp inset.
+ */
+internal fun actionPillWidth(fit: PillFit, labelWidths: List<Int>, dp: Float): Float {
+    if (fit.labels) return actionPillWidth(labelWidths, dp, fit.sidePadding)
+    val buttons = labelWidths.size * (2f * fit.sidePadding + 15f)
+    return (buttons + (labelWidths.size - 1).coerceAtLeast(0) * 2f + 2f * 2f) * dp
+}
+
+/** Where the action pill shows on the canvas card: under the canvas, as the spec says, or over its top. */
+internal enum class PillPlace { Bottom, Top }
+
+/** The axis-aligned bounds of this box grown by [outset] px on every side of the layer's own frame, in box px. */
+internal fun LayerBox.bounds(outset: Float): Rect {
+    val corners = listOf(
+        corner(-1f, -1f, outset), corner(1f, -1f, outset), corner(1f, 1f, outset), corner(-1f, 1f, outset)
+    )
+    return Rect(corners.minOf { it.x }, corners.minOf { it.y }, corners.maxOf { it.x }, corners.maxOf { it.y })
+}
+
+/**
+ * The action pill's zone on the canvas [card] (px): the [pill] centred across the card; at the Bottom
+ * its bottom edge [gap] px above the card's bottom, at the Top its top edge [gap] px below the card's top.
+ */
+internal fun pillZone(card: Size, pill: Size, place: PillPlace, gap: Float): Rect {
+    val left = (card.width - pill.width) / 2f
+    val top = if (place == PillPlace.Top) gap else card.height - gap - pill.height
+    return Rect(left, top, left + pill.width, top + pill.height)
+}
+
+/**
+ * Where the pill goes so it never sits under the selection: [selection] is the selected layer's box in
+ * card px, grown by the handles' reach. At the Top when it overlaps the pill's [bottom] zone and not its
+ * [top] zone; else at the Bottom, as the spec says.
+ */
+internal fun pillPlace(selection: Rect, bottom: Rect, top: Rect): PillPlace =
+    if (selection.overlaps(bottom) && !selection.overlaps(top)) PillPlace.Top else PillPlace.Bottom
+
+/**
+ * Keeps the pill's place through a gesture: it is decided while none is live, and a layer selected by
+ * the gesture itself (a drag that starts on it) gets its place at once, so the pill never jumps under
+ * a moving finger.
+ */
+internal class PillPlacer {
+    private var layer: Long? = null
+    private var place = PillPlace.Bottom
+
+    /** The place of the pill for layer [layerId], decided by [decide] unless a gesture is [live] on it already. */
+    fun place(layerId: Long, live: Boolean, decide: () -> PillPlace): PillPlace {
+        if (!live || layerId != layer) {
+            layer = layerId
+            place = decide()
+        }
+        return place
+    }
 }
 
 /** What a touch on the canvas turned into once it moved or a second finger landed. */

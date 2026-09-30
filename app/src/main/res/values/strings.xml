@@ -455,7 +455,7 @@
     <string name="create_rail_anim" translatable="false">ANIM</string>
     <string name="create_text_style_sample" translatable="false">Aa</string>
     <string name="licences_fluent_name" translatable="false">Fluent Emoji</string>
-    <string name="licences_fonts_name" translatable="false">Baloo 2 · Baloo Bhaijaan 2 · Rubik · Caveat · Lilita One · Mirza · Kalam · Amatic SC · Lalezar · Yatra One · Ruslan Display · Karantina</string>
+    <string name="licences_fonts_name" translatable="false">Baloo 2 · Baloo Bhaijaan 2 · Rubik · Caveat · Lilita One · Mirza · Kalam · Amatic SC · Lalezar · Yatra One · Ruslan Display · Karantina · Hanken Grotesk · JetBrains Mono</string>
     <string name="licences_lucide_name" translatable="false">Lucide</string>
     <string name="licences_tag_mit" translatable="false">MIT</string>
     <string name="licences_tag_ofl" translatable="false">SIL OFL 1.1</string>

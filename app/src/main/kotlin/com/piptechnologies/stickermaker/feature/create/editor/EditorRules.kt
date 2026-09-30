@@ -1,12 +1,13 @@
 package com.piptechnologies.stickermaker.feature.create.editor
 
+import android.graphics.Typeface
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.graphics.TransformOrigin
 import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.feature.create.AddTab
 import com.piptechnologies.stickermaker.feature.create.decor.EmojiCatalog
-import com.piptechnologies.stickermaker.feature.create.decor.FontFile
+import com.piptechnologies.stickermaker.feature.create.decor.FontFace
 import com.piptechnologies.stickermaker.feature.create.decor.FontMood
 import com.piptechnologies.stickermaker.feature.create.decor.MarkerSize
 import com.piptechnologies.stickermaker.feature.create.decor.MotionMath
@@ -15,6 +16,7 @@ import com.piptechnologies.stickermaker.feature.create.decor.OutlineStyle
 import com.piptechnologies.stickermaker.feature.create.decor.OutlineThickness
 import com.piptechnologies.stickermaker.feature.create.decor.SkinTone
 import com.piptechnologies.stickermaker.feature.create.decor.TextStyleId
+import kotlin.math.max
 
 // The small rules of the rows under the tool bar and of the Add sheet, free of Compose state so they
 // can be unit-tested: the words for the data files' ids, how the Draw row and the Outline sub-row fit
@@ -99,12 +101,12 @@ internal fun fontMoodLabel(mood: FontMood): Int = when (mood) {
     FontMood.Display -> R.string.create_text_font_display
 }
 
-/** The Latin face a font mood's chip is lettered in (spec §9): Baloo 2, Caveat or Lilita One. */
-internal fun fontMoodFace(mood: FontMood): FontFile = when (mood) {
-    FontMood.Round -> FontFile.BALOO
-    FontMood.Hand -> FontFile.CAVEAT
-    FontMood.Display -> FontFile.LILITA
-}
+/**
+ * The typeface a font chip letters with: its [face]'s, made bold the way a caption would be when the
+ * face asks for synthetic bold (Caveat on API 24–25).
+ */
+internal fun chipTypeface(face: FontFace): Typeface =
+    if (face.fakeBold) Typeface.create(face.typeface, Typeface.BOLD) else face.typeface
 
 /** A font chip's text size in sp (spec §9): Caveat is lettered at 15, the others at 13. */
 internal fun fontMoodSp(mood: FontMood): Float = if (mood == FontMood.Hand) 15f else 13f
@@ -298,3 +300,13 @@ internal fun skinPopoverPlacement(
  * that much higher, so the canvas and the tool bar can be scrolled into view above the sheet.
  */
 internal fun sheetOverlap(sheetHeight: Int, footerHeight: Int): Int = (sheetHeight - footerHeight).coerceAtLeast(0)
+
+/**
+ * Where the editor's column scrolls to as the Add sheet stands up or changes height (px): far enough
+ * that the canvas card's bottom edge ([cardBottom], from the top of the column's content) sits at the
+ * sheet's top edge, where the column's [viewport] now ends. A card taller than the viewport is cut at
+ * its top: captions live low on the sticker. A column already scrolled further stays where it is
+ * ([scroll]), and none scrolls past its content ([maxScroll]).
+ */
+internal fun scrollClearOfSheet(scroll: Int, cardBottom: Int, viewport: Int, maxScroll: Int): Int =
+    max(scroll, cardBottom - viewport).coerceIn(0, max(0, maxScroll))

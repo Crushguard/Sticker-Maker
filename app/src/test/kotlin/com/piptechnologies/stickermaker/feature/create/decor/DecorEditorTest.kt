@@ -289,6 +289,47 @@ class DecorEditorTest {
     }
 
     @Test
+    fun aTapUnderTheSelectedLayerCyclesDownTheStackAndAGestureKeepsIt() {
+        // A caption, an emoji over it and a big frame over both, all at the centre.
+        val caption = editor.add(text())!!
+        editor.beginGesture(caption)
+        editor.drag(caption, 0f, 256f - editor.state.layer(caption)!!.cy)
+        editor.endGesture()
+        val emoji = editor.add(emoji())!!
+        val frame = editor.add(decor())!!
+        editor.beginGesture(frame); editor.pinch(frame, 4f, 0f); editor.endGesture()
+        editor.select(null)
+
+        assertEquals("nothing selected: the top-most", frame, editor.tapTarget(256f, 256f))
+        editor.select(frame)
+        assertEquals("under the selected frame: the next one down", emoji, editor.tapTarget(256f, 256f))
+        editor.select(emoji)
+        assertEquals(caption, editor.tapTarget(256f, 256f))
+        editor.select(caption)
+        assertEquals("the bottom wraps to the top-most", frame, editor.tapTarget(256f, 256f))
+        // Where only the frame is, the selected frame stays; where the selected layer isn't, the top-most.
+        editor.select(frame)
+        assertEquals(frame, editor.tapTarget(256f + 150f, 256f))
+        editor.select(caption)
+        assertEquals(frame, editor.tapTarget(256f + 150f, 256f))
+        assertNull(editor.tapTarget(10f, 10f))
+
+        // A drag that starts inside the selected layer's box moves it, even under the frame.
+        editor.select(emoji)
+        assertEquals(emoji, editor.gestureTarget(256f, 256f))
+        editor.select(null)
+        assertEquals(frame, editor.gestureTarget(256f, 256f))
+        editor.select(caption)
+        assertEquals("the selected layer isn't there: the top-most", frame, editor.gestureTarget(256f + 150f, 256f))
+
+        // A double tap edits the selected caption under the point, else the top-most caption there.
+        assertEquals(caption, editor.doubleTapTarget(256f, 256f))
+        editor.select(frame)
+        assertEquals(caption, editor.doubleTapTarget(256f, 256f))
+        assertNull(editor.doubleTapTarget(256f + 150f, 256f))
+    }
+
+    @Test
     fun presetAndOutlineChangesAreUndoable() {
         editor.setPreset("heartbeat")
         assertTrue(editor.state.animated)

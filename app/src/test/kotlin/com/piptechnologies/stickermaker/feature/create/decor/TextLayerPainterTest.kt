@@ -8,6 +8,7 @@ import java.io.File
 import kotlin.math.abs
 import kotlin.math.sqrt
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -144,6 +145,22 @@ class TextLayerPainterTest {
         val mixed = painter.render(text("love you سارة"), 1f)
         assertTrue("rose fill", Pixels.count(mixed) { Pixels.near(it, DecorSpec.ROSE, 40) } > 100)
         assertTrue("white edge", Pixels.count(mixed) { Pixels.near(it, Color.WHITE, 40) } > 100)
+    }
+
+    @Test
+    fun aCaptionReadsInTheDirectionOfItsFirstStrongLetter() {
+        val arabicApp = TextLayerPainter(DecorFonts(book, DecorTestFonts::load), book) { true }
+        // "OK!" letters left to right in an Arabic app: the exclamation mark ends it, it doesn't lead.
+        assertFalse(arabicApp.isRtl(text("OK!")))
+        assertFalse(arabicApp.isRtl(text("love you سارة")))
+        // An Arabic phrase in an English app reads right to left.
+        assertTrue(painter.isRtl(text("أحبك")))
+        assertTrue(painter.isRtl(text("!أحبك")))
+        // With no strong letter the app language decides: emoji, digits, marks.
+        assertFalse(painter.isRtl(text("❤️❤️")))
+        assertTrue(arabicApp.isRtl(text("❤️❤️")))
+        assertTrue(arabicApp.isRtl(text("12 ♥")))
+        assertFalse(painter.isRtl(text("")))
     }
 
     @Test
