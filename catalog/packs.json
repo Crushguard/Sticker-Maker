@@ -1,7 +1,7 @@
 {
   "_about": "The reviewed metadata of every catalog pack, by pack id (= its folder name). scripts/library/prepare.js writes each into its folder's pack.json. Tags: category ids first (they decide the Home categories), then what the pack shows and is for; every tag has search words in library/_tags.json.",
   "generated": "2026-09-30",
-  "source": "Claude Design: the Stickers page manifest (packs.json: theme, lang, adult), Pack Ideas (moods, characters, sticker lines) and the WhatsApp export of 2026-09-30 (120 folders).",
+  "source": "Claude Design: the Stickers page manifest (packs.json: theme, lang, adult, liveFiles), Pack Ideas (moods, characters, sticker lines) and the WhatsApp export of 2026-09-30, whose <pack>-animated folders were merged into their packs: \"animate\": \"wiggle\" marks those 25 packs, whose animated stickers ship as they are and whose other stickers get a gentle wiggle, since WhatsApp takes a pack all static or all animated.",
   "packs": {
     "clingy-mango": {
       "name": "Clingy Mango",
@@ -24,6 +24,7 @@
         "🥺"
       ],
       "order": 1,
+      "animate": "wiggle",
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -183,7 +184,8 @@
         "i'm smol",
         "don't yell"
       ],
-      "order": 2
+      "order": 2,
+      "animate": "wiggle"
     },
     "couple-therapy": {
       "name": "Couple Therapy",
@@ -429,73 +431,6 @@
       ],
       "order": 6
     },
-    "clingy-mango-animated": {
-      "name": "Clingy Mango (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "cute",
-        "funny",
-        "cat",
-        "needy",
-        "miss-you",
-        "jealous",
-        "reply",
-        "hug",
-        "mango"
-      ],
-      "emojis": [
-        "🐱",
-        "🥺"
-      ],
-      "order": 7,
-      "stickers": {
-        "01.webp": {
-          "emojis": [
-            "🥺",
-            "❤️"
-          ],
-          "text": "miss u"
-        },
-        "02.webp": {
-          "emojis": [
-            "📱",
-            "🥺"
-          ],
-          "text": "pls reply"
-        },
-        "03.webp": {
-          "emojis": [
-            "😭",
-            "📱"
-          ],
-          "text": "where r u"
-        },
-        "04.webp": {
-          "emojis": [
-            "😼",
-            "❤️"
-          ],
-          "text": "MINE"
-        },
-        "05.webp": {
-          "emojis": [
-            "🤗",
-            "🥺"
-          ],
-          "text": "hug me"
-        },
-        "06.webp": {
-          "emojis": [
-            "😴",
-            "❤️",
-            "🌙"
-          ],
-          "text": "gn love"
-        }
-      }
-    },
     "flirty-shy": {
       "name": "Flirty & Shy",
       "lang": [
@@ -514,7 +449,7 @@
         "🐰",
         "😳"
       ],
-      "order": 8,
+      "order": 7,
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -640,7 +575,7 @@
         "blow the candles",
         "ur age? still perfect"
       ],
-      "order": 9
+      "order": 8
     },
     "sad-hours": {
       "name": "Sad Hours",
@@ -674,38 +609,8 @@
         "we'll be ok",
         "talk to me"
       ],
-      "order": 10
-    },
-    "fragile-baby-animated": {
-      "name": "Fragile Baby (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "cute",
-        "needy",
-        "hug",
-        "care"
-      ],
-      "emojis": [
-        "🥺",
-        "🤗"
-      ],
-      "keywords": [
-        "handle with care",
-        "i'm baby",
-        "carry me",
-        "hold me",
-        "be nice to me",
-        "need attention",
-        "tuck me in",
-        "no.",
-        "soft hours",
-        "pick me up",
-        "i'm smol",
-        "don't yell"
-      ],
-      "order": 11
+      "order": 9,
+      "animate": "wiggle"
     },
     "blue-ticks": {
       "name": "Blue Ticks",
@@ -740,7 +645,8 @@
         "double tick, single heart",
         "read receipts on = love"
       ],
-      "order": 12
+      "order": 10,
+      "animate": "wiggle"
     },
     "mango-moves": {
       "name": "Mango Moves",
@@ -758,7 +664,8 @@
         "🐱",
         "🥳"
       ],
-      "order": 13,
+      "order": 11,
+      "animate": "wiggle",
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -892,41 +799,8 @@
         "let him cook",
         "my roman empire = u"
       ],
-      "order": 14
-    },
-    "sad-hours-animated": {
-      "name": "Sad Hours (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "romantic",
-        "sad",
-        "miss-you",
-        "cloud",
-        "sun",
-        "care",
-        "rainy"
-      ],
-      "emojis": [
-        "🌧️",
-        "😢"
-      ],
-      "keywords": [
-        "miss u so much",
-        "not ok",
-        "cried a bit",
-        "3am thoughts",
-        "wish u were here",
-        "it hurts",
-        "still love u",
-        "heart on the floor",
-        "don't leave",
-        "i'm here",
-        "we'll be ok",
-        "talk to me"
-      ],
-      "order": 15
+      "order": 12,
+      "animate": "wiggle"
     },
     "did-you-eat": {
       "name": "Did You Eat?",
@@ -959,7 +833,8 @@
         "u + me + fries",
         "full & happy"
       ],
-      "order": 16
+      "order": 13,
+      "animate": "wiggle"
     },
     "sorry-love": {
       "name": "Sorry, My Love",
@@ -978,7 +853,8 @@
         "🥺",
         "🙏"
       ],
-      "order": 17,
+      "order": 14,
+      "animate": "wiggle",
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -1138,42 +1014,7 @@
         "champion",
         "star of my day"
       ],
-      "order": 18
-    },
-    "blue-ticks-animated": {
-      "name": "Blue Ticks (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "funny",
-        "phone",
-        "seen",
-        "reply",
-        "typing",
-        "jealous",
-        "petty",
-        "chat"
-      ],
-      "emojis": [
-        "📱",
-        "😒"
-      ],
-      "keywords": [
-        "seen. no reply.",
-        "typing… for 5 min",
-        "left on read",
-        "online but not for me",
-        "last seen: my heart",
-        "who's she",
-        "hmph",
-        "k.",
-        "fine.",
-        "reply pls",
-        "double tick, single heart",
-        "read receipts on = love"
-      ],
-      "order": 19
+      "order": 15
     },
     "gm-gn": {
       "name": "Good Morning, Good Night",
@@ -1192,7 +1033,7 @@
         "☀️",
         "🌙"
       ],
-      "order": 20,
+      "order": 16,
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -1285,7 +1126,7 @@
         "slow dance",
         "always"
       ],
-      "order": 21
+      "order": 17
     },
     "habibi-jaan-amor": {
       "name": "Habibi · Jaan · Mi Amor",
@@ -1319,68 +1160,7 @@
         "mi vida",
         "contigo"
       ],
-      "order": 22
-    },
-    "mango-moves-animated": {
-      "name": "Mango Moves (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "cute",
-        "cat",
-        "happy",
-        "dance",
-        "mango"
-      ],
-      "emojis": [
-        "🐱",
-        "🥳"
-      ],
-      "order": 23,
-      "stickers": {
-        "01.webp": {
-          "emojis": [
-            "🥳",
-            "🙌"
-          ],
-          "text": "LETS GOOO"
-        },
-        "02.webp": {
-          "emojis": [
-            "💫",
-            "❤️"
-          ]
-        },
-        "03.webp": {
-          "emojis": [
-            "🥳",
-            "🎉"
-          ],
-          "text": "YAY"
-        },
-        "04.webp": {
-          "emojis": [
-            "👋",
-            "😸"
-          ],
-          "text": "HIII"
-        },
-        "05.webp": {
-          "emojis": [
-            "❤️",
-            "💓"
-          ],
-          "text": "BA-DUM"
-        },
-        "06.webp": {
-          "emojis": [
-            "🏃",
-            "💨"
-          ],
-          "text": "COMING!"
-        }
-      }
+      "order": 18
     },
     "heartbeat": {
       "name": "Heartbeat",
@@ -1397,7 +1177,8 @@
         "💓",
         "😍"
       ],
-      "order": 24,
+      "order": 19,
+      "animate": "wiggle",
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -1491,7 +1272,7 @@
         "22 sick day",
         "24 forever"
       ],
-      "order": 25
+      "order": 20
     },
     "capy-calm": {
       "name": "Capy Calm",
@@ -1523,38 +1304,8 @@
         "vibing",
         "zen"
       ],
-      "order": 26
-    },
-    "delulu-animated": {
-      "name": "Delulu in Love (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "funny",
-        "words",
-        "slang",
-        "flirt"
-      ],
-      "emojis": [
-        "🤪",
-        "✨"
-      ],
-      "keywords": [
-        "delulu",
-        "delulu is the solulu",
-        "situationship",
-        "talking phase",
-        "dtr?",
-        "boo'd up",
-        "i ship us",
-        "dry texter",
-        "green flag",
-        "soft launch",
-        "let him cook",
-        "my roman empire = u"
-      ],
-      "order": 27
+      "order": 21,
+      "animate": "wiggle"
     },
     "bunny-bounce": {
       "name": "Bunny Bounce",
@@ -1573,7 +1324,8 @@
         "🐰",
         "🤗"
       ],
-      "order": 28,
+      "order": 22,
+      "animate": "wiggle",
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -1667,7 +1419,7 @@
         "team us",
         "rematch?"
       ],
-      "order": 29
+      "order": 23
     },
     "pop-words": {
       "name": "Pop Words",
@@ -1685,7 +1437,7 @@
         "💥",
         "💕"
       ],
-      "order": 30,
+      "order": 24,
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -1749,39 +1501,6 @@
         }
       }
     },
-    "did-you-eat-animated": {
-      "name": "Did You Eat? (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "cute",
-        "food",
-        "care",
-        "snacks",
-        "dumpling",
-        "date"
-      ],
-      "emojis": [
-        "🥟",
-        "😋"
-      ],
-      "keywords": [
-        "did u eat?",
-        "eat first, love later",
-        "hungry = grumpy",
-        "snack?",
-        "cook for me",
-        "feed me",
-        "share a bite",
-        "boba date?",
-        "dinner at mine",
-        "pizza is my love language",
-        "u + me + fries",
-        "full & happy"
-      ],
-      "order": 31
-    },
     "lazy-sunday": {
       "name": "Lazy Sunday",
       "lang": [
@@ -1813,7 +1532,7 @@
         "home = u",
         "sunday us"
       ],
-      "order": 32
+      "order": 25
     },
     "special-days": {
       "name": "Special Days",
@@ -1847,7 +1566,7 @@
         "still choosing u",
         "forever starts today"
       ],
-      "order": 33
+      "order": 26
     },
     "dance-w-me": {
       "name": "Dance With Me",
@@ -1865,7 +1584,7 @@
         "💃",
         "🕺"
       ],
-      "order": 34,
+      "order": 27,
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -1927,69 +1646,6 @@
         }
       }
     },
-    "sorry-love-animated": {
-      "name": "Sorry, My Love (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "couples",
-        "cute",
-        "sorry",
-        "blob",
-        "angry",
-        "pinky"
-      ],
-      "emojis": [
-        "🥺",
-        "🙏"
-      ],
-      "order": 35,
-      "stickers": {
-        "01.webp": {
-          "emojis": [
-            "🥺",
-            "🙏"
-          ],
-          "text": "SORRY"
-        },
-        "02.webp": {
-          "emojis": [
-            "🥺",
-            "🌸"
-          ],
-          "text": "FORGIVE ME?"
-        },
-        "03.webp": {
-          "emojis": [
-            "🤞",
-            "🥺"
-          ],
-          "text": "NEVER AGAIN"
-        },
-        "04.webp": {
-          "emojis": [
-            "✌️",
-            "🏳️"
-          ],
-          "text": "TRUCE"
-        },
-        "05.webp": {
-          "emojis": [
-            "🥺",
-            "😢"
-          ],
-          "text": "DON'T BE MAD"
-        },
-        "06.webp": {
-          "emojis": [
-            "🥺",
-            "🙏"
-          ],
-          "text": "PLS"
-        }
-      }
-    },
     "caught-web": {
       "name": "Caught in Your Web",
       "lang": [
@@ -2020,7 +1676,8 @@
         "web of lies? never",
         "saved my day"
       ],
-      "order": 36
+      "order": 28,
+      "animate": "wiggle"
     },
     "one-night": {
       "name": "One Night",
@@ -2056,7 +1713,8 @@
         "worth it",
         "again tomorrow?"
       ],
-      "order": 37
+      "order": 29,
+      "animate": "wiggle"
     },
     "miles-apart": {
       "name": "Miles Apart",
@@ -2073,7 +1731,7 @@
         "✈️",
         "🥺"
       ],
-      "order": 38,
+      "order": 30,
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -2137,66 +1795,6 @@
         }
       }
     },
-    "heartbeat-animated": {
-      "name": "Heartbeat (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "romantic",
-        "heart",
-        "love",
-        "happy"
-      ],
-      "emojis": [
-        "💓",
-        "😍"
-      ],
-      "order": 39,
-      "stickers": {
-        "01.webp": {
-          "emojis": [
-            "💥",
-            "❤️"
-          ],
-          "text": "BOOM"
-        },
-        "02.webp": {
-          "emojis": [
-            "💘",
-            "❤️"
-          ],
-          "text": "TO U"
-        },
-        "03.webp": {
-          "emojis": [
-            "💞",
-            "😵"
-          ]
-        },
-        "04.webp": {
-          "emojis": [
-            "🔥",
-            "❤️"
-          ],
-          "text": "HOT"
-        },
-        "05.webp": {
-          "emojis": [
-            "🥺",
-            "💗"
-          ],
-          "text": "AWW"
-        },
-        "06.webp": {
-          "emojis": [
-            "🥳",
-            "❤️"
-          ],
-          "text": "YAY"
-        }
-      }
-    },
     "waiting": {
       "name": "Waiting for Something",
       "lang": [
@@ -2227,7 +1825,7 @@
         "find me again",
         "always was u"
       ],
-      "order": 40
+      "order": 31
     },
     "friends-to-lovers": {
       "name": "Friends to Lovers",
@@ -2259,7 +1857,7 @@
         "worth the wait",
         "still my best friend"
       ],
-      "order": 41
+      "order": 32
     },
     "couple-doodles": {
       "name": "Couple Doodles",
@@ -2277,7 +1875,7 @@
         "👫",
         "💕"
       ],
-      "order": 42,
+      "order": 33,
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -2338,38 +1936,6 @@
         }
       }
     },
-    "capy-calm-animated": {
-      "name": "Capy Calm (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "cute",
-        "capybara",
-        "calm",
-        "cozy",
-        "together"
-      ],
-      "emojis": [
-        "😌",
-        "🍊"
-      ],
-      "keywords": [
-        "no thoughts, just us",
-        "unbothered",
-        "chill w me",
-        "we're fine",
-        "slow morning",
-        "come float",
-        "no drama",
-        "soft day",
-        "us > everything",
-        "peace",
-        "vibing",
-        "zen"
-      ],
-      "order": 43
-    },
     "dr-love": {
       "name": "Dr. Love",
       "lang": [
@@ -2400,7 +1966,8 @@
         "heartbeat: yours",
         "not lupus. love."
       ],
-      "order": 44
+      "order": 34,
+      "animate": "wiggle"
     },
     "dearest": {
       "name": "Dearest",
@@ -2432,7 +1999,7 @@
         "meet me in the garden",
         "courting u"
       ],
-      "order": 45
+      "order": 35
     },
     "sorry-wiggle": {
       "name": "Sorry Wiggle",
@@ -2451,7 +2018,8 @@
         "🥺",
         "🙏"
       ],
-      "order": 46,
+      "order": 36,
+      "animate": "wiggle",
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -2515,45 +2083,6 @@
         }
       }
     },
-    "bunny-bounce-animated": {
-      "name": "Bunny Bounce (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "flirty",
-        "cute",
-        "bunny",
-        "hug",
-        "kiss",
-        "happy"
-      ],
-      "emojis": [
-        "🐰",
-        "🤗"
-      ],
-      "order": 47,
-      "stickers": {
-        "01.webp": {
-          "text": "boing boing boing"
-        },
-        "02.webp": {
-          "text": "coming!"
-        },
-        "03.webp": {
-          "text": "wheee"
-        },
-        "04.webp": {
-          "text": "hi hi hi"
-        },
-        "05.webp": {
-          "text": "tackle hug"
-        },
-        "06.webp": {
-          "text": "oof love u"
-        }
-      }
-    },
     "kdrama-hearts": {
       "name": "K-Drama Hearts",
       "lang": [
@@ -2591,7 +2120,8 @@
         "fate",
         "aegyo attack"
       ],
-      "order": 48
+      "order": 37,
+      "animate": "wiggle"
     },
     "love-spell": {
       "name": "Love Spell",
@@ -2623,7 +2153,8 @@
         "boo (i love u)",
         "hex my ex? no, kiss me"
       ],
-      "order": 49
+      "order": 38,
+      "animate": "wiggle"
     },
     "sunny-sleepy": {
       "name": "Sunny & Sleepy",
@@ -2642,7 +2173,7 @@
         "☀️",
         "😴"
       ],
-      "order": 50,
+      "order": 39,
       "stickers": {
         "01.webp": {
           "emojis": [
@@ -2706,38 +2237,6 @@
         }
       }
     },
-    "caught-web-animated": {
-      "name": "Caught in Your Web (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "funny",
-        "cute",
-        "spider",
-        "flirt",
-        "compliment"
-      ],
-      "emojis": [
-        "🕷️",
-        "🕸️"
-      ],
-      "keywords": [
-        "caught u",
-        "stuck on u",
-        "hang w me?",
-        "swing by",
-        "brand new day w us",
-        "8 legs, 1 heart",
-        "my hero",
-        "night patrol: checking on u",
-        "tangled in u",
-        "sense says: hug",
-        "web of lies? never",
-        "saved my day"
-      ],
-      "order": 51
-    },
     "coupled-up": {
       "name": "Coupled Up",
       "lang": [
@@ -2768,7 +2267,7 @@
         "bombshell alert",
         "10/10 would swipe"
       ],
-      "order": 52
+      "order": 40
     },
     "lobsters": {
       "name": "Lobsters",
@@ -2800,7 +2299,7 @@
         "lobster date",
         "pivot! (to u)"
       ],
-      "order": 53
+      "order": 41
     },
     "filmy-love": {
       "name": "Filmy Love",
@@ -2834,43 +2333,7 @@
         "family approves",
         "shaadi? soon"
       ],
-      "order": 54
-    },
-    "one-night-animated": {
-      "name": "One Night (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "flirty",
-        "couples",
-        "date",
-        "couple",
-        "story"
-      ],
-      "emojis": [
-        "🥂",
-        "🌃"
-      ],
-      "keywords": [
-        "tonight?",
-        "7pm. be ready.",
-        "outfit check",
-        "running late",
-        "found u",
-        "one drink",
-        "walk w me",
-        "side quest",
-        "dance w me",
-        "it's midnight",
-        "don't go home",
-        "stay",
-        "last train",
-        "sunrise",
-        "worth it",
-        "again tomorrow?"
-      ],
-      "order": 55
+      "order": 42
     },
     "dizi-love": {
       "name": "Dizi Love",
@@ -2904,7 +2367,7 @@
         "bosphorus date",
         "the slap-turn (jk)"
       ],
-      "order": 56
+      "order": 43
     },
     "just-faces": {
       "name": "Just Faces",
@@ -2935,7 +2398,8 @@
         "melting",
         "zoned out"
       ],
-      "order": 57
+      "order": 44,
+      "animate": "wiggle"
     },
     "hands": {
       "name": "Hands",
@@ -2968,39 +2432,7 @@
         "cheek pinch",
         "fist bump"
       ],
-      "order": 58
-    },
-    "dr-love-animated": {
-      "name": "Dr. Love (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "funny",
-        "doctor",
-        "heart",
-        "care",
-        "tv-series"
-      ],
-      "emojis": [
-        "🩺",
-        "💗"
-      ],
-      "keywords": [
-        "you're my person",
-        "diagnosis: in love",
-        "prescription: u, twice daily",
-        "code blue: miss u",
-        "vitals: racing",
-        "stat! hug needed",
-        "paging dr. cutie",
-        "on call for u",
-        "scrub in w me",
-        "get well soon, my love",
-        "heartbeat: yours",
-        "not lupus. love."
-      ],
-      "order": 59
+      "order": 45
     },
     "reaction-hearts": {
       "name": "Reaction Hearts",
@@ -3031,7 +2463,8 @@
         "spinning",
         "tiny"
       ],
-      "order": 60
+      "order": 46,
+      "animate": "wiggle"
     },
     "love-words-world-1": {
       "name": "Love Words: World (1/2)",
@@ -3068,7 +2501,7 @@
         "sayang · rindu",
         "nakupenda · mpenzi"
       ],
-      "order": 61
+      "order": 47
     },
     "love-words-world-2": {
       "name": "Love Words: World (2/2)",
@@ -3105,46 +2538,7 @@
         "sayang · rindu",
         "nakupenda · mpenzi"
       ],
-      "order": 62
-    },
-    "sorry-wiggle-animated": {
-      "name": "Sorry Wiggle (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "couples",
-        "cute",
-        "sorry",
-        "blob",
-        "angry",
-        "pinky"
-      ],
-      "emojis": [
-        "🥺",
-        "🙏"
-      ],
-      "order": 63,
-      "stickers": {
-        "01.webp": {
-          "text": "sorryyy"
-        },
-        "02.webp": {
-          "text": "pls?"
-        },
-        "03.webp": {
-          "text": "forgive meee"
-        },
-        "04.webp": {
-          "text": "i was wrong!!"
-        },
-        "05.webp": {
-          "text": "don't be mad"
-        },
-        "06.webp": {
-          "text": "love"
-        }
-      }
+      "order": 48
     },
     "i-love-you-world": {
       "name": "I Love You, Everywhere",
@@ -3184,7 +2578,7 @@
         "💕",
         "🌍"
       ],
-      "order": 64
+      "order": 49
     },
     "pet-names": {
       "name": "Pet Names",
@@ -3227,7 +2621,7 @@
         "joonam",
         "boo"
       ],
-      "order": 65
+      "order": 50
     },
     "wedding": {
       "name": "Wedding & Engagement",
@@ -3259,46 +2653,7 @@
         "family approves",
         "honeymoon"
       ],
-      "order": 66
-    },
-    "kdrama-hearts-animated": {
-      "name": "K-Drama Hearts (Animated)",
-      "lang": [
-        "en",
-        "ko"
-      ],
-      "tags": [
-        "anime",
-        "romantic",
-        "k-drama",
-        "korean",
-        "couple",
-        "love",
-        "hug"
-      ],
-      "emojis": [
-        "💕",
-        "🥰"
-      ],
-      "keywords": [
-        "saranghae",
-        "finger heart",
-        "back hug",
-        "wrist grab (gently)",
-        "piggyback home",
-        "one umbrella",
-        "want ramyeon?",
-        "our 100 days",
-        "jagiya",
-        "in this life and the next",
-        "cold? my jacket",
-        "ep 16 ending",
-        "slow-mo hair flip",
-        "soju night",
-        "fate",
-        "aegyo attack"
-      ],
-      "order": 67
+      "order": 51
     },
     "baby": {
       "name": "Baby on the Way",
@@ -3330,7 +2685,7 @@
         "nap when baby naps",
         "we made this"
       ],
-      "order": 68
+      "order": 52
     },
     "family-love": {
       "name": "Family Love",
@@ -3363,7 +2718,7 @@
         "blessings",
         "family first"
       ],
-      "order": 69
+      "order": 53
     },
     "valentines": {
       "name": "Valentine's Countdown",
@@ -3394,39 +2749,7 @@
         "happy diwali, my love",
         "every day is the 14th"
       ],
-      "order": 70
-    },
-    "love-spell-animated": {
-      "name": "Love Spell (Animated)",
-      "lang": [
-        "en"
-      ],
-      "tags": [
-        "cute",
-        "occasions",
-        "cat",
-        "halloween",
-        "flirt"
-      ],
-      "emojis": [
-        "🐈",
-        "👻"
-      ],
-      "keywords": [
-        "under ur spell",
-        "love potion no. 9",
-        "u're my type (of magic)",
-        "bewitched",
-        "brew me a coffee",
-        "full moon date",
-        "my familiar",
-        "spellbound",
-        "charmed",
-        "wicked cute",
-        "boo (i love u)",
-        "hex my ex? no, kiss me"
-      ],
-      "order": 71
+      "order": 54
     },
     "two-part": {
       "name": "Two-Part Stickers",
@@ -3458,7 +2781,7 @@
         "sorry · forgiven",
         "yours · mine"
       ],
-      "order": 72
+      "order": 55
     },
     "seasons-of-us": {
       "name": "Seasons of Us",
@@ -3491,7 +2814,7 @@
         "beach day",
         "another year of us"
       ],
-      "order": 73
+      "order": 56
     },
     "chat-fillers": {
       "name": "Chat Fillers",
@@ -3522,38 +2845,7 @@
         "charging",
         "home"
       ],
-      "order": 74
-    },
-    "just-faces-animated": {
-      "name": "Just Faces (Animated)",
-      "lang": [
-        "none"
-      ],
-      "tags": [
-        "cute",
-        "faces",
-        "wordless",
-        "shy"
-      ],
-      "emojis": [
-        "😊",
-        "🥺"
-      ],
-      "keywords": [
-        "blush",
-        "pout",
-        "heart eyes",
-        "side-eye",
-        "sleepy",
-        "crying-laughing",
-        "smug",
-        "shy",
-        "sulk",
-        "gasp",
-        "melting",
-        "zoned out"
-      ],
-      "order": 75
+      "order": 57
     },
     "sticker-cards": {
       "name": "Sticker Cards",
@@ -3586,7 +2878,7 @@
         "sleep well, my love",
         "always your side"
       ],
-      "order": 76
+      "order": 58
     },
     "ya-amar": {
       "name": "Ya Amar",
@@ -3621,7 +2913,7 @@
         "حبيب قلبي",
         "الله يخليك لي"
       ],
-      "order": 77
+      "order": 59
     },
     "yalla-habibi": {
       "name": "Yalla Habibi",
@@ -3653,38 +2945,7 @@
         "ya zalama",
         "yalla bye ♥"
       ],
-      "order": 78
-    },
-    "reaction-hearts-animated": {
-      "name": "Reaction Hearts (Animated)",
-      "lang": [
-        "none"
-      ],
-      "tags": [
-        "romantic",
-        "heart",
-        "faces",
-        "wordless"
-      ],
-      "emojis": [
-        "❤️",
-        "🔥"
-      ],
-      "keywords": [
-        "exploding",
-        "melting",
-        "shy",
-        "cracked",
-        "on fire",
-        "sleeping",
-        "dizzy",
-        "crying",
-        "laughing",
-        "bandaged",
-        "spinning",
-        "tiny"
-      ],
-      "order": 79
+      "order": 60
     },
     "joonam": {
       "name": "Joonam",
@@ -3717,7 +2978,7 @@
         "شب یلدا · yalda night",
         "نوروز مبارک · nowruz"
       ],
-      "order": 80
+      "order": 61
     },
     "laddoo": {
       "name": "Laddoo",
@@ -3750,7 +3011,8 @@
         "attention do",
         "sulk mode"
       ],
-      "order": 81
+      "order": 62,
+      "animate": "wiggle"
     },
     "khana-khaya": {
       "name": "Khana Khaya?",
@@ -3785,40 +3047,7 @@
         "gulab jamun = u",
         "pet bhar gaya, dil bhi"
       ],
-      "order": 82
-    },
-    "laddoo-animated": {
-      "name": "Laddoo (Animated)",
-      "lang": [
-        "hi"
-      ],
-      "tags": [
-        "india",
-        "cute",
-        "needy",
-        "hug",
-        "sweets",
-        "laddoo"
-      ],
-      "emojis": [
-        "🥺",
-        "💛"
-      ],
-      "keywords": [
-        "mera laddoo",
-        "godi lo",
-        "uthao mujhe",
-        "ignore mat karo",
-        "bas thoda aur",
-        "cute hoon na?",
-        "gol matol",
-        "pyaar karo",
-        "mujhse baat karo",
-        "nahi jaana",
-        "attention do",
-        "sulk mode"
-      ],
-      "order": 83
+      "order": 63
     },
     "sharmaana": {
       "name": "Sharmaana",
@@ -3852,7 +3081,7 @@
         "setting ho gayi",
         "kya dekh rahe ho"
       ],
-      "order": 84
+      "order": 64
     },
     "kaan-pakad": {
       "name": "Kaan Pakad Ke Sorry",
@@ -3885,7 +3114,8 @@
         "last time, promise",
         "dil se sorry"
       ],
-      "order": 85
+      "order": 65,
+      "animate": "wiggle"
     },
     "seen-zone": {
       "name": "Seen Zone",
@@ -3920,40 +3150,7 @@
         "ok ji.",
         "ignore mat karo"
       ],
-      "order": 86
-    },
-    "kaan-pakad-animated": {
-      "name": "Kaan Pakad Ke Sorry (Animated)",
-      "lang": [
-        "hi"
-      ],
-      "tags": [
-        "india",
-        "cute",
-        "sorry",
-        "angry",
-        "sweets",
-        "laddoo"
-      ],
-      "emojis": [
-        "🙏",
-        "🥺"
-      ],
-      "keywords": [
-        "maaf kar do",
-        "galti ho gayi",
-        "kaan pakad liye",
-        "sorry na yaar",
-        "gussa mat karo",
-        "naraz ho?",
-        "mana lo mujhe",
-        "muh mat phulao",
-        "pls na",
-        "ice cream se maafi",
-        "last time, promise",
-        "dil se sorry"
-      ],
-      "order": 87
+      "order": 66
     },
     "good-morning-ji": {
       "name": "Good Morning Ji",
@@ -3987,7 +3184,7 @@
         "sweet dreams, jaan",
         "kal baat karte hain"
       ],
-      "order": 88
+      "order": 67
     },
     "shaadi-season": {
       "name": "Shaadi Season",
@@ -4021,7 +3218,7 @@
         "vidaai tears",
         "mr & mrs"
       ],
-      "order": 89
+      "order": 68
     },
     "kab-aaoge": {
       "name": "Kab Aaoge?",
@@ -4054,40 +3251,7 @@
         "chhutti kab?",
         "ghar = tum"
       ],
-      "order": 90
-    },
-    "briga-animated": {
-      "name": "Briga (Animated)",
-      "lang": [
-        "pt-BR"
-      ],
-      "tags": [
-        "brazil",
-        "cute",
-        "needy",
-        "hug",
-        "sweets",
-        "brigadeiro"
-      ],
-      "emojis": [
-        "🥺",
-        "🍫"
-      ],
-      "keywords": [
-        "sem briga, só brigadeiro",
-        "tô carente",
-        "colo!",
-        "me pega",
-        "me faz carinho",
-        "quero atenção",
-        "manhoso",
-        "não briga comigo",
-        "cadê meu beijo?",
-        "tô mimado",
-        "só mais um pouquinho",
-        "fofinho"
-      ],
-      "order": 91
+      "order": 69
     },
     "pyaar-calendar": {
       "name": "Pyaar Ka Calendar",
@@ -4120,7 +3284,7 @@
         "karva chauth: fasting for u",
         "garba night date?"
       ],
-      "order": 92
+      "order": 70
     },
     "howzzat": {
       "name": "Howzzat!",
@@ -4153,7 +3317,7 @@
         "ipl season = don't disturb",
         "century of kisses"
       ],
-      "order": 93
+      "order": 71
     },
     "briga": {
       "name": "Briga",
@@ -4186,42 +3350,8 @@
         "só mais um pouquinho",
         "fofinho"
       ],
-      "order": 94
-    },
-    "sofrencia-animated": {
-      "name": "Sofrência (Animated)",
-      "lang": [
-        "pt-BR"
-      ],
-      "tags": [
-        "brazil",
-        "romantic",
-        "sad",
-        "miss-you",
-        "music",
-        "guitar",
-        "care",
-        "sun"
-      ],
-      "emojis": [
-        "😭",
-        "🎸"
-      ],
-      "keywords": [
-        "modo sofrência on",
-        "tô sofrendo",
-        "saudade de vc",
-        "chorei um pouquinho",
-        "não tô bem",
-        "volta pra mim",
-        "3 da manhã pensando em vc",
-        "coração na mão",
-        "ainda te amo",
-        "vem cá",
-        "tô aqui",
-        "vai ficar tudo bem"
-      ],
-      "order": 95
+      "order": 72,
+      "animate": "wiggle"
     },
     "bora-comer": {
       "name": "Bora Comer?",
@@ -4255,7 +3385,7 @@
         "pizza no sofá",
         "brigadeiro pra vc"
       ],
-      "order": 96
+      "order": 73
     },
     "mozao": {
       "name": "Mozão",
@@ -4287,7 +3417,7 @@
         "bb",
         "meu tudo"
       ],
-      "order": 97
+      "order": 74
     },
     "vacuo": {
       "name": "Vácuo",
@@ -4322,43 +3452,7 @@
         "responde, mozão",
         "última vez online: meu coração"
       ],
-      "order": 98
-    },
-    "luqaimat-animated": {
-      "name": "Luqaimat (Animated)",
-      "lang": [
-        "ar"
-      ],
-      "tags": [
-        "saudi",
-        "cute",
-        "needy",
-        "hug",
-        "sweets",
-        "dumpling",
-        "arab",
-        "gulf",
-        "luqaimat"
-      ],
-      "emojis": [
-        "🥺",
-        "🍯"
-      ],
-      "keywords": [
-        "أبي حضن · abi 7dhen",
-        "شيلني · shilni",
-        "فديتك · fdaitik",
-        "أبيك · abeek",
-        "لا تروح · la troo7",
-        "دلّعني · dalla3ni",
-        "زعلان · za3lan",
-        "بس شوي · bas shway",
-        "طالبك · talbik",
-        "تعال · ta3al",
-        "ما عليه · ma3alaih",
-        "ردّ عليّ · rudd 3alay"
-      ],
-      "order": 99
+      "order": 75
     },
     "dr": {
       "name": "DR",
@@ -4392,7 +3486,7 @@
         "linguagem do amor: comida",
         "dr encerrada, beijo"
       ],
-      "order": 100
+      "order": 76
     },
     "sofrencia": {
       "name": "Sofrência",
@@ -4427,7 +3521,8 @@
         "tô aqui",
         "vai ficar tudo bem"
       ],
-      "order": 101
+      "order": 77,
+      "animate": "wiggle"
     },
     "saudade": {
       "name": "Saudade",
@@ -4461,43 +3556,7 @@
         "manda foto",
         "sonhei com vc"
       ],
-      "order": 102
-    },
-    "samahni-animated": {
-      "name": "Sama7ni (Animated)",
-      "lang": [
-        "ar"
-      ],
-      "tags": [
-        "saudi",
-        "cute",
-        "sorry",
-        "angry",
-        "sweets",
-        "dumpling",
-        "arab",
-        "gulf",
-        "luqaimat"
-      ],
-      "emojis": [
-        "🙏",
-        "🥺"
-      ],
-      "keywords": [
-        "سامحني · sama7ni",
-        "غلطت · ghelat",
-        "ما قصدت · ma gasadt",
-        "لا تزعل · la tiz3al",
-        "راضيني · radhini",
-        "طالب رضاك · talib redhak",
-        "خلاص ترى · khalas tara",
-        "بلا زعل · bala za3al",
-        "ورد لك · ward lik",
-        "كرك سلام؟ · karak peace?",
-        "تراني آسف · tarani asif",
-        "يد على قلبي · hand on my heart"
-      ],
-      "order": 103
+      "order": 78
     },
     "bom-dia-mozao": {
       "name": "Bom Dia, Mozão",
@@ -4532,7 +3591,7 @@
         "amanhã a gente se fala",
         "bom dia, flor do dia"
       ],
-      "order": 104
+      "order": 79
     },
     "casal-de-novela": {
       "name": "Casal de Novela",
@@ -4564,7 +3623,7 @@
         "gravando: nosso amor",
         "fim… por hoje"
       ],
-      "order": 105
+      "order": 80
     },
     "hoje-tem-jogo": {
       "name": "Hoje Tem Jogo",
@@ -4597,7 +3656,7 @@
         "campeão do meu coração",
         "copa de casal"
       ],
-      "order": 106
+      "order": 81
     },
     "luqaimat": {
       "name": "Luqaimat",
@@ -4633,7 +3692,8 @@
         "ما عليه · ma3alaih",
         "ردّ عليّ · rudd 3alay"
       ],
-      "order": 107
+      "order": 82,
+      "animate": "wiggle"
     },
     "gahwa-tamr": {
       "name": "Gahwa & Tamr",
@@ -4669,7 +3729,7 @@
         "بالعافية · bel3afya",
         "لقيمات لك · luqaimat lik"
       ],
-      "order": 108
+      "order": 83
     },
     "hala-wallah": {
       "name": "Hala Wallah",
@@ -4705,7 +3765,7 @@
         "يا قمر · ya gamar",
         "بيت شعر لك · a verse for you"
       ],
-      "order": 109
+      "order": 84
     },
     "samahni": {
       "name": "Sama7ni",
@@ -4741,7 +3801,8 @@
         "تراني آسف · tarani asif",
         "يد على قلبي · hand on my heart"
       ],
-      "order": 110
+      "order": 85,
+      "animate": "wiggle"
     },
     "wainak": {
       "name": "Wainak?",
@@ -4778,7 +3839,7 @@
         "مشغول عني؟ · busy from me?",
         "تمام."
       ],
-      "order": 111
+      "order": 86
     },
     "sabah-el-khair": {
       "name": "Saba7 el Khair",
@@ -4814,7 +3875,7 @@
         "ليلة سعيدة",
         "باچر نتكلم · bacher we talk"
       ],
-      "order": 112
+      "order": 87
     },
     "mabrook": {
       "name": "Mabrook",
@@ -4849,7 +3910,7 @@
         "عقبال أولادكم",
         "بيت جديد · new home"
       ],
-      "order": 113
+      "order": 88
     },
     "ishtagt-lik": {
       "name": "Ishtagt Lik",
@@ -4885,7 +3946,7 @@
         "معك بقلبي · with you in my heart",
         "المطار الساعة ٧ · airport at 7"
       ],
-      "order": 114
+      "order": 89
     },
     "kel-3am": {
       "name": "Kel 3am w Enta Habibi",
@@ -4923,7 +3984,7 @@
         "ليلة رأس السنة",
         "١٤ فبراير · 14 feb"
       ],
-      "order": 115
+      "order": 90
     },
     "kashta": {
       "name": "Kashta",
@@ -4957,7 +4018,7 @@
         "المباراة ٩٠ دقيقة بس",
         "الخميس لك · thursday is yours"
       ],
-      "order": 116
+      "order": 91
     },
     "filthy-faces": {
       "name": "Filthy Faces",

@@ -123,7 +123,9 @@ library/
 - `order`: tie-breaker in ranking (lower first; default 1000).
 - `adult: true`: After Dark (18+). The pack is parked: never built, nothing reaches `public/`, a live one is taken
   down. The Google Play build never lists these packs.
-- `animate: "wiggle"`: synthesize a 4-frame wiggle from static art (the launch fixtures' "animated" packs).
+- `animate: "wiggle"`: makes the pack animated. Static stickers get a synthesized 4-frame wiggle; animated ones ship as
+  they are. For packs where only some stickers have an animated version (WhatsApp takes a pack all static or all
+  animated), and for the launch fixtures' "animated" packs.
 - `cover`: the 6 stickers on the Home card (default: the first 6).
 - `stickers`: when present it lists exactly the pack's stickers in order; unlisted images are ignored with a note.
   `emojis`: 1–3. `text`: what the sticker says, verbatim (search and WhatsApp's accessibility text).
@@ -344,8 +346,11 @@ couples); miles-apart → `distance` (also missyou); gm-gn and sunny-sleepy → 
 keep their category. `packs/<id>/` keeps the built WhatsApp fixtures for the validator test. `prepare-packs.js` and
 `upload-pack.js` are replaced by `scripts/library/`.
 
-2026-09-30, tags: the catalog moves to Claude Design's WhatsApp export (120 folders: 91 static packs, 25 animated
-variants, 4 After Dark). `catalog/packs.json` holds their reviewed metadata: tags and languages from the Stickers page
+2026-09-30, tags: the catalog moves to Claude Design's WhatsApp export (95 folders: 91 packs and 4 After Dark). The
+export came with a separate `<pack>-animated` folder for 25 packs; at the author's request each was merged into its
+pack, every animated sticker replacing the still it animates (the design manifest's `liveFiles` and a pixel
+comparison of first frames agree on all 152), and those packs carry `"animate": "wiggle"`: WhatsApp takes a pack all
+static or all animated, so their real animations ship untouched and their other stickers get the wiggle. `catalog/packs.json` holds their reviewed metadata: tags and languages from the Stickers page
 manifest and the Pack Ideas page (moods, characters, sticker lines), checked sticker by sticker against contact
 sheets; the launch packs' per-sticker emoji and text; an initial order from the design's download figures, with an
 animated pack after every three static ones. `scripts/library/prepare.js` writes each folder's `pack.json`. The
