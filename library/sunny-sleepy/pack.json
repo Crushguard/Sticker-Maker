@@ -1,0 +1,70 @@
+{
+  "name": "Sunny & Sleepy",
+  "lang": [
+    "en"
+  ],
+  "tags": [
+    "goodnight",
+    "good-morning",
+    "good-night",
+    "sun",
+    "moon",
+    "sleepy"
+  ],
+  "emojis": [
+    "☀️",
+    "😴"
+  ],
+  "order": 50,
+  "animate": "wiggle",
+  "stickers": [
+    {
+      "file": "01.webp",
+      "emojis": [
+        "☀️",
+        "😊"
+      ],
+      "text": "GOOD MORNING!"
+    },
+    {
+      "file": "02.webp",
+      "emojis": [
+        "☀️",
+        "☕"
+      ],
+      "text": "WAKEY WAKEY"
+    },
+    {
+      "file": "03.webp",
+      "emojis": [
+        "☀️",
+        "👋"
+      ],
+      "text": "HI LOVE"
+    },
+    {
+      "file": "04.webp",
+      "emojis": [
+        "🌙",
+        "😴"
+      ],
+      "text": "NITE NITE"
+    },
+    {
+      "file": "05.webp",
+      "emojis": [
+        "💤",
+        "🌙"
+      ],
+      "text": "SWEET DREAMS"
+    },
+    {
+      "file": "06.webp",
+      "emojis": [
+        "⭐",
+        "🌙"
+      ],
+      "text": "GN"
+    }
+  ]
+}

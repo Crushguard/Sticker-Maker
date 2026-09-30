@@ -109,36 +109,57 @@ Packs are folders. Everything about the catalog is named `stickermaker` in Fireb
 
 ```
 library/                        (bucket play-console-f33dd-stickermaker, private)
-  _categories.json              the 11 categories: names in the 19 app languages, order, icon, hue, emoji, search words
-  sorry/                        category = folder name
-    Sorry Wiggle/               pack id = folder name as a slug ("sorry-wiggle"), name = the folder name
-      01.webp 02.webp …         stickers (PNG, WebP or GIF), in file-name order unless pack.json lists them
-      tray.png                  optional; otherwise made from the first sticker
-      pack.json                 optional: name, names, alsoIn, lang, tags, order, animate, cover, stickers
-      _report.txt               written by the build: live (and which version) or why not
+  _categories.json              the app's 14 categories (Home chips): names in the 19 app languages, order,
+                                icon, hue, emoji, search words, and the tags that put a pack in each
+  _tags.json                    what people type for each tag and lettering language, in every app language
+  clingy-mango/                 one folder per pack: pack id = folder name as a slug, name = the folder name
+    01.webp 02.webp …           stickers (PNG, WebP or GIF), in file-name order unless pack.json lists them
+    tray.png                    optional; otherwise made from the first sticker
+    pack.json                   name, lang, tags, emojis, keywords, order, adult, animate, cover, stickers
+    _report.txt                 written by the build: live (which version, which categories) or why not
   _staging/…                    folders starting with "_" are ignored
 ```
 
-- **Add or update a pack:** put its folder under its category in the bucket (Google Cloud console,
-  Upload folder, or `node scripts/library/upload.js <libraryDir> --wait`). The functions convert it
-  to WhatsApp's rules (ready 512×512 WebP ships byte for byte), make the tray and the Home cover
-  strips, zip it, and publish the catalog. A new pack whose `pack.json` lists the stickers and is
-  uploaded last goes live about 15–30 s after it; anything else, updates of a live pack included,
-  goes live once its folder has been quiet for 30 s, so a half-uploaded update never ships. A pack
-  that breaks a rule is not published and the live version stays; `_report.txt` says why.
+- **Tags decide the categories.** A pack shows under every category one of its tags names
+  (`"tags": ["cute", "funny", "cat", "mango"]` puts Clingy Mango under Cute and Funny); its first
+  category tag is its main one. Search matches the pack's names, its tags in every app language
+  (from `_tags.json`: "قطة" finds the cat packs), its lettering languages ("arabic"), its
+  `keywords` and its stickers' text. A category is a filter: adding a chip is one entry in
+  `_categories.json`, no folder moves.
+- **Languages:** `lang` lists the lettering's languages (`"ar"`, `["ar", "hi", "es"]`), `"none"`
+  for no text, `"multi"` for one sticker per language. The app shows packs readable to the user
+  first: no text, English, many languages, or the app language.
+- **After Dark:** `"adult": true` parks a pack. It is never built for the Google Play catalog and
+  nothing of it reaches `public/`.
+- **Add or update packs:** upload the pack folders into `library/` (Google Cloud console: open the
+  bucket, `library/`, drag the folders in; or `node scripts/library/upload.js <folder> --wait`).
+  `node scripts/library/prepare.js <exportDir>` first writes each folder's `pack.json` from
+  `catalog/packs.json`, the reviewed metadata of every pack. The functions convert packs to
+  WhatsApp's rules (ready 512×512 WebP ships byte for byte), make the tray and the Home cover
+  strips, zip each pack, and publish the catalog. A new pack whose `pack.json` lists the stickers
+  and is uploaded last goes live about 15–30 s after it; anything else, updates of a live pack
+  included, goes live once its folder has been quiet for 30 s, so a half-uploaded update never
+  ships. A pack that breaks a rule is not published and the live version stays; `_report.txt` says
+  why.
 - **Take a pack down:** delete its folder, or set `hidden: true` on `packs/<id>` in the Firestore
-  console. **Pin** one to the top with `pin: 1` (2, 3…). Categories live in `_categories.json`.
+  console. **Pin** one to the top with `pin: 1` (2, 3…). A pack that comes back after its removal
+  is a new pack with the next version number.
+- **public/ repairs itself:** a build that finds its pack's published files missing writes them
+  again, and a publish that finds the live catalog file missing publishes a new one. Deleting
+  `public/` is safe; the next upload restores what the catalog needs.
 - **Ranking:** pinned, then popularity (weekly from the Analytics `pack_added` event, when
   `GA4_PROPERTY_ID` is set in `functions/.env`), then `order`, then newest. The app shows "N adds"
   only from 100 real adds.
 - **The app** reads one Firestore document (`catalog/meta`), downloads the gzipped catalog file it
   points to only when it changes, and fetches one `pack.zip` per pack (the pack page and Add share it).
 
-`library/` in this repo holds the 14 launch packs (sources plus `pack.json`); `packs/<id>/` keeps
-their built WhatsApp files as fixtures for `StickerPackValidatorTest`. Tools in `scripts/library/`:
-`upload.js` (library to bucket), `seed-emulators.js`, `e2e.js`, `contact-sheet.js` (numbered sheet
-of a pack's stickers for writing `pack.json`). `npm test --prefix functions` runs the functions'
-tests, including a build of every launch pack.
+`library/` in this repo holds the 14 launch packs the emulators and the screen tour use (sources
+plus `pack.json`) and the real `_categories.json` and `_tags.json`; `packs/<id>/` keeps their built
+WhatsApp files as fixtures for `StickerPackValidatorTest`. Tools in `scripts/library/`:
+`prepare.js` (writes `pack.json` into an export), `upload.js` (library to bucket),
+`seed-emulators.js`, `e2e.js`, `contact-sheet.js` (numbered sheet of a pack's stickers for writing
+`pack.json`). `npm test --prefix functions` runs the functions' tests, including a build of every
+launch pack and a check of `catalog/packs.json` against `_categories.json` and `_tags.json`.
 
 ## Firebase setup (one time)
 

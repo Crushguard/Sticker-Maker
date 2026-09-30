@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
  * upload.js — puts a local sticker library into the stickermaker bucket, the way the pipeline likes it:
- * _categories.json first (and, when it changed, a wait until it is applied: packs read their categories when they
- * build), then per pack every sticker (and tray.png) before pack.json, so a listing pack.json makes a new pack build
- * the moment it lands. Files whose MD5 already matches are skipped.
+ * _categories.json and _tags.json first (each, when it changed, with a wait until it is applied), then per pack
+ * folder (library/<folder>/) every sticker (and tray.png) before pack.json, so a listing pack.json makes a new pack
+ * build the moment it lands. Files whose MD5 already matches are skipped. A folder of pack folders, such as a Claude
+ * Design export, is a library too.
  *
  * Usage:
- *   node scripts/library/upload.js <libraryDir> [--pack <category>/<folder>] [--wait] [--dry-run]
+ *   node scripts/library/upload.js <libraryDir> [--pack <folder>] [--wait] [--dry-run]
  *                                   [--bucket <name>] [--project <id>] [--emulator]
  *
  * Credentials: Application Default Credentials (gcloud auth application-default login). With --emulator (or
@@ -22,7 +23,11 @@ const path = require('path');
 const DEFAULT_PROJECT = 'play-console-f33dd';
 const CONTENT_TYPES = { '.png': 'image/png', '.webp': 'image/webp', '.gif': 'image/gif', '.json': 'application/json' };
 const UPLOAD_CONCURRENCY = 6;
-const CATEGORIES_REPORT = 'library/_categories_report.txt';
+/** The library's shared files, uploaded before any pack, and the report the pipeline writes for each. */
+const SHARED_FILES = [
+  { name: '_categories.json', report: 'library/_categories_report.txt' },
+  { name: '_tags.json', report: 'library/_tags_report.txt' },
+];
 
 function arg(flag, fallback) {
   const i = process.argv.indexOf(flag);
@@ -31,20 +36,39 @@ function arg(flag, fallback) {
 
 const skipName = (name) => name.startsWith('.') || name.startsWith('_');
 
-/** Packs of a local library: [{ category, folder, dir, files: [names] }]. */
+const filesIn = (dir) => fs.readdirSync(dir).filter((f) => !skipName(f) && fs.statSync(path.join(dir, f)).isFile());
+const foldersIn = (dir) =>
+  fs.readdirSync(dir).sort().filter((f) => !skipName(f) && fs.statSync(path.join(dir, f)).isDirectory());
+
+/**
+ * Packs of a local library: [{ category, folder, dir, files: [names] }]. A folder with files is a pack
+ * (library/<folder>/, category null); a folder holding only folders is a category folder of the older layout.
+ */
 function listLocalPacks(libraryDir) {
   const packs = [];
-  for (const category of fs.readdirSync(libraryDir).sort()) {
-    const categoryDir = path.join(libraryDir, category);
-    if (skipName(category) || !fs.statSync(categoryDir).isDirectory()) continue;
-    for (const folder of fs.readdirSync(categoryDir).sort()) {
-      const dir = path.join(categoryDir, folder);
-      if (skipName(folder) || !fs.statSync(dir).isDirectory()) continue;
-      const files = fs.readdirSync(dir).filter((f) => !skipName(f) && fs.statSync(path.join(dir, f)).isFile());
-      packs.push({ category, folder, dir, files });
+  for (const name of foldersIn(libraryDir)) {
+    const dir = path.join(libraryDir, name);
+    const files = filesIn(dir);
+    if (files.length) {
+      packs.push({ category: null, folder: name, dir, files });
+      continue;
+    }
+    for (const folder of foldersIn(dir)) {
+      const packDir = path.join(dir, folder);
+      packs.push({ category: name, folder, dir: packDir, files: filesIn(packDir) });
     }
   }
   return packs;
+}
+
+/** A pack's folder in the bucket. */
+function packPrefix(pack) {
+  return pack.category ? `library/${pack.category}/${pack.folder}/` : `library/${pack.folder}/`;
+}
+
+/** How a pack is named on the command line and in logs. */
+function packName(pack) {
+  return pack.category ? `${pack.category}/${pack.folder}` : pack.folder;
 }
 
 function md5(file) {
@@ -82,7 +106,7 @@ async function inBatches(items, size, fn) {
  * options.concurrency: parallel uploads (default 6; 1 keeps the Functions emulator to one worker).
  */
 async function uploadPack(bucket, pack, options) {
-  const prefix = `library/${pack.category}/${pack.folder}/`;
+  const prefix = packPrefix(pack);
   const first = pack.files.filter((f) => f !== 'pack.json');
   const outcomes = await inBatches(first, options.concurrency || UPLOAD_CONCURRENCY, (f) =>
     uploadFile(bucket, path.join(pack.dir, f), prefix + f, options)
@@ -115,24 +139,31 @@ function waitForReport(bucket, prefix, sinceMs, timeoutMs) {
 }
 
 /**
- * Uploads _categories.json and, when it changed, waits until the pipeline has applied it: a pack built before that
- * would lose its alsoIn categories and fall back to no category emoji until it is rebuilt.
+ * Uploads a shared file (_categories.json or _tags.json) and, when it changed, waits until the pipeline has applied
+ * it, so the packs that follow build and publish with it.
  */
-async function uploadCategories(bucket, localPath, options) {
+async function uploadShared(bucket, libraryDir, { name, report: reportPath }, options) {
+  const localPath = path.join(libraryDir, name);
+  if (!fs.existsSync(localPath)) return;
   const sinceMs = Date.now() - 2000;
-  const outcome = await uploadFile(bucket, localPath, 'library/_categories.json', options);
-  console.log(`_categories.json: ${outcome}`);
+  const outcome = await uploadFile(bucket, localPath, `library/${name}`, options);
+  console.log(`${name}: ${outcome}`);
   if (outcome !== 'uploaded') return;
-  const report = await waitForText(bucket, CATEGORIES_REPORT, sinceMs, 120000);
-  if (!report) throw new Error('_categories.json was not applied within 2 minutes: check the functions logs');
+  const report = await waitForText(bucket, reportPath, sinceMs, 120000);
+  if (!report) throw new Error(`${name} was not applied within 2 minutes: check the functions logs`);
   console.log(report.trim());
-  if (report.startsWith('❌')) throw new Error('fix _categories.json before uploading packs');
+  if (report.startsWith('❌')) throw new Error(`fix ${name} before uploading packs`);
+}
+
+/** Uploads the library's shared files, _categories.json then _tags.json, each applied before the next step. */
+async function uploadSharedFiles(bucket, libraryDir, options) {
+  for (const shared of SHARED_FILES) await uploadShared(bucket, libraryDir, shared, options);
 }
 
 async function main() {
   const libraryDir = process.argv[2];
   if (!libraryDir || libraryDir.startsWith('--') || !fs.existsSync(libraryDir)) {
-    console.error('usage: upload.js <libraryDir> [--pack <category>/<folder>] [--wait] [--dry-run] [--bucket name] [--project id] [--emulator]');
+    console.error('usage: upload.js <libraryDir> [--pack <folder>] [--wait] [--dry-run] [--bucket name] [--project id] [--emulator]');
     process.exit(2);
   }
   const project = arg('--project', DEFAULT_PROJECT);
@@ -144,9 +175,8 @@ async function main() {
   const only = arg('--pack', null);
   const startedMs = Date.now() - 5000;
 
-  const categoriesFile = path.join(libraryDir, '_categories.json');
-  if (!only && fs.existsSync(categoriesFile)) await uploadCategories(bucket, categoriesFile, options);
-  const packs = listLocalPacks(libraryDir).filter((p) => !only || `${p.category}/${p.folder}` === only);
+  if (!only) await uploadSharedFiles(bucket, libraryDir, options);
+  const packs = listLocalPacks(libraryDir).filter((p) => !only || packName(p) === only);
   if (only && !packs.length) {
     console.error(`no pack ${only} in ${libraryDir}`);
     process.exit(2);
@@ -154,7 +184,7 @@ async function main() {
   const uploaded = [];
   for (const pack of packs) {
     const { prefix, counts, changed } = await uploadPack(bucket, pack, options);
-    console.log(`${pack.category}/${pack.folder}: ${Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(', ')}`);
+    console.log(`${packName(pack)}: ${Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(', ')}`);
     if (changed) uploaded.push(prefix);
   }
   if (process.argv.includes('--wait') && !options.dryRun) {
@@ -172,4 +202,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { listLocalPacks, uploadPack, uploadFile, uploadCategories, waitForReport, storageBucket };
+module.exports = { listLocalPacks, packPrefix, packName, uploadPack, uploadFile, uploadSharedFiles, waitForReport, storageBucket };

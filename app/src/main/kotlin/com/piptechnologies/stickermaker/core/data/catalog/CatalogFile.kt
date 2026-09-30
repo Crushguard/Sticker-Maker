@@ -15,6 +15,9 @@ data class Catalog(
 /**
  * Reads the catalog file (public/catalog/v<k>.json.gz, schema 1) the stickermaker functions publish. Unknown
  * fields are ignored; a pack without id, name or zip is skipped. Throws on JSON that is not a catalog.
+ *
+ * The file's "tags" and "languages" hold the words people type for each pack tag and lettering language, by app
+ * language; each pack's keywords get the words of its own, so search needs nothing else.
  */
 object CatalogFile {
 
@@ -25,8 +28,9 @@ object CatalogFile {
         val root = JSONObject(json)
         val categories = root.optJSONArray("categories").objects().mapNotNull(::category)
         val hues = categories.associate { it.id to it.hue }
+        val words = SearchWords(root.optJSONObject("tags").wordsById(), root.optJSONObject("languages").wordsById())
         val packs = root.optJSONArray("packs").objects()
-            .mapNotNull { pack(it, urls, hues) }
+            .mapNotNull { pack(it, urls, hues, words) }
             .mapIndexed { index, pack -> pack.copy(order = index) }
         return Catalog(version = root.optInt("version", 0), categories = categories, packs = packs)
     }
@@ -46,13 +50,21 @@ object CatalogFile {
         )
     }
 
-    private fun pack(o: JSONObject, urls: CatalogUrls, hues: Map<String, Int>): StickerPack? {
+    /** Words people type, by pack tag and by lettering language, every app language together. */
+    private class SearchWords(val tags: Map<String, List<String>>, val languages: Map<String, List<String>>)
+
+    private fun pack(o: JSONObject, urls: CatalogUrls, hues: Map<String, Int>, words: SearchWords): StickerPack? {
         val id = o.optString("id").ifBlank { return null }
         val name = o.optString("name").ifBlank { return null }
         val zip = o.optJSONObject("zip") ?: return null
         val zipPath = zip.optString("path").ifBlank { return null }
         val cover = o.optJSONObject("cover")
         val category = o.optString("category")
+        // Catalogs published before languages were lists have one "lang".
+        val langs = o.optJSONArray("langs").strings().ifEmpty { listOf(o.optString("lang", "en").ifBlank { "en" }) }
+        val keywords = o.optJSONArray("keywords").strings() +
+            o.optJSONArray("tags").strings().flatMap { words.tags[it].orEmpty() } +
+            langs.flatMap { words.languages[it].orEmpty() }
         return StickerPack(
             id = id,
             name = name,
@@ -66,8 +78,8 @@ object CatalogFile {
             version = o.optInt("version", 1),
             names = o.optJSONObject("names").strings(),
             alsoIn = o.optJSONArray("alsoIn").strings(),
-            lang = o.optString("lang", "en").ifBlank { "en" },
-            keywords = o.optJSONArray("keywords").strings(),
+            langs = langs,
+            keywords = keywords.distinct(),
             coverSmallUrl = cover?.optString("s")?.ifBlank { null }?.let(urls::url),
             coverLargeUrl = cover?.optString("l")?.ifBlank { null }?.let(urls::url),
             coverTiles = cover?.optInt("tiles", 0) ?: 0,
@@ -85,6 +97,12 @@ object CatalogFile {
     private fun JSONObject?.strings(): Map<String, String> {
         if (this == null) return emptyMap()
         return keys().asSequence().mapNotNull { key -> optString(key).ifBlank { null }?.let { key to it } }.toMap()
+    }
+
+    /** { id: { lang: [words] } } → { id: [every word, all languages] }. */
+    private fun JSONObject?.wordsById(): Map<String, List<String>> {
+        if (this == null) return emptyMap()
+        return keys().asSequence().associateWith { id -> optJSONObject(id).stringLists().values.flatten().distinct() }
     }
 
     private fun JSONObject?.stringLists(): Map<String, List<String>> {

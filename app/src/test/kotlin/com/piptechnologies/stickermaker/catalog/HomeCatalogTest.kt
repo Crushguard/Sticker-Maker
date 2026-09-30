@@ -71,5 +71,30 @@ class HomeCatalogTest {
         assertTrue(matchesQuery(p, "sor", categories), "prefix")
     }
 
+    @Test
+    fun shortWordsStartAWordAndEveryQueryWordHasToMatch() {
+        val p = pack(keywords = listOf("send location", "good", "morning", "saudade"))
+        assertFalse(matchesQuery(p, "cat", categories), "not inside location")
+        assertTrue(matchesQuery(p, "loc", categories), "a word's start")
+        assertTrue(matchesQuery(p, "cation", categories), "4+ letters match anywhere")
+        assertTrue(matchesQuery(p, "good morning", categories))
+        assertTrue(matchesQuery(p, "  morning   good ", categories))
+        assertFalse(matchesQuery(p, "good night", categories))
+        assertFalse(matchesQuery(p, "dad", categories), "not inside saudade")
+    }
+
+    @Test
+    fun accentsCaseAndArabicSpellingVariantsDoNotMatter() {
+        val p = pack(keywords = listOf("bebê", "آسف", "قطة", "मेरी जान", "دوستت دارم"), names = mapOf("ar" to "إشتقت لك"))
+        assertTrue(matchesQuery(p, "BEBE", categories))
+        assertTrue(matchesQuery(p, "اسف", categories), "alef with madda")
+        assertTrue(matchesQuery(p, "قطه", categories), "ta marbuta typed as ha")
+        assertTrue(matchesQuery(p, "اشتقت", categories), "alef with hamza below")
+        assertTrue(matchesQuery(p, "जान", categories), "Devanagari word")
+        assertTrue(matchesQuery(p, "دوستت", categories), "Persian yeh and kaf")
+    }
+
     private fun assertTrue(condition: Boolean, message: String) = org.junit.Assert.assertTrue(message, condition)
+
+    private fun assertFalse(condition: Boolean, message: String) = org.junit.Assert.assertFalse(message, condition)
 }

@@ -25,7 +25,8 @@ function buildDeps() {
 
 function libraryDeps() {
   const { syncCategories } = require('./categoriesTask');
-  return { ...buildDeps(), syncCategories };
+  const { syncTags } = require('./tagsTask');
+  return { ...buildDeps(), syncCategories, syncTags };
 }
 
 module.exports = { buildDeps, libraryDeps };

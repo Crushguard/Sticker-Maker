@@ -3,7 +3,8 @@
 /**
  * Love Stickers catalog pipeline (codebase "stickermaker"). Deployed as stickermaker-<name>.
  *
- * library/<category>/<Pack Name>/ in bucket play-console-f33dd-stickermaker
+ * library/<Pack Name>/ in bucket play-console-f33dd-stickermaker (pack.json: tags, which place the pack in the
+ * categories of library/_categories.json, and languages; library/_tags.json holds the tags' search words)
  *   → onLibraryUpload / onLibraryDelete schedule buildPack
  *   → buildPack publishes public/packs/<id>/v<n>-<hash8>/ + Firestore packs/<id> + the folder's _report.txt
  *   → publishCatalog writes public/catalog/v<k>.json.gz + catalog/meta, which the app listens to.

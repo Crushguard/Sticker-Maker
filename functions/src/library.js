@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const { LIBRARY_PREFIX } = require('./config');
 
 const CATEGORIES_FILE = `${LIBRARY_PREFIX}_categories.json`;
+const TAGS_FILE = `${LIBRARY_PREFIX}_tags.json`;
 const REPORT_FILE = '_report.txt';
 const JUNK_FILES = new Set(['.ds_store', 'thumbs.db', 'desktop.ini']);
 const MAX_ID_LENGTH = 64;
@@ -31,27 +32,30 @@ function isJunk(file) {
 }
 
 /**
- * What a library object is: the categories file, a pack's build report, a file of a pack
- * (library/<category>/<folder>/<file>), or something the pipeline ignores (staging folders, junk,
- * folder placeholders, anything at another depth).
+ * A pack's library folder: library/<folder>/, or library/<category>/<folder>/ in the older layout, whose
+ * category folder still counts as one of the pack's tags.
+ */
+function libraryPrefix(category, folder) {
+  return category ? `${LIBRARY_PREFIX}${category}/${folder}/` : `${LIBRARY_PREFIX}${folder}/`;
+}
+
+/**
+ * What a library object is: the categories or tags file, a pack's build report, a file of a pack
+ * (library/<folder>/<file>, or library/<category>/<folder>/<file>), or something the pipeline ignores (staging
+ * folders, junk, folder placeholders, anything at another depth).
  */
 function parseLibraryPath(objectName) {
   if (objectName === CATEGORIES_FILE) return { kind: 'categories' };
+  if (objectName === TAGS_FILE) return { kind: 'tags' };
   if (!objectName.startsWith(LIBRARY_PREFIX)) return { kind: 'ignored' };
   const parts = objectName.slice(LIBRARY_PREFIX.length).split('/');
-  if (parts.length !== 3) return { kind: 'ignored' };
-  const [category, folder, file] = parts;
-  if (!category || !folder || category.startsWith('_') || folder.startsWith('_')) return { kind: 'ignored' };
+  if (parts.length !== 2 && parts.length !== 3) return { kind: 'ignored' };
+  const [file, folder, category = null] = [...parts].reverse();
+  if (!folder || folder.startsWith('_')) return { kind: 'ignored' };
+  if (category !== null && (!category || category.startsWith('_'))) return { kind: 'ignored' };
   if (file === REPORT_FILE) return { kind: 'report' };
   if (isJunk(file) || file.startsWith('_')) return { kind: 'ignored' };
-  return {
-    kind: 'pack',
-    category,
-    folder,
-    packId: slugify(folder),
-    file,
-    prefix: `${LIBRARY_PREFIX}${category}/${folder}/`,
-  };
+  return { kind: 'pack', category, folder, packId: slugify(folder), file, prefix: libraryPrefix(category, folder) };
 }
 
 /** A Firestore-safe key for a library folder prefix (folder names may hold any character). */
@@ -70,4 +74,15 @@ function naturalCompare(a, b) {
   return collator.compare(a, b);
 }
 
-module.exports = { slugify, folderKey, parseLibraryPath, isImageName, naturalCompare, isJunk, REPORT_FILE, CATEGORIES_FILE };
+module.exports = {
+  slugify,
+  folderKey,
+  libraryPrefix,
+  parseLibraryPath,
+  isImageName,
+  naturalCompare,
+  isJunk,
+  REPORT_FILE,
+  CATEGORIES_FILE,
+  TAGS_FILE,
+};

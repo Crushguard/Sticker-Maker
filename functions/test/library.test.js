@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { folderKey, slugify, parseLibraryPath, isImageName, naturalCompare } = require('../src/library');
+const { folderKey, slugify, libraryPrefix, parseLibraryPath, isImageName, naturalCompare } = require('../src/library');
 
 test('slugify turns a folder name into a pack id', () => {
   assert.equal(slugify('Sorry Wiggle'), 'sorry-wiggle');
@@ -27,11 +27,23 @@ test('slugify falls back to a stable hashed id for names with no latin letters',
   assert.match(slugify('x'), /^pack-[0-9a-f]{8}$/);
 });
 
-test('parseLibraryPath recognizes the categories file', () => {
+test('parseLibraryPath recognizes the categories and tags files', () => {
   assert.deepEqual(parseLibraryPath('library/_categories.json'), { kind: 'categories' });
+  assert.deepEqual(parseLibraryPath('library/_tags.json'), { kind: 'tags' });
 });
 
-test('parseLibraryPath splits a pack file into category, folder, id and file', () => {
+test('parseLibraryPath splits a pack file into folder, id and file', () => {
+  assert.deepEqual(parseLibraryPath('library/Sorry Wiggle/01.webp'), {
+    kind: 'pack',
+    category: null,
+    folder: 'Sorry Wiggle',
+    packId: 'sorry-wiggle',
+    file: '01.webp',
+    prefix: 'library/Sorry Wiggle/',
+  });
+});
+
+test('parseLibraryPath still reads the older library/<category>/<folder>/ layout', () => {
   assert.deepEqual(parseLibraryPath('library/sorry/Sorry Wiggle/01.webp'), {
     kind: 'pack',
     category: 'sorry',
@@ -43,21 +55,25 @@ test('parseLibraryPath splits a pack file into category, folder, id and file', (
 });
 
 test('parseLibraryPath reports the build report as its own kind', () => {
+  assert.deepEqual(parseLibraryPath('library/Sorry Wiggle/_report.txt'), { kind: 'report' });
   assert.deepEqual(parseLibraryPath('library/sorry/Sorry Wiggle/_report.txt'), { kind: 'report' });
 });
 
 test('parseLibraryPath ignores staging, underscored folders and junk', () => {
   for (const name of [
     'library/_staging/Pack/01.png',
+    'library/_old/01.png',
     'library/sorry/_old/01.png',
+    'library/Pack/',
     'library/sorry/Pack/',
-    'library/sorry/Pack/.DS_Store',
+    'library/Pack/.DS_Store',
     'library/sorry/Pack/Thumbs.db',
-    'library/sorry/Pack/desktop.ini',
-    'library/sorry/Pack/._01.png',
-    'library/sorry/Pack/_notes.txt',
-    'library/sorry/01.png',
-    'library/sorry/Pack/extra/01.png',
+    'library/Pack/desktop.ini',
+    'library/Pack/._01.png',
+    'library/Pack/_notes.txt',
+    'library/contents.json',
+    'library/_categories_report.txt',
+    'library/a/Pack/extra/01.png',
     'public/packs/sorry-wiggle/v1/pack.zip',
     'library/',
   ]) {
@@ -80,9 +96,14 @@ test('naturalCompare orders numbers inside names numerically', () => {
 });
 
 test('folderKey gives each folder prefix a stable key Firestore accepts', () => {
-  const key = folderKey('library/cute/Love Notes/');
+  const key = folderKey('library/Love Notes/');
   assert.match(key, /^[0-9a-f]{20}$/);
-  assert.equal(folderKey('library/cute/Love Notes/'), key);
-  assert.notEqual(folderKey('library/romantic/Love Notes/'), key);
-  assert.notEqual(folderKey('library/cute/love notes/'), key);
+  assert.equal(folderKey('library/Love Notes/'), key);
+  assert.notEqual(folderKey('library/cute/Love Notes/'), key);
+  assert.notEqual(folderKey('library/love notes/'), key);
+});
+
+test('libraryPrefix names a flat folder, or one inside a category folder', () => {
+  assert.equal(libraryPrefix(null, 'Love Notes'), 'library/Love Notes/');
+  assert.equal(libraryPrefix('cute', 'Love Notes'), 'library/cute/Love Notes/');
 });

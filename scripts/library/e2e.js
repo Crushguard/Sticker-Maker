@@ -15,7 +15,7 @@ const os = require('os');
 const path = require('path');
 const zlib = require('zlib');
 const { unzipSync, strFromU8 } = require('fflate');
-const { listLocalPacks, uploadPack, uploadFile, storageBucket } = require('./upload');
+const { listLocalPacks, packName, uploadPack, uploadFile, storageBucket } = require('./upload');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const PROJECT = process.env.GCLOUD_PROJECT || 'play-console-f33dd';
@@ -37,24 +37,24 @@ async function poll(what, fn, timeoutMs) {
   fail(`timed out waiting for ${what}${last && last.error ? ` (${last.error})` : ''}`);
 }
 
-/** A throwaway library with one real launch pack and its category. */
+/** A throwaway library with one real launch pack and the categories its tags name. */
 function testLibrary() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'stickermaker-e2e-'));
   const repoLibrary = path.join(ROOT, 'library');
   if (fs.existsSync(path.join(repoLibrary, '_categories.json'))) {
     const pack = listLocalPacks(repoLibrary)[0];
     fs.copyFileSync(path.join(repoLibrary, '_categories.json'), path.join(dir, '_categories.json'));
-    fs.cpSync(pack.dir, path.join(dir, pack.category, pack.folder), { recursive: true });
+    fs.cpSync(pack.dir, path.join(dir, pack.folder), { recursive: true });
     return dir;
   }
-  const packDir = path.join(dir, 'goodnight', 'Good Morning, Good Night');
+  const packDir = path.join(dir, 'Good Morning, Good Night');
   fs.mkdirSync(packDir, { recursive: true });
   const src = path.join(ROOT, 'packs', 'gm-gn', 'src');
   const files = fs.readdirSync(src).filter((f) => f.endsWith('.webp')).sort();
   for (const f of files) fs.copyFileSync(path.join(src, f), path.join(packDir, f));
   fs.writeFileSync(
     path.join(packDir, 'pack.json'),
-    JSON.stringify({ stickers: files.map((file) => ({ file, emojis: ['🌙'], text: 'good night' })) })
+    JSON.stringify({ tags: ['goodnight'], stickers: files.map((file) => ({ file, emojis: ['🌙'], text: 'good night' })) })
   );
   fs.writeFileSync(
     path.join(dir, '_categories.json'),
@@ -77,7 +77,7 @@ async function main() {
   const pack = listLocalPacks(library)[0];
   const packId = JSON.parse(fs.readFileSync(path.join(pack.dir, 'pack.json'), 'utf8')).id || null;
   const stickerCount = pack.files.filter((f) => /\.(png|webp|gif)$/i.test(f) && !/^tray\.png$/i.test(f)).length;
-  console.log(`library ${library}: ${pack.category}/${pack.folder} (${stickerCount} stickers)`);
+  console.log(`library ${library}: ${packName(pack)} (${stickerCount} stickers)`);
 
   await uploadFile(bucket, path.join(library, '_categories.json'), 'library/_categories.json', {});
   await poll('categories in Firestore', async () => {
@@ -107,7 +107,8 @@ async function main() {
   if (entry.count !== stickerCount) fail(`catalog count ${entry.count}, expected ${stickerCount}`);
   if (entry.version !== 1) fail(`first version is ${entry.version}`);
   if (!/\/v1-[0-9a-f]{8}\/pack\.zip$/.test(entry.zip.path)) fail(`zip path ${entry.zip.path} is not content-addressed`);
-  if (!catalog.categories.some((c) => c.id === pack.category && c.packs >= 1)) fail('category count missing');
+  if (!entry.category) fail('the pack has no category: its tags name none');
+  if (!catalog.categories.some((c) => c.id === entry.category && c.packs >= 1)) fail('category count missing');
 
   const cover = await fetch(urlOf(meta, entry.cover.l));
   if (!cover.ok || !(cover.headers.get('content-type') || '').startsWith('image/webp')) fail(`cover HTTP ${cover.status}`);

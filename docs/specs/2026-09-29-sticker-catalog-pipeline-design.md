@@ -3,6 +3,12 @@
 Date: 2026-09-29. Status: approved in conversation ("do it"); implemented. Updated after implementation where the build taught
 us something (marked "Implementation note").
 
+Update 2026-09-30 (asked for in conversation: "the categories should function based on tags … categories are just search
+filters"): packs sit flat in `library/<Pack Name>/`; each pack's tags place it in the app's categories, which are
+filters defined in `_categories.json`; `_tags.json` gives every tag and lettering language the words people type in
+every app language; `lang` is a list; After Dark packs are parked; `public/` repairs itself after a wipe. The catalog
+content moved to the 120-pack Claude Design export, described in `catalog/packs.json`.
+
 ## Goal
 
 Adding a sticker pack means putting its folder into Cloud Storage. A function turns the folder into a
@@ -10,7 +16,7 @@ WhatsApp-ready pack, records it in Firestore and republishes the catalog; the ap
 hand-edited catalog, no local scripts, no invented numbers.
 
 Success:
-- A folder dropped into `library/<category>/<Pack Name>/` is live in the app 15–30 s after its last file lands
+- A folder dropped into `library/<Pack Name>/` is live in the app 15–30 s after its last file lands
   (with a listing `pack.json`), or about a minute later without one.
 - Only complete packs that pass WhatsApp's rules go live; a bad upload never replaces a good live version.
 - Sticker quality is never worse than the art that was uploaded.
@@ -36,7 +42,7 @@ Success:
 ## Architecture
 
 ```
-Claude Design ──export──▶ library/<category>/<Pack Name>/ (Storage, private)
+Claude Design ──export──▶ library/<Pack Name>/ (Storage, private)
                                   │ object finalized / deleted
                                   ▼
               stickermaker-onLibraryUpload / -Delete ──▶ task queue ──▶ stickermaker-buildPack
@@ -56,7 +62,7 @@ Functions (all min instances 0, capped max instances):
 
 | Function | Trigger | Job |
 |---|---|---|
-| `onLibraryUpload` | Storage finalize, bucket `play-console-f33dd-stickermaker` (retried) | `_categories.json` → sync categories; pack files → schedule a build |
+| `onLibraryUpload` | Storage finalize, bucket `play-console-f33dd-stickermaker` (retried) | `_categories.json` → sync categories; `_tags.json` → sync `config/tags`; pack files → schedule a build |
 | `onLibraryDelete` | Storage delete, same bucket (retried) | schedule a build (which unpublishes an emptied folder) |
 | `buildPack` | task queue (2 GiB, 2 vCPU, one build per instance, max 3 at once, one per pack) | build, validate, publish a new version or report errors |
 | `publishCatalog` | task queue (max 1 at once) | write the catalog file and the pointer document |
@@ -67,20 +73,22 @@ Functions (all min instances 0, capped max instances):
 
 ```
 library/
-  _categories.json            categories: names in 19 languages, order, icon, hue, default emoji, search words
-  sorry/                      category id = folder name
-    Sorry Wiggle/             pack folder: id = slug of the name ("sorry-wiggle"), display name = the folder name
-      01.webp 02.webp …       stickers, in natural file-name order unless pack.json lists them
-      tray.png                optional; otherwise made from the first sticker
-      pack.json               optional (always written by the Claude Design export)
-      _report.txt             written by the build
+  _categories.json            the app's categories: names in 19 languages, order, icon, hue, default emoji, search
+                              words, and the tags that put a pack in each
+  _tags.json                  the words people type for each tag and lettering language, by app language
+  Sorry Wiggle/               pack folder: id = slug of the name ("sorry-wiggle"), display name = the folder name
+    01.webp 02.webp …         stickers, in natural file-name order unless pack.json lists them
+    tray.png                  optional; otherwise made from the first sticker
+    pack.json                 written into the export by scripts/library/prepare.js from catalog/packs.json
+    _report.txt               written by the build
   _staging/…                  anything under a folder starting with "_" is ignored
 ```
 
 - Pack id: the folder name lowercased, accents stripped, runs of anything but `a-z0-9` turned into one `-`,
   trimmed; 2–64 characters. Renaming the folder makes a new pack; rename with `pack.json` `name` instead.
-- Category: the parent folder. A folder missing from `_categories.json` still works with defaults (English name from
-  the folder, heart icon, placed last) and the report says so.
+- Categories: the pack's tags decide them (see `_categories.json`). The older `library/<category>/<Pack Name>/`
+  layout still builds, its category folder counting as the pack's first tag; it stays readable so the packs uploaded
+  that way can be deleted and moved.
 - Inputs: PNG, WebP (static or animated) and GIF, up to 10 MB each. Anything else is skipped with a note.
 
 ### `pack.json` (all fields optional)
@@ -89,10 +97,12 @@ library/
 {
   "name": "Sorry, My Love",
   "names": { "ar": "…" },
-  "alsoIn": ["couples"],
-  "lang": "en",
-  "tags": ["pinky", "apology"],
+  "lang": ["en"],
+  "tags": ["couples", "romantic", "sorry", "blob", "pinky"],
+  "emojis": ["🥺", "💗"],
+  "keywords": ["forgive me", "my bad"],
   "order": 5,
+  "adult": false,
   "animate": "wiggle",
   "cover": ["01.webp", "04.webp", "07.webp", "10.webp", "13.webp", "16.webp"],
   "stickers": [
@@ -102,14 +112,21 @@ library/
 ```
 
 - `name` (≤ 128 chars) and `names` (per app language) override the folder name.
-- `alsoIn`: up to 2 more category ids the pack appears under.
-- `lang`: the language of the lettering (BCP 47, e.g. `en`, `ar`, `pt-BR`), or `none` for text-free art. Default `en`.
-- `tags`: search words. `order`: tie-breaker in ranking (lower first; default 1000).
-- `animate: "wiggle"`: synthesize a 4-frame wiggle from static art (the launch packs' "animated" packs).
+- `lang`: the languages of the lettering (BCP 47, e.g. `"en"`, `["ar", "hi", "es"]`, `"pt-BR"`), `"none"` for
+  text-free art, `"multi"` for one sticker per language (listed with the languages it shows). One code, a list or a
+  comma-separated string. Default `["en"]`.
+- `tags` (≤ 20): the pack's category ids first (its main one first), then what it shows and is for (cat, sorry,
+  coffee, birthday…), then proper names people might type (mango, laddoo). They decide the categories and feed
+  search.
+- `emojis`: 1–3, the default for stickers without their own (else the main category's, else ❤️).
+- `keywords` (≤ 40 phrases): extra search words, such as the stickers' lines.
+- `order`: tie-breaker in ranking (lower first; default 1000).
+- `adult: true`: After Dark (18+). The pack is parked: never built, nothing reaches `public/`, a live one is taken
+  down. The Google Play build never lists these packs.
+- `animate: "wiggle"`: synthesize a 4-frame wiggle from static art (the launch fixtures' "animated" packs).
 - `cover`: the 6 stickers on the Home card (default: the first 6).
 - `stickers`: when present it lists exactly the pack's stickers in order; unlisted images are ignored with a note.
-  `emojis`: 1–3 (default: the category's). `text`: what the sticker says, verbatim (search and WhatsApp's
-  accessibility text).
+  `emojis`: 1–3. `text`: what the sticker says, verbatim (search and WhatsApp's accessibility text).
 
 ### `_categories.json`
 
@@ -117,18 +134,36 @@ library/
 {
   "categories": [
     {
-      "id": "couples", "order": 1, "icon": "heart-handshake", "hue": 10,
-      "emojis": ["💑", "❤️"],
-      "names": { "en": "Couples", "ar": "…" },
-      "keywords": { "pt-BR": ["namorados"] }
+      "id": "saudi", "order": 14, "icon": "moon-star", "hue": 250,
+      "emojis": ["☕", "🌙"],
+      "names": { "en": "Saudi & Gulf", "ar": "…" },
+      "keywords": { "ar": ["خليجي"] },
+      "tags": ["gulf"]
     }
   ]
 }
 ```
 
-Launch set (the current 8 plus Miss you, Sorry and Good morning), in chip order: couples, romantic, missyou, sorry,
-cute, flirty, goodmorning, goodnight, distance, funny, anime. Existing ids are unchanged. Names in all 19 app
-languages; the 8 existing ones come from the app's `theme_*` strings, the 3 new ones are ours pending native review.
+A category is a filter: a pack shows under every category whose id, or one of whose `tags`, is among the pack's tags.
+The first such tag in the pack's own order is its main category (its card's hue, "category" in the catalog). A pack
+with no category tag shows in Trending, Animated and search only. Membership is worked out at every publish, so
+editing `_categories.json` regroups packs without rebuilding them.
+
+The 14 categories are the design's Stickers page themes, in its order: cute, couples, romantic, flirty, funny, anime,
+goodnight, distance, occasions, family, world ("Love words"), india, brazil ("Brasil"), saudi ("Saudi & Gulf").
+After Dark is not a category: its packs are parked.
+
+### `_tags.json`
+
+```json
+{
+  "tags": { "cat": { "en": ["cat", "kitty"], "ar": ["قطة", "بسة"], "fr": ["chat"] } },
+  "languages": { "ar": { "en": ["arabic"], "ar": ["عربي", "العربية"] } }
+}
+```
+
+Synced to Firestore `config/tags` (report `library/_tags_report.txt`); the catalog carries the entries its packs use.
+Category ids are translated in `_categories.json` (names and keywords), not here.
 
 ## Build
 
@@ -201,23 +236,31 @@ tray ≤ 50 KB; the pack id is not used by another folder that still has files.
   between the record and the publish still publishes.
 - A failed build leaves the live version and its record; putting the live files back clears the failure.
 - An emptied folder whose pack came from it: status `removed`, catalog republished, and any other folder holding the
-  same pack id builds next (a move to another category). People who added it keep it.
+  same pack id builds next (a move out of an older category folder). People who added it keep it.
+- A removed pack that comes back is a new pack: its old static or animated kind no longer binds it, its version still
+  goes up, and it counts as new for ranking.
+- Records written before tags decided categories carry `category`, `alsoIn` and `lang`; the catalog still reads them
+  as tags until the pack's next build drops them.
+- Self-repair: an unchanged pack whose version files are missing from `public/` has them written again (same bytes,
+  same path); a publish whose catalog is unchanged but whose live catalog file is missing publishes a new version. A
+  wiped `public/` is back as soon as each pack builds again.
 
 ### Report (`_report.txt` in the pack folder)
 
 ```
-✅ Sorry Wiggle is live: version 3, 6 animated stickers, in Sorry (also Couples). Built 2026-09-29 14:05 UTC.
+✅ Sorry Wiggle is live: version 3, 6 animated stickers, in Couples, Romantic. Built 2026-09-29 14:05 UTC.
 Notes:
 - No tray.png: made from 01.webp.
 ❌ Sorry Wiggle was not published; version 2 stays live.
 - Only 2 stickers: WhatsApp needs 3 to 30.
+⏸ Rude Love is not published: After Dark (18+) packs stay out of the Google Play build.
 ```
 
 ## Publish
 
 `publishCatalog` runs one at a time. Publish requests are never deduplicated (an id that already ran would drop a
-later request); a publish whose catalog is identical to the live one writes nothing. It reads `categories` and every
-`packs` doc with status `live` and `hidden` not true, and writes:
+later request); a publish whose catalog is identical to the live one writes nothing. It reads `categories`,
+`config/tags` and every `packs` doc with status `live` and `hidden` not true, and writes:
 
 - `public/catalog/v<k>.json.gz` (gzip, immutable, the last 3 kept):
 
@@ -225,16 +268,19 @@ later request); a publish whose catalog is identical to the live one writes noth
 {
   "schema": 1, "version": 12, "publishedAt": "2026-09-29T14:05:00.000Z",
   "categories": [
-    { "id": "sorry", "order": 4, "icon": "hand-heart", "hue": 20, "names": { "en": "Sorry" },
-      "keywords": { "pt-BR": ["desculpa"] }, "packs": 2 }
+    { "id": "couples", "order": 2, "icon": "heart-handshake", "hue": 10, "names": { "en": "Couples" },
+      "keywords": { "pt-BR": ["casal"] }, "tags": ["couples"], "packs": 21 }
   ],
   "packs": [
-    { "id": "sorry-wiggle", "name": "Sorry Wiggle", "names": {}, "category": "sorry", "alsoIn": ["couples"],
-      "lang": "en", "animated": true, "count": 6, "version": 3, "adds": 0,
-      "cover": { "s": "public/packs/sorry-wiggle/v3/cover-s.webp", "l": "public/packs/sorry-wiggle/v3/cover-l.webp", "tiles": 6 },
-      "zip": { "path": "public/packs/sorry-wiggle/v3/pack.zip", "bytes": 563412 },
-      "keywords": ["sorry", "forgive", "bunny"], "publishedAt": "2026-09-29T14:05:00.000Z" }
-  ]
+    { "id": "sorry-wiggle", "name": "Sorry Wiggle", "names": {}, "category": "couples", "alsoIn": ["romantic"],
+      "lang": "en", "langs": ["en"], "tags": ["couples", "romantic", "sorry", "blob", "animated"],
+      "animated": true, "count": 6, "version": 3, "adds": 0,
+      "cover": { "s": "public/packs/sorry-wiggle/v3-a1b2c3d4/cover-s.webp", "l": "…/cover-l.webp", "tiles": 6 },
+      "zip": { "path": "public/packs/sorry-wiggle/v3-a1b2c3d4/pack.zip", "bytes": 563412 },
+      "keywords": ["couples", "romantic", "sorry", "blob", "animated", "forgive"], "publishedAt": "2026-09-29T14:05:00.000Z" }
+  ],
+  "tags": { "sorry": { "en": ["sorry", "apology"], "ar": ["آسف"] } },
+  "languages": { "en": { "en": ["english"] } }
 }
 ```
 
@@ -242,7 +288,9 @@ later request); a publish whose catalog is identical to the live one writes noth
   `https://firebasestorage.googleapis.com/v0/b/play-console-f33dd-stickermaker/o/{path}?alt=media` (`{path}` is the
   URL-encoded object path). Moving public files to R2 later means copying them and setting the template to
   `https://<cdn host>/{rawPath}`; the app needs no update.
-- `packs` is in rank order; category `packs` counts include `alsoIn`.
+- `packs` is in rank order; category `packs` counts every pack the category's tags bring. An animated pack gets the
+  `animated` tag. `category` and `alsoIn` are the pack's categories (main, then the rest), so app builds from before
+  tags keep working; `tags` and `languages` hold only the entries the listed packs use.
 
 ## Ordering, filters, search and counts
 
@@ -251,12 +299,13 @@ later request); a publish whose catalog is identical to the live one writes noth
   Analytics Data API (28 days by day, plus all time): `trend = Σ adds_d × 0.5^(age_d / 7)`. A pack live under 14 days
   scores at least `median trend × (1 − age / 14)` so new packs are not buried. Without Analytics configured
   (`GA4_PROPERTY_ID` unset) the job does nothing and ranking falls back to pin → order → newest.
-- The app partitions the ranked list by lettering language, keeping rank inside each group: the app language or
-  `none` first, then English, then the rest.
+- The app shows readable packs first, keeping rank inside each group: packs with no text, in English, in many
+  languages (`multi`) or in the app language are readable; the rest follow.
 - Chips: Trending · ♥ Saved · Animated · then categories in `order`, hiding any with no live packs. A pack appears
-  under its folder category and its `alsoIn` categories.
-- Search: pack names (all languages), category names and keywords (all languages), pack keywords (tags plus the
-  words of every sticker's text).
+  under every category its tags name.
+- Search: pack names (all languages), category names and keywords (all languages), pack keywords (tags, the words
+  of `_tags.json` for its tags and lettering languages in every app language, its `keywords`, and the words of every
+  sticker's text): "cat" and "قطة" find Clingy Mango, "arabic" the Arabic packs.
 - Counts: "N adds" only once a pack has ≥ 100 real adds (all-time `pack_added`); below that the card shows just the
   sticker count. No invented numbers.
 
@@ -295,6 +344,18 @@ couples); miles-apart → `distance` (also missyou); gm-gn and sunny-sleepy → 
 keep their category. `packs/<id>/` keeps the built WhatsApp fixtures for the validator test. `prepare-packs.js` and
 `upload-pack.js` are replaced by `scripts/library/`.
 
+2026-09-30, tags: the catalog moves to Claude Design's WhatsApp export (120 folders: 91 static packs, 25 animated
+variants, 4 After Dark). `catalog/packs.json` holds their reviewed metadata: tags and languages from the Stickers page
+manifest and the Pack Ideas page (moods, characters, sticker lines), checked sticker by sticker against contact
+sheets; the launch packs' per-sticker emoji and text; an initial order from the design's download figures, with an
+animated pack after every three static ones. `scripts/library/prepare.js` writes each folder's `pack.json`. The
+switch is a clean slate: after the functions that read tags are deployed and `_categories.json` and `_tags.json` are
+applied, the author deletes everything in `library/` and `public/`, waits two minutes (the old packs' removal builds
+settle), then uploads the 120 folders flat into `library/`. Old records come back as new packs with the next version
+number; their `category`, `alsoIn` and `lang` fields are dropped by the build. The repo's `library/` keeps the 14
+launch packs as fixtures for the emulators and the screen tour, flat, with the reviewed tags (their `animate:
+"wiggle"` stays, so the tour still has animated packs).
+
 ## Testing
 
 - Functions: `node --test` unit tests for slugs, path parsing, manifests, readiness, encoding decisions, checks,
@@ -304,7 +365,10 @@ keep their category. `packs/<id>/` keeps the built WhatsApp fixtures for the val
 - Emulators: an end-to-end script uploads a library pack to the Storage emulator and waits for `catalog/meta`, the
   catalog file and the pack outputs, re-uploads it unchanged, replaces two stickers slowly (exactly one complete new
   version must go live) and deletes it (Storage, Firestore, Functions and Tasks emulators).
-- App: JVM tests for catalog parsing, URL templates, language grouping, zip unpacking and the Room migration.
+- App: JVM tests for catalog parsing (search words, language lists), URL templates, language grouping, zip unpacking
+  and the Room migration.
+- Content: a functions test checks `catalog/packs.json` against `_categories.json` and `_tags.json`: every pack has a
+  category tag (After Dark aside), and every tag and language has search words.
 - CI: the screen tour seeds its emulators through the real pipeline (`scripts/library/seed-emulators.js`, one file
   and one pack at a time; test-only add counts from `design/catalog.json` keep the frames matching the design), and
   `.github/workflows/functions.yml` runs the functions' tests.
@@ -316,8 +380,10 @@ One time (needs a login with Owner or Editor on `play-console-f33dd`, Blaze plan
 2. Create the bucket in us-central1 and add it to Firebase (console Storage › Add bucket, or gcloud plus the Firebase
    Storage `addFirebase` API).
 3. `firebase deploy --only firestore,storage,functions:stickermaker`.
-4. Upload `library/` (`scripts/library/upload.js`): `_categories.json` first (the script waits until it is applied),
-   then per pack the stickers first and `pack.json` last. Read every `_report.txt` (`--wait` prints them).
+4. Upload `library/` (`scripts/library/upload.js`): `_categories.json` and `_tags.json` first (the script waits until
+   each is applied), then per pack the stickers first and `pack.json` last. Read every `_report.txt` (`--wait` prints
+   them). For a Claude Design export: `node scripts/library/prepare.js <exportDir>` writes each folder's
+   `pack.json`, then the folders go into `library/` as they are.
 5. Optional, for ranking: register `pack_id` as an event-scoped custom dimension in Analytics, give the functions'
    service account Viewer on the property, set `GA4_PROPERTY_ID`.
 

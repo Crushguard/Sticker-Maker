@@ -11,8 +11,10 @@ package com.piptechnologies.stickermaker.core.model
  * @property order Rank in the catalog (0 = first): pinned, then popular, then newest.
  * @property downloads Real adds counted by Analytics (0 until counted); shown only from 100.
  * @property version WhatsApp's image_data_version: a new version means new files.
- * @property lang Language of the lettering (BCP 47), or "none" for text-free art.
- * @property keywords Search words: tags plus the words of every sticker's text.
+ * @property langs Languages of the lettering (BCP 47); "none" for text-free art, "multi" for one sticker per
+ *   language.
+ * @property keywords Search words: the pack's tags and the words people type for them in every app language, the
+ *   names of its lettering languages, its phrases and the words of every sticker's text.
  */
 data class StickerPack(
     val id: String,
@@ -32,7 +34,7 @@ data class StickerPack(
     val version: Int = 1,
     val names: Map<String, String> = emptyMap(),
     val alsoIn: List<String> = emptyList(),
-    val lang: String = "en",
+    val langs: List<String> = listOf("en"),
     val keywords: List<String> = emptyList(),
     val coverSmallUrl: String? = null,
     val coverLargeUrl: String? = null,
@@ -41,5 +43,5 @@ data class StickerPack(
     val zipBytes: Long = 0,
 )
 
-/** The pack shows under its folder category and every category it lists in alsoIn. */
+/** The pack shows under its first category and every other category its tags name (alsoIn). */
 fun StickerPack.inCategory(categoryId: String): Boolean = category == categoryId || categoryId in alsoIn

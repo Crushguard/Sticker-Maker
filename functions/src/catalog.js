@@ -1,11 +1,13 @@
 'use strict';
 
 const { publicPackBase } = require('./config');
+const { categoriesOf, categoryTags } = require('./categories');
 
 const DAY_MS = 86400000;
 const NEW_PACK_DAYS = 14;
-const MAX_KEYWORDS = 40;
-const DEFAULT_CATEGORY = { order: 1000, icon: 'heart', hue: 340 };
+const MAX_KEYWORDS = 60;
+/** Every animated pack carries this tag, so "animated" (and its translations) finds them. */
+const ANIMATED_TAG = 'animated';
 
 function toMs(value) {
   if (!value) return null;
@@ -54,7 +56,25 @@ function rankPacks(packs, now) {
   return keyed.map((k) => k.p);
 }
 
-/** Search words: the pack's tags, then the words of every sticker's text; lowercase, unique, 2+ characters. */
+/**
+ * A pack's tags as the catalog lists them, plus "animated" for an animated pack. A record built before tags decided
+ * categories still counts its category folder and alsoIn as tags until its next build drops them.
+ */
+function tagsOf(p) {
+  const legacy = [p.category, ...(Array.isArray(p.alsoIn) ? p.alsoIn : [])].filter((t) => typeof t === 'string' && t);
+  const tags = [...new Set([...legacy, ...(Array.isArray(p.tags) ? p.tags : [])])];
+  return p.animated && !tags.includes(ANIMATED_TAG) ? [...tags, ANIMATED_TAG] : tags;
+}
+
+/** The languages of a pack's lettering; records built before lists had one "lang". */
+function langsOf(p) {
+  return Array.isArray(p.langs) && p.langs.length ? p.langs : [p.lang || 'en'];
+}
+
+/**
+ * Search words: the pack's tags, its keywords (phrases from its stickers), then the words of every sticker's text;
+ * lowercase, unique, 2+ characters.
+ */
 function keywordsOf(p) {
   const words = [];
   const add = (text) => {
@@ -62,57 +82,68 @@ function keywordsOf(p) {
       if (word.length >= 2 && !words.includes(word)) words.push(word);
     }
   };
-  (p.tags || []).forEach(add);
+  tagsOf(p).forEach(add);
+  (p.keywords || []).forEach(add);
   (p.stickers || []).forEach((s) => add(s.text || ''));
   return words.slice(0, MAX_KEYWORDS);
 }
 
-function titleCase(id) {
-  return id
-    .split('-')
-    .filter(Boolean)
-    .map((w) => w[0].toUpperCase() + w.slice(1))
-    .join(' ');
+/**
+ * The entries of a { id: words } dictionary that the catalog uses, in the order first used, under the ids the packs
+ * use. A language code without an entry of its own takes its primary language's ("pt-BR" → "pt").
+ */
+function pick(dictionary, ids) {
+  const out = {};
+  for (const id of ids) {
+    const words = dictionary && (dictionary[id] || dictionary[id.split('-')[0]]);
+    if (words && !out[id]) out[id] = words;
+  }
+  return out;
 }
 
 /**
- * The catalog file the app downloads: categories (with live pack counts, alsoIn included) and live packs in
- * rank order. A pack whose folder category is missing from _categories.json brings a default category.
+ * The catalog file the app downloads: categories in chip order (with live pack counts), live packs in rank order,
+ * and the search words of the tags and languages those packs use (from _tags.json).
+ *
+ * A pack's categories come from its tags: it shows under every category one of its tags names (categoriesOf), the
+ * first being its main one ("category"; the rest are "alsoIn"). A pack with no category tag has category "" and
+ * shows in Trending and search only.
+ *
+ * @param {{version: number, now: Date, categories: object[], packs: object[], vocabulary?: {tags?: object,
+ *   languages?: object}}} input
  */
-function assembleCatalog({ version, now, categories, packs }) {
+function assembleCatalog({ version, now, categories, packs, vocabulary = {} }) {
   const ranked = rankPacks(packs, now);
-  const known = new Map(categories.map((c) => [c.id, c]));
-  for (const p of ranked) {
-    if (!known.has(p.category)) {
-      known.set(p.category, { id: p.category, ...DEFAULT_CATEGORY, names: { en: titleCase(p.category) }, keywords: {} });
-    }
-  }
+  const sorted = [...categories].sort((a, b) => a.order - b.order || (a.id < b.id ? -1 : 1));
+  const membership = new Map(ranked.map((p) => [p.id, categoriesOf(tagsOf(p), sorted)]));
   const counts = new Map();
-  for (const p of ranked) {
-    for (const id of new Set([p.category, ...(p.alsoIn || [])])) counts.set(id, (counts.get(id) || 0) + 1);
-  }
-  const catalogCategories = [...known.values()]
-    .sort((a, b) => a.order - b.order || (a.id < b.id ? -1 : 1))
-    .map((c) => ({
-      id: c.id,
-      order: c.order,
-      icon: c.icon,
-      hue: c.hue,
-      names: c.names,
-      keywords: c.keywords || {},
-      packs: counts.get(c.id) || 0,
-    }));
+  for (const ids of membership.values()) for (const id of ids) counts.set(id, (counts.get(id) || 0) + 1);
+
+  const catalogCategories = sorted.map((c) => ({
+    id: c.id,
+    order: c.order,
+    icon: c.icon,
+    hue: c.hue,
+    names: c.names,
+    keywords: c.keywords || {},
+    tags: categoryTags(c),
+    packs: counts.get(c.id) || 0,
+  }));
 
   const catalogPacks = ranked.map((p) => {
     const base = publicPackBase(p.id, p.version, p.contentHash);
     const published = toMs(p.publishedAt);
+    const [category = '', ...alsoIn] = membership.get(p.id);
+    const langs = langsOf(p);
     return {
       id: p.id,
       name: p.name,
       names: p.names || {},
-      category: p.category,
-      alsoIn: p.alsoIn || [],
-      lang: p.lang || 'en',
+      category,
+      alsoIn,
+      lang: langs[0],
+      langs,
+      tags: tagsOf(p),
       animated: !!p.animated,
       count: p.count,
       version: p.version,
@@ -130,6 +161,8 @@ function assembleCatalog({ version, now, categories, packs }) {
     publishedAt: now.toISOString(),
     categories: catalogCategories,
     packs: catalogPacks,
+    tags: pick(vocabulary.tags, catalogPacks.flatMap((p) => p.tags)),
+    languages: pick(vocabulary.languages, catalogPacks.flatMap((p) => p.langs)),
   };
 }
 

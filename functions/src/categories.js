@@ -3,6 +3,7 @@
 const { cleanEmojis, cleanNames } = require('./manifest');
 
 const ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const MAX_TAG = 32;
 const DEFAULT_ICON = 'heart';
 const DEFAULT_HUE = 340;
 const FALLBACK_EMOJIS = ['❤️'];
@@ -17,6 +18,30 @@ function cleanKeywords(value) {
     }
   }
   return keywords;
+}
+
+/** The pack tags that put a pack in a category: its own id, plus any the file lists (e.g. "gulf" for saudi). */
+function categoryTags(category) {
+  const listed = Array.isArray(category.tags) ? category.tags : [];
+  const tags = listed.filter((t) => typeof t === 'string').map((t) => t.trim().toLowerCase().slice(0, MAX_TAG));
+  return [...new Set([category.id, ...tags.filter((t) => t !== '')])];
+}
+
+/**
+ * The categories a pack shows under: every category one of its tags belongs to, in the order of the pack's tags,
+ * so the first is the one its first category tag names.
+ *
+ * @param {string[]} tags the pack's tags
+ * @param {{id: string, tags?: string[]}[]} categories
+ */
+function categoriesOf(tags, categories) {
+  const ids = [];
+  for (const tag of tags) {
+    for (const category of categories) {
+      if (!ids.includes(category.id) && categoryTags(category).includes(tag)) ids.push(category.id);
+    }
+  }
+  return ids;
 }
 
 /**
@@ -60,9 +85,10 @@ function parseCategoriesFile(text) {
       emojis: emojis.length ? emojis : FALLBACK_EMOJIS,
       names,
       keywords: cleanKeywords(entry.keywords),
+      tags: categoryTags({ id, tags: entry.tags }),
     });
   });
   return { errors, categories };
 }
 
-module.exports = { parseCategoriesFile };
+module.exports = { parseCategoriesFile, categoriesOf, categoryTags };

@@ -35,12 +35,17 @@ async function scheduleQuietBuild(deps, { packId, key, category, folder, nowMs, 
  * @param {string} objectName
  * @param {'finalized'|'deleted'} kind
  * @param {number} nowMs
- * @param {{listFolder: Function, readText: Function, enqueueBuild: Function, store: object, syncCategories: Function}} deps
+ * @param {{listFolder: Function, readText: Function, enqueueBuild: Function, store: object, syncCategories: Function,
+ *   syncTags: Function}} deps
  */
 async function handleLibraryEvent(objectName, kind, nowMs, deps) {
   const parsed = parseLibraryPath(objectName);
   if (parsed.kind === 'categories') {
     if (kind === 'finalized') await deps.syncCategories();
+    return;
+  }
+  if (parsed.kind === 'tags') {
+    if (kind === 'finalized') await deps.syncTags();
     return;
   }
   if (parsed.kind !== 'pack') return;
@@ -54,11 +59,9 @@ async function handleLibraryEvent(objectName, kind, nowMs, deps) {
   const entries = await deps.listFolder(prefix);
   const manifestEntry = entries.find((e) => e.file === 'pack.json');
   if (!manifestEntry) return;
-  const manifest = parsePackManifest(
-    await deps.readText(manifestEntry),
-    entries.map((e) => e.file).filter(isImageName),
-    { folder, category, categoryIds: new Set(), defaultEmojis: [] }
-  );
+  const manifest = parsePackManifest(await deps.readText(manifestEntry), entries.map((e) => e.file).filter(isImageName), {
+    folder,
+  });
   if (!fastPathReady(manifest, entries)) return;
   const listed = new Set(manifest.stickers.map((s) => s.file));
   const generations = entries

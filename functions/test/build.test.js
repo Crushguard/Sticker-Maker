@@ -18,14 +18,19 @@ const stickerFiles = (n) =>
     }))
   );
 
+const CATEGORIES = [
+  { id: 'sorry', emojis: ['🥺', '🙏'] },
+  { id: 'couples', emojis: ['💑'] },
+  { id: 'saudi', tags: ['gulf'], emojis: ['☕'] },
+];
+
 const base = (files, extra = {}) => ({
   packId: 'sorry-wiggle',
-  category: 'sorry',
   folder: 'Sorry Wiggle',
+  folderTags: ['sorry'],
   files,
   manifestText: null,
-  categoryIds: new Set(['sorry', 'couples']),
-  defaultEmojis: ['🥺', '🙏'],
+  categories: CATEGORIES,
   live: null,
   ...extra,
 });
@@ -52,7 +57,9 @@ test('a folder of three stickers builds version 1 with a zip and two cover strip
 
   const r = result.record;
   assert.equal(r.name, 'Sorry Wiggle');
-  assert.equal(r.category, 'sorry');
+  assert.deepEqual(r.tags, ['sorry']);
+  assert.deepEqual(r.langs, ['en']);
+  assert.deepEqual(result.categories, ['sorry']);
   assert.equal(r.version, 1);
   assert.equal(r.count, 3);
   assert.equal(r.zipBytes, result.outputs.zip.length);
@@ -62,6 +69,31 @@ test('a folder of three stickers builds version 1 with a zip and two cover strip
     [['01.webp', '1.png'], ['02.webp', '2.png'], ['03.webp', '3.png']]
   );
   assert.ok(result.notes.some((n) => n.includes('No tray.png')));
+});
+
+test("pack.json tags choose the categories; the pack's emoji fill stickers without their own", async () => {
+  const manifestText = JSON.stringify({
+    lang: ['ar', 'en'],
+    tags: ['gulf', 'coffee', 'couples'],
+    keywords: ['gahwa'],
+    emojis: ['☕', '❤️'],
+    stickers: { '2.png': { emojis: ['🌙'] } },
+  });
+  const result = await buildPackFromFiles(base(await stickerFiles(3), { folderTags: [], manifestText }));
+  assert.deepEqual(result.errors, []);
+  assert.deepEqual(result.categories, ['saudi', 'couples']);
+  assert.deepEqual(result.record.tags, ['gulf', 'coffee', 'couples']);
+  assert.deepEqual(result.record.langs, ['ar', 'en']);
+  assert.deepEqual(result.record.keywords, ['gahwa']);
+  assert.deepEqual(result.record.stickers.map((s) => s.emojis), [['☕', '❤️'], ['🌙'], ['☕', '❤️']]);
+  assert.ok(!result.notes.some((n) => n.includes('emoji')), result.notes.join(' | '));
+  assert.equal(result.record.category, undefined);
+});
+
+test("a pack with no emoji of its own takes its first category's", async () => {
+  const result = await buildPackFromFiles(base(await stickerFiles(3), { folderTags: [], manifestText: '{"tags":["couples","sorry"]}' }));
+  assert.deepEqual(result.record.stickers[0].emojis, ['💑']);
+  assert.ok(result.notes.some((n) => n.includes("category's emoji 💑")));
 });
 
 test('building the same files again against the live version changes nothing', async () => {
@@ -182,14 +214,14 @@ test('the report says what went live, or why not', () => {
   assert.equal(
     renderReport({
       ok: true, unchanged: false, name: 'Sorry Wiggle', version: 3, count: 6, animated: true,
-      category: 'Sorry', alsoIn: ['Couples'], liveVersion: 2, errors: [], notes: ['No tray.png: made from 01.webp.'], at,
+      categories: ['Sorry', 'Couples'], liveVersion: 2, errors: [], notes: ['No tray.png: made from 01.webp.'], at,
     }),
-    '✅ Sorry Wiggle is live: version 3, 6 animated stickers, in Sorry (also Couples). Built 2026-09-29 14:05 UTC.\n' +
+    '✅ Sorry Wiggle is live: version 3, 6 animated stickers, in Sorry, Couples. Built 2026-09-29 14:05 UTC.\n' +
       'Notes:\n- No tray.png: made from 01.webp.\n'
   );
   assert.equal(
     renderReport({
-      ok: false, name: 'Sorry Wiggle', version: null, count: 2, animated: false, category: 'Sorry', alsoIn: [],
+      ok: false, name: 'Sorry Wiggle', version: null, count: 2, animated: false, categories: [],
       liveVersion: 2, errors: ['Only 2 stickers: WhatsApp needs 3 to 30.'], notes: [], at,
     }),
     '❌ Sorry Wiggle was not published; version 2 stays live. Checked 2026-09-29 14:05 UTC.\n' +
@@ -197,15 +229,23 @@ test('the report says what went live, or why not', () => {
   );
   assert.match(
     renderReport({
-      ok: true, unchanged: true, name: 'Pack', version: 3, count: 6, animated: false, category: 'Sorry', alsoIn: [],
+      ok: true, unchanged: true, name: 'Pack', version: 3, count: 6, animated: false, categories: ['Sorry'],
       liveVersion: 3, errors: [], notes: [], at,
     }),
     /^✅ Pack is live and unchanged: version 3, 6 static stickers, in Sorry\./
   );
   assert.match(
-    renderReport({ ok: false, name: 'New', version: null, count: 0, animated: false, category: 'Sorry', alsoIn: [],
+    renderReport({ ok: true, name: 'Loose', version: 1, count: 3, animated: false, categories: [], errors: [], notes: [], at }),
+    /in no category \(no tag names one\): it shows in Trending and search\./
+  );
+  assert.match(
+    renderReport({ ok: false, name: 'New', version: null, count: 0, animated: false, categories: [],
       liveVersion: null, errors: ['x'], notes: [], at }),
     /^❌ New was not published\. Checked/
+  );
+  assert.equal(
+    renderReport({ parked: true, name: 'Night Pack', at }),
+    '⏸ Night Pack is not published: After Dark (18+) packs stay out of the Google Play build. Checked 2026-09-29 14:05 UTC.\n'
   );
 });
 

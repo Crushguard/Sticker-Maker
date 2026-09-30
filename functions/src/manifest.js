@@ -6,11 +6,15 @@ const { naturalCompare } = require('./library');
 const DEFAULT_ORDER = 1000;
 const MAX_NAME = 128;
 const MAX_TEXT = 255;
-const MAX_ALSO_IN = 2;
 const MAX_TAGS = 20;
 const MAX_TAG = 32;
+const MAX_KEYWORDS = 40;
+const MAX_KEYWORD = 64;
 const TRAY = /^tray\.png$/i;
 const LANG = /^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/;
+/** "none": no text on the stickers. "multi": one sticker per language, readable anywhere. */
+const TEXT_FREE = 'none';
+const MULTILINGUAL = 'multi';
 const EMOJI = /\p{Extended_Pictographic}|\p{Regional_Indicator}/u;
 const FALLBACK_EMOJIS = ['❤️'];
 
@@ -37,21 +41,55 @@ function cleanNames(value) {
   return names;
 }
 
-function cleanTags(value) {
+/** Lowercase, trimmed, unique, capped strings. */
+function cleanWords(value, maxLength, maxCount) {
   if (!Array.isArray(value)) return [];
-  const tags = value
+  const words = value
     .filter((t) => typeof t === 'string')
-    .map((t) => t.trim().toLowerCase().slice(0, MAX_TAG))
+    .map((t) => t.trim().toLowerCase().slice(0, maxLength).trim())
     .filter((t) => t !== '');
-  return [...new Set(tags)].slice(0, MAX_TAGS);
+  return [...new Set(words)].slice(0, maxCount);
+}
+
+function cleanTags(value) {
+  return cleanWords(value, MAX_TAG, MAX_TAGS);
+}
+
+/**
+ * pack.json lang: one code, a list, or a comma-separated string, e.g. "ar", ["ar", "hi", "es"], "none", or
+ * ["multi", "fr", "it"]. Always at least one code; "en" when none is given.
+ */
+function parseLangs(value, notes) {
+  if (value === undefined) return ['en'];
+  const list = Array.isArray(value) ? value : typeof value === 'string' ? value.split(',') : [];
+  const langs = [];
+  for (const raw of list) {
+    const code = typeof raw === 'string' ? raw.trim() : '';
+    if (code === TEXT_FREE || code === MULTILINGUAL || LANG.test(code)) {
+      if (!langs.includes(code)) langs.push(code);
+    } else {
+      notes.push(`lang "${raw}" is not a language code: ignored.`);
+    }
+  }
+  if (langs.length === 0) {
+    notes.push('lang has no language code: used "en".');
+    return ['en'];
+  }
+  if (langs.includes(TEXT_FREE) && langs.length > 1) {
+    notes.push('lang lists languages and "none" (no text): "none" was ignored.');
+    return langs.filter((code) => code !== TEXT_FREE);
+  }
+  return langs;
 }
 
 /**
  * Reads a pack folder's optional pack.json against the images actually in the folder.
  *
+ * Stickers keep only their own emoji here; fillEmojis adds the pack's (or its category's) to the others.
+ *
  * @param {string|null} text pack.json contents, or null when the folder has none
  * @param {string[]} imageNames image files in the folder (png, webp, gif)
- * @param {{folder: string, category: string, categoryIds: Set<string>, defaultEmojis: string[]}} opts
+ * @param {{folder: string}} opts
  */
 function parsePackManifest(text, imageNames, opts) {
   const errors = [];
@@ -80,24 +118,15 @@ function parsePackManifest(text, imageNames, opts) {
   }
   if (name.length > MAX_NAME) errors.push(`The pack name is longer than ${MAX_NAME} characters.`);
 
-  const alsoIn = [];
-  if (json.alsoIn !== undefined) {
-    const wanted = Array.isArray(json.alsoIn) ? json.alsoIn : [];
-    for (const id of wanted) {
-      if (id === opts.category || alsoIn.includes(id)) continue;
-      if (!opts.categoryIds.has(id)) {
-        notes.push(`alsoIn: unknown category "${id}" ignored.`);
-        continue;
-      }
-      if (alsoIn.length < MAX_ALSO_IN) alsoIn.push(id);
-      else notes.push(`alsoIn: only ${MAX_ALSO_IN} extra categories are used; "${id}" ignored.`);
-    }
-  }
+  const langs = parseLangs(json.lang, notes);
 
-  let lang = 'en';
-  if (json.lang !== undefined) {
-    if (json.lang === 'none' || (typeof json.lang === 'string' && LANG.test(json.lang))) lang = json.lang;
-    else notes.push(`lang "${json.lang}" is not a language code: used "en".`);
+  const emojis = cleanEmojis(json.emojis);
+  if (json.emojis !== undefined && emojis.length === 0) notes.push('pack.json emojis has no emoji: ignored.');
+
+  let adult = false;
+  if (json.adult !== undefined) {
+    if (typeof json.adult === 'boolean') adult = json.adult;
+    else notes.push('adult is not true or false: ignored.');
   }
 
   let order = DEFAULT_ORDER;
@@ -112,16 +141,7 @@ function parsePackManifest(text, imageNames, opts) {
     else notes.push(`animate "${json.animate}" is not supported (only "wiggle"): ignored.`);
   }
 
-  const defaults = cleanEmojis(opts.defaultEmojis).length ? cleanEmojis(opts.defaultEmojis) : FALLBACK_EMOJIS;
-  let usedDefaults = false;
-  const sticker = (file, entry) => {
-    let emojis = cleanEmojis(entry && entry.emojis);
-    if (emojis.length === 0) {
-      emojis = defaults;
-      usedDefaults = true;
-    }
-    return { file, emojis, text: cleanText(entry && entry.text) };
-  };
+  const sticker = (file, entry) => ({ file, emojis: cleanEmojis(entry && entry.emojis), text: cleanText(entry && entry.text) });
 
   let listed = false;
   let stickers;
@@ -150,8 +170,6 @@ function parsePackManifest(text, imageNames, opts) {
       json.stickers && typeof json.stickers === 'object' ? json.stickers : {};
     stickers = images.map((file) => sticker(file, overrides[file]));
   }
-  if (usedDefaults) notes.push(`Stickers without emoji use the category's emoji ${defaults.join(' ')}.`);
-
   const stickerFiles = stickers.map((s) => s.file);
   let cover = [];
   if (Array.isArray(json.cover)) {
@@ -168,9 +186,11 @@ function parsePackManifest(text, imageNames, opts) {
     notes,
     name,
     names: cleanNames(json.names),
-    alsoIn,
-    lang,
+    langs,
     tags: cleanTags(json.tags),
+    keywords: cleanWords(json.keywords, MAX_KEYWORD, MAX_KEYWORDS),
+    emojis,
+    adult,
     order,
     animate,
     tray,
@@ -180,4 +200,27 @@ function parsePackManifest(text, imageNames, opts) {
   };
 }
 
-module.exports = { parsePackManifest, cleanEmojis, cleanNames, DEFAULT_ORDER };
+/**
+ * Gives every sticker without emoji of its own the pack's emoji, else its first category's, else ❤️.
+ *
+ * @param {{stickers: {emojis: string[]}[], emojis: string[]}} manifest parsePackManifest's result
+ * @param {string[]} categoryEmojis the emoji of the pack's first category
+ * @returns {{stickers: object[], note: string|null}} the note says which default a sticker got, unless the pack chose it
+ */
+function fillEmojis(manifest, categoryEmojis) {
+  const fromCategory = cleanEmojis(categoryEmojis);
+  const [defaults, note] = manifest.emojis.length
+    ? [manifest.emojis, null]
+    : fromCategory.length
+      ? [fromCategory, `Stickers without emoji use the category's emoji ${fromCategory.join(' ')}.`]
+      : [FALLBACK_EMOJIS, `Stickers without emoji use ${FALLBACK_EMOJIS.join(' ')}.`];
+  let used = false;
+  const stickers = manifest.stickers.map((s) => {
+    if (s.emojis.length) return s;
+    used = true;
+    return { ...s, emojis: defaults };
+  });
+  return { stickers, note: used ? note : null };
+}
+
+module.exports = { parsePackManifest, fillEmojis, cleanEmojis, cleanNames, DEFAULT_ORDER, TEXT_FREE, MULTILINGUAL };

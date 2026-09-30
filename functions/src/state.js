@@ -31,4 +31,7 @@ function sameVersion(current, expected) {
   return a.every((value, i) => value === b[i]);
 }
 
-module.exports = { isPending, leaseFree, sameVersion, PENDING_STALE_MS, LEASE_MS };
+/** Fields older builds wrote on packs/<id> that a build now removes: the catalog works categories out from tags. */
+const DROPPED_PACK_FIELDS = ['category', 'alsoIn', 'lang'];
+
+module.exports = { isPending, leaseFree, sameVersion, PENDING_STALE_MS, LEASE_MS, DROPPED_PACK_FIELDS };

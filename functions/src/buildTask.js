@@ -1,8 +1,8 @@
 'use strict';
 
 const crypto = require('crypto');
-const { LIBRARY_PREFIX, PUBLIC_PREFIX, BUILD_RETRY, publicPackBase } = require('./config');
-const { slugify, parseLibraryPath, isImageName, folderKey, REPORT_FILE } = require('./library');
+const { PUBLIC_PREFIX, BUILD_RETRY, publicPackBase } = require('./config');
+const { slugify, parseLibraryPath, isImageName, folderKey, libraryPrefix, REPORT_FILE } = require('./library');
 const { parsePackManifest } = require('./manifest');
 const { fastPathReady, mustWait, quietTaskId, QUIET_DELAY_S, FAST_DELAY_S } = require('./readiness');
 const { buildPackFromFiles } = require('./build');
@@ -12,14 +12,19 @@ const { scheduleQuietBuild } = require('./events');
 /** The folder is still changing, or another build of the pack is running: Cloud Tasks retries the build later. */
 class NotQuietYet extends Error {}
 
-const RECORD_KEYS_COMPARED = ['name', 'names', 'category', 'alsoIn', 'lang', 'tags', 'order', 'coverTiles'];
+const RECORD_KEYS_COMPARED = ['name', 'names', 'langs', 'tags', 'keywords', 'order', 'coverTiles'];
 /** Versions kept in public/: phones mid-download, or on a catalog a publish or two behind, still finish. */
 const KEEP_VERSIONS = 3;
 /** Outcomes of a build that looked at its folder: each ends with a publish request. */
-const LOOKED = new Set(['published', 'updated', 'unchanged', 'failed', 'collision', 'removed', 'empty']);
+const LOOKED = new Set(['published', 'updated', 'restored', 'unchanged', 'failed', 'collision', 'removed', 'empty', 'parked']);
+/** The files of a published version, in its public/packs/<id>/v<n>-<hash8>/ folder. */
+const OUTPUT_FILES = [
+  ['cover-s.webp', 'coverS', 'image/webp'],
+  ['cover-l.webp', 'coverL', 'image/webp'],
+  ['pack.zip', 'zip', 'application/zip'],
+];
 
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-const libraryPrefix = (category, folder) => `${LIBRARY_PREFIX}${category}/${folder}/`;
 const publicPrefix = (packId) => `${PUBLIC_PREFIX}packs/${packId}/`;
 const snapshot = (entries) => entries.map((e) => `${e.file}#${e.generation}`).sort().join('\n');
 
@@ -52,7 +57,7 @@ async function deleteOldVersions(packId, version, deps) {
 async function otherFoldersWithFiles(prefix, folders, deps) {
   const others = [];
   for (const [key, f] of Object.entries(folders)) {
-    if (!f.category || !f.folder || libraryPrefix(f.category, f.folder) === prefix) continue;
+    if (!f.folder || libraryPrefix(f.category, f.folder) === prefix) continue;
     if ((await packEntries(libraryPrefix(f.category, f.folder), deps)).length) {
       others.push({ key, category: f.category, folder: f.folder });
     }
@@ -61,21 +66,22 @@ async function otherFoldersWithFiles(prefix, folders, deps) {
 }
 
 /**
- * Builds the pack in library/<category>/<folder>/ and publishes it when it passes. Safe to run any number of times,
- * in any order: one build per pack id runs at a time (a lease in builds/<packId>), the record only moves on from the
- * version the build started from, and every version's files sit in a folder named after their content.
+ * Builds the pack in library/<folder>/ (library/<category>/<folder>/ in the older layout) and publishes it when it
+ * passes. Safe to run any number of times, in any order: one build per pack id runs at a time (a lease in
+ * builds/<packId>), the record only moves on from the version the build started from, and every version's files sit
+ * in a folder named after their content.
  *
  * Quiet builds, scheduled by library events, are the ones every change waits for: while the folder is still
  * changing they wait by retrying. Fast builds, scheduled by the pack.json that completes a new pack, only save that
  * wait: they stop whenever they can't build right away, because the folder's quiet build always follows.
  *
- * @param {{category: string, folder: string, quiet?: boolean}} task
+ * @param {{category?: string|null, folder: string, quiet?: boolean}} task
  * @param {object} deps the clock, the bucket, the store (packs/, builds/, categories/) and the queue: deps.js in the
  *   cloud, test/fakes.js in tests
  * @param {{holder?: string}} [options] who holds the pack's lease: the Cloud Tasks task id, so a retry of a task
  *   whose instance died mid-build takes its lease straight back
  */
-async function runBuild({ category, folder, quiet = false }, deps, { holder = crypto.randomUUID() } = {}) {
+async function runBuild({ category = null, folder, quiet = false }, deps, { holder = crypto.randomUUID() } = {}) {
   const now = deps.now();
   const prefix = libraryPrefix(category, folder);
   const job = { category, folder, quiet, now, nowMs: now.getTime(), prefix, packId: slugify(folder), key: folderKey(prefix) };
@@ -122,7 +128,8 @@ async function buildLocked(job, deps) {
     if (mustWait({ fastReady: false, newestObjectMs: 0, lastEventMs, nowMs })) return job.wait('files are still being deleted');
     if (!(live && live.source && live.source.folder === prefix && live.status !== 'removed')) return { outcome: 'empty', packId };
     await store.mergePack(packId, { status: 'removed', removedAt: now });
-    // The pack may live on in another folder with the same name (a move to another category): it builds next.
+    // The pack may live on in another folder with the same name (moved out of an older category folder, say): it
+    // builds next.
     return { outcome: 'removed', packId, rebuild: await otherFoldersWithFiles(prefix, folders, deps) };
   }
 
@@ -142,7 +149,7 @@ async function buildLocked(job, deps) {
   if (manifestRead.changed) return job.wait('files changed while the build read them');
   const manifestText = manifestRead.value;
   const imageNames = entries.map((e) => e.file).filter(isImageName);
-  const quick = parsePackManifest(manifestText, imageNames, { folder, category, categoryIds: new Set(), defaultEmojis: [] });
+  const quick = parsePackManifest(manifestText, imageNames, { folder });
   // Only a pack that was never published skips the quiet wait. An update always waits for its folder to settle, so
   // a half-replaced set of stickers never goes live, whatever order the files arrive in.
   const fastReady = !(live && live.version) && fastPathReady(quick, entries);
@@ -150,9 +157,18 @@ async function buildLocked(job, deps) {
   const newest = Math.max(...entries.map((e) => e.updatedMs));
   if (mustWait({ fastReady, newestObjectMs: newest, lastEventMs, nowMs })) return job.wait('files are still arriving');
 
-  const categories = await store.categories();
-  const categoryName = (id) => (categories.get(id) && categories.get(id).names && categories.get(id).names.en) || id;
   const liveVersion = live && live.status === 'live' ? live.version : null;
+  if (quick.adult) {
+    // After Dark packs are never built for the Google Play catalog: nothing of them reaches public/.
+    if (liveVersion && live.source && live.source.folder === prefix) await store.mergePack(packId, { status: 'removed', removedAt: now });
+    await deps.saveText(reportPath, renderReport({ parked: true, name: quick.name, at: now }));
+    return { outcome: 'parked', packId };
+  }
+  const categories = [...(await store.categories()).entries()].map(([id, c]) => ({ id, ...c }));
+  const categoryName = (id) => {
+    const c = categories.find((x) => x.id === id);
+    return (c && c.names && c.names.en) || id;
+  };
 
   if (live && live.source && live.source.folder !== prefix && live.status !== 'removed') {
     if ((await packEntries(live.source.folder, deps)).length) {
@@ -173,15 +189,19 @@ async function buildLocked(job, deps) {
   const files = downloads.value;
   const published = await deps.listPaths(publicPrefix(packId));
 
-  const previous = live && live.version ? { version: live.version, contentHash: live.contentHash, animated: live.animated } : null;
+  // A removed pack that comes back is a new pack: its old kind (static or animated) no longer binds it, but its
+  // version number still only goes up.
+  const previous =
+    live && live.version
+      ? { version: live.version, contentHash: live.contentHash, animated: live.status === 'live' ? live.animated : null }
+      : null;
   const result = await buildPackFromFiles({
     packId,
-    category,
     folder,
+    folderTags: category ? [category] : [],
     files,
     manifestText,
-    categoryIds: new Set(categories.keys()),
-    defaultEmojis: (categories.get(category) && categories.get(category).emojis) || [],
+    categories,
     live: previous,
     published: versionFolders(packId, published),
   });
@@ -190,7 +210,7 @@ async function buildLocked(job, deps) {
     await store.mergePack(packId, {
       build: { status: 'failed', errors: result.errors, notes: result.notes, at: now },
       // A record with no source yet (none at all, or only stats) learns which pack and folder this is.
-      ...(live && live.source ? {} : { id: packId, status: 'failed', name: folder, category, source: { folder: prefix, files: entries.length } }),
+      ...(live && live.source ? {} : { id: packId, status: 'failed', name: folder, source: { folder: prefix, files: entries.length } }),
     });
     await deps.saveText(
       reportPath,
@@ -208,13 +228,12 @@ async function buildLocked(job, deps) {
     RECORD_KEYS_COMPARED.some((k) => !same(live[k], result.record[k])) ||
     !same((live.stickers || []).map((s) => [s.emojis, s.text]), result.record.stickers.map((s) => [s.emojis, s.text]));
 
-  if (!result.unchanged) {
-    const base = publicPackBase(packId, result.version, result.contentHash);
-    await Promise.all([
-      deps.savePublic(`${base}cover-s.webp`, result.outputs.coverS, 'image/webp'),
-      deps.savePublic(`${base}cover-l.webp`, result.outputs.coverL, 'image/webp'),
-      deps.savePublic(`${base}pack.zip`, result.outputs.zip, 'application/zip'),
-    ]);
+  const base = publicPackBase(packId, result.version, result.contentHash);
+  // An unchanged pack whose files left public/ (a wiped folder) gets them back: same bytes, same path.
+  const restore = result.unchanged && !OUTPUT_FILES.every(([name]) => published.includes(`${base}${name}`));
+  if (restore) result.notes.push('The published files were missing from public/: written again.');
+  if (!result.unchanged || restore) {
+    await Promise.all(OUTPUT_FILES.map(([name, key, type]) => deps.savePublic(`${base}${name}`, result.outputs[key], type)));
   }
   if (!result.unchanged || recordChanged) {
     const doc = {
@@ -223,7 +242,8 @@ async function buildLocked(job, deps) {
       status: 'live',
       source: { folder: prefix, files: entries.length },
       build: { status: 'ok', errors: [], notes: result.notes, at: now },
-      publishedAt: live && live.publishedAt ? live.publishedAt : now,
+      // A pack that comes back after its removal counts as new (Home's new-pack boost).
+      publishedAt: liveVersion && live.publishedAt ? live.publishedAt : now,
       updatedAt: result.unchanged && live && live.updatedAt ? live.updatedAt : now,
     };
     // The record only moves on from what this build started from; mergeFields replaces these fields whole and leaves
@@ -242,15 +262,14 @@ async function buildLocked(job, deps) {
       version: result.version,
       count: result.count,
       animated: result.animated,
-      category: categoryName(category),
-      alsoIn: result.record.alsoIn.map(categoryName),
+      categories: result.categories.map(categoryName),
       liveVersion,
       errors: [],
       notes: result.notes,
       at: now,
     })
   );
-  const outcome = result.unchanged ? (recordChanged ? 'updated' : 'unchanged') : 'published';
+  const outcome = !result.unchanged ? 'published' : recordChanged ? 'updated' : restore ? 'restored' : 'unchanged';
   return { outcome, packId, version: result.version };
 }
 
@@ -279,7 +298,7 @@ async function reportCrash({ category, folder }, err, deps) {
  * backoff). On the last attempt a wait moves to a fresh task, so a long upload never runs out of retries, and an
  * unexpected error still leaves the author a report.
  *
- * @param {{category: string, folder: string, quiet?: boolean}} task
+ * @param {{category?: string|null, folder: string, quiet?: boolean}} task
  * @param {{retryCount?: number, taskId?: string}} attempt
  * @param {object} deps see runBuild
  */

@@ -1,0 +1,69 @@
+{
+  "name": "Dance With Me",
+  "lang": [
+    "en"
+  ],
+  "tags": [
+    "couples",
+    "couple",
+    "dance",
+    "together",
+    "music"
+  ],
+  "emojis": [
+    "💃",
+    "🕺"
+  ],
+  "order": 34,
+  "animate": "wiggle",
+  "stickers": [
+    {
+      "file": "01.webp",
+      "emojis": [
+        "💃",
+        "🕺"
+      ],
+      "text": "dance w me"
+    },
+    {
+      "file": "02.webp",
+      "emojis": [
+        "🤗",
+        "💕"
+      ],
+      "text": ""
+    },
+    {
+      "file": "03.webp",
+      "emojis": [
+        "👫",
+        "❤️"
+      ],
+      "text": "us"
+    },
+    {
+      "file": "04.webp",
+      "emojis": [
+        "💏",
+        "❤️"
+      ],
+      "text": ""
+    },
+    {
+      "file": "05.webp",
+      "emojis": [
+        "🙌",
+        "💪"
+      ],
+      "text": "team"
+    },
+    {
+      "file": "06.webp",
+      "emojis": [
+        "🥳",
+        "🎉"
+      ],
+      "text": "yay"
+    }
+  ]
+}

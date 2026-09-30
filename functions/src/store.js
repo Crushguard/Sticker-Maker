@@ -2,7 +2,7 @@
 
 const { FieldValue, Timestamp } = require('firebase-admin/firestore');
 const { db } = require('./firebase');
-const { isPending, leaseFree, sameVersion, LEASE_MS } = require('./state');
+const { isPending, leaseFree, sameVersion, LEASE_MS, DROPPED_PACK_FIELDS } = require('./state');
 
 const toMs = (t) => (t && typeof t.toMillis === 'function' ? t.toMillis() : null);
 
@@ -75,7 +75,8 @@ function firestoreStore() {
         const ref = packRef(packId);
         const snap = await tx.get(ref);
         if (!sameVersion(snap.exists ? snap.data() : null, expected)) return false;
-        tx.set(ref, doc, { mergeFields: Object.keys(doc) });
+        const write = { ...doc, ...Object.fromEntries(DROPPED_PACK_FIELDS.map((f) => [f, FieldValue.delete()])) };
+        tx.set(ref, write, { mergeFields: Object.keys(write) });
         return true;
       }),
     mergePack: (packId, fields) => packRef(packId).set(fields, { merge: true }),

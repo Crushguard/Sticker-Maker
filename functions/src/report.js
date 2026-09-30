@@ -4,11 +4,18 @@ function stamp(at) {
   return `${at.toISOString().slice(0, 16).replace('T', ' ')} UTC`;
 }
 
-/** The _report.txt written into a pack folder after every build. */
-function renderReport({ ok, unchanged, name, version, count, animated, category, alsoIn, liveVersion, errors, notes, at }) {
+/**
+ * The _report.txt written into a pack folder after every build. `categories` are the names of the categories its
+ * tags put it in; `parked` is an After Dark pack, which the Google Play build never lists.
+ */
+function renderReport({ ok, parked, unchanged, name, version, count, animated, categories, liveVersion, errors, notes, at }) {
   const lines = [];
-  if (ok) {
-    const where = `in ${category}${alsoIn && alsoIn.length ? ` (also ${alsoIn.join(', ')})` : ''}`;
+  if (parked) {
+    lines.push(`⏸ ${name} is not published: After Dark (18+) packs stay out of the Google Play build. Checked ${stamp(at)}.`);
+  } else if (ok) {
+    const where = categories && categories.length
+      ? `in ${categories.join(', ')}`
+      : 'in no category (no tag names one): it shows in Trending and search';
     const what = `${count} ${animated ? 'animated' : 'static'} sticker${count === 1 ? '' : 's'}`;
     lines.push(
       unchanged

@@ -3,7 +3,8 @@
 const crypto = require('crypto');
 const { COVER_TILES } = require('./config');
 const { isImageName } = require('./library');
-const { parsePackManifest } = require('./manifest');
+const { parsePackManifest, fillEmojis } = require('./manifest');
+const { categoriesOf } = require('./categories');
 const { encodeSticker, firstFramePng, StickerError } = require('./stickers');
 const { makeTray, makeCoverStrip } = require('./images');
 const { makePackZip } = require('./zip');
@@ -37,7 +38,19 @@ function nextVersion(live, published, contentHash) {
 }
 
 function failure(errors, notes) {
-  return { ok: false, errors, notes, unchanged: false, version: null, contentHash: null, animated: false, count: 0, outputs: null, record: null };
+  return {
+    ok: false,
+    errors,
+    notes,
+    unchanged: false,
+    version: null,
+    contentHash: null,
+    animated: false,
+    count: 0,
+    categories: [],
+    outputs: null,
+    record: null,
+  };
 }
 
 /**
@@ -46,16 +59,16 @@ function failure(errors, notes) {
  *
  * @param {object} input
  * @param {string} input.packId
- * @param {string} input.category
  * @param {string} input.folder
+ * @param {string[]} [input.folderTags] tags the folder's place gives it (the category folder of the older layout)
  * @param {{name: string, buffer: Buffer}[]} input.files every file of the folder except pack.json
  * @param {string|null} input.manifestText pack.json, if any
- * @param {Set<string>} input.categoryIds
- * @param {string[]} input.defaultEmojis the category's emoji
- * @param {{version: number, contentHash: string, animated: boolean}|null} input.live the live version, if any
+ * @param {{id: string, tags?: string[], emojis?: string[]}[]} [input.categories] the catalog's categories
+ * @param {{version: number, contentHash: string, animated: boolean|null}|null} input.live the version the pack had,
+ *   if any; animated is null when it isn't live, so its kind no longer binds the new files
  * @param {{version: number, hash: string|null}[]} [input.published] the version folders already in public/
  */
-async function buildPackFromFiles({ packId, category, folder, files, manifestText, categoryIds, defaultEmojis, live, published = [] }) {
+async function buildPackFromFiles({ packId, folder, folderTags = [], files, manifestText, categories = [], live, published = [] }) {
   const notes = [];
   const skipped = files.filter((f) => !isImageName(f.name)).map((f) => f.name);
   if (skipped.length) notes.push(`Skipped files that aren't PNG, WebP or GIF: ${skipped.join(', ')}.`);
@@ -66,19 +79,20 @@ async function buildPackFromFiles({ packId, category, folder, files, manifestTex
     if (file.buffer.length > MAX_INPUT_BYTES) errors.push(`${file.name} is larger than 10 MB.`);
     else images.push(file);
   }
-  const manifest = parsePackManifest(manifestText, images.map((f) => f.name), {
-    folder,
-    category,
-    categoryIds,
-    defaultEmojis,
-  });
+  const manifest = parsePackManifest(manifestText, images.map((f) => f.name), { folder });
   errors.push(...manifest.errors);
   notes.push(...manifest.notes);
   if (errors.length) return failure(errors, notes);
 
+  const tags = [...new Set([...folderTags, ...manifest.tags])];
+  const packCategories = categoriesOf(tags, categories);
+  const firstCategory = categories.find((c) => c.id === packCategories[0]);
+  const filled = fillEmojis(manifest, firstCategory ? firstCategory.emojis : []);
+  if (filled.note) notes.push(filled.note);
+
   const source = new Map(images.map((f) => [f.name, f.buffer]));
   const encoded = [];
-  for (const sticker of manifest.stickers) {
+  for (const sticker of filled.stickers) {
     try {
       const out = await encodeSticker(source.get(sticker.file), { wiggle: manifest.animate === 'wiggle' });
       for (const note of out.notes) notes.push(`${sticker.file}: ${note}.`);
@@ -99,9 +113,9 @@ async function buildPackFromFiles({ packId, category, folder, files, manifestTex
   if (errors.length) return failure(errors, notes);
 
   const animated = kinds.has('animated');
-  const first = manifest.stickers[0].file;
-  if (!manifest.tray) notes.push(`No tray.png: made from ${first}.`);
-  const trayFile = manifest.tray || first;
+  const firstSticker = manifest.stickers[0].file;
+  if (!manifest.tray) notes.push(`No tray.png: made from ${firstSticker}.`);
+  const trayFile = manifest.tray || firstSticker;
   let tray;
   try {
     tray = await makeTray(source.get(trayFile));
@@ -141,10 +155,9 @@ async function buildPackFromFiles({ packId, category, folder, files, manifestTex
   const record = {
     name: manifest.name,
     names: manifest.names,
-    category,
-    alsoIn: manifest.alsoIn,
-    lang: manifest.lang,
-    tags: manifest.tags,
+    langs: manifest.langs,
+    tags,
+    keywords: manifest.keywords,
     order: manifest.order,
     animated,
     count: encoded.length,
@@ -171,6 +184,7 @@ async function buildPackFromFiles({ packId, category, folder, files, manifestTex
     contentHash,
     animated,
     count: encoded.length,
+    categories: packCategories,
     outputs: { coverS, coverL, zip },
     record,
   };

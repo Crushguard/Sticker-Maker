@@ -11,10 +11,8 @@ const pack = (id, extra = {}) => ({
   id,
   name: id,
   names: {},
-  category: 'sorry',
-  alsoIn: [],
-  lang: 'en',
-  tags: [],
+  langs: ['en'],
+  tags: ['sorry'],
   animated: false,
   count: 6,
   version: 1,
@@ -72,51 +70,95 @@ test('a new pack never scores below its own trend', () => {
   assert.deepEqual(ids(ranked), ['viral', 'm']);
 });
 
-test('the catalog lists categories in order with live pack counts including alsoIn', () => {
+const CATEGORIES = [
+  { id: 'sorry', order: 4, icon: 'hand-heart', hue: 20, emojis: ['🥺'], names: { en: 'Sorry' }, keywords: { 'pt-BR': ['desculpa'] } },
+  { id: 'couples', order: 1, icon: 'heart-handshake', hue: 10, emojis: ['💑'], names: { en: 'Couples' }, keywords: {} },
+  { id: 'saudi', order: 11, icon: 'moon-star', hue: 250, emojis: ['☕'], names: { en: 'Saudi & Gulf' }, keywords: {}, tags: ['saudi', 'gulf'] },
+];
+
+test('the catalog lists categories in order with the live packs their tags bring', () => {
   const catalog = assembleCatalog({
     version: 7,
     now: NOW,
-    categories: [
-      { id: 'sorry', order: 4, icon: 'hand-heart', hue: 20, emojis: ['🥺'], names: { en: 'Sorry' }, keywords: { 'pt-BR': ['desculpa'] } },
-      { id: 'couples', order: 1, icon: 'heart-handshake', hue: 10, emojis: ['💑'], names: { en: 'Couples' }, keywords: {} },
-      { id: 'anime', order: 11, icon: 'sparkles', hue: 300, emojis: ['✨'], names: { en: 'Anime' }, keywords: {} },
-    ],
-    packs: [pack('a', { alsoIn: ['couples'] }), pack('b')],
+    categories: CATEGORIES,
+    packs: [pack('a', { tags: ['sorry', 'couples', 'hug'] }), pack('b')],
   });
   assert.equal(catalog.schema, 1);
   assert.equal(catalog.version, 7);
   assert.equal(catalog.publishedAt, NOW.toISOString());
   assert.deepEqual(
     catalog.categories.map((c) => [c.id, c.packs]),
-    [['couples', 1], ['sorry', 2], ['anime', 0]]
+    [['couples', 1], ['sorry', 2], ['saudi', 0]]
   );
   assert.deepEqual(catalog.categories[1], {
-    id: 'sorry', order: 4, icon: 'hand-heart', hue: 20, names: { en: 'Sorry' }, keywords: { 'pt-BR': ['desculpa'] }, packs: 2,
+    id: 'sorry',
+    order: 4,
+    icon: 'hand-heart',
+    hue: 20,
+    names: { en: 'Sorry' },
+    keywords: { 'pt-BR': ['desculpa'] },
+    tags: ['sorry'],
+    packs: 2,
   });
+  assert.deepEqual(catalog.categories[2].tags, ['saudi', 'gulf']);
 });
 
-test('a pack in a folder missing from _categories.json gets a default category', () => {
-  const catalog = assembleCatalog({ version: 1, now: NOW, categories: [], packs: [pack('a', { category: 'love-letters' })] });
-  assert.deepEqual(catalog.categories, [
-    { id: 'love-letters', order: 1000, icon: 'heart', hue: 340, names: { en: 'Love Letters' }, keywords: {}, packs: 1 },
-  ]);
+test("a pack's first category tag is its category; the others are alsoIn", () => {
+  const catalog = assembleCatalog({
+    version: 1,
+    now: NOW,
+    categories: CATEGORIES,
+    packs: [pack('coffee', { tags: ['coffee', 'gulf', 'couples'] }), pack('plain', { tags: ['coffee'] })],
+  });
+  const [coffee, plain] = catalog.packs;
+  assert.deepEqual([coffee.category, coffee.alsoIn], ['saudi', ['couples']]);
+  assert.deepEqual([plain.category, plain.alsoIn], ['', []]);
+});
+
+test('a record built before tags decided categories keeps its folder category and alsoIn', () => {
+  const catalog = assembleCatalog({
+    version: 1,
+    now: NOW,
+    categories: CATEGORIES,
+    packs: [pack('old', { category: 'couples', alsoIn: ['sorry'], lang: 'ar', langs: undefined, tags: ['bunny'] })],
+  });
+  const [old] = catalog.packs;
+  assert.deepEqual([old.category, old.alsoIn, old.lang, old.langs], ['couples', ['sorry'], 'ar', ['ar']]);
+});
+
+test('the catalog carries the search words of the tags and languages its packs use', () => {
+  const vocabulary = {
+    tags: { hug: { en: ['hug'], ar: ['حضن'] }, cat: { en: ['cat'] }, animated: { en: ['animated'], fr: ['animé'] } },
+    languages: { ar: { en: ['arabic'], ar: ['عربي'] }, fr: { en: ['french'] } },
+  };
+  const catalog = assembleCatalog({
+    version: 1,
+    now: NOW,
+    categories: CATEGORIES,
+    packs: [pack('a', { tags: ['sorry', 'hug'], langs: ['ar', 'en', 'fr-CA'], animated: true })],
+    vocabulary,
+  });
+  assert.deepEqual(catalog.tags, { hug: vocabulary.tags.hug, animated: vocabulary.tags.animated });
+  assert.deepEqual(catalog.languages, { ar: vocabulary.languages.ar, 'fr-CA': vocabulary.languages.fr });
+  assert.deepEqual(assembleCatalog({ version: 1, now: NOW, categories: [], packs: [] }).tags, {});
 });
 
 test('a catalog pack carries what the app needs and its public paths', () => {
   const catalog = assembleCatalog({
     version: 1,
     now: NOW,
-    categories: [],
+    categories: CATEGORIES,
     packs: [
       pack('sorry-wiggle', {
         name: 'Sorry Wiggle',
         names: { ar: 'آسف' },
-        alsoIn: ['couples'],
+        langs: ['en', 'ar'],
         animated: true,
         version: 3,
         contentHash: 'a1b2c3d4'.repeat(8),
         zipBytes: 563412,
-        tags: ['Bunny', 'sorry'],
+        tags: ['bunny', 'sorry', 'couples'],
+        keywords: ['forgive me', 'pls'],
         stickers: [{ text: "I'm sorry!" }, { text: 'Forgive me' }, { text: '' }, { text: 'Sorry sorry' }],
         publishedAt: new Date('2026-09-29T14:05:00Z'),
         stats: { adds: 150, adds28d: 20, trend: 5 },
@@ -130,6 +172,8 @@ test('a catalog pack carries what the app needs and its public paths', () => {
     category: 'sorry',
     alsoIn: ['couples'],
     lang: 'en',
+    langs: ['en', 'ar'],
+    tags: ['bunny', 'sorry', 'couples', 'animated'],
     animated: true,
     count: 6,
     version: 3,
@@ -140,13 +184,13 @@ test('a catalog pack carries what the app needs and its public paths', () => {
       tiles: 6,
     },
     zip: { path: 'public/packs/sorry-wiggle/v3-a1b2c3d4/pack.zip', bytes: 563412 },
-    keywords: ['bunny', 'sorry', 'forgive', 'me'],
+    keywords: ['bunny', 'sorry', 'couples', 'animated', 'forgive', 'me', 'pls'],
     publishedAt: '2026-09-29T14:05:00.000Z',
   });
 });
 
-test('keywords are capped at 40', () => {
-  const words = Array.from({ length: 60 }, (_, i) => `word${i}`).join(' ');
+test('keywords are capped at 60', () => {
+  const words = Array.from({ length: 80 }, (_, i) => `word${i}`).join(' ');
   const catalog = assembleCatalog({ version: 1, now: NOW, categories: [], packs: [pack('a', { stickers: [{ text: words }] })] });
-  assert.equal(catalog.packs[0].keywords.length, 40);
+  assert.equal(catalog.packs[0].keywords.length, 60);
 });

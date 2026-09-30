@@ -2,14 +2,9 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { parsePackManifest } = require('../src/manifest');
+const { parsePackManifest, fillEmojis } = require('../src/manifest');
 
-const OPTS = {
-  folder: 'Sorry Wiggle',
-  category: 'sorry',
-  categoryIds: new Set(['sorry', 'couples', 'romantic', 'missyou']),
-  defaultEmojis: ['🥺', '🙏'],
-};
+const OPTS = { folder: 'Sorry Wiggle' };
 const IMAGES = ['10.png', '2.png', '1.png', 'tray.png'];
 
 test('without pack.json every image except the tray is a sticker, in natural order, with defaults', () => {
@@ -18,17 +13,30 @@ test('without pack.json every image except the tray is a sticker, in natural ord
   assert.equal(m.listed, false);
   assert.equal(m.name, 'Sorry Wiggle');
   assert.deepEqual(m.names, {});
-  assert.deepEqual(m.alsoIn, []);
-  assert.equal(m.lang, 'en');
+  assert.deepEqual(m.langs, ['en']);
   assert.deepEqual(m.tags, []);
+  assert.deepEqual(m.keywords, []);
+  assert.deepEqual(m.emojis, []);
+  assert.equal(m.adult, false);
   assert.equal(m.order, 1000);
   assert.equal(m.animate, null);
   assert.equal(m.tray, 'tray.png');
   assert.deepEqual(m.stickers.map((s) => s.file), ['1.png', '2.png', '10.png']);
-  assert.deepEqual(m.stickers[0].emojis, ['🥺', '🙏']);
+  assert.deepEqual(m.stickers[0].emojis, []);
   assert.equal(m.stickers[0].text, '');
   assert.deepEqual(m.cover, ['1.png', '2.png', '10.png']);
-  assert.equal(m.notes.filter((n) => n.includes("category's emoji")).length, 1);
+});
+
+test("fillEmojis gives stickers without emoji the pack's, else the category's, else a heart", () => {
+  const stickers = [{ file: '1.png', emojis: ['😢'], text: '' }, { file: '2.png', emojis: [], text: '' }];
+  const own = fillEmojis({ stickers, emojis: ['🐱', '🥺'] }, ['🥰']);
+  assert.deepEqual(own.stickers.map((s) => s.emojis), [['😢'], ['🐱', '🥺']]);
+  assert.equal(own.note, null);
+  const category = fillEmojis({ stickers, emojis: [] }, ['🥰']);
+  assert.deepEqual(category.stickers[1].emojis, ['🥰']);
+  assert.match(category.note, /category's emoji 🥰/);
+  assert.deepEqual(fillEmojis({ stickers, emojis: [] }, []).stickers[1].emojis, ['❤️']);
+  assert.equal(fillEmojis({ stickers: [stickers[0]], emojis: [] }, []).note, null);
 });
 
 test('malformed pack.json is an error naming the parser message', () => {
@@ -42,13 +50,16 @@ test('pack.json that is not an object is an error', () => {
   assert.match(m.errors[0], /pack\.json must be an object/);
 });
 
-test('name, names, lang, tags, order and animate come from pack.json', () => {
+test('name, names, lang, tags, keywords, emojis, adult, order and animate come from pack.json', () => {
   const m = parsePackManifest(
     JSON.stringify({
       name: '  Sorry, My Love ',
       names: { ar: 'آسف يا حبيبي', fr: '' },
       lang: 'pt-BR',
       tags: ['Pinky', 'pinky', ' apology '],
+      keywords: ['Forgive Me', ' forgive me', '', 7],
+      emojis: ['🥺', 'sorry', '🙏'],
+      adult: true,
       order: 5,
       animate: 'wiggle',
     }),
@@ -58,32 +69,43 @@ test('name, names, lang, tags, order and animate come from pack.json', () => {
   assert.deepEqual(m.errors, []);
   assert.equal(m.name, 'Sorry, My Love');
   assert.deepEqual(m.names, { ar: 'آسف يا حبيبي' });
-  assert.equal(m.lang, 'pt-BR');
+  assert.deepEqual(m.langs, ['pt-BR']);
   assert.deepEqual(m.tags, ['pinky', 'apology']);
+  assert.deepEqual(m.keywords, ['forgive me']);
+  assert.deepEqual(m.emojis, ['🥺', '🙏']);
+  assert.equal(m.adult, true);
   assert.equal(m.order, 5);
   assert.equal(m.animate, 'wiggle');
 });
 
-test('lang "none" marks text-free art and junk lang falls back to en with a note', () => {
-  assert.equal(parsePackManifest('{"lang":"none"}', IMAGES, OPTS).lang, 'none');
+test('lang takes one code, a list or a comma list; "none" marks text-free art', () => {
+  assert.deepEqual(parsePackManifest('{"lang":"none"}', IMAGES, OPTS).langs, ['none']);
+  assert.deepEqual(parsePackManifest('{"lang":["ar","hi","es"]}', IMAGES, OPTS).langs, ['ar', 'hi', 'es']);
+  assert.deepEqual(parsePackManifest('{"lang":"ar, hi,ar"}', IMAGES, OPTS).langs, ['ar', 'hi']);
+  assert.deepEqual(parsePackManifest('{"lang":["multi","fr","it"]}', IMAGES, OPTS).langs, ['multi', 'fr', 'it']);
+  const both = parsePackManifest('{"lang":["none","en"]}', IMAGES, OPTS);
+  assert.deepEqual(both.langs, ['en']);
+  assert.ok(both.notes.some((n) => n.includes('"none"')));
+});
+
+test('junk lang entries are dropped with a note, and no code left means en', () => {
   const m = parsePackManifest('{"lang":"English please"}', IMAGES, OPTS);
-  assert.equal(m.lang, 'en');
+  assert.deepEqual(m.langs, ['en']);
   assert.ok(m.notes.some((n) => n.includes('lang')));
+  const mixed = parsePackManifest('{"lang":["tr", 5]}', IMAGES, OPTS);
+  assert.deepEqual(mixed.langs, ['tr']);
+  assert.ok(mixed.notes.some((n) => n.includes('"5"')));
+});
+
+test('an adult flag that is not a boolean is ignored with a note', () => {
+  const m = parsePackManifest('{"adult":"yes"}', IMAGES, OPTS);
+  assert.equal(m.adult, false);
+  assert.ok(m.notes.some((n) => n.includes('adult')));
 });
 
 test('a name longer than 128 characters is an error', () => {
   const m = parsePackManifest(JSON.stringify({ name: 'x'.repeat(129) }), IMAGES, OPTS);
   assert.ok(m.errors.some((e) => e.includes('128')));
-});
-
-test('alsoIn keeps at most two known categories other than its own', () => {
-  const m = parsePackManifest(
-    JSON.stringify({ alsoIn: ['sorry', 'couples', 'nope', 'romantic', 'missyou'] }),
-    IMAGES,
-    OPTS
-  );
-  assert.deepEqual(m.alsoIn, ['couples', 'romantic']);
-  assert.ok(m.notes.some((n) => n.includes('nope')));
 });
 
 test('unknown animate values are ignored with a note', () => {
@@ -109,7 +131,7 @@ test('a stickers array lists exactly the pack, in its order, with emojis and tex
   assert.deepEqual(m.stickers.map((s) => s.file), ['10.png', '1.png', '2.png']);
   assert.deepEqual(m.stickers[0], { file: '10.png', emojis: ['😢'], text: 'Forgive me' });
   assert.deepEqual(m.stickers[1].emojis, ['🥺', '💔', '🙏']);
-  assert.deepEqual(m.stickers[2].emojis, ['🥺', '🙏']);
+  assert.deepEqual(m.stickers[2].emojis, []);
 });
 
 test('a listed file that is missing is an error and unlisted images are noted', () => {

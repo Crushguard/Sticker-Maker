@@ -5,6 +5,7 @@ const zlib = require('zlib');
 const { BUCKET, PUBLIC_PREFIX, publicCatalogPath } = require('./config');
 const { assembleCatalog } = require('./catalog');
 const { db, bucket, savePublic } = require('./firebase');
+const { TAGS_DOC } = require('./tagsTask');
 
 const KEEP_CATALOG_VERSIONS = 3;
 
@@ -33,26 +34,33 @@ async function deleteOldCatalogs(version) {
 
 /**
  * Writes public/catalog/v<k>.json.gz and points catalog/meta at it. Nothing changes when the catalog's content
- * is identical to the live one, so phones never re-download an unchanged catalog.
+ * is identical to the live one, so phones never re-download an unchanged catalog, unless the live file is gone
+ * from public/ (a wiped folder): then it is published again as a new version.
  */
 async function runPublish({ now = new Date(), urlOverride = '' } = {}) {
   const metaRef = db().doc('catalog/meta');
-  const [categoriesSnap, packsSnap, metaSnap] = await Promise.all([
+  const [categoriesSnap, packsSnap, metaSnap, tagsSnap] = await Promise.all([
     db().collection('categories').get(),
     db().collection('packs').where('status', '==', 'live').get(),
     metaRef.get(),
+    db().doc(TAGS_DOC).get(),
   ]);
   const meta = metaSnap.exists ? metaSnap.data() : null;
   const categories = categoriesSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
   const packs = packsSnap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((p) => p.hidden !== true);
+  const vocabulary = tagsSnap.exists ? tagsSnap.data() : {};
   const version = (meta ? meta.version : 0) + 1;
-  const catalog = assembleCatalog({ version, now, categories, packs });
+  const catalog = assembleCatalog({ version, now, categories, packs, vocabulary });
   const template = urlTemplate(urlOverride);
+  const { categories: catalogCategories, packs: catalogPacks, tags, languages } = catalog;
   const contentHash = crypto
     .createHash('sha256')
-    .update(JSON.stringify({ categories: catalog.categories, packs: catalog.packs, template }))
+    .update(JSON.stringify({ categories: catalogCategories, packs: catalogPacks, tags, languages, template }))
     .digest('hex');
-  if (meta && meta.contentHash === contentHash) return { outcome: 'unchanged', version: meta.version };
+  if (meta && meta.contentHash === contentHash) {
+    const [exists] = await bucket().file(meta.path).exists();
+    if (exists) return { outcome: 'unchanged', version: meta.version };
+  }
 
   const gz = zlib.gzipSync(Buffer.from(JSON.stringify(catalog), 'utf8'), { level: 9 });
   const path = publicCatalogPath(version);

@@ -8,7 +8,7 @@
 
 const { handleLibraryEvent } = require('../src/events');
 const { runBuildTask } = require('../src/buildTask');
-const { isPending, leaseFree, sameVersion, LEASE_MS } = require('../src/state');
+const { isPending, leaseFree, sameVersion, LEASE_MS, DROPPED_PACK_FIELDS } = require('../src/state');
 const { BUILD_RETRY } = require('../src/config');
 
 const T0 = Date.UTC(2026, 8, 29, 12, 0, 0);
@@ -72,7 +72,9 @@ function memoryStore(categories = CATEGORIES) {
     },
     commitPack: async (id, expected, record) => {
       if (!sameVersion(packs.get(id) ?? null, expected)) return false;
-      packs.set(id, { ...packs.get(id), ...structuredClone(record) });
+      const next = { ...packs.get(id), ...structuredClone(record) };
+      for (const field of DROPPED_PACK_FIELDS) delete next[field];
+      packs.set(id, next);
       return true;
     },
     mergePack: async (id, fields) => {
@@ -92,6 +94,7 @@ class World {
     this.usedIds = new Set();
     this.publishes = 0;
     this.syncs = 0;
+    this.tagSyncs = 0;
     /** Every build attempt: { id, folder, quiet, retryCount, outcome } or { …, error }. */
     this.runs = [];
     this.generation = 0;
@@ -124,6 +127,9 @@ class World {
       }),
       syncCategories: async () => {
         this.syncs += 1;
+      },
+      syncTags: async () => {
+        this.tagSyncs += 1;
       },
     };
   }
@@ -185,7 +191,7 @@ class World {
 
   // ---- Build queue ----
 
-  enqueueBuild({ category, folder, quiet = false, delaySeconds = 0, id }) {
+  enqueueBuild({ category = null, folder, quiet = false, delaySeconds = 0, id }) {
     const taskId = id || `task-${this.usedIds.size + 1}`;
     // Cloud Tasks refuses an id it has seen; queue.js reports that as "not enqueued".
     if (this.usedIds.has(taskId)) return false;

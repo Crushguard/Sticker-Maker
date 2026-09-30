@@ -14,7 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
-const { listLocalPacks, uploadPack, uploadCategories, waitForReport, storageBucket } = require('./upload');
+const { listLocalPacks, packPrefix, packName, uploadPack, uploadSharedFiles, waitForReport, storageBucket } = require('./upload');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const LIBRARY = path.join(ROOT, 'library');
@@ -47,7 +47,7 @@ async function main() {
     console.log(`test add counts from design/catalog.json for ${design.packs.length} packs`);
   }
 
-  await uploadCategories(bucket, path.join(LIBRARY, '_categories.json'), {});
+  await uploadSharedFiles(bucket, LIBRARY, {});
   // One file at a time, one pack at a time: each upload event runs a Functions emulator worker, and a burst of
   // them exhausts a small machine (workers die with EPIPE). The fast path builds each pack as its pack.json lands.
   for (const pack of packs) {
@@ -55,7 +55,7 @@ async function main() {
     const { prefix, counts } = await uploadPack(bucket, pack, { concurrency: 1 });
     const report = await waitForReport(bucket, prefix, since, 120000);
     console.log(
-      `${pack.category}/${pack.folder}: ${Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(', ')} — ` +
+      `${packName(pack)}: ${Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(', ')} — ` +
         (report ? report.split('\n')[0] : 'no report after 120 s')
     );
   }
@@ -82,7 +82,7 @@ async function main() {
   }
   const failed = [];
   for (const pack of packs) {
-    const report = bucket.file(`library/${pack.category}/${pack.folder}/_report.txt`);
+    const report = bucket.file(`${packPrefix(pack)}_report.txt`);
     const [exists] = await report.exists();
     failed.push(`${pack.folder}: ${exists ? (await report.download())[0].toString('utf8').split('\n')[0] : 'no report'}`);
   }

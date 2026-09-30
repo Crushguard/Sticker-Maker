@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { parseCategoriesFile } = require('../src/categories');
+const { parseCategoriesFile, categoriesOf, categoryTags } = require('../src/categories');
 
 test('categories are read with their fields and defaults', () => {
   const { errors, categories } = parseCategoriesFile(
@@ -16,6 +16,7 @@ test('categories are read with their fields and defaults', () => {
           emojis: ['💑', '❤️'],
           names: { en: 'Couples', ar: 'الأزواج' },
           keywords: { 'pt-BR': ['namorados', ' '] },
+          tags: ['Couple', ' ', 'couples'],
         },
         { id: 'missyou', names: { en: 'Miss you' } },
       ],
@@ -30,6 +31,7 @@ test('categories are read with their fields and defaults', () => {
     emojis: ['💑', '❤️'],
     names: { en: 'Couples', ar: 'الأزواج' },
     keywords: { 'pt-BR': ['namorados'] },
+    tags: ['couples', 'couple'],
   });
   assert.deepEqual(categories[1], {
     id: 'missyou',
@@ -39,7 +41,24 @@ test('categories are read with their fields and defaults', () => {
     emojis: ['❤️'],
     names: { en: 'Miss you' },
     keywords: {},
+    tags: ['missyou'],
   });
+});
+
+test("a category's tags are its id plus the ones it lists", () => {
+  assert.deepEqual(categoryTags({ id: 'saudi' }), ['saudi']);
+  assert.deepEqual(categoryTags({ id: 'saudi', tags: ['gulf', 'saudi', 'Khaleeji'] }), ['saudi', 'gulf', 'khaleeji']);
+});
+
+test("a pack is in every category one of its tags names, in the order of its tags", () => {
+  const categories = [
+    { id: 'cute', tags: ['cute'] },
+    { id: 'funny' },
+    { id: 'saudi', tags: ['gulf'] },
+  ];
+  assert.deepEqual(categoriesOf(['cat', 'funny', 'cute', 'funny'], categories), ['funny', 'cute']);
+  assert.deepEqual(categoriesOf(['gulf', 'coffee'], categories), ['saudi']);
+  assert.deepEqual(categoriesOf(['coffee'], categories), []);
 });
 
 test('malformed JSON is an error', () => {

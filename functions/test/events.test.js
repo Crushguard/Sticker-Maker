@@ -6,7 +6,7 @@ const { World } = require('./fakes');
 const { handleLibraryEvent } = require('../src/events');
 const { folderKey } = require('../src/library');
 
-const PACK = 'library/sorry/Sorry Wiggle/';
+const PACK = 'library/Sorry Wiggle/';
 const ID = 'sorry-wiggle';
 const png = Buffer.from('png');
 const listing = Buffer.from(JSON.stringify({ stickers: [{ file: '01.png' }, { file: '02.png' }, { file: '03.png' }] }));
@@ -18,6 +18,15 @@ test('the categories file syncs categories and nothing else', async () => {
   const world = new World();
   await world.upload('library/_categories.json', Buffer.from('{}'));
   assert.equal(world.syncs, 1);
+  assert.deepEqual(world.queue, []);
+});
+
+test('the tags file syncs the tag search words and nothing else; deleting it changes nothing', async () => {
+  const world = new World();
+  await world.upload('library/_tags.json', Buffer.from('{}'));
+  await handleLibraryEvent('library/_tags.json', 'deleted', world.nowMs, world.deps);
+  assert.equal(world.tagSyncs, 1);
+  assert.equal(world.syncs, 0);
   assert.deepEqual(world.queue, []);
 });
 
@@ -48,7 +57,7 @@ test('an upload without a listing pack.json schedules only the quiet build', asy
   await world.upload(`${PACK}02.png`, png);
   const [only, ...rest] = builds(world);
   assert.deepEqual(rest, []);
-  assert.equal(only.category, 'sorry');
+  assert.equal(only.category, null);
   assert.equal(only.folder, 'Sorry Wiggle');
   assert.equal(only.delaySeconds, 45);
   assert.equal(only.quiet, true);
@@ -99,7 +108,7 @@ test('every pack event records when it happened in its folder', async () => {
   await world.upload(`${PACK}_report.txt`, Buffer.from('report'));
   await world.upload('library/_categories.json', Buffer.from('{}'));
   assert.deepEqual(folderState(world), {
-    category: 'sorry',
+    category: null,
     folder: 'Sorry Wiggle',
     lastEventMs: first,
     pending: true,
@@ -123,7 +132,7 @@ test('two folders that give the same pack id each get their own quiet build', as
   const other = 'library/cute/Sorry Wiggle/';
   await world.remove(`${PACK}01.png`);
   await world.upload(`${other}01.png`, png);
-  assert.deepEqual(builds(world).map((b) => [b.category, b.quiet]), [['sorry', true], ['cute', true]]);
+  assert.deepEqual(builds(world).map((b) => [b.category, b.quiet]), [[null, true], ['cute', true]]);
   assert.equal(folderState(world).pending, true);
   assert.equal(folderState(world, other).pending, true);
 });

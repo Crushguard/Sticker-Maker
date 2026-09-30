@@ -29,15 +29,22 @@ class CatalogFileTest {
           ],
           "packs": [
             { "id": "sorry-wiggle", "name": "Sorry Wiggle", "names": { "ar": "آسف" }, "category": "sorry",
-              "alsoIn": ["couples"], "lang": "en", "animated": true, "count": 6, "version": 3, "adds": 150,
+              "alsoIn": ["couples"], "lang": "en", "langs": ["en", "ar"], "tags": ["sorry", "bunny", "unknown"],
+              "animated": true, "count": 6, "version": 3, "adds": 150,
               "cover": { "s": "public/packs/sorry-wiggle/v3/cover-s.webp", "l": "public/packs/sorry-wiggle/v3/cover-l.webp", "tiles": 6 },
               "zip": { "path": "public/packs/sorry-wiggle/v3/pack.zip", "bytes": 563412 },
-              "keywords": ["sorry", "forgive"], "publishedAt": "2026-09-29T14:05:00.000Z", "somethingNew": true },
+              "keywords": ["sorry", "forgive", "bunny"], "publishedAt": "2026-09-29T14:05:00.000Z", "somethingNew": true },
             { "id": "no-zip", "name": "Broken", "category": "sorry", "count": 3, "version": 1 },
             { "id": "sorry-love", "name": "Sorry, My Love", "category": "sorry", "lang": "none", "count": 18, "version": 1,
               "cover": { "s": "public/packs/sorry-love/v1/cover-s.webp", "l": "public/packs/sorry-love/v1/cover-l.webp", "tiles": 6 },
               "zip": { "path": "public/packs/sorry-love/v1/pack.zip", "bytes": 504000 } }
-          ]
+          ],
+          "tags": {
+            "bunny": { "en": ["bunny", "rabbit"], "ar": ["أرنب"], "fr": ["lapin"] },
+            "sorry": { "en": ["sorry"], "ar": ["آسف", "اسف"] },
+            "cat": { "en": ["cat"] }
+          },
+          "languages": { "ar": { "en": ["arabic"], "ar": ["عربي"] } }
         }
     """.trimIndent()
 
@@ -65,7 +72,7 @@ class CatalogFileTest {
         assertEquals(mapOf("ar" to "آسف"), pack.names)
         assertEquals("sorry", pack.category)
         assertEquals(listOf("couples"), pack.alsoIn)
-        assertEquals("en", pack.lang)
+        assertEquals(listOf("en", "ar"), pack.langs)
         assertTrue(pack.animated)
         assertEquals(6, pack.stickerCount)
         assertEquals(3, pack.version)
@@ -77,13 +84,25 @@ class CatalogFileTest {
         assertEquals(6, pack.coverTiles)
         assertEquals("https://cdn.example.com/public/packs/sorry-wiggle/v3/pack.zip", pack.zipUrl)
         assertEquals(563412L, pack.zipBytes)
-        assertEquals(listOf("sorry", "forgive"), pack.keywords)
+        assertEquals(
+            listOf("sorry", "forgive", "bunny", "آسف", "اسف", "rabbit", "أرنب", "lapin", "arabic", "عربي"),
+            pack.keywords,
+        )
+    }
+
+    @Test
+    fun aCatalogWithoutWordsOrLanguageListsStillReads() {
+        val old = """{ "version": 3, "packs": [ { "id": "a", "name": "A", "lang": "tr", "keywords": ["x"],
+            "tags": ["bunny"], "zip": { "path": "public/packs/a/v1/pack.zip" } } ] }"""
+        val pack = CatalogFile.parse(old, urls).packs.single()
+        assertEquals(listOf("tr"), pack.langs)
+        assertEquals(listOf("x"), pack.keywords)
     }
 
     @Test
     fun missingOptionalFieldsFallBackToDefaults() {
         val pack = CatalogFile.parse(json, urls).packs[1]
-        assertEquals("none", pack.lang)
+        assertEquals(listOf("none"), pack.langs)
         assertEquals(emptyList<String>(), pack.alsoIn)
         assertEquals(0L, pack.downloads)
         assertEquals(1, pack.order)

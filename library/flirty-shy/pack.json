@@ -1,0 +1,110 @@
+{
+  "name": "Flirty & Shy",
+  "lang": [
+    "en"
+  ],
+  "tags": [
+    "flirty",
+    "cute",
+    "bunny",
+    "shy",
+    "flirt",
+    "tease",
+    "compliment"
+  ],
+  "emojis": [
+    "🐰",
+    "😳"
+  ],
+  "order": 8,
+  "stickers": [
+    {
+      "file": "01.webp",
+      "emojis": [
+        "😉",
+        "👋"
+      ],
+      "text": "HEY U"
+    },
+    {
+      "file": "02.webp",
+      "emojis": [
+        "🙈",
+        "😳"
+      ],
+      "text": "STOP IT"
+    },
+    {
+      "file": "03.webp",
+      "emojis": [
+        "😊",
+        "💗"
+      ],
+      "text": "HEHE"
+    },
+    {
+      "file": "04.webp",
+      "emojis": [
+        "😏",
+        "👉"
+      ],
+      "text": "CUTE?"
+    },
+    {
+      "file": "05.webp",
+      "emojis": [
+        "🥺",
+        "💋"
+      ],
+      "text": "NOTICE ME"
+    },
+    {
+      "file": "06.webp",
+      "emojis": [
+        "😍",
+        "✨"
+      ],
+      "text": "WOW"
+    },
+    {
+      "file": "07.webp",
+      "emojis": [
+        "🌹",
+        "🥰"
+      ],
+      "text": "for u"
+    },
+    {
+      "file": "08.webp",
+      "emojis": [
+        "👉",
+        "😳"
+      ],
+      "text": ""
+    },
+    {
+      "file": "09.webp",
+      "emojis": [
+        "🤗",
+        "💕"
+      ],
+      "text": ""
+    },
+    {
+      "file": "10.webp",
+      "emojis": [
+        "😏",
+        "💘"
+      ],
+      "text": "date?"
+    },
+    {
+      "file": "11.webp",
+      "emojis": [
+        "😳",
+        "💥"
+      ],
+      "text": "omg"
+    }
+  ]
+}

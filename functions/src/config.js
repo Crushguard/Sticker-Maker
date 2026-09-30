@@ -10,7 +10,7 @@ const BUCKET = `${PROJECT_ID}-stickermaker`;
 const DATABASE = 'stickermaker';
 const REGION = 'us-central1';
 
-/** Private sources: library/<category>/<Pack Name>/… */
+/** Private sources: library/<Pack Name>/… plus _categories.json and _tags.json. */
 const LIBRARY_PREFIX = 'library/';
 /** Generated, publicly readable files. */
 const PUBLIC_PREFIX = 'public/';
