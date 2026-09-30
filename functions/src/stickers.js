@@ -20,6 +20,10 @@ const WIGGLE_POSES = [
   { angle: -1.8, dx: 0, dy: -5 },
 ];
 const WIGGLE_MARGIN = 16;
+/** The chunks that make up a WebP's image; any other chunk is metadata. */
+const IMAGE_CHUNKS = new Set(['VP8X', 'ICCP', 'ANIM', 'ANMF', 'ALPH', 'VP8 ', 'VP8L']);
+/** VP8X flag bits announcing EXIF and XMP chunks. */
+const VP8X_EXIF_XMP = 0x08 | 0x04;
 
 const sum = (list) => list.reduce((a, b) => a + b, 0);
 
@@ -40,6 +44,29 @@ async function probe(buf) {
     loop: m.loop || 0,
     bytes: buf.length,
   };
+}
+
+/**
+ * The WebP without its metadata chunks: C2PA content credentials, EXIF, XMP and anything unknown. WhatsApp silently
+ * refuses stickers carrying a C2PA chunk (AI image and video tools write one): its add sheet shows no stickers and
+ * the pack never arrives. The image chunks stay byte for byte.
+ */
+function withoutMetadata(buf) {
+  if (buf.length < 20 || buf.toString('latin1', 0, 4) !== 'RIFF' || buf.toString('latin1', 8, 12) !== 'WEBP') return buf;
+  const kept = [];
+  let dropped = false;
+  for (let i = 12; i + 8 <= buf.length; ) {
+    const size = buf.readUInt32LE(i + 4);
+    const end = Math.min(buf.length, i + 8 + size + (size & 1));
+    if (IMAGE_CHUNKS.has(buf.toString('latin1', i, i + 4))) kept.push(buf.subarray(i, end));
+    else dropped = true;
+    i = end;
+  }
+  if (!dropped) return buf;
+  const out = Buffer.concat([buf.subarray(0, 12), ...kept]);
+  out.writeUInt32LE(out.length - 8, 4);
+  if (out.toString('latin1', 12, 16) === 'VP8X') out[20] &= ~VP8X_EXIF_XMP;
+  return out;
 }
 
 /** Already exactly what WhatsApp takes: shipped untouched, so no quality is lost. */
@@ -135,10 +162,6 @@ async function wiggle(buf) {
   return buffer;
 }
 
-/**
- * One sticker to WhatsApp's rules. Ready art passes through byte for byte; everything else is fitted into
- * 512×512 on transparency and encoded at the best quality that fits.
- */
 /** The last word on a re-encoded sticker: it must meet WhatsApp's rules as written, whatever the encoder did. */
 async function assertWhatsAppReady(buffer) {
   const p = await probe(buffer);
@@ -150,7 +173,16 @@ async function assertWhatsAppReady(buffer) {
   throw new StickerError(`the encoded sticker breaks WhatsApp's rules (${p.width}×${p.height}, ${p.bytes} bytes)`);
 }
 
-async function encodeSticker(buf, { wiggle: wiggleIt = false } = {}) {
+/**
+ * One sticker to WhatsApp's rules. Ready art passes through with its image byte for byte; everything else is fitted
+ * into 512×512 on transparency and encoded at the best quality that fits. Metadata chunks never ship.
+ */
+async function encodeSticker(buf, options = {}) {
+  const out = await encode(buf, options);
+  return { ...out, buffer: withoutMetadata(out.buffer) };
+}
+
+async function encode(buf, { wiggle: wiggleIt = false } = {}) {
   const p = await probe(buf);
   const notes = [];
   if (wiggleIt && p.pages === 1) {
@@ -173,4 +205,4 @@ async function encodeSticker(buf, { wiggle: wiggleIt = false } = {}) {
   return { buffer, animated: false, passthrough: false, quality, lossless, notes };
 }
 
-module.exports = { probe, isWhatsAppReady, encodeSticker, wiggle, firstFramePng, StickerError };
+module.exports = { probe, isWhatsAppReady, encodeSticker, withoutMetadata, wiggle, firstFramePng, StickerError };

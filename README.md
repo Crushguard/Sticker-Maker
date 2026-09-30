@@ -147,6 +147,12 @@ library/                        (bucket play-console-f33dd-stickermaker, private
 - **Take a pack down:** delete its folder, or set `hidden: true` on `packs/<id>` in the Firestore
   console. **Pin** one to the top with `pin: 1` (2, 3…). A pack that comes back after its removal
   is a new pack with the next version number.
+- **Metadata never ships:** stickers keep their image byte for byte, but the build drops metadata
+  chunks (EXIF, XMP, and the C2PA content credentials AI image and video tools embed). WhatsApp
+  silently refuses stickers carrying C2PA: its add sheet shows no stickers and the pack never
+  arrives.
+- **After a pipeline change:** builds only run when a folder changes, so rebuild every pack with
+  `node scripts/library/upload.js <folder> --rebuild` (it uploads each `pack.json` again).
 - **public/ repairs itself:** a build that finds its pack's published files missing writes them
   again, and a publish that finds the live catalog file missing publishes a new one. Deleting
   `public/` is safe; the next upload restores what the catalog needs.

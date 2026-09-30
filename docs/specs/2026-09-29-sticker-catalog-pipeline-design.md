@@ -242,6 +242,11 @@ tray ≤ 50 KB; the pack id is not used by another folder that still has files.
   goes up, and it counts as new for ranking.
 - Records written before tags decided categories carry `category`, `alsoIn` and `lang`; the catalog still reads them
   as tags until the pack's next build drops them.
+- Metadata never ships (2026-09-30): every sticker loses its metadata chunks (EXIF, XMP, C2PA content credentials,
+  unknown chunks); the image chunks stay byte for byte. Found on a device: WhatsApp's add sheet showed no stickers for
+  any pack of the Claude Design export, whose every sticker carries a C2PA chunk (written by the AI image and video
+  tools); the same packs without it showed and added normally. `upload.js --rebuild` rebuilds every pack after such a
+  pipeline change.
 - Self-repair: an unchanged pack whose version files are missing from `public/` has them written again (same bytes,
   same path); a publish whose catalog is unchanged but whose live catalog file is missing publishes a new version. A
   wiped `public/` is back as soon as each pack builds again.

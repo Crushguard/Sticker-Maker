@@ -33,6 +33,50 @@ test('a WhatsApp-ready animated WebP ships byte for byte', async () => {
   assert.ok(out.buffer.equals(ready));
 });
 
+/** A WebP's top-level chunks as [tag, bytes] pairs. */
+function chunks(webp) {
+  const out = [];
+  for (let i = 12; i + 8 <= webp.length; ) {
+    const size = webp.readUInt32LE(i + 4);
+    const end = i + 8 + size + (size & 1);
+    out.push([webp.toString('latin1', i, i + 4), webp.subarray(i, end)]);
+    i = end;
+  }
+  return out;
+}
+
+/** The WebP with extra chunks appended and its RIFF size (and VP8X flags) updated, as metadata tools write them. */
+function withChunks(webp, extra, flags = 0) {
+  const parts = extra.map(([tag, body]) => {
+    const head = Buffer.alloc(8);
+    head.write(tag, 0, 'latin1');
+    head.writeUInt32LE(body.length, 4);
+    return Buffer.concat([head, body, Buffer.alloc(body.length & 1)]);
+  });
+  const out = Buffer.concat([webp, ...parts]);
+  out.writeUInt32LE(out.length - 8, 4);
+  if (flags) out[20] |= flags;
+  return out;
+}
+
+test('metadata chunks (C2PA content credentials, EXIF, XMP, unknown) are dropped; the image ships byte for byte', async () => {
+  const ready = await sharp(await shapePng()).webp({ quality: 90 }).toBuffer();
+  assert.equal(chunks(ready)[0][0], 'VP8X', 'an extended WebP, as art with transparency is');
+  const tagged = withChunks(ready, [['C2PA', Buffer.alloc(301, 7)], ['EXIF', Buffer.from('Exif..')], ['XMP ', Buffer.from('<x/>')], ['ABCD', Buffer.alloc(3)]], 0x08 | 0x04);
+  const out = await encodeSticker(tagged, {});
+  assert.equal(out.passthrough, true);
+  assert.deepEqual(chunks(out.buffer).map(([tag]) => tag), chunks(ready).map(([tag]) => tag));
+  assert.ok(out.buffer.equals(ready), 'the image chunks and the VP8X flags are back to the untagged file');
+  assert.equal(out.buffer.readUInt32LE(4), out.buffer.length - 8);
+});
+
+test('an animated sticker loses its trailing C2PA chunk and keeps every frame', async () => {
+  const ready = await animated();
+  const out = await encodeSticker(withChunks(ready, [['C2PA', Buffer.alloc(5759, 1)]]), {});
+  assert.equal(out.animated, true);
+  assert.ok(out.buffer.equals(ready));
+});
+
 test('a PNG becomes a lossless 512 WebP when that fits', async () => {
   const out = await encodeSticker(await shapePng(), {});
   assert.equal(out.passthrough, false);

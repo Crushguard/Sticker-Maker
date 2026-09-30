@@ -7,12 +7,14 @@
  * Design export, is a library too.
  *
  * Usage:
- *   node scripts/library/upload.js <libraryDir> [--pack <folder>] [--wait] [--dry-run]
+ *   node scripts/library/upload.js <libraryDir> [--pack <folder>] [--rebuild] [--wait] [--dry-run]
  *                                   [--bucket <name>] [--project <id>] [--emulator]
  *
  * Credentials: Application Default Credentials (gcloud auth application-default login). With --emulator (or
  * FIREBASE_STORAGE_EMULATOR_HOST set) it talks to the local Storage emulator instead.
  * --wait prints each pack's _report.txt once the build has written it.
+ * --rebuild uploads every pack.json again even when it is unchanged, so every pack builds again: after a change to
+ * the pipeline itself (the builds only run when a folder changes).
  */
 'use strict';
 
@@ -82,10 +84,10 @@ function storageBucket({ project, bucketName }) {
   return getStorage(app).bucket(bucketName);
 }
 
-async function uploadFile(bucket, localPath, remotePath, { dryRun }) {
+async function uploadFile(bucket, localPath, remotePath, { dryRun, force = false }) {
   const file = bucket.file(remotePath);
   const [exists] = await file.exists();
-  if (exists) {
+  if (exists && !force) {
     const [meta] = await file.getMetadata();
     if (meta.md5Hash === md5(localPath)) return 'unchanged';
   }
@@ -112,7 +114,8 @@ async function uploadPack(bucket, pack, options) {
     uploadFile(bucket, path.join(pack.dir, f), prefix + f, options)
   );
   if (pack.files.includes('pack.json')) {
-    outcomes.push(await uploadFile(bucket, path.join(pack.dir, 'pack.json'), `${prefix}pack.json`, options));
+    const again = { ...options, force: !!options.rebuild };
+    outcomes.push(await uploadFile(bucket, path.join(pack.dir, 'pack.json'), `${prefix}pack.json`, again));
   }
   const counts = {};
   for (const o of outcomes) counts[o] = (counts[o] || 0) + 1;
@@ -163,14 +166,14 @@ async function uploadSharedFiles(bucket, libraryDir, options) {
 async function main() {
   const libraryDir = process.argv[2];
   if (!libraryDir || libraryDir.startsWith('--') || !fs.existsSync(libraryDir)) {
-    console.error('usage: upload.js <libraryDir> [--pack <folder>] [--wait] [--dry-run] [--bucket name] [--project id] [--emulator]');
+    console.error('usage: upload.js <libraryDir> [--pack <folder>] [--rebuild] [--wait] [--dry-run] [--bucket name] [--project id] [--emulator]');
     process.exit(2);
   }
   const project = arg('--project', DEFAULT_PROJECT);
   if (process.argv.includes('--emulator') && !process.env.FIREBASE_STORAGE_EMULATOR_HOST) {
     process.env.FIREBASE_STORAGE_EMULATOR_HOST = '127.0.0.1:9199';
   }
-  const options = { dryRun: process.argv.includes('--dry-run') };
+  const options = { dryRun: process.argv.includes('--dry-run'), rebuild: process.argv.includes('--rebuild') };
   const bucket = storageBucket({ project, bucketName: arg('--bucket', `${project}-stickermaker`) });
   const only = arg('--pack', null);
   const startedMs = Date.now() - 5000;
