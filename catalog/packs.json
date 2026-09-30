@@ -1,7 +1,7 @@
 {
   "_about": "The reviewed metadata of every catalog pack, by pack id (= its folder name). scripts/library/prepare.js writes each into its folder's pack.json. Tags: category ids first (they decide the Home categories), then what the pack shows and is for; every tag has search words in library/_tags.json.",
   "generated": "2026-09-30",
-  "source": "Claude Design: the Stickers page manifest (packs.json: theme, lang, adult), Pack Ideas (moods, characters, sticker lines) and the WhatsApp export of 2026-09-30 (120 folders).",
+  "source": "Claude Design: the Stickers page manifest (packs.json: theme, lang, adult), Pack Ideas (moods, characters, sticker lines) and the WhatsApp export of 2026-09-30 (120 folders; animated variants are packs of their own).",
   "packs": {
     "clingy-mango": {
       "name": "Clingy Mango",
@@ -430,7 +430,7 @@
       "order": 6
     },
     "clingy-mango-animated": {
-      "name": "Clingy Mango (Animated)",
+      "name": "Clingy Mango",
       "lang": [
         "en"
       ],
@@ -677,7 +677,7 @@
       "order": 10
     },
     "fragile-baby-animated": {
-      "name": "Fragile Baby (Animated)",
+      "name": "Fragile Baby",
       "lang": [
         "en"
       ],
@@ -895,7 +895,7 @@
       "order": 14
     },
     "sad-hours-animated": {
-      "name": "Sad Hours (Animated)",
+      "name": "Sad Hours",
       "lang": [
         "en"
       ],
@@ -1141,7 +1141,7 @@
       "order": 18
     },
     "blue-ticks-animated": {
-      "name": "Blue Ticks (Animated)",
+      "name": "Blue Ticks",
       "lang": [
         "en"
       ],
@@ -1322,7 +1322,7 @@
       "order": 22
     },
     "mango-moves-animated": {
-      "name": "Mango Moves (Animated)",
+      "name": "Mango Moves",
       "lang": [
         "en"
       ],
@@ -1526,7 +1526,7 @@
       "order": 26
     },
     "delulu-animated": {
-      "name": "Delulu in Love (Animated)",
+      "name": "Delulu in Love",
       "lang": [
         "en"
       ],
@@ -1750,7 +1750,7 @@
       }
     },
     "did-you-eat-animated": {
-      "name": "Did You Eat? (Animated)",
+      "name": "Did You Eat?",
       "lang": [
         "en"
       ],
@@ -1928,7 +1928,7 @@
       }
     },
     "sorry-love-animated": {
-      "name": "Sorry, My Love (Animated)",
+      "name": "Sorry, My Love",
       "lang": [
         "en"
       ],
@@ -2138,7 +2138,7 @@
       }
     },
     "heartbeat-animated": {
-      "name": "Heartbeat (Animated)",
+      "name": "Heartbeat",
       "lang": [
         "en"
       ],
@@ -2339,7 +2339,7 @@
       }
     },
     "capy-calm-animated": {
-      "name": "Capy Calm (Animated)",
+      "name": "Capy Calm",
       "lang": [
         "en"
       ],
@@ -2516,7 +2516,7 @@
       }
     },
     "bunny-bounce-animated": {
-      "name": "Bunny Bounce (Animated)",
+      "name": "Bunny Bounce",
       "lang": [
         "en"
       ],
@@ -2707,7 +2707,7 @@
       }
     },
     "caught-web-animated": {
-      "name": "Caught in Your Web (Animated)",
+      "name": "Caught in Your Web",
       "lang": [
         "en"
       ],
@@ -2837,7 +2837,7 @@
       "order": 54
     },
     "one-night-animated": {
-      "name": "One Night (Animated)",
+      "name": "One Night",
       "lang": [
         "en"
       ],
@@ -2971,7 +2971,7 @@
       "order": 58
     },
     "dr-love-animated": {
-      "name": "Dr. Love (Animated)",
+      "name": "Dr. Love",
       "lang": [
         "en"
       ],
@@ -3108,7 +3108,7 @@
       "order": 62
     },
     "sorry-wiggle-animated": {
-      "name": "Sorry Wiggle (Animated)",
+      "name": "Sorry Wiggle",
       "lang": [
         "en"
       ],
@@ -3262,7 +3262,7 @@
       "order": 66
     },
     "kdrama-hearts-animated": {
-      "name": "K-Drama Hearts (Animated)",
+      "name": "K-Drama Hearts",
       "lang": [
         "en",
         "ko"
@@ -3397,7 +3397,7 @@
       "order": 70
     },
     "love-spell-animated": {
-      "name": "Love Spell (Animated)",
+      "name": "Love Spell",
       "lang": [
         "en"
       ],
@@ -3525,7 +3525,7 @@
       "order": 74
     },
     "just-faces-animated": {
-      "name": "Just Faces (Animated)",
+      "name": "Just Faces",
       "lang": [
         "none"
       ],
@@ -3656,7 +3656,7 @@
       "order": 78
     },
     "reaction-hearts-animated": {
-      "name": "Reaction Hearts (Animated)",
+      "name": "Reaction Hearts",
       "lang": [
         "none"
       ],
@@ -3788,7 +3788,7 @@
       "order": 82
     },
     "laddoo-animated": {
-      "name": "Laddoo (Animated)",
+      "name": "Laddoo",
       "lang": [
         "hi"
       ],
@@ -3923,7 +3923,7 @@
       "order": 86
     },
     "kaan-pakad-animated": {
-      "name": "Kaan Pakad Ke Sorry (Animated)",
+      "name": "Kaan Pakad Ke Sorry",
       "lang": [
         "hi"
       ],
@@ -4057,7 +4057,7 @@
       "order": 90
     },
     "briga-animated": {
-      "name": "Briga (Animated)",
+      "name": "Briga",
       "lang": [
         "pt-BR"
       ],
@@ -4189,7 +4189,7 @@
       "order": 94
     },
     "sofrencia-animated": {
-      "name": "Sofrência (Animated)",
+      "name": "Sofrência",
       "lang": [
         "pt-BR"
       ],
@@ -4325,7 +4325,7 @@
       "order": 98
     },
     "luqaimat-animated": {
-      "name": "Luqaimat (Animated)",
+      "name": "Luqaimat",
       "lang": [
         "ar"
       ],
@@ -4464,7 +4464,7 @@
       "order": 102
     },
     "samahni-animated": {
-      "name": "Sama7ni (Animated)",
+      "name": "Sama7ni",
       "lang": [
         "ar"
       ],
