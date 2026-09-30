@@ -3,6 +3,7 @@ package com.piptechnologies.stickermaker.feature.create.decor
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
+import com.piptechnologies.stickermaker.feature.namepack.CmapCoverage
 import java.io.File
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -57,6 +58,43 @@ class TextLayerPainterTest {
         assertSame(hand, fonts.forText("miss you", uiFont = false, mood = FontMood.Hand))
         assertSame(hand, fonts.face(FontFile.CAVEAT))
         assertEquals(listOf(FontFile.CAVEAT), loads)
+    }
+
+    @Test
+    fun handAndDisplayGiveWayWhenTheFontLacksALetter() {
+        val fonts = DecorFonts(book, DecorTestFonts::load)
+        fun face(text: String, mood: FontMood) = fonts.forText(text, uiFont = false, mood = mood)
+        // Lilita One has no ş: the whole string letters in the Rounded choice, not one glyph from a fallback.
+        assertSame(fonts.face(FontFile.LILITA), face("Ask", FontMood.Display))
+        assertSame(fonts.face(FontFile.BALOO), face("Aşk", FontMood.Display))
+        assertSame(fonts.face(FontFile.BALOO), face("İyi geceler Ğ", FontMood.Display))
+        // Spaces, punctuation and emoji don't count.
+        assertSame(fonts.face(FontFile.LILITA), face("Ask me! ❤️ …", FontMood.Display))
+        // Lalezar lacks the Pashto ځ; the Rounded choice for it is the system bold (the Pashto rule).
+        assertSame(fonts.face(FontFile.LALEZAR), face("أحبك", FontMood.Display))
+        assertSame(fonts.face(FontFile.SYSTEM_BOLD), face("ځان", FontMood.Display))
+        // Mirza has it, so Hand keeps its own face.
+        assertSame(fonts.face(FontFile.MIRZA), face("ځان", FontMood.Hand))
+        // The table choice itself is unchanged.
+        assertEquals(FontFile.LILITA, DecorFonts.fileFor("Aşk", false, FontMood.Display, book))
+    }
+
+    @Test
+    fun fontCoverageReadsTheCmap() {
+        val sample = (0x20..0x24F) + (0x400..0x4FF) + (0x590..0x6FF) + (0x900..0x97F) + listOf(0x4F60, 0x1F600)
+        // Every Hand and Display font (their coverage decides the fallback); Kalam has a format 12 subtable.
+        listOf(
+            "assets/fonts/lettering_caveat.ttf", "res/font/lettering_mirza.ttf", "res/font/lettering_kalam.ttf",
+            "res/font/lettering_amaticsc.ttf", "res/font/lettering_lilitaone.ttf",
+            "res/font/lettering_ruslandisplay.ttf", "res/font/lettering_lalezar.ttf",
+            "res/font/lettering_yatraone.ttf", "res/font/lettering_karantina.ttf"
+        ).forEach { path ->
+            val file = File("src/main/$path")
+            val ours = FontCoverage.read(file.readBytes())!!
+            val reference = CmapCoverage.of(file)
+            sample.forEach { cp -> assertEquals("$path U+%04X".format(cp), reference.covers(cp), ours.covers(cp)) }
+        }
+        assertEquals(null, FontCoverage.read(ByteArray(12)))
     }
 
     @Test
@@ -153,9 +191,11 @@ internal object DecorTestFonts {
         FontFile.KARANTINA to "res/font/lettering_karantina.ttf"
     )
 
-    fun load(file: FontFile): FontFace =
-        if (file == FontFile.SYSTEM_BOLD) FontFace(Typeface.DEFAULT_BOLD)
-        else FontFace(Typeface.createFromFile(File("src/main/" + paths.getValue(file))))
+    fun load(file: FontFile): FontFace {
+        if (file == FontFile.SYSTEM_BOLD) return FontFace(Typeface.DEFAULT_BOLD)
+        val font = File("src/main/" + paths.getValue(file))
+        return FontFace(Typeface.createFromFile(font), coverage = FontCoverage.read(font.readBytes()))
+    }
 }
 
 /** Pixel checks shared by the Create rendering tests. */

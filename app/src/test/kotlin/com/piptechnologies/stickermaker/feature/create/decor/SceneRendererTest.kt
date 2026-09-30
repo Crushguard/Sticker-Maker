@@ -101,6 +101,24 @@ class SceneRendererTest {
     }
 
     @Test
+    fun liveGestureDrawsTheCachedSizeAtTheLayersScale() {
+        fun alone(layer: Layer) = SceneRenderer.Scene(null, null, DecorState(listOf(layer), OutlineStyle(on = false)))
+        renderer.renderStill(alone(heart))
+        val bytes = cache.cachedBytes
+        val grown = heart.copy(scale = 0.6f)
+        val live = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888)
+        renderer.drawSticker(Canvas(live), alone(grown), liveLayerId = heart.id)
+        assertEquals("nothing rendered mid-gesture", bytes, cache.cachedBytes)
+        val exact = renderer.renderStill(alone(grown))
+        assertTrue("the exact size renders once the gesture ends", cache.cachedBytes > bytes)
+        val a = bounds(live, minAlpha = 128)
+        val b = bounds(exact, minAlpha = 128)
+        listOf(a.left - b.left, a.top - b.top, a.right - b.right, a.bottom - b.bottom).forEach {
+            assertTrue("$a vs $b", abs(it) <= 2)
+        }
+    }
+
+    @Test
     fun flippedLayerMirrors() {
         val arrow = Layer(3, LayerContent.Decor("props-7.webp", listOf("💘")), 256f, 256f)
         assertEquals(Size2(256f, 256f * 218f / 300f), cache.baseSize(arrow.content))

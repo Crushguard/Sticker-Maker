@@ -49,11 +49,15 @@ class SceneRenderer(private val cache: LayerRenderCache, private val data: Decor
     fun outlineRadius(t: OutlineThickness): Float =
         data.styles.outlinePx.getValue(t) * CreateSpec.CANVAS_SIZE / CreateSpec.EXPORT_CONTENT
 
-    /** Draws [scene] onto [canvas] (512 space); [dimLayers] shows the layers at 40% (Brush and Erase). */
-    fun drawSticker(canvas: Canvas, scene: Scene, dimLayers: Boolean = false) {
+    /**
+     * Draws [scene] onto [canvas] (512 space); [dimLayers] shows the layers at 40% (Brush and Erase).
+     * [liveLayerId] is the layer a gesture is resizing: it draws from the nearest size already cached,
+     * scaled, instead of rendering a new size on every frame; the exact size renders once it ends.
+     */
+    fun drawSticker(canvas: Canvas, scene: Scene, dimLayers: Boolean = false, liveLayerId: Long? = null) {
         val outline = scene.decor.outline
         val radius = if (outline.on) outlineRadius(outline.thickness) else null
-        val layers = scene.decor.layers.map { it to cache.render(it, radius) }
+        val layers = scene.decor.layers.map { it to cache.render(it, radius, live = it.id == liveLayerId) }
         val layerAlpha = if (dimLayers) DIM_ALPHA else OPAQUE
         if (radius != null) {
             val tint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG).apply {

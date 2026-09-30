@@ -7,6 +7,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.feature.namepack.engine.LetteringFont
 import com.piptechnologies.stickermaker.feature.namepack.engine.LetteringFonts
+import java.io.InputStream
 import java.util.concurrent.ConcurrentHashMap
 
 /** The font files a text layer can be lettered in (spec §5): the UI font, the lettering fonts and the system bold. */
@@ -15,8 +16,16 @@ enum class FontFile {
     CAVEAT, MIRZA, KALAM, AMATIC, LILITA, RUSLAN, LALEZAR, YATRA, KARANTINA
 }
 
-/** A loaded face; [fakeBold] asks for synthetic bold (Caveat on API 24-25, where its weight axis can't be set). */
-data class FontFace(val typeface: Typeface, val fakeBold: Boolean = false)
+/**
+ * A loaded face; [fakeBold] asks for synthetic bold (Caveat on API 24-25, where its weight axis can't
+ * be set). [coverage] is what the font file itself draws; null means unknown, taken as complete.
+ */
+data class FontFace(val typeface: Typeface, val fakeBold: Boolean = false, val coverage: FontCoverage? = null) {
+
+    /** Whether the font has every letter and digit of [text]; spaces, punctuation and emoji don't count. */
+    fun covers(text: String): Boolean =
+        coverage == null || text.codePoints().toArray().all { !Character.isLetterOrDigit(it) || coverage.covers(it) }
+}
 
 /**
  * The face of a text layer, picked from the string and never from the UI language (spec §5):
@@ -31,8 +40,16 @@ class DecorFonts(private val book: TextStyleBook, private val load: (FontFile) -
     /** The face of [file], loaded on first use. */
     fun face(file: FontFile): FontFace = faces.getOrPut(file) { load(file) }
 
-    /** The face for [text] in a style that uses the UI font ([uiFont]) or the lettering font of [mood]. */
-    fun forText(text: String, uiFont: Boolean, mood: FontMood): FontFace = face(fileFor(text, uiFont, mood, book))
+    /**
+     * The face for [text] in a style that uses the UI font ([uiFont]) or the lettering font of [mood].
+     * A Hand or Display font missing any letter or digit of the string (Lilita One has no ş, Lalezar
+     * no ځ) gives way to the Rounded choice for the whole string, so no word mixes two fonts.
+     */
+    fun forText(text: String, uiFont: Boolean, mood: FontMood): FontFace {
+        val chosen = face(fileFor(text, uiFont, mood, book))
+        if (uiFont || mood == FontMood.Round || chosen.covers(text)) return chosen
+        return face(fileFor(text, uiFont = false, mood = FontMood.Round, book = book))
+    }
 
     companion object {
         private const val CAVEAT_ASSET = "fonts/lettering_caveat.ttf"
@@ -43,6 +60,9 @@ class DecorFonts(private val book: TextStyleBook, private val load: (FontFile) -
             "Amatic SC" to FontFile.AMATIC, "Lilita One" to FontFile.LILITA, "Ruslan Display" to FontFile.RUSLAN,
             "Lalezar" to FontFile.LALEZAR, "Yatra One" to FontFile.YATRA, "Karantina" to FontFile.KARANTINA
         )
+
+        /** The Hand and Display files, whose coverage [forText] checks. */
+        private val MOOD_FILES = FAMILIES.values.toSet()
 
         /** The file for [text] in a style that uses the UI font ([uiFont]) or the lettering font of [mood]. */
         fun fileFor(text: String, uiFont: Boolean, mood: FontMood, book: TextStyleBook): FontFile {
@@ -71,25 +91,40 @@ class DecorFonts(private val book: TextStyleBook, private val load: (FontFile) -
             }
         }
 
-        /** Production fonts: `res/font` resources, Caveat from assets at weight 700, the system bold. */
+        /**
+         * Production fonts: `res/font` resources, Caveat from assets at weight 700, the system bold.
+         * The Hand and Display files also have their coverage read from the file.
+         */
         fun android(context: Context, book: TextStyleBook): DecorFonts {
             val app = context.applicationContext
             return DecorFonts(book) { file ->
                 when (file) {
                     FontFile.SYSTEM_BOLD -> FontFace(Typeface.DEFAULT_BOLD)
                     FontFile.CAVEAT -> caveat(app)
-                    else -> FontFace(ResourcesCompat.getFont(app, resourceOf(file)) ?: Typeface.DEFAULT_BOLD)
+                    else -> {
+                        val id = resourceOf(file)
+                        val typeface = ResourcesCompat.getFont(app, id) ?: Typeface.DEFAULT_BOLD
+                        if (file !in MOOD_FILES) FontFace(typeface)
+                        else FontFace(typeface, coverage = coverageOf { app.resources.openRawResource(id) })
+                    }
                 }
             }
         }
 
         /** Caveat ships as a variable font; its weight axis needs API 26, so older phones get fake bold (§13.9). */
-        private fun caveat(context: Context): FontFace =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                FontFace(Typeface.Builder(context.assets, CAVEAT_ASSET).setFontVariationSettings("'wght' 700").build())
+        private fun caveat(context: Context): FontFace {
+            val coverage = coverageOf { context.assets.open(CAVEAT_ASSET) }
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val builder = Typeface.Builder(context.assets, CAVEAT_ASSET).setFontVariationSettings("'wght' 700")
+                FontFace(builder.build(), coverage = coverage)
             } else {
-                FontFace(Typeface.createFromAsset(context.assets, CAVEAT_ASSET), fakeBold = true)
+                FontFace(Typeface.createFromAsset(context.assets, CAVEAT_ASSET), fakeBold = true, coverage = coverage)
             }
+        }
+
+        /** The coverage of the font file [open] reads; null when it can't be read (then nothing falls back). */
+        private fun coverageOf(open: () -> InputStream): FontCoverage? =
+            runCatching { open().use { it.readBytes() } }.getOrNull()?.let(FontCoverage::read)
 
         private fun resourceOf(file: FontFile): Int = when (file) {
             FontFile.UI -> R.font.hg_extrabold

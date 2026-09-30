@@ -141,8 +141,9 @@ class DecorEditor(
         gesture = Gesture(id, l.cx, l.cy, l.scale, l.rotation, l.scale)
     }
 
-    /** Moves by a canvas-px delta, with centre snapping and the quarter-inside clamp. */
+    /** Moves by a canvas-px delta, with centre snapping and the quarter-inside clamp. Non-finite deltas are ignored. */
     fun drag(id: Long, dx: Float, dy: Float) {
+        if (!dx.isFinite() || !dy.isFinite()) return
         val g = gesture?.takeIf { it.id == id } ?: return
         g.rawX += dx
         g.rawY += dy
@@ -153,8 +154,9 @@ class DecorEditor(
         update(id) { it.copy(cx = (if (snapX) c else g.rawX).coerceIn(0f, DecorSpec.CANVAS), cy = (if (snapY) c else g.rawY).coerceIn(0f, DecorSpec.CANVAS)) }
     }
 
-    /** Multiplies the scale and adds rotation (two-finger pinch and twist). */
+    /** Multiplies the scale and adds rotation (two-finger pinch and twist). Non-finite input is ignored. */
     fun pinch(id: Long, zoom: Float, rotationDeg: Float) {
+        if (!zoom.isFinite() || !rotationDeg.isFinite()) return
         val g = gesture?.takeIf { it.id == id } ?: return
         val layer = state.layer(id) ?: return
         g.rawScale *= zoom
@@ -164,9 +166,14 @@ class DecorEditor(
         g.rawScale = newScale
     }
 
-    /** Absolute scale and rotation from the corner handle; [start] records the undo step. */
+    /**
+     * Absolute scale and rotation from the corner handle; [start] records the undo step. A
+     * non-finite scale or rotation changes nothing (the gesture still starts, so the next
+     * finite move is recorded as usual).
+     */
     fun setScaleRotation(id: Long, scale: Float, rotation: Float, start: Boolean = false) {
         if (start) beginGesture(id)
+        if (!scale.isFinite() || !rotation.isFinite()) return
         val layer = state.layer(id) ?: return
         val g = gesture?.takeIf { it.id == id }
         val startScale = g?.startScale ?: layer.scale

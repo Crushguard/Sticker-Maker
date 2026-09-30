@@ -343,6 +343,24 @@ class DecorEditorTest {
     }
 
     @Test
+    fun nonFiniteGestureInputIsIgnored() {
+        val id = editor.add(decor())!!
+        val before = editor.state.layer(id)!!
+        editor.setScaleRotation(id, Float.NaN, 0f, start = true)
+        editor.setScaleRotation(id, 1.2f, Float.POSITIVE_INFINITY)
+        editor.pinch(id, Float.POSITIVE_INFINITY, 0f)
+        editor.pinch(id, 1.1f, Float.NaN)
+        editor.drag(id, Float.NaN, 5f)
+        assertEquals(before, editor.state.layer(id))
+        // The gesture itself still runs: a finite move applies, as one undo step.
+        editor.pinch(id, 1.5f, 0f)
+        assertEquals(1.5f, editor.state.layer(id)!!.scale, 1e-4f)
+        editor.endGesture()
+        assertEquals(UndoResult.Changed, editor.undo())
+        assertEquals(before, editor.state.layer(id))
+    }
+
+    @Test
     fun textWithTrailingEmojiDropsSurrogate() {
         val textContent = "a".repeat(29) + "😍"
         editor.setText(textContent)
