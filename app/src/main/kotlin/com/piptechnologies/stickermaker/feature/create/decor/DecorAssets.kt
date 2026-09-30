@@ -62,7 +62,7 @@ class DecorAssets(private val openAsset: (String) -> InputStream, private val to
         /** Production assets: the APK's assets, tones in `filesDir/emoji-tones/` (spec §2). */
         fun android(context: Context): DecorAssets {
             val app = context.applicationContext
-            return DecorAssets({ app.assets.open(it) }, File(app.filesDir, "emoji-tones"))
+            return DecorAssets({ app.assets.open(it) }, File(app.filesDir, EmojiTones.DIR))
         }
     }
 }

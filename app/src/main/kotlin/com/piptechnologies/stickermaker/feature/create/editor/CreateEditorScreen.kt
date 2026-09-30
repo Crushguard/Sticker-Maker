@@ -1,7 +1,6 @@
 package com.piptechnologies.stickermaker.feature.create.editor
 
 import android.graphics.Paint
-import android.graphics.Typeface
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -65,7 +64,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.res.ResourcesCompat
 import coil.compose.AsyncImage
 import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.design.Border
@@ -95,7 +93,6 @@ import com.piptechnologies.stickermaker.feature.create.EditorTool
 import com.piptechnologies.stickermaker.feature.create.FooterDivider
 import com.piptechnologies.stickermaker.feature.create.MonoCounterText
 import com.piptechnologies.stickermaker.feature.create.PrimaryButton
-import com.piptechnologies.stickermaker.feature.create.StickerRenderer
 import com.piptechnologies.stickermaker.feature.create.createPackViewModel
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
@@ -124,13 +121,6 @@ fun CreateEditorScreen(
     val toaster = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val captionTypeface = remember {
-        try {
-            ResourcesCompat.getFont(context, R.font.hg_extrabold)
-        } catch (e: Exception) {
-            null
-        }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -176,11 +166,9 @@ fun CreateEditorScreen(
                     zoomed = state.zoomed,
                     activeIndex = state.activeIndex,
                     activeCut = state.activeCut,
-                    outlineOn = state.activeOutlineOn,
-                    text = state.activeText,
                     durationLabel = state.activeDurationLabel,
                     editorTick = state.editorTick,
-                    captionTypeface = captionTypeface
+                    liveLayerId = state.liveLayerId
                 )
                 EditorToolbar(
                     tool = state.tool,
@@ -196,8 +184,8 @@ fun CreateEditorScreen(
                     )
                 }
                 OutlineRow(
-                    checked = state.activeOutlineOn,
-                    onToggle = { viewModel.toggleOutline() }
+                    checked = state.outline.on,
+                    onToggle = { viewModel.setOutlineOn(!state.outline.on) }
                 )
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -224,7 +212,10 @@ fun CreateEditorScreen(
                         pluralStringResource(R.plurals.create_next_count, n, n)
                     },
                     enabled = !state.anyPending,
-                    onClick = onDone
+                    onClick = {
+                        viewModel.flushEdits()
+                        onDone()
+                    }
                 )
             }
         }
@@ -246,11 +237,9 @@ private fun EditorCanvasCard(
     zoomed: Boolean,
     activeIndex: Int,
     activeCut: CutStatus,
-    outlineOn: Boolean,
-    text: String,
     durationLabel: String?,
     editorTick: Int,
-    captionTypeface: Typeface?
+    liveLayerId: Long?
 ) {
     val bitmapPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG) }
     val checkerPaint = remember { Paint() }
@@ -343,9 +332,10 @@ private fun EditorCanvasCard(
                     }
             ) {
                 Canvas(Modifier.fillMaxSize()) {
-                    // editorTick invalidates this draw whenever a mask/outline changed.
+                    // editorTick invalidates this draw whenever something the scene shows changed.
                     @Suppress("UNUSED_EXPRESSION") editorTick
-                    val live = viewModel.activeCanvas()
+                    val scene = viewModel.activeScene()
+                    val renderer = viewModel.renderer
                     val edge = size.width
                     val s0 = edge / CreateSpec.CANVAS_SIZE
                     drawIntoCanvas { canvas ->
@@ -354,20 +344,11 @@ private fun EditorCanvasCard(
                         nc.translate(panX, panY)
                         nc.scale(scale, scale, edge / 2f, edge / 2f)
                         nc.scale(s0, s0)
-                        val src = live.source
-                        val mask = live.mask
-                        if (activeCut == CutStatus.Done && src != null && mask != null) {
+                        if (activeCut == CutStatus.Done && scene != null && renderer != null) {
                             drawChecker(nc, checkerPaint)
-                            StickerRenderer.drawComposite(
-                                nc,
-                                src,
-                                mask,
-                                if (outlineOn) live.outline else null,
-                                text,
-                                captionTypeface
-                            )
-                        } else if (src != null) {
-                            nc.drawBitmap(src, 0f, 0f, bitmapPaint)
+                            renderer.drawSticker(nc, scene, dimLayers = paintingTool, liveLayerId = liveLayerId)
+                        } else {
+                            viewModel.activeSource()?.let { nc.drawBitmap(it, 0f, 0f, bitmapPaint) }
                         }
                         nc.restore()
                     }

@@ -108,6 +108,27 @@ class DecorEditorTest {
     }
 
     @Test
+    fun scaleIsCappedByTheLongerSide() {
+        // A thin upright doodle (20 × 400) and a tall emoji (100 × 200): capped by width, the doodle
+        // could reach 25.6× (a 10,240 px tall bitmap).
+        val tall: (LayerContent) -> Size2 = { c ->
+            if (c is LayerContent.Emoji) Size2(100f, 200f) else Size2(20f, 400f)
+        }
+        val e = DecorEditor(tall, { null }, { ++ids })
+        val doodle = e.add(decor())!!
+        e.beginGesture(doodle); e.pinch(doodle, zoom = 100f, rotationDeg = 0f); e.endGesture()
+        assertEquals(512f / 400f, e.state.layer(doodle)!!.scale, 1e-4f)
+        assertEquals(512f, e.renderedSize(e.state.layer(doodle)!!).h, 1e-2f)     // the canvas height, no more
+        val heart = e.add(emoji())!!
+        e.setScaleRotation(heart, scale = 100f, rotation = 0f, start = true); e.endGesture()
+        assertEquals(0.5f * 512f / 200f, e.state.layer(heart)!!.scale, 1e-4f)  // emoji: half the canvas
+        // A piece taller than the canvas at scale 1 arrives scaled to fit.
+        val huge = DecorEditor({ Size2(40f, 1024f) }, { null }, { ++ids })
+        val id = huge.add(decor())!!
+        assertEquals(0.5f, huge.state.layer(id)!!.scale, 1e-4f)
+    }
+
+    @Test
     fun typingIsOneUndoStepAndEmptyTextIsDroppedOnClose() {
         assertTrue(editor.setText("m"))
         assertTrue(editor.setText("mi"))

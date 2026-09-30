@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PointF
 import android.graphics.Rect
 import androidx.test.core.app.ApplicationProvider
 import com.piptechnologies.stickermaker.feature.create.StickerRenderer
@@ -198,6 +199,33 @@ class SceneRendererTest {
         assertEquals(512, out.width)
         assertEquals(Color.BLUE, out.getPixel(150, 150))
         assertEquals(0, out.getPixel(50, 50))
+    }
+
+    @Test
+    fun maskBoundsIsTheBoxOfTheKeptPixels() {
+        val mask = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888)
+        assertEquals(null, StickerRenderer.maskBounds(mask))
+        Canvas(mask).drawRect(100f, 120f, 300f, 400f, Paint().apply { color = Color.WHITE })
+        Canvas(mask).drawRect(10f, 10f, 20f, 20f, Paint().apply { color = Color.argb(128, 255, 255, 255) })
+        // The half-transparent speck (alpha 128) is not the subject; the box covers the kept pixels.
+        assertEquals(Box(100f, 120f, 300f, 400f), StickerRenderer.maskBounds(mask))
+    }
+
+    @Test
+    fun patchSubjectRedrawsOnlyTheStrokesArea() {
+        val source = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888).apply { eraseColor(Color.BLUE) }
+        val mask = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888)
+        Canvas(mask).drawRect(100f, 100f, 200f, 200f, Paint().apply { color = Color.WHITE })
+        val subject = StickerRenderer.maskedSubject(source, mask)
+        // An erase across the square's middle and a keep outside it; only the erase is patched.
+        StickerRenderer.drawStrokeSegment(mask, keep = false, radiusPx = 10f, PointF(90f, 150f), PointF(210f, 150f))
+        StickerRenderer.drawStrokeSegment(mask, keep = true, radiusPx = 10f, PointF(400f, 400f), PointF(400f, 400f))
+        StickerRenderer.patchSubject(subject, source, mask, PointF(90f, 150f), PointF(210f, 150f), radiusPx = 10f)
+        assertEquals(0, subject.getPixel(150, 150))                                 // erased, live
+        assertEquals(Color.BLUE, subject.getPixel(150, 120))                        // kept
+        assertEquals("outside the patch nothing changed yet", 0, subject.getPixel(400, 400))
+        val full = StickerRenderer.maskedSubject(source, mask)
+        for (x in 85..215) assertEquals("x=$x", full.getPixel(x, 150), subject.getPixel(x, 150))
     }
 
     @Test

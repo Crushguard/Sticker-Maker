@@ -189,12 +189,17 @@ class DecorEditor(
         guides = Guides.NONE
     }
 
+    /**
+     * The largest scale: the layer's longer side stays within the canvas (half of it for emoji, whose
+     * art is 256 px), so a thin upright piece can't grow into a bitmap many canvases tall.
+     */
     private fun maxScale(layer: Layer): Float {
-        val base = baseSize(layer).w.coerceAtLeast(1f)
-        val maxW = if (layer.content is LayerContent.Emoji) DecorSpec.EMOJI_MAX_WIDTH else 1f
-        return maxW * DecorSpec.CANVAS / base
+        val base = baseSize(layer).let { max(it.w, it.h) }.coerceAtLeast(1f)
+        val maxSide = if (layer.content is LayerContent.Emoji) DecorSpec.EMOJI_MAX_WIDTH else 1f
+        return maxSide * DecorSpec.CANVAS / base
     }
 
+    /** The 10% floor, on the width (a gesture never forces a layer below where it started). */
     private fun minScale(layer: Layer): Float {
         val base = baseSize(layer).w.coerceAtLeast(1f)
         return DecorSpec.MIN_WIDTH * DecorSpec.CANVAS / base
