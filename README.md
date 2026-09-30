@@ -129,9 +129,9 @@ library/                        (bucket play-console-f33dd-stickermaker, private
 - **Languages:** `lang` lists the lettering's languages (`"ar"`, `["ar", "hi", "es"]`), `"none"`
   for no text, `"multi"` for one sticker per language. The app shows packs readable to the user
   first: no text, English, many languages, or the app language.
-- **Animated:** a pack is all static or all animated (WhatsApp's rule). Put the animated stickers in
-  the pack's folder in place of their stills and set `"animate": "wiggle"`: the animated ones ship as
-  they are, the other stickers get a gentle wiggle.
+- **Animated:** WhatsApp takes a pack all static or all animated, so animated stickers go in a pack of
+  their own (the export's `<pack>-animated` folders). `"animate": "wiggle"` turns a static pack into a
+  gentle loop.
 - **After Dark:** `"adult": true` parks a pack. It is never built for the Google Play catalog and
   nothing of it reaches `public/`.
 - **Add or update packs:** upload the pack folders into `library/` (Google Cloud console: open the
