@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.piptechnologies.stickermaker.core.design.LoveStickersTheme
+import com.piptechnologies.stickermaker.core.notifications.PushNotifications
 import com.piptechnologies.stickermaker.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +18,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        // This activity is always in the current in-app language (a language change recreates it).
+        (application as? LoveStickersApp)?.localizeCrashScreen(this)
+        PushNotifications.createChannel(this)
         enableEdgeToEdge()
         setContent {
             LoveStickersTheme {

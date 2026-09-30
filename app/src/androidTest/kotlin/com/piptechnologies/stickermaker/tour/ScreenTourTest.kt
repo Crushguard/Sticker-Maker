@@ -5,11 +5,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isToggleable
@@ -42,7 +42,7 @@ import org.junit.runners.MethodSorters
  * scripts/upload-pack.js, and a WhatsApp test double (testing/whatsapp-stub)
  * reads packs back through the app's ContentProvider and checks WhatsApp's
  * pack rules. Tests run in order and build on each other's state, like a user
- * would: first run, themes, adds, own packs, settings.
+ * would: first run, adds, own packs, settings.
  */
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -64,7 +64,7 @@ class ScreenTourTest {
     }
 
     // ------------------------------------------------------------------ //
-    // 1. First run, offline: launch, onboarding, themes, offline Home.
+    // 1. First run, offline: launch, onboarding, the name flow, offline Home.
     // ------------------------------------------------------------------ //
 
     @Test
@@ -79,20 +79,44 @@ class ScreenTourTest {
         step("Go offline") { Tour.setOnline(false) }
         step("Onboarding") {
             compose.waitFor(hasText("Say it with a sticker"), 20_000)
-            shot(Frame.ONBOARDING_1, "Slide 1 with Skip; Next advances.")
+            shot(Frame.ONBOARDING_1, "Slide 1: language chip and Skip on top; Next advances.")
             compose.tap(hasText("Next") and hasClickAction())
             compose.waitFor(hasText("Make your own"))
-            shot(Frame.ONBOARDING_2, "Slide 2; Skip hides, CTA reads Get started.")
+            shot(Frame.ONBOARDING_2, "Slide 2: Skip stays, CTA reads Get started.")
             compose.tap(hasText("Get started") and hasClickAction())
         }
-        step("Customization first run") {
-            compose.waitFor(hasText("Pick your themes"))
-            setTheme("Couples", on = true)
-            setTheme("Cute", on = true)
-            setTheme("Funny", on = true)
-            compose.waitFor(hasText("Continue · 3 themes"))
-            shot(Frame.CUSTOMIZE_FIRST_RUN, "Offline first run: the eight themes come from the built-in fallback list.")
-            compose.tap(hasText("Continue · 3 themes") and hasClickAction())
+        step("Your name") {
+            compose.waitFor(hasText("What's your name?"))
+            compose.onNode(hasSetTextAction()).performTextInput("Aymen")
+            // Keyboard down first: with it up the preview may shrink below 72 dp and hide.
+            Espresso.closeSoftKeyboard()
+            compose.waitFor(hasContentDescription("Sticker preview: Aymen"), 30_000)
+            shot(Frame.NAME_YOU, "Mango picked, your name typed: the name_only sticker is lettered on the phone, offline.")
+            compose.tap(hasClickLabel("Continue"))
+        }
+        step("Their name") {
+            compose.waitFor(hasText("Who's your love?"))
+            // The steps crossfade; wait for the first field to leave before typing.
+            compose.waitGone(hasText("What's your name?"))
+            compose.onNode(hasSetTextAction()).performTextInput("Sara")
+            Espresso.closeSoftKeyboard()
+            compose.waitFor(hasContentDescription("Sticker preview: Love you, Sara"), 30_000)
+            shot(Frame.NAME_LOVE, "Their name with Girlfriend: the love_you preview letters \"Love you, Sara\".")
+            compose.tap(hasClickLabel("Make our stickers"))
+        }
+        step("Reveal") {
+            compose.waitFor(hasClickLabel("Not now"), 60_000)
+            compose.waitFor(hasText("12 stickers · girlfriend"))
+            // The header's merged description is the pack name (bare U+2764, as the ViewModel writes it).
+            compose.waitFor(hasContentDescription("Aymen \u2764 Sara"))
+            extra("x06", "Custom stickers · reveal", "namePack",
+                "Aymen ❤ Sara: 12 stickers lettered on the phone (Mango, Sweet), offline; nothing uploaded.")
+        }
+        // Back, then Skip, leaves first run without saving a pack, so My Packs keeps its two own packs.
+        step("Leave without a pack") {
+            back()
+            compose.waitFor(hasText("Who's your love?"))
+            compose.tap(hasClickLabel("Skip"))
         }
         step("Offline Home") {
             compose.waitFor(hasText("You're offline"), 60_000)
@@ -102,36 +126,19 @@ class ScreenTourTest {
         step("Retry") {
             if (compose.exists(hasClickLabel("Retry"))) compose.tap(hasClickLabel("Retry"))
             awaitHome()
-            extra("x01", "Home after Retry (first-run themes)", "home",
-                "Back online, Retry reloads the catalog from the Firestore emulator; only Couples/Cute/Funny packs show.")
+            extra("x01", "Home after Retry", "home",
+                "Back online, Retry reloads the catalog from the Firestore emulator; every theme shows.")
         }
     }
 
     // ------------------------------------------------------------------ //
-    // 2. Edit themes from Settings; WhatsApp missing.
+    // 2. WhatsApp missing.
     // ------------------------------------------------------------------ //
 
     @Test
-    fun t02_themesAndMissingWhatsApp() {
+    fun t02_missingWhatsApp() {
         Tour.uninstallWhatsAppStub()
         awaitHome()
-        step("Edit themes") {
-            compose.tap(hasClickLabel("Settings"))
-            compose.tap(hasClickLabel("Edit themes"))
-            compose.waitFor(hasText("Your themes"))
-            setTheme("Funny", on = false)
-            setTheme("Romantic", on = true)
-            setTheme("Flirty", on = true)
-            setTheme("Good night", on = true)
-            setTheme("Long distance", on = true)
-            setTheme("Couples", on = true)
-            setTheme("Cute", on = true)
-            shot(Frame.CUSTOMIZE_EDIT, "Settings › Edit themes, pre-checked from prefs; six themes picked, CTA reads Save.")
-            compose.tap(hasText("Save") and hasClickAction())
-            compose.waitFor(hasClickLabel("Edit themes"))
-            back()
-            awaitHome()
-        }
         step("WhatsApp not installed") {
             openPack("Flirty & Shy")
             compose.tap(addBar("Add to WhatsApp"))
@@ -258,7 +265,7 @@ class ScreenTourTest {
             compose.clearToasts()
             compose.scrollListToTop(card("Clingy Mango"))
             compose.tap(hasClickLabel("Trending"))
-            shot(Frame.HOME_TRENDING, "Six themes picked; two packs added, two hearted (♥ Saved chip shows).")
+            shot(Frame.HOME_TRENDING, "Every theme on Home; two packs added, two hearted (♥ Saved chip shows).")
         }
         step("Animated chip") {
             compose.tap(hasClickLabel("Animated"))
@@ -452,7 +459,7 @@ class ScreenTourTest {
         awaitHome()
         step("Settings") {
             compose.tap(hasClickLabel("Settings"))
-            compose.waitFor(hasClickLabel("Edit themes"))
+            compose.waitFor(hasClickLabel("Language"))
             shot(Frame.SETTINGS, "Alerts hero, preferences with values, about rows, free-forever card.")
         }
         step("Rate stars") {
@@ -497,9 +504,9 @@ class ScreenTourTest {
             back()
         }
         step("Alerts permission") {
-            compose.waitFor(hasClickLabel("Edit themes"))
+            compose.waitFor(hasClickLabel("Language"))
             toggleAlerts()
-            compose.waitFor(hasText("Off. You won't hear about new packs."))
+            compose.waitFor(hasText("Off. You won't get alerts or updates."))
             toggleAlerts()
             compose.waitFor(hasText("Allow Love Stickers to send notifications?"))
             shot(Frame.NOTIFICATION_PERMISSION, "Turning alerts back on without the Android 13+ notification permission asks first.")
@@ -610,15 +617,6 @@ class ScreenTourTest {
             val label = node.config.getOrNull(SemanticsActions.OnClick)?.label.orEmpty()
             Regex("Downloading (\\d+) percent").find(label)?.groupValues?.get(1)?.toInt()?.let { it >= percent } == true
         }
-
-    private fun setTheme(label: String, on: Boolean) {
-        val tile = hasText(label) and isToggleable()
-        compose.reveal(tile)
-        val node = compose.onAllNodes(tile).onFirst()
-        val checked = node.fetchSemanticsNode().config.getOrNull(SemanticsProperties.ToggleableState) == ToggleableState.On
-        if (checked != on) node.performClick()
-        compose.waitForIdle()
-    }
 
     private fun toggleAlerts() {
         compose.onAllNodes(isToggleable()).onFirst().performClick()

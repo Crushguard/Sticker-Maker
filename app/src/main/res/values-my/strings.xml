@@ -63,14 +63,6 @@
     <string name="theme_flirty">ကလူကျီစယ်</string>
     <string name="theme_goodnight">ကောင်းသောည</string>
     <string name="theme_distance">အဝေးရောက်ချစ်သူ</string>
-    <string name="customize_title">နှစ်သက်ရာ ခေါင်းစဉ်များ ရွေးပါ</string>
-    <string name="customize_edit_title">သင့်ခေါင်းစဉ်များ</string>
-    <string name="customize_subtitle">သင်ရွေးတဲ့ ခေါင်းစဉ်တွေထဲက အစုံတွေကို “ပင်မ” မှာ ပြပေးပါမယ်။ “ဆက်တင်များ” မှာ အချိန်မရွေး ပြောင်းနိုင်ပါတယ်။</string>
-    <string name="customize_save">သိမ်းရန်</string>
-    <string name="customize_pick_one">ခေါင်းစဉ် အနည်းဆုံး တစ်ခု ရွေးပါ</string>
-    <plurals name="customize_continue">
-        <item quantity="other">ဆက်လုပ်ရန် · ခေါင်းစဉ် %d ခု</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">အော့ဖ်လိုင်း ဖြစ်နေပါတယ်</string>
@@ -196,15 +188,11 @@
 
     <!-- Settings -->
     <string name="settings_title">ဆက်တင်များ</string>
-    <string name="settings_alerts_title">အစုံအသစ် သတိပေးချက်များ</string>
-    <string name="settings_alerts_on">အစုံအသစ် ထွက်မှသာ အကြောင်းကြားပါမယ်။</string>
-    <string name="settings_alerts_off">ပိတ်ထားပါတယ်။ အစုံအသစ် ထွက်ရင် သိရမှာ မဟုတ်ပါဘူး။</string>
+    <string name="settings_alerts_title">အကြောင်းကြားချက်များ</string>
+    <string name="settings_alerts_on">Love Stickers ထံမှ သတိပေးချက်နဲ့ အပ်ဒိတ်များ။</string>
+    <string name="settings_alerts_off">ပိတ်ထားပါတယ်။ သတိပေးချက်နဲ့ အပ်ဒိတ်တွေ ရမှာ မဟုတ်ပါဘူး။</string>
     <string name="settings_section_preferences">ရွေးချယ်မှုများ</string>
     <string name="settings_section_about">အကြောင်း</string>
-    <string name="settings_edit_themes">ခေါင်းစဉ်များ ပြင်ရန်</string>
-    <plurals name="settings_theme_count">
-        <item quantity="other">ခေါင်းစဉ် %d ခု</item>
-    </plurals>
     <string name="settings_language">ဘာသာစကား</string>
     <string name="settings_clear">ဒေါင်းလုဒ်လုပ်ထားသည့် အစုံများ ရှင်းရန်</string>
     <string name="settings_storage_none">မရှိ</string>
@@ -216,14 +204,15 @@
     <string name="settings_privacy">ကိုယ်ရေးအချက်အလက် မူဝါဒ</string>
     <string name="settings_version">ဗားရှင်း</string>
     <string name="settings_free_card">Love Stickers က အခမဲ့ပါ၊ အမြဲလည်း အခမဲ့ ဖြစ်နေမှာပါ။ ကြော်ငြာ မရှိ၊ အကောင့် မလို၊ ခြေရာခံတာ မရှိပါဘူး။ သင့်ဓာတ်ပုံတွေက သင့်ဖုန်းထဲကနေ ဘယ်တော့မှ ထွက်မသွားပါဘူး။</string>
-    <string name="settings_toast_alerts_on">အစုံအသစ် သတိပေးချက်များ ဖွင့်ထားပါပြီ</string>
-    <string name="settings_toast_alerts_off">အစုံအသစ် သတိပေးချက်များ ပိတ်ထားပါပြီ</string>
+    <string name="settings_toast_alerts_on">အကြောင်းကြားချက်များ ဖွင့်ထားပါပြီ</string>
+    <string name="settings_toast_alerts_off">အကြောင်းကြားချက်များ ပိတ်ထားပါပြီ</string>
     <string name="settings_toast_nothing_to_clear">ရှင်းစရာ မရှိပါ</string>
     <string name="settings_toast_cleared">ဒေါင်းလုဒ်များ ရှင်းပြီးပါပြီ</string>
     <string name="settings_notif_title">Love Stickers ကို အကြောင်းကြားချက်တွေ ပို့ခွင့် ပေးမလား။</string>
-    <string name="settings_notif_body">Android က တစ်ကြိမ်ပဲ မေးပါမယ်။ အစုံအသစ် ထွက်မှသာ အကြောင်းကြားပါမယ်။ ပရိုမိုးရှင်း ဘယ်တော့မှ မပို့ပါဘူး။</string>
+    <string name="settings_notif_body">Android က တစ်ကြိမ်ပဲ မေးပါမယ်။ အစုံအသစ်တွေလို သတိပေးချက်နဲ့ အပ်ဒိတ်တွေကို ရံဖန်ရံခါ ပို့ပေးပါမယ်။</string>
     <string name="settings_notif_deny">ခွင့်မပြုပါ</string>
     <string name="settings_notif_allow">ခွင့်ပြုရန်</string>
+    <string name="notification_channel_updates">သတိပေးချက်နဲ့ အပ်ဒိတ်များ</string>
     <string name="settings_clear_title">ဒေါင်းလုဒ်လုပ်ထားသည့် အစုံများကို ရှင်းမလား။</string>
     <string name="settings_clear_body">ဒီအက်ပ်ထဲမှာ သိမ်းထားတဲ့ မိတ္တူတွေ (%1$s) ကို ဖယ်ရှားပါမယ်။ WhatsApp ထဲမှာ ရှိပြီးသား အစုံတွေကတော့ ဆက်ရှိနေပါမယ်။</string>
     <string name="settings_clear_keep">ဆက်ထားရန်</string>
@@ -282,4 +271,43 @@
     <string name="contact_email_label">အီးမေးလ် · မထည့်လည်း ရပါတယ်၊ အကြောင်းပြန်စေချင်မှ ထည့်ပါ</string>
     <string name="contact_attach_note">အက်ပ် ဗားရှင်းနဲ့ Android ဗားရှင်းကိုပါ တွဲပို့ပါမယ်။ တခြား ဘာမှ မပို့ပါဘူး။</string>
     <string name="contact_send">ပို့ရန်</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">တစ်ခုခု မှားယွင်းသွားပါတယ်</string>
+    <string name="crash_message">Love Stickers မှာ မမျှော်လင့်ထားတဲ့ အမှားတစ်ခု ဖြစ်သွားလို့ ပိတ်ရပါမယ်။ ကျွန်ုပ်တို့ သိရှိထားပြီး ပြင်ဆင်နေပါတယ်။</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">အက်ပ်နဲ့ စတစ်ကာ ဘာသာစကားကို ပြောင်းပေးတယ်။</string>
+    <string name="namepack_you_title">သင့်နာမည် ဘာလဲ?</string>
+    <string name="namepack_you_helper">သင်ပို့တဲ့ စတစ်ကာတွေပေါ်မှာ ပါလာမယ်။ ဒီအဆင့်ကို ကျော်နိုင်တယ်။</string>
+    <string name="namepack_you_placeholder">သင့်နာမည်</string>
+    <string name="namepack_pick_character">ဘယ်သူ ပြောမလဲ?</string>
+    <string name="namepack_love_title">သင့်ချစ်သူ ဘယ်သူလဲ?</string>
+    <string name="namepack_love_helper">ဒီနာမည်နဲ့ သင့်ဘာသာစကားဖြင့် စတစ်ကာ ၁၂ ခု ရေးပေးမယ်။</string>
+    <string name="namepack_love_placeholder">သူ့နာမည်</string>
+    <string name="namepack_sample_name">မေ</string>
+    <string name="namepack_continue">ဆက်လုပ်ရန်</string>
+    <string name="namepack_make">ငါတို့ စတစ်ကာ လုပ်မယ်</string>
+    <string name="namepack_note_limit">ဒါ အများဆုံးပါ။ ချစ်စနိုးနာမည်လည်း ရတယ်။</string>
+    <string name="namepack_note_emoji">အီမိုဂျီကို ရေးလို့မရပါ။ စာလုံးသာ။</string>
+    <string name="namepack_note_need_name">ပက်ခ်လုပ်ဖို့ နာမည်တစ်ခု ထည့်ပါ။</string>
+    <string name="namepack_preview_hint">တိုက်ရိုက်အစမ်းကြည့်ရှု။ ရိုက်နေစဉ် ပြောင်းလဲတယ်။</string>
+    <string name="namepack_preview_alt">စတစ်ကာ အစမ်းကြည့်ရှု: %1$s</string>
+    <string name="namepack_rel_girlfriend">ကောင်မလေး</string>
+    <string name="namepack_rel_boyfriend">ကောင်လေး</string>
+    <string name="namepack_rel_wife">ဇနီး</string>
+    <string name="namepack_rel_husband">ခင်ပွန်း</string>
+    <string name="namepack_rel_crush">သဘောကျသူ</string>
+    <string name="namepack_rel_partner">အဖော်</string>
+    <string name="namepack_rel_mom">အမေ</string>
+    <string name="namepack_rel_friend">သူငယ်ချင်း</string>
+    <string name="namepack_building_title">စတစ်ကာ ၁၂ ခု ရေးနေတယ်…</string>
+    <string name="namepack_building_sub">ဒီဖုန်းပေါ်မှာ လုပ်ထားတာ။ ဘာမှ အပ်လုဒ်မလုပ်ပါ။</string>
+    <string name="namepack_waiting_alt">%1$s က သင့်စတစ်ကာတွေကို စောင့်နေတယ်</string>
+    <string name="namepack_pack_for">%1$s အတွက်</string>
+    <string name="namepack_tone_sweet">ချိုချို</string>
+    <string name="namepack_tone_flirty">ကျီစယ်</string>
+    <string name="namepack_meta">စတစ်ကာ ၁၂ ခု · %1$s</string>
+    <string name="namepack_add_failed">တစ်ခုခု မှားသွားတယ် · ထပ်စမ်းရန်</string>
+    <string name="namepack_build_failed">စတစ်ကာ မလုပ်နိုင်ပါ။ ထပ်စမ်းကြည့်ပါ။</string>
+    <!-- /Custom stickers -->
 </resources>

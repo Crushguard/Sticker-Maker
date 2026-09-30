@@ -64,15 +64,6 @@
     <string name="theme_flirty">Kwarkwasa</string>
     <string name="theme_goodnight">Sai da safe</string>
     <string name="theme_distance">Nesa da juna</string>
-    <string name="customize_title">Zaɓi jigoginku</string>
-    <string name="customize_edit_title">Jigoginku</string>
-    <string name="customize_subtitle">“Gida” na nuna fakitoci daga jigogin da kuka zaɓa. Kuna iya canza su a kowane lokaci a “Saituna”.</string>
-    <string name="customize_save">Ajiye</string>
-    <string name="customize_pick_one">Zaɓi jigo aƙalla ɗaya</string>
-    <plurals name="customize_continue">
-        <item quantity="one">Ci gaba · jigo %d</item>
-        <item quantity="other">Ci gaba · jigogi %d</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">Babu intanet</string>
@@ -202,16 +193,11 @@
 
     <!-- Settings -->
     <string name="settings_title">Saituna</string>
-    <string name="settings_alerts_title">Sanarwar sabon fakiti</string>
-    <string name="settings_alerts_on">Sai lokacin da aka ƙara sabon fakiti.</string>
-    <string name="settings_alerts_off">A kashe. Ba za ku ji labarin sabbin fakitoci ba.</string>
+    <string name="settings_alerts_title">Sanarwa</string>
+    <string name="settings_alerts_on">Sanarwa da sabbin labarai daga Love Stickers.</string>
+    <string name="settings_alerts_off">A kashe. Ba za ku sami sanarwa ko sabbin labarai ba.</string>
     <string name="settings_section_preferences">ZAƁUƁƁUKA</string>
     <string name="settings_section_about">GAME DA MU</string>
-    <string name="settings_edit_themes">Gyara jigogi</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">Jigo %d</item>
-        <item quantity="other">Jigogi %d</item>
-    </plurals>
     <string name="settings_language">Harshe</string>
     <string name="settings_clear">Share fakitocin da aka sauke</string>
     <string name="settings_storage_none">Babu</string>
@@ -223,14 +209,15 @@
     <string name="settings_privacy">Manufar tsare sirri</string>
     <string name="settings_version">Siga</string>
     <string name="settings_free_card">Love Stickers kyauta ce, kuma za ta ci gaba da zama kyauta har abada. Babu talla, babu asusu, babu bin diddigi. Hotunanku ba sa taɓa barin wayarku.</string>
-    <string name="settings_toast_alerts_on">An kunna sanarwar sabon fakiti</string>
-    <string name="settings_toast_alerts_off">An kashe sanarwar sabon fakiti</string>
+    <string name="settings_toast_alerts_on">An kunna sanarwa</string>
+    <string name="settings_toast_alerts_off">An kashe sanarwa</string>
     <string name="settings_toast_nothing_to_clear">Babu abin da za a share</string>
     <string name="settings_toast_cleared">An share abubuwan da aka sauke</string>
     <string name="settings_notif_title">A bar Love Stickers ta aika sanarwa?</string>
-    <string name="settings_notif_body">Android na tambaya sau ɗaya kawai. Muna sanar da ku ne kawai idan an ƙara sabon fakiti. Ba za mu taɓa aika talla ba.</string>
+    <string name="settings_notif_body">Android na tambaya sau ɗaya kawai. Za mu riƙa aiko muku da sanarwa da sabbin labarai lokaci zuwa lokaci, kamar sabbin fakitoci.</string>
     <string name="settings_notif_deny">Kar a bari</string>
     <string name="settings_notif_allow">A bari</string>
+    <string name="notification_channel_updates">Sanarwa da sabbin labarai</string>
     <string name="settings_clear_title">A share fakitocin da aka sauke?</string>
     <string name="settings_clear_body">Za a cire kwafin da aka ajiye a wannan manhaja (%1$s). Fakitocin da ke cikin WhatsApp za su ci gaba da zama a can.</string>
     <string name="settings_clear_keep">Riƙe su</string>
@@ -290,4 +277,43 @@
     <string name="contact_email_label">Imel · ba dole ba ne, sai idan kuna son amsa</string>
     <string name="contact_attach_note">Ana aikawa tare da sigar manhaja da sigar Android. Babu wani abu daban.</string>
     <string name="contact_send">Aika</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">Wani abu ya faru</string>
+    <string name="crash_message">Love Stickers ya ci karo da kuskuren da ba a zata ba kuma dole ne ya rufe. An sanar da mu kuma muna aikin gyara.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">Yana canza harshen manhaja da na sitikoki.</string>
+    <string name="namepack_you_title">Menene sunanku?</string>
+    <string name="namepack_you_helper">Zai bayyana a sitikokin da kuke aikawa. Kuna iya tsallake wannan.</string>
+    <string name="namepack_you_placeholder">Sunanku</string>
+    <string name="namepack_pick_character">Wa ke faɗa?</string>
+    <string name="namepack_love_title">Wanene masoyinku?</string>
+    <string name="namepack_love_helper">Za mu rubuta sitika 12 da wannan suna, a harshenku.</string>
+    <string name="namepack_love_placeholder">Sunan masoyi</string>
+    <string name="namepack_sample_name">Aisha</string>
+    <string name="namepack_continue">Ci gaba</string>
+    <string name="namepack_make">Yi sitikokinmu</string>
+    <string name="namepack_note_limit">Iyakar ke nan. Laƙabi ma ya yi.</string>
+    <string name="namepack_note_emoji">Ba a iya rubuta emoji. Haruffa kaɗai.</string>
+    <string name="namepack_note_need_name">Ƙara suna don yin fakitin.</string>
+    <string name="namepack_preview_hint">Samfoti kai tsaye. Yana canzawa yayin da kuke rubutu.</string>
+    <string name="namepack_preview_alt">Samfotin sitika: %1$s</string>
+    <string name="namepack_rel_girlfriend">Budurwa</string>
+    <string name="namepack_rel_boyfriend">Saurayi</string>
+    <string name="namepack_rel_wife">Mata</string>
+    <string name="namepack_rel_husband">Miji</string>
+    <string name="namepack_rel_crush">Crush</string>
+    <string name="namepack_rel_partner">Abokin rayuwa</string>
+    <string name="namepack_rel_mom">Mama</string>
+    <string name="namepack_rel_friend">Aboki</string>
+    <string name="namepack_building_title">Ana rubuta sitika 12…</string>
+    <string name="namepack_building_sub">An yi shi a wannan wayar. Ba a loda komai ba.</string>
+    <string name="namepack_waiting_alt">%1$s na jiran sitikokinku</string>
+    <string name="namepack_pack_for">Don %1$s</string>
+    <string name="namepack_tone_sweet">Mai daɗi</string>
+    <string name="namepack_tone_flirty">Mai wasa</string>
+    <string name="namepack_meta">Sitika 12 · %1$s</string>
+    <string name="namepack_add_failed">Wani abu ya faru · Sake gwadawa</string>
+    <string name="namepack_build_failed">Ba a iya yin sitikokin ba. Sake gwadawa.</string>
+    <!-- /Custom stickers -->
 </resources>

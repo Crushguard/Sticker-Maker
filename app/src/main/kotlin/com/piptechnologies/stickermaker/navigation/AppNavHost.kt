@@ -1,22 +1,31 @@
 package com.piptechnologies.stickermaker.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
 import com.piptechnologies.stickermaker.feature.contact.ContactScreen
 import com.piptechnologies.stickermaker.feature.create.details.CreatePackDetailsScreen
 import com.piptechnologies.stickermaker.feature.create.editor.CreateEditorScreen
 import com.piptechnologies.stickermaker.feature.create.import_.CreateImportScreen
-import com.piptechnologies.stickermaker.feature.customize.CustomizationScreen
 import com.piptechnologies.stickermaker.feature.detail.PackDetailScreen
 import com.piptechnologies.stickermaker.feature.home.HomeScreen
 import com.piptechnologies.stickermaker.feature.language.LanguageScreen
 import com.piptechnologies.stickermaker.feature.mypacks.MyPacksScreen
+import com.piptechnologies.stickermaker.feature.namepack.NamePackScreen
+import com.piptechnologies.stickermaker.feature.namepack.blockTaps
 import com.piptechnologies.stickermaker.feature.onboarding.OnboardingScreen
+import com.piptechnologies.stickermaker.feature.rating.RatingPromptHost
 import com.piptechnologies.stickermaker.feature.saved.SavedScreen
 import com.piptechnologies.stickermaker.feature.settings.SettingsScreen
 import com.piptechnologies.stickermaker.feature.splash.SplashScreen
@@ -25,8 +34,7 @@ import com.piptechnologies.stickermaker.feature.splash.SplashScreen
 object Routes {
     const val SPLASH = "splash"
     const val ONBOARDING = "onboarding"
-    const val CUSTOMIZE = "customize"
-    const val CUSTOMIZE_EDIT = "customizeEdit"
+    const val NAME_PACK = "namePack"
     const val HOME = "home"
     const val DETAIL = "detail/{packId}"
     const val CREATE = "create"
@@ -44,14 +52,31 @@ object Routes {
     fun detail(packId: String): String = "detail/$packId"
 }
 
+/** Screens where a finished add leaves the user browsing: the rating prompt's natural pauses. */
+private val RATING_PAUSES = setOf(Routes.HOME, Routes.DETAIL, Routes.SAVED, Routes.MY_PACKS)
+
 /**
  * The app's navigation graph, mirroring the prototype's stack semantics:
- * splash decides between onboarding and home; first-run customization
- * replaces the launch stack; a finished create flow collapses into My Packs.
+ * splash decides between onboarding and home; the intro hands over to the
+ * Custom Stickers flow, which ends on Home; a finished create flow collapses
+ * into My Packs.
  */
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController()) {
     val openPack: (String) -> Unit = { id -> navController.navigate(Routes.detail(id)) }
+
+    // One screen_view per destination (the route pattern, never a pack id).
+    DisposableEffect(navController) {
+        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            destination.route?.let(AppAnalytics::logScreen)
+        }
+        navController.addOnDestinationChangedListener(listener)
+        onDispose { navController.removeOnDestinationChangedListener(listener) }
+    }
+
+    // The rating prompt rises after a pack WhatsApp confirmed, once the user is browsing again.
+    val route = navController.currentBackStackEntryAsState().value?.destination?.route
+    RatingPromptHost(atNaturalPause = route in RATING_PAUSES)
 
     NavHost(
         navController = navController,
@@ -69,31 +94,25 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
 
         composable(Routes.ONBOARDING) {
             OnboardingScreen(
-                onDone = {
-                    navController.navigate(Routes.CUSTOMIZE) {
-                        popUpTo(Routes.ONBOARDING) { inclusive = true }
-                    }
-                }
+                // The intro stays underneath: Back on "Your name" returns to it.
+                onDone = { navController.navigate(Routes.NAME_PACK) { launchSingleTop = true } }
             )
         }
 
-        composable(Routes.CUSTOMIZE) {
-            CustomizationScreen(
-                isEdit = false,
-                onDone = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.CUSTOMIZE) { inclusive = true }
-                    }
-                }
-            )
-        }
-
-        composable(Routes.CUSTOMIZE_EDIT) {
-            CustomizationScreen(
-                isEdit = true,
-                onDone = { navController.popBackStack() },
-                onBack = { navController.popBackStack() }
-            )
+        composable(Routes.NAME_PACK) {
+            // The route fades in over the intro, whose Skip sits where the name steps' Skip does:
+            // taps during the fade were aimed at the intro.
+            Box(Modifier.fillMaxSize().blockTaps(transition.currentState != transition.targetState)) {
+                NamePackScreen(
+                    // First run is over: Home becomes the only screen on the stack.
+                    onFinished = {
+                        navController.navigate(Routes.HOME) {
+                            popUpTo(navController.graph.id) { inclusive = true }
+                        }
+                    },
+                    onLeave = { navController.popBackStack() }
+                )
+            }
         }
 
         composable(Routes.HOME) {
@@ -163,8 +182,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             SettingsScreen(
                 onBack = { navController.popBackStack() },
                 onLanguage = { navController.navigate(Routes.LANGUAGE) },
-                onContact = { navController.navigate(Routes.CONTACT) },
-                onEditThemes = { navController.navigate(Routes.CUSTOMIZE_EDIT) }
+                onContact = { navController.navigate(Routes.CONTACT) }
             )
         }
 

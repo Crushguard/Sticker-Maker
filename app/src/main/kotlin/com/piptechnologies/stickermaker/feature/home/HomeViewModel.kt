@@ -1,24 +1,30 @@
 package com.piptechnologies.stickermaker.feature.home
 
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.piptechnologies.stickermaker.R
+import com.piptechnologies.stickermaker.core.data.di.IoDispatcher
 import com.piptechnologies.stickermaker.core.data.prefs.PrefsRepository
 import com.piptechnologies.stickermaker.core.data.repo.CatalogRepository
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
 import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.model.Category
+import com.piptechnologies.stickermaker.core.model.FallbackCategories
 import com.piptechnologies.stickermaker.core.model.StickerPack
+import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
+import com.piptechnologies.stickermaker.core.ui.PendingToasts
 import com.piptechnologies.stickermaker.core.ui.UiText
 import com.piptechnologies.stickermaker.core.ui.inAppLanguage
 import com.piptechnologies.stickermaker.core.ui.nameText
 import com.piptechnologies.stickermaker.core.ui.themeNameRes
-import com.piptechnologies.stickermaker.feature.customize.FallbackCategories
+import com.piptechnologies.stickermaker.feature.rating.RatingPromptController
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -33,7 +39,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-// Fixed chips ahead of the user's themes (Prototype `chips`).
+// Fixed chips ahead of the theme chips (Prototype `chips`).
 const val CHIP_TRENDING = "trending"
 const val CHIP_SAVED = "saved"
 const val CHIP_ANIMATED = "animated"
@@ -60,10 +66,10 @@ data class HomePackUi(
     val addProgress: Float
 )
 
-/** A download that finished; the screen must now fire the ADD_PACK intent. */
+/** A download that finished and its ADD_PACK [intent], resolved off the main thread; the screen fires it. */
 data class PendingWhatsAppAdd(
     val packId: String,
-    val packName: String
+    val intent: Intent
 )
 
 /** One dark toast queued by the ViewModel; [withCheck] leads with a green check. */
@@ -79,7 +85,7 @@ data class HomeToast(
  * @property offline the catalog emitted empty (Firestore error / no cache),
  * so Home shows the full offline state with Retry.
  * @property activeChipId the effective chip: falls back to Trending when the
- * Saved chip lost its last heart or a theme chip was deselected in Settings.
+ * Saved chip lost its last heart or a theme chip's category left the catalog.
  * @property whatsAppMissingPackId non-null shows the "WhatsApp isn't
  * installed" confirmation sheet.
  * @property pendingWhatsAppAdd non-null makes the screen launch WhatsApp's
@@ -101,18 +107,21 @@ data class HomeUiState(
 
 /**
  * Browse state and the card-pill add machine (Prototype `is.home` +
- * `startAdd`): filter chips over the user's themes, local search across
+ * `startAdd`): filter chips over every theme, local search across
  * titles and theme names, favorites hearts, and per-card
  * idle -> downloading -> sent -> added, with failed -> retry.
  *
- * The repository stops at [AddState.Sent]; the screen fires the ADD_PACK
- * intent and reports WhatsApp's verdict back through [onWhatsAppResult].
+ * The repository stops at [AddState.Sent]; this resolves the ADD_PACK
+ * intent, the screen fires it and reports WhatsApp's verdict back through
+ * [onWhatsAppResult].
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val catalogRepository: CatalogRepository,
     private val prefsRepository: PrefsRepository,
-    @ApplicationContext private val appContext: Context
+    @ApplicationContext private val appContext: Context,
+    private val pendingToasts: PendingToasts,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     /** Screen-local controls folded into one flow for the combine below. */
@@ -129,7 +138,6 @@ class HomeViewModel @Inject constructor(
         val packs: List<StickerPack>?,
         val installed: Set<String>,
         val favorites: Set<String>,
-        val themes: Set<String>,
         val categories: List<Category>
     )
 
@@ -138,7 +146,6 @@ class HomeViewModel @Inject constructor(
     private val packsMirror = MutableStateFlow<List<StickerPack>?>(null)
     private val installedMirror = MutableStateFlow<Set<String>>(emptySet())
     private val favoritesMirror = MutableStateFlow<Set<String>>(emptySet())
-    private val themesMirror = MutableStateFlow<Set<String>>(emptySet())
     private val categoriesMirror = MutableStateFlow(FallbackCategories)
 
     private val _toasts = MutableSharedFlow<HomeToast>(
@@ -182,9 +189,6 @@ class HomeViewModel @Inject constructor(
             prefsRepository.favoritePackIds.collect { favoritesMirror.value = it }
         }
         viewModelScope.launch {
-            prefsRepository.selectedThemes.collect { themesMirror.value = it }
-        }
-        viewModelScope.launch {
             catalogRepository.observeCategories().collect { remote ->
                 categoriesMirror.value = remote.ifEmpty { FallbackCategories }
             }
@@ -192,9 +196,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private val dataFlow = combine(
-        packsMirror, installedMirror, favoritesMirror, themesMirror, categoriesMirror
-    ) { packs, installed, favorites, themes, categories ->
-        HomeData(packs, installed, favorites, themes, categories)
+        packsMirror, installedMirror, favoritesMirror, categoriesMirror
+    ) { packs, installed, favorites, categories ->
+        HomeData(packs, installed, favorites, categories)
     }
 
     val uiState: StateFlow<HomeUiState> =
@@ -262,7 +266,7 @@ class HomeViewModel @Inject constructor(
     }
 
     /** Both WhatsApp apps already carry the pack: nothing to launch. */
-    fun onAlreadyInWhatsApp(packId: String) {
+    private fun onAlreadyInWhatsApp(packId: String) {
         controls.update { it.copy(pendingWhatsAppAdd = null) }
         setAddState(packId, AddState.Added)
         viewModelScope.launch { catalogRepository.setWhitelisted(packId, true) }
@@ -275,11 +279,14 @@ class HomeViewModel @Inject constructor(
         awaitingResultFor = null
         when (result) {
             AddStickerPackFlow.AddResult.Added -> {
+                AppAnalytics.logPackAdded(packId)
+                RatingPromptController.onPackAdded(appContext)
                 setAddState(packId, AddState.Added)
                 viewModelScope.launch { catalogRepository.setWhitelisted(packId, true) }
                 _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_added_to_whatsapp), withCheck = true))
             }
             is AddStickerPackFlow.AddResult.Cancelled -> {
+                AppAnalytics.logPackAddCancelled(packId, rejected = result.validationError != null)
                 // Prototype cancelWA: back to idle; drop the local copy so a
                 // re-add runs the full download again.
                 setAddState(packId, AddState.Idle)
@@ -297,6 +304,9 @@ class HomeViewModel @Inject constructor(
         _toasts.tryEmit(HomeToast(UiText.res(R.string.toast_opening_play_store)))
     }
 
+    /** A toast another screen left for Home (the name flow's "Added to WhatsApp"), handed out once. */
+    fun takePendingToast(): UiText? = pendingToasts.take()
+
     // -------------------------------------------------------------- internals //
 
     private fun startDownload(packId: String) {
@@ -305,12 +315,21 @@ class HomeViewModel @Inject constructor(
         addJobs[packId] = viewModelScope.launch {
             catalogRepository.addPack(pack).collect { state ->
                 setAddState(packId, state)
-                if (state is AddState.Sent) {
-                    controls.update {
-                        it.copy(pendingWhatsAppAdd = PendingWhatsAppAdd(packId, pack.name))
-                    }
-                }
+                if (state is AddState.Sent) handOff(packId, pack.name)
             }
+        }
+    }
+
+    /** The download is in: ask WhatsApp, off the main thread, what Add launches. */
+    private suspend fun handOff(packId: String, packName: String) {
+        val target = AddStickerPackFlow.resolveAddTarget(
+            appContext, packId, packName, "home_add_intent", ioDispatcher
+        )
+        when (target) {
+            is AddStickerPackFlow.AddTarget.Launch ->
+                controls.update { it.copy(pendingWhatsAppAdd = PendingWhatsAppAdd(packId, target.intent)) }
+            AddStickerPackFlow.AddTarget.AlreadyAdded -> onAlreadyInWhatsApp(packId)
+            AddStickerPackFlow.AddTarget.NoWhatsApp -> onWhatsAppMissingAtLaunch(packId)
         }
     }
 
@@ -330,16 +349,15 @@ class HomeViewModel @Inject constructor(
         val offline = catalog != null && catalog.isEmpty()
         val catalogIds = catalog.orEmpty().mapTo(mutableSetOf()) { it.id }
         val favCount = data.favorites.count { it in catalogIds }
-        val selectedCategories = data.categories.filter { it.id in data.themes }
         val chips = buildList {
             add(HomeChipUi(CHIP_TRENDING, UiText.res(R.string.home_chip_trending)))
             if (favCount > 0) {
                 add(HomeChipUi(CHIP_SAVED, UiText.res(R.string.home_chip_saved, favCount), showHeart = true))
             }
             add(HomeChipUi(CHIP_ANIMATED, UiText.res(R.string.home_chip_animated)))
-            selectedCategories.forEach { add(HomeChipUi(it.id, it.nameText())) }
+            data.categories.forEach { add(HomeChipUi(it.id, it.nameText())) }
         }
-        val chip = effectiveChip(c.chipId, favCount, selectedCategories.mapTo(mutableSetOf()) { it.id })
+        val chip = effectiveChip(c.chipId, favCount, data.categories.mapTo(mutableSetOf()) { it.id })
         val query = c.query.trim()
         val list = filterPacks(catalog.orEmpty(), data, c.searchOpen, query, chip)
         val packsUi = list.map { pack ->
@@ -373,7 +391,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    /** Prototype `homePacks()`, verbatim: themes baseline, search, chips, trending sort. */
+    /** Prototype `homePacks()`: search, chips, trending sort. */
     private fun filterPacks(
         catalog: List<StickerPack>,
         data: HomeData,
@@ -381,7 +399,7 @@ class HomeViewModel @Inject constructor(
         query: String,
         chip: String
     ): List<StickerPack> {
-        var list = catalog.filter { data.themes.isEmpty() || it.category in data.themes }
+        var list = catalog
         if (searchOpen) {
             if (query.isNotEmpty()) {
                 val q = query.lowercase()
@@ -418,11 +436,11 @@ class HomeViewModel @Inject constructor(
     private fun effectiveChip(
         chipId: String,
         favCount: Int,
-        selectedThemeIds: Set<String>
+        categoryIds: Set<String>
     ): String = when {
         chipId == CHIP_SAVED && favCount == 0 -> CHIP_TRENDING
         chipId != CHIP_TRENDING && chipId != CHIP_SAVED && chipId != CHIP_ANIMATED &&
-            chipId !in selectedThemeIds -> CHIP_TRENDING
+            chipId !in categoryIds -> CHIP_TRENDING
         else -> chipId
     }
 

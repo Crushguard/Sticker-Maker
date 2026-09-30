@@ -63,14 +63,6 @@
     <string name="theme_flirty">Menggoda</string>
     <string name="theme_goodnight">Selamat tidur</string>
     <string name="theme_distance">Jarak jauh</string>
-    <string name="customize_title">Pilih tema Anda</string>
-    <string name="customize_edit_title">Tema Anda</string>
-    <string name="customize_subtitle">Beranda menampilkan paket dari tema yang Anda pilih. Ubah kapan saja di Setelan.</string>
-    <string name="customize_save">Simpan</string>
-    <string name="customize_pick_one">Pilih minimal satu tema</string>
-    <plurals name="customize_continue">
-        <item quantity="other">Lanjutkan · %d tema</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">Anda sedang offline</string>
@@ -196,15 +188,11 @@
 
     <!-- Settings -->
     <string name="settings_title">Setelan</string>
-    <string name="settings_alerts_title">Notifikasi paket baru</string>
-    <string name="settings_alerts_on">Hanya saat ada paket baru.</string>
-    <string name="settings_alerts_off">Nonaktif. Anda tidak akan mendapat kabar tentang paket baru.</string>
+    <string name="settings_alerts_title">Notifikasi</string>
+    <string name="settings_alerts_on">Peringatan dan info terbaru dari Love Stickers.</string>
+    <string name="settings_alerts_off">Nonaktif. Anda tidak akan menerima peringatan atau info terbaru.</string>
     <string name="settings_section_preferences">PREFERENSI</string>
     <string name="settings_section_about">TENTANG</string>
-    <string name="settings_edit_themes">Ubah tema</string>
-    <plurals name="settings_theme_count">
-        <item quantity="other">%d tema</item>
-    </plurals>
     <string name="settings_language">Bahasa</string>
     <string name="settings_clear">Hapus paket yang diunduh</string>
     <string name="settings_storage_none">Tidak ada</string>
@@ -216,14 +204,15 @@
     <string name="settings_privacy">Kebijakan privasi</string>
     <string name="settings_version">Versi</string>
     <string name="settings_free_card">Love Stickers gratis, dan akan selalu gratis. Tanpa iklan, tanpa akun, tanpa pelacakan. Foto Anda tidak pernah keluar dari ponsel Anda.</string>
-    <string name="settings_toast_alerts_on">Notifikasi paket baru aktif</string>
-    <string name="settings_toast_alerts_off">Notifikasi paket baru nonaktif</string>
+    <string name="settings_toast_alerts_on">Notifikasi aktif</string>
+    <string name="settings_toast_alerts_off">Notifikasi nonaktif</string>
     <string name="settings_toast_nothing_to_clear">Tidak ada yang perlu dihapus</string>
     <string name="settings_toast_cleared">Unduhan dihapus</string>
     <string name="settings_notif_title">Izinkan Love Stickers mengirim notifikasi?</string>
-    <string name="settings_notif_body">Android hanya bertanya sekali. Kami hanya memberi tahu Anda saat ada paket baru. Tidak akan pernah ada promosi.</string>
+    <string name="settings_notif_body">Android hanya bertanya sekali. Sesekali kami akan mengirim peringatan dan info terbaru, seperti paket baru.</string>
     <string name="settings_notif_deny">Jangan izinkan</string>
     <string name="settings_notif_allow">Izinkan</string>
+    <string name="notification_channel_updates">Peringatan dan info terbaru</string>
     <string name="settings_clear_title">Hapus paket yang diunduh?</string>
     <string name="settings_clear_body">Salinan yang disimpan di aplikasi ini (%1$s) akan dihapus. Paket yang sudah ada di WhatsApp tetap di sana.</string>
     <string name="settings_clear_keep">Pertahankan</string>
@@ -282,4 +271,43 @@
     <string name="contact_email_label">Email · opsional, hanya jika Anda ingin dibalas</string>
     <string name="contact_attach_note">Dikirim bersama versi aplikasi dan versi Android. Tidak ada yang lain.</string>
     <string name="contact_send">Kirim</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">Terjadi kesalahan</string>
+    <string name="crash_message">Love Stickers mengalami kesalahan tak terduga dan harus ditutup. Kami sudah diberi tahu dan sedang memperbaikinya.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">Mengubah bahasa aplikasi dan stiker.</string>
+    <string name="namepack_you_title">Siapa nama Anda?</string>
+    <string name="namepack_you_helper">Nama ini muncul di stiker yang Anda kirim. Anda bisa melewatinya.</string>
+    <string name="namepack_you_placeholder">Nama Anda</string>
+    <string name="namepack_pick_character">Siapa yang bilang?</string>
+    <string name="namepack_love_title">Siapa kekasih Anda?</string>
+    <string name="namepack_love_helper">Kami menulis 12 stiker dengan nama ini, dalam bahasa Anda.</string>
+    <string name="namepack_love_placeholder">Namanya</string>
+    <string name="namepack_sample_name">Putri</string>
+    <string name="namepack_continue">Lanjut</string>
+    <string name="namepack_make">Buat stiker kita</string>
+    <string name="namepack_note_limit">Sudah batasnya. Nama panggilan juga bisa.</string>
+    <string name="namepack_note_emoji">Emoji tidak bisa ditulis. Hanya huruf.</string>
+    <string name="namepack_note_need_name">Tambahkan nama untuk membuat paket.</string>
+    <string name="namepack_preview_hint">Pratinjau langsung. Berubah saat Anda mengetik.</string>
+    <string name="namepack_preview_alt">Pratinjau stiker: %1$s</string>
+    <string name="namepack_rel_girlfriend">Cewekku</string>
+    <string name="namepack_rel_boyfriend">Cowokku</string>
+    <string name="namepack_rel_wife">Istri</string>
+    <string name="namepack_rel_husband">Suami</string>
+    <string name="namepack_rel_crush">Gebetan</string>
+    <string name="namepack_rel_partner">Pasangan</string>
+    <string name="namepack_rel_mom">Ibu</string>
+    <string name="namepack_rel_friend">Sahabat</string>
+    <string name="namepack_building_title">Menulis 12 stiker…</string>
+    <string name="namepack_building_sub">Dibuat di ponsel ini. Tidak ada yang diunggah.</string>
+    <string name="namepack_waiting_alt">%1$s menunggu stiker Anda</string>
+    <string name="namepack_pack_for">Untuk %1$s</string>
+    <string name="namepack_tone_sweet">Manis</string>
+    <string name="namepack_tone_flirty">Menggoda</string>
+    <string name="namepack_meta">12 stiker · %1$s</string>
+    <string name="namepack_add_failed">Terjadi kesalahan · Coba lagi</string>
+    <string name="namepack_build_failed">Stiker gagal dibuat. Coba lagi.</string>
+    <!-- /Custom stickers -->
 </resources>

@@ -68,19 +68,6 @@
     <string name="theme_flirty">غزل</string>
     <string name="theme_goodnight">ليلة سعيدة</string>
     <string name="theme_distance">حب عن بُعد</string>
-    <string name="customize_title">اختر مواضيعك</string>
-    <string name="customize_edit_title">مواضيعك</string>
-    <string name="customize_subtitle">تعرض «الرئيسية» حزمًا من المواضيع التي تختارها. غيّرها متى شئت من «الإعدادات».</string>
-    <string name="customize_save">حفظ</string>
-    <string name="customize_pick_one">اختر موضوعًا واحدًا على الأقل</string>
-    <plurals name="customize_continue">
-        <item quantity="zero">متابعة · لا مواضيع</item>
-        <item quantity="one">متابعة · موضوع واحد</item>
-        <item quantity="two">متابعة · موضوعان</item>
-        <item quantity="few">متابعة · %d مواضيع</item>
-        <item quantity="many">متابعة · %d موضوعًا</item>
-        <item quantity="other">متابعة · %d موضوع</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">أنت غير متصل</string>
@@ -226,20 +213,11 @@
 
     <!-- Settings -->
     <string name="settings_title">الإعدادات</string>
-    <string name="settings_alerts_title">تنبيهات الحزم الجديدة</string>
-    <string name="settings_alerts_on">فقط عند إضافة حزمة جديدة.</string>
-    <string name="settings_alerts_off">متوقفة. لن تصلك أخبار الحزم الجديدة.</string>
+    <string name="settings_alerts_title">الإشعارات</string>
+    <string name="settings_alerts_on">تنبيهات وتحديثات من Love Stickers.</string>
+    <string name="settings_alerts_off">متوقفة. لن تصلك تنبيهات أو تحديثات.</string>
     <string name="settings_section_preferences">التفضيلات</string>
     <string name="settings_section_about">حول التطبيق</string>
-    <string name="settings_edit_themes">تعديل المواضيع</string>
-    <plurals name="settings_theme_count">
-        <item quantity="zero">لا مواضيع</item>
-        <item quantity="one">موضوع واحد</item>
-        <item quantity="two">موضوعان</item>
-        <item quantity="few">%d مواضيع</item>
-        <item quantity="many">%d موضوعًا</item>
-        <item quantity="other">%d موضوع</item>
-    </plurals>
     <string name="settings_language">اللغة</string>
     <string name="settings_clear">مسح الحزم المُنزَّلة</string>
     <string name="settings_storage_none">لا شيء</string>
@@ -251,14 +229,15 @@
     <string name="settings_privacy">سياسة الخصوصية</string>
     <string name="settings_version">الإصدار</string>
     <string name="settings_free_card">&#x200F;Love Stickers مجاني، وسيبقى كذلك دائمًا. بلا إعلانات، وبلا حساب، وبلا تتبّع. صورك لا تغادر هاتفك أبدًا.</string>
-    <string name="settings_toast_alerts_on">تم تشغيل تنبيهات الحزم الجديدة</string>
-    <string name="settings_toast_alerts_off">تم إيقاف تنبيهات الحزم الجديدة</string>
+    <string name="settings_toast_alerts_on">تم تشغيل الإشعارات</string>
+    <string name="settings_toast_alerts_off">تم إيقاف الإشعارات</string>
     <string name="settings_toast_nothing_to_clear">لا شيء لمسحه</string>
     <string name="settings_toast_cleared">تم مسح التنزيلات</string>
     <string name="settings_notif_title">هل تريد السماح لتطبيق Love Stickers بإرسال إشعارات؟</string>
-    <string name="settings_notif_body">يسأل Android مرة واحدة فقط. لن نرسل إليك إشعارًا إلا عند إضافة حزمة جديدة. ولا عروض ترويجية أبدًا.</string>
+    <string name="settings_notif_body">يسأل Android مرة واحدة فقط. سنرسل إليك أحيانًا تنبيهات وتحديثات، مثل الحزم الجديدة.</string>
     <string name="settings_notif_deny">عدم السماح</string>
     <string name="settings_notif_allow">السماح</string>
+    <string name="notification_channel_updates">التنبيهات والتحديثات</string>
     <string name="settings_clear_title">هل تريد مسح الحزم المُنزَّلة؟</string>
     <string name="settings_clear_body">يزيل ذلك النسخ المخزّنة في هذا التطبيق (%1$s). تبقى الحزم الموجودة في واتساب كما هي.</string>
     <string name="settings_clear_keep">الإبقاء عليها</string>
@@ -322,4 +301,43 @@
     <string name="contact_email_label">البريد الإلكتروني · اختياري، فقط إن أردت ردًّا</string>
     <string name="contact_attach_note">تُرسل مع إصدار التطبيق وإصدار Android. لا شيء غير ذلك.</string>
     <string name="contact_send">إرسال</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">حدث خطأ ما</string>
+    <string name="crash_message">واجه Love Stickers خطأ غير متوقع وسيتم إغلاقه. لقد تم إبلاغنا ونعمل على إصلاحه.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">تغيّر التطبيق والملصقات.</string>
+    <string name="namepack_you_title">ما اسمك؟</string>
+    <string name="namepack_you_helper">يظهر على الملصقات التي ترسلها. يمكنك تخطي هذه الخطوة.</string>
+    <string name="namepack_you_placeholder">اسمك</string>
+    <string name="namepack_pick_character">من يقولها؟</string>
+    <string name="namepack_love_title">من تحب؟</string>
+    <string name="namepack_love_helper">نكتب ١٢ ملصقًا بهذا الاسم، بلغتك.</string>
+    <string name="namepack_love_placeholder">الاسم</string>
+    <string name="namepack_sample_name">سارة</string>
+    <string name="namepack_continue">متابعة</string>
+    <string name="namepack_make">اصنع ملصقاتنا</string>
+    <string name="namepack_note_limit">هذا هو الحد. أسماء التحبب تنفع أيضًا.</string>
+    <string name="namepack_note_emoji">لا يمكن كتابة الإيموجي. حروف فقط.</string>
+    <string name="namepack_note_need_name">أضف اسمًا لصنع الحزمة.</string>
+    <string name="namepack_preview_hint">معاينة حيّة. تتغيّر مع كتابتك.</string>
+    <string name="namepack_preview_alt">معاينة الملصق: %1$s</string>
+    <string name="namepack_rel_girlfriend">صديقتي</string>
+    <string name="namepack_rel_boyfriend">صديقي</string>
+    <string name="namepack_rel_wife">زوجتي</string>
+    <string name="namepack_rel_husband">زوجي</string>
+    <string name="namepack_rel_crush">كراش</string>
+    <string name="namepack_rel_partner">شريكي</string>
+    <string name="namepack_rel_mom">أمي</string>
+    <string name="namepack_rel_friend">صديق</string>
+    <string name="namepack_building_title">نكتب ١٢ ملصقًا…</string>
+    <string name="namepack_building_sub">صُنعت على هذا الهاتف. لا شيء يُرفع.</string>
+    <string name="namepack_waiting_alt">&#x200F;%1$s ينتظر ملصقاتك</string>
+    <string name="namepack_pack_for">إلى %1$s</string>
+    <string name="namepack_tone_sweet">لطيف</string>
+    <string name="namepack_tone_flirty">غزلي</string>
+    <string name="namepack_meta">١٢ ملصقًا · %1$s</string>
+    <string name="namepack_add_failed">حدث خطأ · أعد المحاولة</string>
+    <string name="namepack_build_failed">تعذّر صنع الملصقات. حاول مرة أخرى.</string>
+    <!-- /Custom stickers -->
 </resources>

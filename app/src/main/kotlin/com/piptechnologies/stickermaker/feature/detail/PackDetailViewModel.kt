@@ -13,7 +13,9 @@ import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.model.InstalledPack
 import com.piptechnologies.stickermaker.core.model.OwnPack
 import com.piptechnologies.stickermaker.core.model.StickerPack
+import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
 import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.feature.rating.RatingPromptController
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -214,17 +216,20 @@ class PackDetailViewModel @Inject constructor(
     }
 
     private fun sendToWhatsApp(id: String, name: String) {
-        viewModelScope.launch(ioDispatcher) {
-            val intent = AddStickerPackFlow.createBestIntent(appContext, id, name)
-            when {
-                intent != null -> _events.send(PackDetailEvent.LaunchAddIntent(intent))
-                AddStickerPackFlow.isWhatsAppInstalled(appContext) -> {
+        viewModelScope.launch {
+            val target = AddStickerPackFlow.resolveAddTarget(
+                appContext, id, name, "pack_detail_add_intent", ioDispatcher
+            )
+            when (target) {
+                is AddStickerPackFlow.AddTarget.Launch ->
+                    _events.send(PackDetailEvent.LaunchAddIntent(target.intent))
+                AddStickerPackFlow.AddTarget.AlreadyAdded -> {
                     // Nothing to launch: every installed WhatsApp already has the pack.
                     persistWhitelisted(id, true)
                     session.value = AddState.Added
                     _events.send(PackDetailEvent.Toast(UiText.res(R.string.toast_already_in_whatsapp), false))
                 }
-                else -> {
+                AddStickerPackFlow.AddTarget.NoWhatsApp -> {
                     session.value = AddState.Idle
                     showNoWhatsApp.value = true
                 }
@@ -238,6 +243,8 @@ class PackDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (result) {
                 AddStickerPackFlow.AddResult.Added -> {
+                    AppAnalytics.logPackAdded(id)
+                    RatingPromptController.onPackAdded(appContext)
                     val verified = withContext(ioDispatcher) {
                         WhitelistCheck.isWhitelisted(appContext, id)
                     }
@@ -246,6 +253,7 @@ class PackDetailViewModel @Inject constructor(
                     _events.send(PackDetailEvent.Toast(UiText.res(R.string.toast_added_to_whatsapp), true))
                 }
                 is AddStickerPackFlow.AddResult.Cancelled -> {
+                    AppAnalytics.logPackAddCancelled(id, rejected = result.validationError != null)
                     cleanUpAfterUnconfirmedAdd(id)
                     // WhatsApp rejected the pack -> Failed (retry); the user backing out
                     // returns to idle, exactly as the design's sent-frame says.

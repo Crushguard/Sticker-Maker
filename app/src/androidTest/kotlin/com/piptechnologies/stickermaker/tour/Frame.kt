@@ -3,9 +3,10 @@ package com.piptechnologies.stickermaker.tour
 import java.util.Locale
 
 /**
- * The 42 frames of design/Screens.dc.html ("Every screen, every state"), in the
- * design's order. The tour captures the real app in each state and records
- * which frame every screenshot maps to.
+ * The tour's 42 frames, numbered as design/Screens.dc.html ("Every screen, every state") first
+ * shipped them. Frames 4 and 5 were the theme picker; they are now the Custom Stickers name
+ * steps from the page's "01 → 02 · First run" section. The tour captures the real app in each
+ * state and records which frame every screenshot maps to.
  */
 enum class Frame(
     val n: Int,
@@ -17,8 +18,8 @@ enum class Frame(
     SPLASH(1, "launch", "00 Launch", "Loading screen", "splash"),
     ONBOARDING_1(2, "onboarding-slide-1", "01 Onboarding", "Slide 1 · Curated packs, one tap to WhatsApp", "onboarding"),
     ONBOARDING_2(3, "onboarding-slide-2", "01 Onboarding", "Slide 2 · Make your own, animated too", "onboarding"),
-    CUSTOMIZE_FIRST_RUN(4, "customize-first-run", "02 Customization", "First run", "customize"),
-    CUSTOMIZE_EDIT(5, "customize-edit-themes", "02 Customization", "From Settings · Edit themes", "customizeEdit"),
+    NAME_YOU(4, "custom-your-name", "02 Custom stickers", "What's your name? · optional", "namePack"),
+    NAME_LOVE(5, "custom-their-name", "02 Custom stickers", "Who's your love?", "namePack"),
     HOME_TRENDING(6, "home-trending", "03 Home", "Home · Trending", "home"),
     HOME_ANIMATED(7, "home-animated", "03 Home", "Home · Animated", "home"),
     HOME_SEARCH(8, "home-search", "03 Home", "Home › Search", "home"),

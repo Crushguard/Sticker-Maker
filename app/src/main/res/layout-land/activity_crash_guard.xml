@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Landscape counterpart of the portrait crash-screen layout. The AAR ships its own layout-land
+  variant, and a more specific qualifier in the library still wins over an unqualified override in
+  the app, so without this file the crash screen would fall back to the SDK's unstyled default
+  whenever the device is rotated. Carries the extra buttons container that the SDK's
+  landscape layout declares.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/crashguard_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/crash_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="24dp"
+    tools:ignore="UnusedResources,Overdraw">
+
+    <ImageView
+        android:id="@+id/crashguard_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:maxWidth="180dp"
+        android:maxHeight="180dp"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/ic_crash_error" />
+
+    <RelativeLayout
+        android:id="@+id/crashguard_main_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:paddingVertical="24dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <TextView
+            android:id="@+id/crashguard_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/hg_extrabold"
+            android:gravity="center"
+            android:paddingBottom="12dp"
+            android:textColor="@color/crash_title"
+            android:textSize="20sp"
+            app:fontFamily="@font/hg_extrabold"
+            tools:text="@string/crash_title" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/crashguard_buttons"
+            android:layout_below="@id/crashguard_title">
+
+            <TextView
+                android:id="@+id/crashguard_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/hg_regular"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:paddingBottom="16dp"
+                android:textColor="@color/crash_body"
+                android:textSize="15sp"
+                app:fontFamily="@font/hg_regular"
+                tools:text="@string/crash_message" />
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/crashguard_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Required by the SDK's view lookup; never shown. -->
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/crashguard_stacktrace_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/crashguard_ok_button"
+                android:layout_width="240dp"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_crash_button"
+                android:fontFamily="@font/hg_bold"
+                android:stateListAnimator="@null"
+                android:text="@string/common_close"
+                android:textAllCaps="false"
+                android:textColor="@color/crash_on_button"
+                android:textSize="16sp"
+                app:fontFamily="@font/hg_bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/crashguard_stacktrace_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:paddingVertical="24dp"
+        android:visibility="gone">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/crashguard_stacktrace_ok_button">
+
+            <TextView
+                android:id="@+id/crashguard_stacktrace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="16dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/crash_body"
+                android:textSize="13sp" />
+        </ScrollView>
+
+        <Button
+            android:id="@+id/crashguard_stacktrace_ok_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/common_close" />
+    </RelativeLayout>
+</LinearLayout>

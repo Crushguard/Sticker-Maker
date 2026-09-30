@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Central configuration file for external URLs and emails, laid out like the other PIP Technologies apps -->
+    <!-- It is highly recommended to edit these values here instead of hunting through code -->
+    <!-- ConfigXmlTest checks that every config_* key the code uses is defined here, that the support address is the
+         publisher's, and that the sticker packs agree with this file. The crash-reporting codes are not here: they
+         stay out of git, in local.properties (see settings.gradle.kts) -->
+    <!-- ============================== Support and legal ============================== -->
+    <!-- Recipient for Contact us and the low-star feedback mail. Also the publisher email of every pack WhatsApp
+         receives (StickerContentProvider), which packs/*/pack.json and design/catalog.json repeat.
+         Always the publisher's address, never a personal one -->
+    <string name="config_support_email" translatable="false">support@piptechnologies.co</string>
+    <!-- Privacy Policy URL (Settings > Privacy policy, and the privacy policy link of every pack in WhatsApp) -->
+    <string name="config_privacy_policy_url" translatable="false">https://sites.google.com/view/ncd2fbbfb</string>
+    <!-- ============================== Firebase ============================== -->
+    <!-- The app's own named Firestore database in project play-console-f33dd: like the other apps there (pdf-app,
+         pedometer-app), each app keeps its catalog and rules in a database of its own. firebase.json deploys
+         firestore.rules to it and scripts/upload-pack.js seeds it: change all three together (ConfigXmlTest) -->
+    <string name="config_firestore_database" translatable="false">stickers-app</string>
+    <!-- ============================== Google Play ============================== -->
+    <!-- Settings > More apps: the publisher's developer page. The id is the developer name exactly as Play shows it -->
+    <string name="config_more_apps_url" translatable="false">https://play.google.com/store/apps/developer?id=PIP+TECHNOLOGIES</string>
+</resources>

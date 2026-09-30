@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Splash theme set in the manifest; installSplashScreen() swaps to
          postSplashScreenTheme before super.onCreate(). -->
@@ -16,6 +16,21 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <!--
+      The crash-reporting library's crash screen. Redefines the style name the SDK's AAR declares so the crash
+      screen carries this app's canvas. Parent is AppCompat, not Material3: the library's crash activity
+      extends AppCompatActivity, and AppCompat inflates the layout's <Button> as AppCompatButton,
+      which honors the rose shape drawable. The AAR ships a values-night variant of this same name,
+      and a library resource under a more specific qualifier wins over an unqualified app override,
+      so values-night/themes.xml redefines it too (the app is light-only in both).
+    -->
+    <style name="Theme.CrashGuardActivity" parent="Theme.AppCompat.Light.NoActionBar" tools:ignore="UnusedResources">
+        <item name="android:windowBackground">@color/crash_bg</item>
+        <item name="android:statusBarColor">@color/crash_bg</item>
+        <item name="android:navigationBarColor">@color/crash_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
 </resources>

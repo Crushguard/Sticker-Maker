@@ -17,11 +17,17 @@ import com.google.mlkit.vision.segmentation.Segmenter
 import com.google.mlkit.vision.segmentation.selfie.SelfieSegmenterOptions
 import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.di.IoDispatcher
+import com.piptechnologies.stickermaker.core.data.files.OwnPackFiles
 import com.piptechnologies.stickermaker.core.data.repo.MyPacksRepository
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
+import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
+import com.piptechnologies.stickermaker.core.telemetry.CrashReporting
 import com.piptechnologies.stickermaker.core.ui.UiText
 import com.piptechnologies.stickermaker.core.ui.inAppLanguage
+import com.piptechnologies.stickermaker.feature.rating.RatingPromptController
+import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.AnimatedWebpMuxer
+import com.piptechnologies.stickermaker.whatsapp.StickerContentProvider
 import com.piptechnologies.stickermaker.whatsapp.StickerPackValidator
 import com.piptechnologies.stickermaker.whatsapp.ValidatablePack
 import com.piptechnologies.stickermaker.whatsapp.ValidatableSticker
@@ -52,8 +58,6 @@ import kotlinx.coroutines.withContext
 
 /** The design assigns no per-sticker emoji, so every sticker gets this default pair. */
 private val DEFAULT_EMOJIS = listOf("❤️", "😊")
-
-private const val TRAY_FILE = "tray.png"
 
 /**
  * The one Create session shared by Import, Cut out and Pack details, exactly
@@ -446,7 +450,12 @@ class CreatePackViewModel @Inject constructor(
     fun saveToMyPacksOnly() = startExport(toWhatsApp = false)
 
     /** Result of the ENABLE_STICKER_PACK activity. */
-    fun onWhatsAppResult(added: Boolean) {
+    fun onWhatsAppResult(added: Boolean, rejected: Boolean = false) {
+        savedPackId?.let { id ->
+            if (added) AppAnalytics.logPackAdded(id) else AppAnalytics.logPackAddCancelled(id, rejected)
+        }
+        // Armed here, shown once the finished flow lands on My Packs.
+        if (added) RatingPromptController.onPackAdded(appContext)
         if (added) {
             exportState = AddVisualState.Added
             push()
@@ -471,7 +480,7 @@ class CreatePackViewModel @Inject constructor(
             if (toWhatsApp) {
                 exportState = AddVisualState.Sent
                 push()
-                _events.tryEmit(CreateEvent.LaunchAddToWhatsApp(existing, savedPackName))
+                exportJob = viewModelScope.launch { sendToWhatsApp(existing, savedPackName) }
             } else {
                 finishSaveOnly()
             }
@@ -489,21 +498,43 @@ class CreatePackViewModel @Inject constructor(
         exportJob = viewModelScope.launch {
             try {
                 val (id, name) = exportPack(stickers, finalName, publisher, trayAt)
+                AppAnalytics.logPackCreated(
+                    stickers = stickers.size,
+                    animated = stickers.any { it.isVideo },
+                    toWhatsApp = toWhatsApp
+                )
                 savedPackId = id
                 savedPackName = name
                 exportProgress = 1f
                 if (toWhatsApp) {
                     exportState = AddVisualState.Sent
                     push()
-                    _events.emit(CreateEvent.LaunchAddToWhatsApp(id, name))
+                    sendToWhatsApp(id, name)
                 } else {
                     finishSaveOnly()
                 }
             } catch (ce: CancellationException) {
                 throw ce
             } catch (e: Exception) {
+                CrashReporting.record(e, "pack_export")
                 exportState = AddVisualState.Failed
                 push()
+            }
+        }
+    }
+
+    /** Asks WhatsApp, off the main thread, what the add launches; the screen fires it as it arrives. */
+    private suspend fun sendToWhatsApp(id: String, name: String) {
+        val target = AddStickerPackFlow.resolveAddTarget(
+            appContext, id, name, "create_add_intent", ioDispatcher
+        )
+        when (target) {
+            is AddStickerPackFlow.AddTarget.Launch -> _events.emit(CreateEvent.LaunchAddToWhatsApp(target.intent))
+            // Nothing left to launch: the pack is already everywhere.
+            AddStickerPackFlow.AddTarget.AlreadyAdded -> onWhatsAppResult(added = true)
+            AddStickerPackFlow.AddTarget.NoWhatsApp -> {
+                onWhatsAppResult(added = false)
+                _events.emit(CreateEvent.ShowNoWhatsApp)
             }
         }
     }
@@ -557,17 +588,21 @@ class CreatePackViewModel @Inject constructor(
                 identifier = dirId,
                 name = finalName,
                 publisher = publisher,
-                trayImageFile = TRAY_FILE,
+                trayImageFile = OwnPackFiles.TRAY_FILE,
                 trayBytes = trayBytes,
                 animatedStickerPack = packAnimated,
                 stickers = encoded.mapIndexed { index, bytes ->
                     ValidatableSticker(fileNames[index], bytes, DEFAULT_EMOJIS)
-                }
+                },
+                // What StickerContentProvider will hand WhatsApp for this pack.
+                publisherEmail = appContext.getString(R.string.config_support_email),
+                privacyPolicyWebsite = appContext.getString(R.string.config_privacy_policy_url),
+                androidPlayStoreLink = StickerContentProvider.ANDROID_PLAY_STORE_LINK
             )
         )
 
         val dir = withContext(ioDispatcher) {
-            writePackFiles(dirId, trayBytes, fileNames.zip(encoded))
+            OwnPackFiles.write(appContext.filesDir, dirId, trayBytes, fileNames.zip(encoded))
         }
         val id = myPacksRepository.saveOwnPack(
             name = finalName,
@@ -575,7 +610,7 @@ class CreatePackViewModel @Inject constructor(
             animated = packAnimated,
             stickers = fileNames.map { it to DEFAULT_EMOJIS },
             dir = dir.absolutePath,
-            trayFile = TRAY_FILE
+            trayFile = OwnPackFiles.TRAY_FILE
         )
         id to finalName
     }
@@ -708,33 +743,6 @@ class CreatePackViewModel @Inject constructor(
         }
     }
 
-    private fun writePackFiles(
-        dirId: String,
-        trayBytes: ByteArray,
-        stickerFiles: List<Pair<String, ByteArray>>
-    ): File {
-        val root = File(appContext.filesDir, "own").apply { mkdirs() }
-        val tmp = File(root, "$dirId.tmp")
-        val finalDir = File(root, dirId)
-        var completed = false
-        try {
-            tmp.deleteRecursively()
-            if (!tmp.mkdirs()) throw IOException("Could not create ${tmp.absolutePath}")
-            File(tmp, TRAY_FILE).writeBytes(trayBytes)
-            stickerFiles.forEach { (name, bytes) -> File(tmp, name).writeBytes(bytes) }
-            if (finalDir.exists() && !finalDir.deleteRecursively()) {
-                throw IOException("Could not replace ${finalDir.absolutePath}")
-            }
-            if (!tmp.renameTo(finalDir)) {
-                throw IOException("Could not move pack $dirId into place")
-            }
-            completed = true
-            return finalDir
-        } finally {
-            if (!completed) tmp.deleteRecursively()
-        }
-    }
-
     // ----------------------------------------------------- cut-out pipeline
 
     private suspend fun runCutout(item: MediaItem, resetStrokes: Boolean) {
@@ -761,6 +769,7 @@ class CreatePackViewModel @Inject constructor(
         } catch (ce: CancellationException) {
             throw ce
         } catch (e: Exception) {
+            CrashReporting.record(e, "cutout")
             withContext(Dispatchers.Main.immediate) {
                 if (item.source == null) item.source = placeholderSource()
                 item.autoMask = StickerRenderer.fullMask()
@@ -807,6 +816,8 @@ class CreatePackViewModel @Inject constructor(
     } catch (ce: CancellationException) {
         throw ce
     } catch (e: Exception) {
+        // ML Kit failed: the full-mask fallback keeps the flow going, but it is a silent quality drop.
+        CrashReporting.record(e, "segmentation")
         StickerRenderer.fullMask()
     }
 

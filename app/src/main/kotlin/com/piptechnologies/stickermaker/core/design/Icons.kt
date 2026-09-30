@@ -20,7 +20,7 @@ object LoveIcons {
      * [autoMirror] flips it in right-to-left layouts: set it on icons that
      * point along the reading direction (back, chevrons, undo and redo).
      */
-    private fun lucideIcon(
+    internal fun lucideIcon(
         name: String,
         vararg pathData: String,
         filled: Boolean = false,
@@ -71,56 +71,6 @@ object LoveIcons {
         )
     }
 
-    val Rabbit: ImageVector by lazy {
-        lucideIcon(
-            "rabbit",
-            "M13 16a3 3 0 0 1 2.24 5",
-            "M18 12h.01",
-            "M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3",
-            "M20 8.54V4a2 2 0 1 0-4 0v3",
-            "M7.612 12.524a3 3 0 1 0-1.6 4.3"
-        )
-    }
-
-    val Laugh: ImageVector by lazy {
-        lucideIcon(
-            "laugh",
-            "M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0",
-            "M18 13a6 6 0 0 1-6 5 6 6 0 0 1-6-5h12Z",
-            "M9 9h.01",
-            "M15 9h.01"
-        )
-    }
-
-    val Sparkles: ImageVector by lazy {
-        lucideIcon(
-            "sparkles",
-            "M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z",
-            "M20 2v4",
-            "M22 4h-4",
-            "M2 20a2 2 0 1 0 4 0a2 2 0 1 0-4 0"
-        )
-    }
-
-    val Flower2: ImageVector by lazy {
-        lucideIcon(
-            "flower-2",
-            "M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1",
-            "M10 8a2 2 0 1 0 4 0a2 2 0 1 0-4 0",
-            "M12 10v12",
-            "M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z",
-            "M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z"
-        )
-    }
-
-    val MessageCircleHeart: ImageVector by lazy {
-        lucideIcon(
-            "message-circle-heart",
-            "M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719",
-            "M7.828 13.07A3 3 0 0 1 12 8.764a3 3 0 0 1 5.004 2.224 3 3 0 0 1-.832 2.083l-3.447 3.62a1 1 0 0 1-1.45-.001z"
-        )
-    }
-
     /**
      * The glyph the Add controls use to say "WhatsApp" in our own colours: the
      * prototype draws every "message-circle" as its waGlyph, a chat bubble with
@@ -163,20 +113,6 @@ object LoveIcons {
             "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
             "m21.854 2.147-10.94 10.939",
             autoMirror = true
-        )
-    }
-
-    val Moon: ImageVector by lazy {
-        lucideIcon(
-            "moon",
-            "M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
-        )
-    }
-
-    val Plane: ImageVector by lazy {
-        lucideIcon(
-            "plane",
-            "M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"
         )
     }
 

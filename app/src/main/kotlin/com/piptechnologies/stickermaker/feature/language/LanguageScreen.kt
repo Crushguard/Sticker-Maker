@@ -44,6 +44,7 @@ import com.piptechnologies.stickermaker.core.design.Rose
 import com.piptechnologies.stickermaker.core.design.Subtle
 import com.piptechnologies.stickermaker.core.design.Surface
 import com.piptechnologies.stickermaker.core.design.components.LoveTopBar
+import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
 
 // ---- Off-token colors from the prototype's language list ---- //
 private val CardBorder = Color(0xFFEEF0F4)
@@ -81,6 +82,7 @@ fun LanguageScreen(onBack: () -> Unit) {
             // Like the prototype, picking a language returns to Settings.
             // setApplicationLocales may recreate the activity right after;
             // the nav stack is saved state, so Settings is what comes back.
+            AppAnalytics.logLanguageChanged(tag)
             AppLanguages.apply(tag)
             onBack()
         }

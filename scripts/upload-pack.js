@@ -4,12 +4,13 @@
  *
  * Uploads packs/<id>/{tray.png, NN.webp, thumbs/NN.webp} to Cloud Storage and
  * writes one Firestore document per pack (collection "packs") plus the eight
- * category documents (collection "categories") from design/catalog.json.
+ * category documents (collection "categories") from design/catalog.json, into
+ * the app's own named Firestore database (config.xml's config_firestore_database).
  *
  * Usage:
  *   GOOGLE_APPLICATION_CREDENTIALS=service-account.json \
  *     node scripts/upload-pack.js --all [--project play-console-f33dd] \
- *       [--bucket <name>] [--dry-run]
+ *       [--database stickers-app] [--bucket <name>] [--dry-run]
  *   node scripts/upload-pack.js --pack gm-gn
  *
  * Idempotent: files are skipped when the remote MD5 already matches, and
@@ -34,9 +35,11 @@ const ONLY = arg('--pack', null);
 const DRY = process.argv.includes('--dry-run');
 const PROJECT = arg('--project', process.env.FIREBASE_PROJECT || 'play-console-f33dd');
 const BUCKET = arg('--bucket', `${PROJECT}.firebasestorage.app`);
+// The app reads this database (config.xml's config_firestore_database); ConfigXmlTest keeps them equal.
+const DATABASE = arg('--database', 'stickers-app');
 
 if (!ALL && !ONLY) {
-  console.error('usage: upload-pack.js (--all | --pack <id>) [--project id] [--bucket name] [--dry-run]');
+  console.error('usage: upload-pack.js (--all | --pack <id>) [--project id] [--database id] [--bucket name] [--dry-run]');
   process.exit(2);
 }
 
@@ -49,8 +52,10 @@ initializeApp({
   projectId: PROJECT,
   storageBucket: BUCKET,
 });
-const db = getFirestore();
+const db = getFirestore(DATABASE);
 const bucket = getStorage().bucket();
+const EMULATORS = process.env.FIRESTORE_EMULATOR_HOST ? ' on the local emulators' : '';
+console.log(`target: project ${PROJECT}, database ${DATABASE}, bucket ${BUCKET}${EMULATORS}`);
 
 function md5(file) {
   return crypto.createHash('md5').update(fs.readFileSync(file)).digest('base64');

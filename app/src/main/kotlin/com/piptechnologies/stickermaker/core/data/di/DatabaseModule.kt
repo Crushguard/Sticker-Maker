@@ -20,7 +20,9 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): LoveDb =
-        Room.databaseBuilder(context, LoveDb::class.java, "love.db").build()
+        Room.databaseBuilder(context, LoveDb::class.java, "love.db")
+            .addMigrations(LoveDb.MIGRATION_1_2)
+            .build()
 
     @Provides
     fun provideInstalledPackDao(db: LoveDb): InstalledPackDao = db.installedPackDao()

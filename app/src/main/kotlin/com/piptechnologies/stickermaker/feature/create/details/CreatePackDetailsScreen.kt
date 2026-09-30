@@ -117,9 +117,11 @@ fun CreatePackDetailsScreen(
     val addLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        val added = AddStickerPackFlow.parseResult(result.resultCode, result.data) is
-            AddStickerPackFlow.AddResult.Added
-        viewModel.onWhatsAppResult(added)
+        val parsed = AddStickerPackFlow.parseResult(result.resultCode, result.data)
+        viewModel.onWhatsAppResult(
+            added = parsed is AddStickerPackFlow.AddResult.Added,
+            rejected = (parsed as? AddStickerPackFlow.AddResult.Cancelled)?.validationError != null
+        )
     }
 
     LaunchedEffect(Unit) {
@@ -128,21 +130,14 @@ fun CreatePackDetailsScreen(
                 // Toasts run on their own so ExportComplete is never held behind one.
                 is CreateEvent.ShowToast ->
                     scope.launch { toaster.showToast(event.message.asString(context), event.check) }
-                is CreateEvent.LaunchAddToWhatsApp -> {
-                    val intent = AddStickerPackFlow.createBestIntent(
-                        context, event.identifier, event.packName
-                    )
-                    if (intent == null) {
-                        // Nothing left to launch — the pack is already everywhere.
-                        viewModel.onWhatsAppResult(added = true)
-                    } else {
-                        try {
-                            addLauncher.launch(intent)
-                        } catch (e: ActivityNotFoundException) {
-                            viewModel.onWhatsAppResult(added = false)
-                        }
-                    }
+                // Resolved off the main thread by the ViewModel; launched as it arrives.
+                is CreateEvent.LaunchAddToWhatsApp -> try {
+                    addLauncher.launch(event.intent)
+                } catch (e: ActivityNotFoundException) {
+                    viewModel.onWhatsAppResult(added = false)
+                    showNoWhatsApp = true
                 }
+                CreateEvent.ShowNoWhatsApp -> showNoWhatsApp = true
                 CreateEvent.ExportComplete -> onExported()
             }
         }

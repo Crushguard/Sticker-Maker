@@ -1,5 +1,6 @@
 package com.piptechnologies.stickermaker.core.data.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -42,6 +43,8 @@ data class OwnPackEntity(
     val createdAt: Long,
     val dirPath: String,
     val whitelisted: Boolean = false,
+    /** Bumped whenever the pack's images change, so WhatsApp re-reads them (name packs re-letter). */
+    @ColumnInfo(defaultValue = "1") val imageDataVersion: Int = 1,
 )
 
 /** One sticker of an own (user-created) pack. [emojis] is the comma-joined emoji list. */

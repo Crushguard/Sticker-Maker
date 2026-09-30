@@ -64,15 +64,6 @@
     <string name="theme_flirty">شوخ</string>
     <string name="theme_goodnight">شب بخیر</string>
     <string name="theme_distance">فاصلوں کی محبت</string>
-    <string name="customize_title">اپنے موضوعات چنیں</string>
-    <string name="customize_edit_title">آپ کے موضوعات</string>
-    <string name="customize_subtitle">”ہوم“ پر آپ کے چنے ہوئے موضوعات کے پیکس دکھائے جاتے ہیں۔ انہیں کسی بھی وقت ”ترتیبات“ میں تبدیل کریں۔</string>
-    <string name="customize_save">محفوظ کریں</string>
-    <string name="customize_pick_one">کم از کم ایک موضوع چنیں</string>
-    <plurals name="customize_continue">
-        <item quantity="one">جاری رکھیں · %d موضوع</item>
-        <item quantity="other">جاری رکھیں · %d موضوعات</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">آپ آف لائن ہیں</string>
@@ -202,16 +193,11 @@
 
     <!-- Settings -->
     <string name="settings_title">ترتیبات</string>
-    <string name="settings_alerts_title">نئے پیک کے الرٹس</string>
-    <string name="settings_alerts_on">صرف جب کوئی نیا پیک شامل ہو۔</string>
-    <string name="settings_alerts_off">بند ہیں۔ آپ کو نئے پیکس کی خبر نہیں ملے گی۔</string>
+    <string name="settings_alerts_title">اطلاعات</string>
+    <string name="settings_alerts_on">&#x200F;Love Stickers کی جانب سے الرٹس اور اپ ڈیٹس۔</string>
+    <string name="settings_alerts_off">بند ہیں۔ آپ کو الرٹس یا اپ ڈیٹس نہیں ملیں گی۔</string>
     <string name="settings_section_preferences">ترجیحات</string>
     <string name="settings_section_about">بارے میں</string>
-    <string name="settings_edit_themes">موضوعات میں ترمیم کریں</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">%d موضوع</item>
-        <item quantity="other">%d موضوعات</item>
-    </plurals>
     <string name="settings_language">زبان</string>
     <string name="settings_clear">ڈاؤن لوڈ کردہ پیکس صاف کریں</string>
     <string name="settings_storage_none">کوئی نہیں</string>
@@ -223,14 +209,15 @@
     <string name="settings_privacy">رازداری کی پالیسی</string>
     <string name="settings_version">ورژن</string>
     <string name="settings_free_card">&#x200F;Love Stickers مفت ہے اور ہمیشہ مفت رہے گی۔ کوئی اشتہار نہیں، کوئی اکاؤنٹ نہیں، کوئی ٹریکنگ نہیں۔ آپ کی تصاویر کبھی آپ کے فون سے باہر نہیں جاتیں۔</string>
-    <string name="settings_toast_alerts_on">نئے پیک کے الرٹس آن ہیں</string>
-    <string name="settings_toast_alerts_off">نئے پیک کے الرٹس آف ہیں</string>
+    <string name="settings_toast_alerts_on">اطلاعات آن ہیں</string>
+    <string name="settings_toast_alerts_off">اطلاعات آف ہیں</string>
     <string name="settings_toast_nothing_to_clear">صاف کرنے کو کچھ نہیں</string>
     <string name="settings_toast_cleared">ڈاؤن لوڈز صاف ہو گئے</string>
     <string name="settings_notif_title">&#x200F;Love Stickers کو اطلاعات بھیجنے کی اجازت دیں؟</string>
-    <string name="settings_notif_body">اینڈرائیڈ صرف ایک بار پوچھتا ہے۔ ہم آپ کو صرف تب مطلع کرتے ہیں جب کوئی نیا پیک شامل ہو۔ کوئی پروموشن کبھی نہیں۔</string>
+    <string name="settings_notif_body">اینڈرائیڈ صرف ایک بار پوچھتا ہے۔ ہم کبھی کبھار الرٹس اور اپ ڈیٹس بھیجیں گے، جیسے نئے پیک۔</string>
     <string name="settings_notif_deny">اجازت نہ دیں</string>
     <string name="settings_notif_allow">اجازت دیں</string>
+    <string name="notification_channel_updates">الرٹس اور اپ ڈیٹس</string>
     <string name="settings_clear_title">ڈاؤن لوڈ کردہ پیکس صاف کریں؟</string>
     <string name="settings_clear_body">اس ایپ میں محفوظ کاپیاں (%1$s) ہٹا دی جائیں گی۔ جو پیکس پہلے سے واٹس ایپ میں ہیں وہ وہیں رہیں گے۔</string>
     <string name="settings_clear_keep">رہنے دیں</string>
@@ -290,4 +277,43 @@
     <string name="contact_email_label">ای میل · اختیاری، صرف اگر آپ جواب چاہتے ہیں</string>
     <string name="contact_attach_note">ایپ ورژن اور اینڈرائیڈ ورژن کے ساتھ بھیجا جاتا ہے۔ اور کچھ نہیں۔</string>
     <string name="contact_send">بھیجیں</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">کچھ غلط ہو گیا</string>
+    <string name="crash_message">&#x200F;Love Stickers کو ایک غیر متوقع خرابی پیش آئی اور اسے بند کرنا ہوگا۔ ہمیں اطلاع مل چکی ہے اور ہم اسے ٹھیک کر رہے ہیں۔</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">ایپ اور اسٹیکرز کی زبان بدلتی ہے۔</string>
+    <string name="namepack_you_title">آپ کا نام کیا ہے؟</string>
+    <string name="namepack_you_helper">یہ آپ کے بھیجے گئے اسٹیکرز پر آتا ہے۔ آپ اسے چھوڑ سکتے ہیں۔</string>
+    <string name="namepack_you_placeholder">آپ کا نام</string>
+    <string name="namepack_pick_character">کون کہے گا؟</string>
+    <string name="namepack_love_title">آپ کا پیار کون ہے؟</string>
+    <string name="namepack_love_helper">ہم اس نام سے آپ کی زبان میں 12 اسٹیکرز لکھتے ہیں۔</string>
+    <string name="namepack_love_placeholder">ان کا نام</string>
+    <string name="namepack_sample_name">سارہ</string>
+    <string name="namepack_continue">جاری رکھیں</string>
+    <string name="namepack_make">ہمارے اسٹیکرز بنائیں</string>
+    <string name="namepack_note_limit">بس یہی حد ہے۔ پیار کے نام بھی چلیں گے۔</string>
+    <string name="namepack_note_emoji">ایموجی نہیں لکھے جا سکتے۔ صرف حروف۔</string>
+    <string name="namepack_note_need_name">پیک بنانے کے لیے نام درج کریں۔</string>
+    <string name="namepack_preview_hint">لائیو پیش منظر۔ لکھتے ہی بدلتا ہے۔</string>
+    <string name="namepack_preview_alt">اسٹیکر کا پیش منظر: %1$s</string>
+    <string name="namepack_rel_girlfriend">گرل فرینڈ</string>
+    <string name="namepack_rel_boyfriend">بوائے فرینڈ</string>
+    <string name="namepack_rel_wife">بیوی</string>
+    <string name="namepack_rel_husband">شوہر</string>
+    <string name="namepack_rel_crush">کرش</string>
+    <string name="namepack_rel_partner">پارٹنر</string>
+    <string name="namepack_rel_mom">امی</string>
+    <string name="namepack_rel_friend">دوست</string>
+    <string name="namepack_building_title">12 اسٹیکرز لکھے جا رہے ہیں…</string>
+    <string name="namepack_building_sub">اسی فون پر بنا۔ کچھ بھی اپ لوڈ نہیں ہوتا۔</string>
+    <string name="namepack_waiting_alt">&#x200F;%1$s آپ کے اسٹیکرز کا انتظار کر رہا ہے</string>
+    <string name="namepack_pack_for">&#x200F;%1$s کے لیے</string>
+    <string name="namepack_tone_sweet">میٹھا</string>
+    <string name="namepack_tone_flirty">شوخ</string>
+    <string name="namepack_meta">12 اسٹیکرز · %1$s</string>
+    <string name="namepack_add_failed">کچھ غلط ہو گیا · دوبارہ کوشش کریں</string>
+    <string name="namepack_build_failed">اسٹیکرز نہیں بن سکے۔ دوبارہ کوشش کریں۔</string>
+    <!-- /Custom stickers -->
 </resources>

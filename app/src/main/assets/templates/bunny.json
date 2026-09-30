@@ -1,0 +1,228 @@
+{
+ "character": "bunny",
+ "canvas": 512,
+ "generated": "2026-09-29",
+ "notes": "zone is the lettering area in 512-px coordinates (centre, size, rotation in degrees). ink = text fill; stroke = white outline width in px at 512 (0 = none). The app draws the die-cut white outline around art + lettering after lettering. No letters or numbers exist in the art.",
+ "stickers": [
+  {
+   "file": "bunny-1.webp",
+   "slot": "love_you",
+   "zone": {
+    "cx": 312,
+    "cy": 362,
+    "w": 196,
+    "h": 100,
+    "rotate": 0
+   },
+   "emojis": [
+    "❤️",
+    "😻"
+   ],
+   "ink": "#FFFFFF",
+   "stroke": 0,
+   "surface": "red heart"
+  },
+  {
+   "file": "bunny-2.webp",
+   "slot": "miss_you",
+   "zone": {
+    "cx": 253,
+    "cy": 104,
+    "w": 280,
+    "h": 124,
+    "rotate": 0
+   },
+   "emojis": [
+    "🥺",
+    "💔"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "speech bubble"
+  },
+  {
+   "file": "bunny-3.webp",
+   "slot": "good_morning",
+   "zone": {
+    "cx": 256,
+    "cy": 84,
+    "w": 360,
+    "h": 66,
+    "rotate": 0
+   },
+   "emojis": [
+    "☀️",
+    "☕"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "ribbon banner"
+  },
+  {
+   "file": "bunny-4.webp",
+   "slot": "good_night",
+   "zone": {
+    "cx": 256,
+    "cy": 84,
+    "w": 440,
+    "h": 130,
+    "rotate": 0
+   },
+   "emojis": [
+    "🌙",
+    "😴"
+   ],
+   "ink": "#C23359",
+   "stroke": 5,
+   "strokeColor": "#FFFFFF",
+   "surface": "open space above"
+  },
+  {
+   "file": "bunny-5.webp",
+   "slot": "kiss",
+   "zone": {
+    "cx": 256,
+    "cy": 440,
+    "w": 440,
+    "h": 118,
+    "rotate": 0
+   },
+   "emojis": [
+    "😘",
+    "💋"
+   ],
+   "ink": "#C23359",
+   "stroke": 5,
+   "strokeColor": "#FFFFFF",
+   "surface": "open space below"
+  },
+  {
+   "file": "bunny-6.webp",
+   "slot": "hug",
+   "zone": {
+    "cx": 256,
+    "cy": 84,
+    "w": 440,
+    "h": 130,
+    "rotate": 0
+   },
+   "emojis": [
+    "🤗",
+    "🫂"
+   ],
+   "ink": "#C23359",
+   "stroke": 5,
+   "strokeColor": "#FFFFFF",
+   "surface": "open space above"
+  },
+  {
+   "file": "bunny-7.webp",
+   "slot": "sorry",
+   "zone": {
+    "cx": 328,
+    "cy": 342,
+    "w": 230,
+    "h": 176,
+    "rotate": 0
+   },
+   "emojis": [
+    "🥀",
+    "🙏"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "held sign"
+  },
+  {
+   "file": "bunny-8.webp",
+   "slot": "be_mine",
+   "zone": {
+    "cx": 363,
+    "cy": 130,
+    "w": 220,
+    "h": 130,
+    "rotate": 4
+   },
+   "emojis": [
+    "💘",
+    "😏"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "sign on a stick"
+  },
+  {
+   "file": "bunny-9.webp",
+   "slot": "for_you",
+   "zone": {
+    "cx": 266,
+    "cy": 367,
+    "w": 176,
+    "h": 76,
+    "rotate": 0
+   },
+   "emojis": [
+    "🎁",
+    "💝"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "gift label"
+  },
+  {
+   "file": "bunny-10.webp",
+   "slot": "call_me",
+   "zone": {
+    "cx": 379,
+    "cy": 125,
+    "w": 200,
+    "h": 150,
+    "rotate": 0
+   },
+   "emojis": [
+    "📞",
+    "🥰"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "speech bubble"
+  },
+  {
+   "file": "bunny-11.webp",
+   "slot": "our_names",
+   "zone": {
+    "cx": 250,
+    "cy": 112,
+    "w": 420,
+    "h": 96,
+    "rotate": 0
+   },
+   "emojis": [
+    "💑",
+    "❤️"
+   ],
+   "ink": "#C23359",
+   "stroke": 0,
+   "surface": "wide banner"
+  },
+  {
+   "file": "bunny-12.webp",
+   "slot": "name_only",
+   "zone": {
+    "cx": 250,
+    "cy": 328,
+    "w": 420,
+    "h": 214,
+    "rotate": 0
+   },
+   "emojis": [
+    "🐱",
+    "💖"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "big sign"
+  }
+ ],
+ "title": "Bunny · from Bunny Bounce"
+}

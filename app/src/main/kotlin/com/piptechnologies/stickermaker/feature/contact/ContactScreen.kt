@@ -146,7 +146,7 @@ fun ContactScreen(
 /** Launches the mail composer; false when no app handles mailto:. */
 private fun composeMail(context: Context, body: String): Boolean = try {
     context.startActivity(
-        Intent(Intent.ACTION_SENDTO, mailtoUri(CONTACT_MAIL_SUBJECT, body))
+        Intent(Intent.ACTION_SENDTO, mailtoUri(context, CONTACT_MAIL_SUBJECT, body))
     )
     true
 } catch (_: ActivityNotFoundException) {

@@ -64,15 +64,6 @@
     <string name="theme_flirty">ناز</string>
     <string name="theme_goodnight">شپه مو پخیر</string>
     <string name="theme_distance">له لرې مینه</string>
-    <string name="customize_title">خپلې موضوعګانې وټاکئ</string>
-    <string name="customize_edit_title">ستاسو موضوعګانې</string>
-    <string name="customize_subtitle">په «کور» کې ستاسو د ټاکل شویو موضوعګانو کڅوړې ښودل کېږي. هر وخت یې په امستنو کې بدلولی شئ.</string>
-    <string name="customize_save">خوندي کول</string>
-    <string name="customize_pick_one">لږ تر لږه یوه موضوع وټاکئ</string>
-    <plurals name="customize_continue">
-        <item quantity="one">دوام · %d موضوع</item>
-        <item quantity="other">دوام · %d موضوعګانې</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">انټرنېټ نشته</string>
@@ -202,16 +193,11 @@
 
     <!-- Settings -->
     <string name="settings_title">امستنې</string>
-    <string name="settings_alerts_title">د نویو کڅوړو خبرتیاوې</string>
-    <string name="settings_alerts_on">یوازې کله چې نوې کڅوړه اضافه شي.</string>
-    <string name="settings_alerts_off">بند. د نویو کڅوړو په اړه به خبر نه شئ.</string>
+    <string name="settings_alerts_title">خبرتیاوې</string>
+    <string name="settings_alerts_on">د Love Stickers خبرتیاوې او تازه معلومات.</string>
+    <string name="settings_alerts_off">بندې دي. تاسو ته به خبرتیاوې یا تازه معلومات نه درځي.</string>
     <string name="settings_section_preferences">غوره توبونه</string>
     <string name="settings_section_about">په اړه</string>
-    <string name="settings_edit_themes">د موضوعګانو سمون</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">%d موضوع</item>
-        <item quantity="other">%d موضوعګانې</item>
-    </plurals>
     <string name="settings_language">ژبه</string>
     <string name="settings_clear">ښکته شوې کڅوړې پاکول</string>
     <string name="settings_storage_none">هېڅ</string>
@@ -223,14 +209,15 @@
     <string name="settings_privacy">د محرمیت تګلاره</string>
     <string name="settings_version">نسخه</string>
     <string name="settings_free_card">د Love Stickers اپلیکیشن وړیا دی او تل به وړیا وي. نه اعلانونه، نه حساب، نه څارنه. ستاسو انځورونه هېڅکله له ټیلیفون څخه نه وځي.</string>
-    <string name="settings_toast_alerts_on">د نویو کڅوړو خبرتیاوې فعالې شوې</string>
-    <string name="settings_toast_alerts_off">د نویو کڅوړو خبرتیاوې بندې شوې</string>
+    <string name="settings_toast_alerts_on">خبرتیاوې فعالې شوې</string>
+    <string name="settings_toast_alerts_off">خبرتیاوې بندې شوې</string>
     <string name="settings_toast_nothing_to_clear">د پاکولو لپاره څه نشته</string>
     <string name="settings_toast_cleared">ښکته شوې کڅوړې پاکې شوې</string>
     <string name="settings_notif_title">آیا Love Stickers ته اجازه ورکوئ چې خبرتیاوې واستوي؟</string>
-    <string name="settings_notif_body">اندروید یوازې یو ځل پوښتنه کوي. موږ یوازې هغه وخت خبرتیا درلېږو چې نوې کڅوړه اضافه شي. هېڅکله تبلیغات نه.</string>
+    <string name="settings_notif_body">اندروید یوازې یو ځل پوښتنه کوي. کله ناکله به تاسو ته خبرتیاوې او تازه معلومات واستوو، لکه نوې کڅوړې.</string>
     <string name="settings_notif_deny">اجازه مه ورکوئ</string>
     <string name="settings_notif_allow">اجازه ورکړئ</string>
+    <string name="notification_channel_updates">خبرتیاوې او تازه معلومات</string>
     <string name="settings_clear_title">آیا ښکته شوې کڅوړې پاکې شي؟</string>
     <string name="settings_clear_body">په دې اپلیکیشن کې ساتل شوې کاپيګانې (%1$s) لرې کېږي. هغه کڅوړې چې دمخه په واټساپ کې دي، هلته پاتې کېږي.</string>
     <string name="settings_clear_keep">ویې ساتئ</string>
@@ -290,4 +277,43 @@
     <string name="contact_email_label">برېښنالیک · اختیاري، یوازې که ځواب غواړئ</string>
     <string name="contact_attach_note">د اپلیکیشن له نسخې او د اندروید له نسخې سره یوځای لېږل کېږي. نور هېڅ نه.</string>
     <string name="contact_send">لېږل</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">یو څه غلط شول</string>
+    <string name="crash_message">په Love Stickers کې یوه ناڅاپي تېروتنه رامنځته شوه او باید وتړل شي. موږ خبر شوي یو او د سمون لپاره یې کار کوو.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">د اپلیکیشن او سټیکرونو ژبه بدلوي.</string>
+    <string name="namepack_you_title">ستاسو نوم څه دی؟</string>
+    <string name="namepack_you_helper">دا به په هغو سټیکرونو راشي چې تاسو یې لېږئ. کولی شئ دا پړاو پرېږدئ.</string>
+    <string name="namepack_you_placeholder">ستاسو نوم</string>
+    <string name="namepack_pick_character">څوک یې وایي؟</string>
+    <string name="namepack_love_title">ستاسو مینه څوک ده؟</string>
+    <string name="namepack_love_helper">موږ په دې نوم، ستاسو په ژبه ۱۲ سټیکرونه لیکو.</string>
+    <string name="namepack_love_placeholder">د هغه/هغې نوم</string>
+    <string name="namepack_sample_name">زرمینه</string>
+    <string name="namepack_continue">دوام</string>
+    <string name="namepack_make">زموږ سټیکرونه جوړ کړئ</string>
+    <string name="namepack_note_limit">همدا حد دی. د مینې نومونه هم چلېږي.</string>
+    <string name="namepack_note_emoji">ایموجي نه لیکل کېږي. یوازې توري.</string>
+    <string name="namepack_note_need_name">د کڅوړې جوړولو لپاره یو نوم ولیکئ.</string>
+    <string name="namepack_preview_hint">ژوندۍ مخکتنه. د لیکلو سره بدلېږي.</string>
+    <string name="namepack_preview_alt">د سټیکر مخکتنه: %1$s</string>
+    <string name="namepack_rel_girlfriend">نجلۍ ملګرې</string>
+    <string name="namepack_rel_boyfriend">هلک ملګری</string>
+    <string name="namepack_rel_wife">مېرمن</string>
+    <string name="namepack_rel_husband">مېړه</string>
+    <string name="namepack_rel_crush">کرش</string>
+    <string name="namepack_rel_partner">د ژوند شریک</string>
+    <string name="namepack_rel_mom">مور</string>
+    <string name="namepack_rel_friend">دوست</string>
+    <string name="namepack_building_title">۱۲ سټیکرونه لیکل کېږي…</string>
+    <string name="namepack_building_sub">په همدې تلیفون جوړ شو. هېڅ نه پورته کېږي.</string>
+    <string name="namepack_waiting_alt">&#x200F;%1$s ستاسو سټیکرونو ته انتظار باسي</string>
+    <string name="namepack_pack_for">د %1$s لپاره</string>
+    <string name="namepack_tone_sweet">خوږ</string>
+    <string name="namepack_tone_flirty">شوخ</string>
+    <string name="namepack_meta">۱۲ سټیکرونه · %1$s</string>
+    <string name="namepack_add_failed">یوه ستونزه پېښه شوه · بیا هڅه</string>
+    <string name="namepack_build_failed">سټیکرونه جوړ نه شول. بیا هڅه وکړئ.</string>
+    <!-- /Custom stickers -->
 </resources>

@@ -64,15 +64,6 @@
     <string name="theme_flirty">دلبرانه</string>
     <string name="theme_goodnight">شب بخیر</string>
     <string name="theme_distance">عشق از راه دور</string>
-    <string name="customize_title">موضوع‌هایتان را انتخاب کنید</string>
-    <string name="customize_edit_title">موضوع‌های شما</string>
-    <string name="customize_subtitle">«خانه» بسته‌هایی از موضوع‌هایی که انتخاب می‌کنید نشان می‌دهد. هر وقت خواستید، آن‌ها را در «تنظیمات» تغییر دهید.</string>
-    <string name="customize_save">ذخیره</string>
-    <string name="customize_pick_one">دست‌کم یک موضوع انتخاب کنید</string>
-    <plurals name="customize_continue">
-        <item quantity="one">ادامه · %d موضوع</item>
-        <item quantity="other">ادامه · %d موضوع</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">آفلاین هستید</string>
@@ -202,16 +193,11 @@
 
     <!-- Settings -->
     <string name="settings_title">تنظیمات</string>
-    <string name="settings_alerts_title">اعلان بسته‌های جدید</string>
-    <string name="settings_alerts_on">فقط وقتی بستهٔ جدیدی اضافه شود.</string>
-    <string name="settings_alerts_off">خاموش. از بسته‌های جدید باخبر نمی‌شوید.</string>
+    <string name="settings_alerts_title">اعلان‌ها</string>
+    <string name="settings_alerts_on">هشدارها و به‌روزرسانی‌های Love Stickers.</string>
+    <string name="settings_alerts_off">خاموش. هشدار یا به‌روزرسانی دریافت نمی‌کنید.</string>
     <string name="settings_section_preferences">ترجیحات</string>
     <string name="settings_section_about">درباره</string>
-    <string name="settings_edit_themes">ویرایش موضوع‌ها</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">%d موضوع</item>
-        <item quantity="other">%d موضوع</item>
-    </plurals>
     <string name="settings_language">زبان</string>
     <string name="settings_clear">پاک کردن بسته‌های دانلودشده</string>
     <string name="settings_storage_none">هیچ</string>
@@ -223,14 +209,15 @@
     <string name="settings_privacy">سیاست حفظ حریم خصوصی</string>
     <string name="settings_version">نسخه</string>
     <string name="settings_free_card">&#x200F;Love Stickers رایگان است و همیشه رایگان می‌ماند. بدون تبلیغات، بدون حساب، بدون ردیابی. عکس‌هایتان هرگز از گوشی‌تان خارج نمی‌شوند.</string>
-    <string name="settings_toast_alerts_on">اعلان بسته‌های جدید روشن شد</string>
-    <string name="settings_toast_alerts_off">اعلان بسته‌های جدید خاموش شد</string>
+    <string name="settings_toast_alerts_on">اعلان‌ها روشن شد</string>
+    <string name="settings_toast_alerts_off">اعلان‌ها خاموش شد</string>
     <string name="settings_toast_nothing_to_clear">چیزی برای پاک کردن نیست</string>
     <string name="settings_toast_cleared">دانلودها پاک شدند</string>
     <string name="settings_notif_title">به Love Stickers اجازهٔ ارسال اعلان می‌دهید؟</string>
-    <string name="settings_notif_body">اندروید فقط یک بار می‌پرسد. فقط وقتی بستهٔ جدیدی اضافه شود به شما خبر می‌دهیم. هیچ‌وقت تبلیغ نمی‌فرستیم.</string>
+    <string name="settings_notif_body">اندروید فقط یک بار می‌پرسد. گاهی هشدارها و به‌روزرسانی‌هایی مثل بسته‌های جدید برایتان می‌فرستیم.</string>
     <string name="settings_notif_deny">اجازه ندادن</string>
     <string name="settings_notif_allow">اجازه دادن</string>
+    <string name="notification_channel_updates">هشدارها و به‌روزرسانی‌ها</string>
     <string name="settings_clear_title">بسته‌های دانلودشده پاک شوند؟</string>
     <string name="settings_clear_body">نسخه‌های ذخیره‌شده در این برنامه (%1$s) پاک می‌شوند. بسته‌هایی که در واتس‌اپ هستند، همان‌جا می‌مانند.</string>
     <string name="settings_clear_keep">نگه داشتن</string>
@@ -290,4 +277,43 @@
     <string name="contact_email_label">ایمیل · اختیاری، فقط اگر پاسخ می‌خواهید</string>
     <string name="contact_attach_note">همراه با نسخهٔ برنامه و نسخهٔ اندروید ارسال می‌شود. چیز دیگری نه.</string>
     <string name="contact_send">ارسال</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">مشکلی پیش آمد</string>
+    <string name="crash_message">&#x200F;Love Stickers با خطایی غیرمنتظره روبه‌رو شد و باید بسته شود. به ما اطلاع داده شده است و در حال رفع آن هستیم.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">زبان برنامه و استیکرها را تغییر می‌دهد.</string>
+    <string name="namepack_you_title">اسم شما چیست؟</string>
+    <string name="namepack_you_helper">روی استیکرهایی که می‌فرستید می‌آید. می‌توانید این مرحله را رد کنید.</string>
+    <string name="namepack_you_placeholder">اسم شما</string>
+    <string name="namepack_pick_character">چه کسی می‌گوید؟</string>
+    <string name="namepack_love_title">عشق شما کیست؟</string>
+    <string name="namepack_love_helper">با این اسم، به زبان شما ۱۲ استیکر می‌نویسیم.</string>
+    <string name="namepack_love_placeholder">اسم او</string>
+    <string name="namepack_sample_name">سارا</string>
+    <string name="namepack_continue">ادامه</string>
+    <string name="namepack_make">استیکرهای ما را بساز</string>
+    <string name="namepack_note_limit">همین حد مجاز است. اسم‌های خودمانی هم خوب است.</string>
+    <string name="namepack_note_emoji">ایموجی را نمی‌شود نوشت. فقط حروف.</string>
+    <string name="namepack_note_need_name">برای ساختن بسته یک اسم بنویسید.</string>
+    <string name="namepack_preview_hint">پیش‌نمایش زنده. با تایپ شما عوض می‌شود.</string>
+    <string name="namepack_preview_alt">پیش‌نمایش استیکر: %1$s</string>
+    <string name="namepack_rel_girlfriend">دوست‌دختر</string>
+    <string name="namepack_rel_boyfriend">دوست‌پسر</string>
+    <string name="namepack_rel_wife">زنم</string>
+    <string name="namepack_rel_husband">شوهرم</string>
+    <string name="namepack_rel_crush">کراش</string>
+    <string name="namepack_rel_partner">شریک زندگی</string>
+    <string name="namepack_rel_mom">مامان</string>
+    <string name="namepack_rel_friend">دوست</string>
+    <string name="namepack_building_title">در حال نوشتن ۱۲ استیکر…</string>
+    <string name="namepack_building_sub">روی همین گوشی ساخته شد. چیزی آپلود نمی‌شود.</string>
+    <string name="namepack_waiting_alt">&#x200F;%1$s منتظر استیکرهای شماست</string>
+    <string name="namepack_pack_for">برای %1$s</string>
+    <string name="namepack_tone_sweet">شیرین</string>
+    <string name="namepack_tone_flirty">شیطون</string>
+    <string name="namepack_meta">۱۲ استیکر · %1$s</string>
+    <string name="namepack_add_failed">مشکلی پیش آمد · تلاش مجدد</string>
+    <string name="namepack_build_failed">ساخت استیکرها ممکن نشد. دوباره امتحان کنید.</string>
+    <!-- /Custom stickers -->
 </resources>

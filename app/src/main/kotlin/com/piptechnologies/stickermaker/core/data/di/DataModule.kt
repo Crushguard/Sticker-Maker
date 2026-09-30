@@ -1,13 +1,17 @@
 package com.piptechnologies.stickermaker.core.data.di
 
+import android.content.Context
+import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.PersistentCacheSettings
 import com.google.firebase.storage.FirebaseStorage
 import com.piptechnologies.stickermaker.BuildConfig
+import com.piptechnologies.stickermaker.R
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -27,11 +31,17 @@ annotation class IoDispatcher
 @InstallIn(SingletonComponent::class)
 object DataModule {
 
-    /** Firestore with on-disk offline persistence so the catalog renders offline. */
+    /**
+     * The app's own named Firestore database (config.xml's config_firestore_database), with
+     * on-disk offline persistence so the catalog renders offline.
+     */
     @Provides
     @Singleton
-    fun provideFirestore(): FirebaseFirestore =
-        FirebaseFirestore.getInstance().apply {
+    fun provideFirestore(@ApplicationContext context: Context): FirebaseFirestore =
+        FirebaseFirestore.getInstance(
+            FirebaseApp.getInstance(),
+            context.getString(R.string.config_firestore_database)
+        ).apply {
             emulatorHost()?.let { useEmulator(it, FIRESTORE_EMULATOR_PORT) }
             firestoreSettings = FirebaseFirestoreSettings.Builder()
                 .setLocalCacheSettings(PersistentCacheSettings.newBuilder().build())

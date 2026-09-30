@@ -64,6 +64,7 @@ import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.TopBarIconButton
 import com.piptechnologies.stickermaker.core.design.components.showToast
 import com.piptechnologies.stickermaker.core.model.AddState
+import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
 import com.piptechnologies.stickermaker.core.ui.UiText
 import com.piptechnologies.stickermaker.core.ui.asString
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
@@ -280,6 +281,7 @@ private fun sharePlayStoreLink(context: Context) {
         .setType("text/plain")
         .putExtra(Intent.EXTRA_TEXT, link)
     runCatching { context.startActivity(Intent.createChooser(send, null)) }
+        .onSuccess { AppAnalytics.logAppShared() }
 }
 
 /** "Get WhatsApp": Play Store detail page, web fallback. */

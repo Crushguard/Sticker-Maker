@@ -10,7 +10,9 @@ import com.piptechnologies.stickermaker.core.data.prefs.PrefsRepository
 import com.piptechnologies.stickermaker.core.data.repo.CatalogRepository
 import com.piptechnologies.stickermaker.core.data.repo.MyPacksRepository
 import com.piptechnologies.stickermaker.core.model.AddState
+import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
 import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.feature.rating.RatingPromptController
 import com.piptechnologies.stickermaker.whatsapp.AddStickerPackFlow
 import com.piptechnologies.stickermaker.whatsapp.WhitelistCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -255,16 +257,22 @@ class MyPacksViewModel @Inject constructor(
         }
         sessions.update { it + (row.id to AddState.Sent) }
         pending = PendingAdd(row.id, row.own)
-        viewModelScope.launch(ioDispatcher) {
-            val intent = AddStickerPackFlow.createBestIntent(appContext, row.id, row.name)
-            if (intent != null) {
-                _events.send(MyPacksEvent.LaunchAddIntent(intent))
-            } else {
-                // Every installed WhatsApp already has the pack.
-                pending = null
-                persistWhitelisted(row.id, row.own, whitelisted = true)
-                sessions.update { it - row.id }
-                _events.send(MyPacksEvent.Toast(UiText.res(R.string.toast_already_in_whatsapp), false))
+        viewModelScope.launch {
+            val target = AddStickerPackFlow.resolveAddTarget(
+                appContext, row.id, row.name, "my_packs_add_intent", ioDispatcher
+            )
+            when (target) {
+                is AddStickerPackFlow.AddTarget.Launch ->
+                    _events.send(MyPacksEvent.LaunchAddIntent(target.intent))
+                AddStickerPackFlow.AddTarget.AlreadyAdded -> {
+                    // Every installed WhatsApp already has the pack.
+                    pending = null
+                    persistWhitelisted(row.id, row.own, whitelisted = true)
+                    sessions.update { it - row.id }
+                    _events.send(MyPacksEvent.Toast(UiText.res(R.string.toast_already_in_whatsapp), false))
+                }
+                // WhatsApp went away since the check above.
+                AddStickerPackFlow.AddTarget.NoWhatsApp -> onAddLaunchFailed()
             }
         }
     }
@@ -276,6 +284,8 @@ class MyPacksViewModel @Inject constructor(
         viewModelScope.launch {
             when (result) {
                 AddStickerPackFlow.AddResult.Added -> {
+                    AppAnalytics.logPackAdded(current.id)
+                    RatingPromptController.onPackAdded(appContext)
                     val verified = withContext(ioDispatcher) {
                         WhitelistCheck.isWhitelisted(appContext, current.id)
                     }
@@ -283,11 +293,13 @@ class MyPacksViewModel @Inject constructor(
                     sessions.update { it - current.id }
                     toast(UiText.res(R.string.toast_added_to_whatsapp), withCheck = true)
                 }
-                is AddStickerPackFlow.AddResult.Cancelled ->
+                is AddStickerPackFlow.AddResult.Cancelled -> {
+                    AppAnalytics.logPackAddCancelled(current.id, rejected = result.validationError != null)
                     // The pack was already installed here; cancelling only means
                     // WhatsApp did not take it this time. Pill falls back to
                     // whitelist truth.
                     sessions.update { it - current.id }
+                }
             }
         }
     }
