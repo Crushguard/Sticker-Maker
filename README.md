@@ -2,17 +2,26 @@
 
 Native Android WhatsApp sticker app (`com.piptechnologies.stickermaker`) by PIP Technologies.
 Kotlin, Jetpack Compose + Material 3, single `:app` module, Hilt, Room, Coil, and
-Firebase (Storage + Cloud Functions + Firestore) for the pack catalog. Packs download on
-demand and are handed to WhatsApp through the standard sticker `ContentProvider` contract.
+Firebase (Storage + Cloud Functions + Firestore) for the pack catalog, with Firebase Analytics and
+Crashlytics like the other PIP apps. Packs download on demand and are handed to WhatsApp through the
+standard sticker `ContentProvider` contract.
 
 ## Build
 
 **CI (the build gate):** every push to `main` (and `claude/**` branches) runs
 `.github/workflows/android.yml` — `:app:assembleDebug` + `:app:testDebugUnitTest` on
 `ubuntu-latest`, uploading `app-debug.apk` as a workflow artifact. Debug builds only;
-there is no release keystore.
+there is no release keystore. It needs the repo secrets `CRASH_REPORTING_ACCESS_CODE` and
+`CRASH_REPORTING_SECRET_CODE` (the crash-reporting SDK project's pair, below).
 
-**Local:**
+**Local:** the crash-reporting SDK project's access/secret pair stays out of git, in
+`local.properties` (gitignored). `settings.gradle.kts` uses it for the SDK's Maven repository
+and `app/build.gradle.kts` hands it to the app:
+
+```properties
+crashReporting.accessCode=…
+crashReporting.secretCode=…
+```
 
 ```sh
 ./gradlew :app:assembleDebug
@@ -22,17 +31,74 @@ Requires JDK 17 and the Android SDK (compileSdk 35).
 
 ## Firebase configuration
 
+The app belongs to the PIP Technologies Firebase project `play-console-f33dd`, next to
+the other PIP apps (All Recovery, PDF Reader, Pedometer), as the Android app
+"Love Stickers" (`com.piptechnologies.stickermaker`). One time, register it and download
+its config (needs a Firebase login with access to the project):
+
+```sh
+firebase apps:create ANDROID "Love Stickers" --package-name com.piptechnologies.stickermaker --project play-console-f33dd
+firebase apps:sdkconfig ANDROID <app id printed above> --project play-console-f33dd --out app/google-services.json
+```
+
 `app/google-services.json` is **never committed** (gitignored). Until it is provided,
 the build writes a clearly-marked placeholder so compilation stays green — the app
-builds and runs, but cannot reach Firebase.
+builds and runs, but cannot reach Firebase (catalog, Analytics, Crashlytics).
 
-- **CI:** add the repo secret `GOOGLE_SERVICES_JSON` (the full JSON for Firebase
-  project `play-console-f33dd`); the workflow writes it to `app/google-services.json`
-  before building.
+- **CI:** add the repo secret `GOOGLE_SERVICES_JSON` (the full JSON above); the workflow
+  writes it to `app/google-services.json` before building.
 - **Local:** drop the real file at `app/google-services.json`.
 
-The Firebase config is finalized locally later; the placeholder keeps everything
-building until then.
+## Configuration (`config.xml`)
+
+`app/src/main/res/values/config.xml` is the one place for the app's external values, laid
+out like the other PIP apps: the support address (`support@piptechnologies.co`, for Contact
+us, the feedback mail and every pack's publisher email in WhatsApp), the privacy policy URL,
+the Play developer page behind Settings › More apps, and the app's Firestore database. The
+crash-reporting project codes are not here: they stay out of git (see Build). `ConfigXmlTest`
+fails if code reads a `config_*` key the file lacks, if the support address is not the
+publisher's, if `firebase.json` or the catalog functions (`functions/src/config.js`) target another
+database, if a tracked build file or config.xml holds the crash-reporting codes, or if a pack
+(`packs/*/pack.json`, `design/catalog.json`) names another address or privacy policy.
+
+## Crash reporting and analytics
+
+- **Crash screen:** crash reporting is armed first in `LoveStickersApp.onCreate`, as in the
+  other PIP apps. A crash shows the app's own crash screen (`crash_title` / `crash_message` in
+  every language) and is forwarded to Crashlytics, best-effort. Try it on a debug build, which
+  carries a crash-on-start test activity (only adb can start it):
+  `adb shell am start -n com.piptechnologies.stickermaker/.debug.CrashTestActivity`.
+- **Crashlytics** also gets non-fatals where the app swallows a failure (pack download,
+  pack export, ML Kit cutout, and the Custom Stickers flow's art, preview, build, save, finish
+  and add intent, as the exception type and stack only, never names): `CrashReporting` in
+  `core/telemetry/Telemetry.kt`.
+- **Analytics** (`AppAnalytics`, same file): a `screen_view` per navigation destination, plus
+  `onboarding_complete` (how first run ended: `added`, `saved` or `skipped`),
+  `name_pack_built`, `pack_add_started`, `pack_download_failed`, `pack_added`,
+  `pack_add_cancelled`, `pack_created`, `share`, `app_rating` and `language_changed`. Only
+  coarse values go out: catalog pack ids, counts, enum-like strings; a pack the user made is
+  just `own`, and names typed in the Custom Stickers flow never do.
+- Builds made with `-PfirebaseEmulatorHost` (local development, the CI screen tour) switch
+  Analytics and Crashlytics collection off, so their sessions stay out of the production data.
+
+## Rating prompt
+
+Like the other apps (`feature/rating/`): a pack WhatsApp confirmed arms the rating sheet, and it
+rises at the next natural pause, back on Home, a pack page, Saved or My Packs, about 1.5 s after
+the "Added to WhatsApp" toast. The first pack WhatsApp confirms earns it, on install day as on
+any other; at most once per app launch. "Maybe later" re-asks after 2, then 3, then 4 more added
+packs; a swipe-away or Cancel after 4, then 6; three of those stop it for good, and a rating or
+a feedback note ends it. Settings › Rate us bypasses all of this. `RatingEligibilityTest` pins
+the rules.
+
+## Notifications
+
+Settings › Notifications is the switch for alerts and updates. Send them from the Firebase
+console (Messaging › New campaign › Notifications) to the Love Stickers app; target languages or
+countries with the campaign's user-segment filters, one campaign per language. Firebase Cloud
+Messaging stays off until the switch and Android both allow notifications (on Android 13+ the
+switch asks for the permission first), and turning the switch off deletes the device's token.
+Everything lands in one channel, "Alerts and updates".
 
 ## Sticker packs
 
@@ -133,13 +199,31 @@ emulator on every push to a `claude/**` branch:
 2. starts the Firestore, Storage, Functions and Tasks emulators and publishes `library/`
    through the real pipeline (`scripts/library/seed-emulators.js`);
 3. walks the app through all 42 frames of `design/Screens.dc.html` (first run
-   offline, add states including a real failed download, own packs made with
-   ML Kit, My Packs, Settings) and screenshots each one. The stub reads every
-   pack back through the app's ContentProvider and checks WhatsApp's pack rules;
+   offline through the Custom Stickers name steps, add states including a real
+   failed download, own packs made with ML Kit, My Packs, Settings) and
+   screenshots each one. The stub reads every pack back through the app's
+   ContentProvider and checks WhatsApp's pack rules;
 4. switches the app through every language (`LocaleTourTest`) and captures
    Home, a pack page, My Packs and Settings in each;
 5. publishes the screenshots to the `screenshots` branch, whose README maps
    each one to its design frame and route, with a grid of every language.
+
+## Custom stickers
+
+First run ends with the Custom Stickers flow (`feature/namepack/`): pick a character, type your
+name (optional) and your love's name, and the app letters 12 stickers on the phone, in the app
+language, then adds them to WhatsApp as your own pack (`own-np-…`, listed under My Packs › Made
+by you). Names stay on the phone: in the stickers' pixels, the pack name and Room.
+
+- Art, templates and phrases (19 languages): `app/src/main/assets/templates/`.
+- Lettering fonts, trimmed to weight 800: Baloo 2, Baloo Bhaijaan 2 and Rubik
+  (`app/src/main/res/font/lettering_*.ttf`), under the SIL Open Font License 1.1
+  (`app/src/main/assets/licenses/`). Letters they lack (Chinese, Burmese, some Pashto and
+  Hausa letters) fall back to the system font.
+- `NamePackSheetsTest` writes contact sheets to `app/build/namepack-sheets/` for checking the
+  lettering by eye: every character in both tones for English and Arabic, and Mango in both
+  tones for 11 more languages, each with sample names in its own script. It is opt-in:
+  `NAMEPACK_SHEETS=1 ./gradlew :app:testDebugUnitTest --tests '*NamePackSheetsTest*' --rerun`.
 
 ## Languages
 
@@ -169,9 +253,9 @@ Hebrew, Pashto and Urdu lay out right to left.
 
 1. Download `app-debug.apk` from the latest green CI run and install it
    (enable "install unknown apps" for your browser/file manager).
-2. Launch → onboarding → pick themes → Home shows the catalog
-   (needs the real `google-services.json` build + a published catalog, see Firebase setup; otherwise the
-   offline empty state appears).
+2. Launch → onboarding → your name → their name → 12 lettered stickers → Add to WhatsApp
+   (or Not now) → Home shows the catalog (needs the real `google-services.json` build + a published
+   catalog, see Firebase setup; otherwise the offline empty state appears).
 3. Add a pack → progress → WhatsApp opens its confirmation sheet → the pack
    appears in WhatsApp's sticker tray (WhatsApp or WA Business must be installed).
 4. Create your own pack: Create → photo/video → auto cutout → adjust → name it →

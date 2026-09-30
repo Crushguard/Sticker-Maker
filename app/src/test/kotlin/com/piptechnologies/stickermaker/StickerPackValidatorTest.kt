@@ -1,5 +1,6 @@
 package com.piptechnologies.stickermaker
 
+import com.piptechnologies.stickermaker.whatsapp.StickerContentProvider
 import com.piptechnologies.stickermaker.whatsapp.StickerPackValidator
 import com.piptechnologies.stickermaker.whatsapp.ValidatablePack
 import com.piptechnologies.stickermaker.whatsapp.ValidatableSticker
@@ -30,6 +31,15 @@ class StickerPackValidatorTest {
             "expected the 14 seeded packs under ${PackFixtures.packsDir}",
             14,
             PackFixtures.packDirs.size,
+        )
+    }
+
+    @Test
+    fun stickerRecipientsAreLinkedToThisAppsPlayListing() {
+        // WhatsApp lets someone who receives one of our stickers tap through to this link.
+        assertEquals(
+            "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}",
+            StickerContentProvider.ANDROID_PLAY_STORE_LINK,
         )
     }
 
@@ -137,6 +147,8 @@ class StickerPackValidatorTest {
             publisherWebsite = json.optString("publisher_website"),
             privacyPolicyWebsite = json.optString("privacy_policy_website"),
             licenseAgreementWebsite = json.optString("license_agreement_website"),
+            // What StickerContentProvider hands WhatsApp next to every pack.
+            androidPlayStoreLink = StickerContentProvider.ANDROID_PLAY_STORE_LINK,
         )
     }
 }

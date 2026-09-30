@@ -14,8 +14,8 @@ FLOW = """```mermaid
 flowchart TD
   splash["Launch · 01"] -->|first run| onboarding["Onboarding · 02 03"]
   splash -->|returning| home
-  onboarding --> customize["Pick your themes · 04"]
-  customize --> home["Home · 06 07 08 17 29 · offline 39"]
+  onboarding --> namepack["Custom stickers · 04 05 · reveal x06"]
+  namepack --> home["Home · 06 07 08 17 29 · offline 39"]
   home -->|card| detail["Pack page · 09 10 11 · add states 12–16 · no WhatsApp 40"]
   home -->|Create| create["Import · 18"]
   home <-->|tab| mypacks["My Packs · 24 · menu 26 · confirms 27 28 · empty 41"]
@@ -28,11 +28,11 @@ flowchart TD
   mypacks -->|Create| create
   mypacks -->|gear| settings
   saved -->|card| detail
-  settings --> edit["Edit themes · 05"]
   settings --> language["Language · 36"]
   settings --> contact["Contact us · 35"]
   detail -.->|ENABLE_STICKER_PACK| whatsapp[("WhatsApp")]
   details -.->|ENABLE_STICKER_PACK| whatsapp
+  namepack -.->|ENABLE_STICKER_PACK| whatsapp
 ```"""
 
 

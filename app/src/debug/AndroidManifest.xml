@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Debug builds may reach the local Firebase emulators over plain HTTP. -->
-    <application android:networkSecurityConfig="@xml/network_security_config" />
+    <application android:networkSecurityConfig="@xml/network_security_config">
+
+        <!-- A test crash for the crash screen. Exported so adb can start it, and guarded by
+             DUMP, which the shell holds and apps cannot get. -->
+        <activity
+            android:name=".debug.CrashTestActivity"
+            android:exported="true"
+            android:permission="android.permission.DUMP"
+            android:theme="@style/Theme.LoveStickers.Main" />
+    </application>
 
 </manifest>

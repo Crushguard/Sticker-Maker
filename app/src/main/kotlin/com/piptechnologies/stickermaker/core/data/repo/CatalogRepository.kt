@@ -9,6 +9,8 @@ import com.piptechnologies.stickermaker.core.data.firebase.CatalogDataSource
 import com.piptechnologies.stickermaker.core.model.AddState
 import com.piptechnologies.stickermaker.core.model.Category
 import com.piptechnologies.stickermaker.core.model.StickerPack
+import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
+import com.piptechnologies.stickermaker.core.telemetry.CrashReporting
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -74,6 +76,7 @@ class CatalogRepository @Inject constructor(
      * intent. Any error surfaces as [AddState.Failed].
      */
     fun addPack(pack: StickerPack): Flow<AddState> = flow<AddState> {
+        AppAnalytics.logPackAddStarted(pack.id)
         emit(AddState.Downloading(0f))
         downloader.download(pack).collect { progress ->
             emit(AddState.Downloading(progress.fraction))
@@ -85,6 +88,8 @@ class CatalogRepository @Inject constructor(
     }
         .catch { error ->
             if (error is CancellationException) throw error
+            AppAnalytics.logPackDownloadFailed(pack.id)
+            CrashReporting.record(error, "pack_download")
             emit(AddState.Failed(error.message))
         }
         .flowOn(ioDispatcher)

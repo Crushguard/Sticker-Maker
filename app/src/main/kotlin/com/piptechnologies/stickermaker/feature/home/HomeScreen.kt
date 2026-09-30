@@ -105,7 +105,7 @@ private val CancelText = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.
 
 /**
  * Home (Prototype `is.home`): slim brand bar with Search and Settings, chip
- * row (Trending · ♥ Saved · Animated · your themes), browse cards with heart
+ * row (Trending · ♥ Saved · Animated · every theme), browse cards with heart
  * and the Add pill, the offline full state, and the 3-slot bottom nav
  * (Home · raised Create · My Packs). Saved is reached from the My Packs
  * toolbar heart; on Home the ♥ Saved chip filters in place.
@@ -135,24 +135,21 @@ fun HomeScreen(
         viewModel.toasts.collect { snackbarHostState.showToast(it.message.asString(context), it.withCheck) }
     }
 
-    // A finished download hands off to WhatsApp (repository stops at Sent).
+    // The name flow's "Added to WhatsApp" arrives with Home (each screen owns its toast host).
+    LaunchedEffect(Unit) {
+        viewModel.takePendingToast()?.let { snackbarHostState.showToast(it.asString(context), withCheck = true) }
+    }
+
+    // A finished download hands off to WhatsApp (repository stops at Sent). The ViewModel
+    // resolved the intent off the main thread; nothing suspends between here and the launch.
     val pending = state.pendingWhatsAppAdd
     LaunchedEffect(pending) {
         if (pending == null) return@LaunchedEffect
-        val intent =
-            AddStickerPackFlow.createBestIntent(context, pending.packId, pending.packName)
-        when {
-            intent != null -> {
-                viewModel.onWhatsAppLaunched(pending.packId)
-                try {
-                    addResultLauncher.launch(intent)
-                } catch (notFound: ActivityNotFoundException) {
-                    viewModel.onWhatsAppMissingAtLaunch(pending.packId)
-                }
-            }
-            !AddStickerPackFlow.isWhatsAppInstalled(context) ->
-                viewModel.onWhatsAppMissingAtLaunch(pending.packId)
-            else -> viewModel.onAlreadyInWhatsApp(pending.packId)
+        viewModel.onWhatsAppLaunched(pending.packId)
+        try {
+            addResultLauncher.launch(pending.intent)
+        } catch (notFound: ActivityNotFoundException) {
+            viewModel.onWhatsAppMissingAtLaunch(pending.packId)
         }
     }
 

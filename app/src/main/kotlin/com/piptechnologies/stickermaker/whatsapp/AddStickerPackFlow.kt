@@ -3,6 +3,12 @@ package com.piptechnologies.stickermaker.whatsapp
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import com.piptechnologies.stickermaker.core.telemetry.CrashReporting
+import com.piptechnologies.stickermaker.core.telemetry.redacted
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * The "add to WhatsApp" flow, ported from the launch/result logic of the sample's
@@ -42,7 +48,8 @@ object AddStickerPackFlow {
     /**
      * The add target the sample picks in `addStickerPackToWhatsApp`: a specific app when only
      * one still misses the pack, a chooser when both do, null when there is nothing to launch
-     * (no WhatsApp installed, or the pack is already everywhere).
+     * (no WhatsApp installed, or the pack is already everywhere). Blocks on WhatsApp's providers
+     * and throws what they throw: screens go through [resolveAddTarget].
      */
     fun createBestIntent(context: Context, identifier: String, stickerPackName: String): Intent? {
         val packageManager = context.packageManager
@@ -70,6 +77,46 @@ object AddStickerPackFlow {
         val packageManager = context.packageManager
         return WhitelistCheck.isWhatsAppConsumerAppInstalled(packageManager) ||
             WhitelistCheck.isWhatsAppSmbAppInstalled(packageManager)
+    }
+
+    /** Where an add goes once WhatsApp was asked (see [resolveAddTarget]). */
+    sealed interface AddTarget {
+        /** Launch WhatsApp's own confirm with [intent]. */
+        data class Launch(val intent: Intent) : AddTarget
+
+        /** Every installed WhatsApp already has the pack: nothing to launch. */
+        data object AlreadyAdded : AddTarget
+
+        /** No WhatsApp is installed (any more). */
+        data object NoWhatsApp : AddTarget
+    }
+
+    /**
+     * [createBestIntent] for the add flows: its two queries into WhatsApp's processes (they can
+     * start WhatsApp) run on [dispatcher]. A failing query is recorded under [where], messages
+     * removed, and answered with the plain add intent so WhatsApp itself decides; with no WhatsApp
+     * at all that launch fails on the screen, which shows its install sheet.
+     */
+    suspend fun resolveAddTarget(
+        context: Context,
+        identifier: String,
+        stickerPackName: String,
+        where: String,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    ): AddTarget = withContext(dispatcher) {
+        try {
+            val best = createBestIntent(context, identifier, stickerPackName)
+            when {
+                best != null -> AddTarget.Launch(best)
+                isWhatsAppInstalled(context) -> AddTarget.AlreadyAdded
+                else -> AddTarget.NoWhatsApp
+            }
+        } catch (ce: CancellationException) {
+            throw ce
+        } catch (e: Exception) {
+            CrashReporting.record(e.redacted(), where)
+            AddTarget.Launch(createIntentToAddStickerPack(identifier, stickerPackName))
+        }
     }
 
     /** Outcome of the ENABLE_STICKER_PACK activity result. */

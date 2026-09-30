@@ -1,0 +1,227 @@
+{
+ "character": "mango",
+ "canvas": 512,
+ "generated": "2026-09-29",
+ "notes": "zone is the lettering area in 512-px coordinates (centre, size, rotation in degrees). ink = text fill; stroke = white outline width in px at 512 (0 = none). The app draws the die-cut white outline around art + lettering after lettering. No letters or numbers exist in the art.",
+ "stickers": [
+  {
+   "file": "mango-1.webp",
+   "slot": "love_you",
+   "zone": {
+    "cx": 300,
+    "cy": 326,
+    "w": 196,
+    "h": 116,
+    "rotate": 0
+   },
+   "emojis": [
+    "❤️",
+    "😻"
+   ],
+   "ink": "#FFFFFF",
+   "stroke": 0,
+   "surface": "red heart"
+  },
+  {
+   "file": "mango-2.webp",
+   "slot": "miss_you",
+   "zone": {
+    "cx": 253,
+    "cy": 100,
+    "w": 276,
+    "h": 126,
+    "rotate": 0
+   },
+   "emojis": [
+    "🥺",
+    "💔"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "speech bubble"
+  },
+  {
+   "file": "mango-3.webp",
+   "slot": "good_morning",
+   "zone": {
+    "cx": 254,
+    "cy": 88,
+    "w": 356,
+    "h": 68,
+    "rotate": 0
+   },
+   "emojis": [
+    "☀️",
+    "☕"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "ribbon banner"
+  },
+  {
+   "file": "mango-4.webp",
+   "slot": "good_night",
+   "zone": {
+    "cx": 256,
+    "cy": 84,
+    "w": 440,
+    "h": 130,
+    "rotate": 0
+   },
+   "emojis": [
+    "🌙",
+    "😴"
+   ],
+   "ink": "#C23359",
+   "stroke": 5,
+   "strokeColor": "#FFFFFF",
+   "surface": "open space above"
+  },
+  {
+   "file": "mango-5.webp",
+   "slot": "kiss",
+   "zone": {
+    "cx": 256,
+    "cy": 440,
+    "w": 440,
+    "h": 118,
+    "rotate": 0
+   },
+   "emojis": [
+    "😘",
+    "💋"
+   ],
+   "ink": "#C23359",
+   "stroke": 5,
+   "strokeColor": "#FFFFFF",
+   "surface": "open space below"
+  },
+  {
+   "file": "mango-6.webp",
+   "slot": "hug",
+   "zone": {
+    "cx": 256,
+    "cy": 84,
+    "w": 440,
+    "h": 130,
+    "rotate": 0
+   },
+   "emojis": [
+    "🤗",
+    "🫂"
+   ],
+   "ink": "#C23359",
+   "stroke": 5,
+   "strokeColor": "#FFFFFF",
+   "surface": "open space above"
+  },
+  {
+   "file": "mango-7.webp",
+   "slot": "sorry",
+   "zone": {
+    "cx": 326,
+    "cy": 350,
+    "w": 246,
+    "h": 166,
+    "rotate": 0
+   },
+   "emojis": [
+    "🥀",
+    "🙏"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "held sign"
+  },
+  {
+   "file": "mango-8.webp",
+   "slot": "be_mine",
+   "zone": {
+    "cx": 373,
+    "cy": 108,
+    "w": 186,
+    "h": 116,
+    "rotate": 8
+   },
+   "emojis": [
+    "💘",
+    "😏"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "sign on a stick"
+  },
+  {
+   "file": "mango-9.webp",
+   "slot": "for_you",
+   "zone": {
+    "cx": 219,
+    "cy": 354,
+    "w": 176,
+    "h": 74,
+    "rotate": 0
+   },
+   "emojis": [
+    "🎁",
+    "💝"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "gift label"
+  },
+  {
+   "file": "mango-10.webp",
+   "slot": "call_me",
+   "zone": {
+    "cx": 384,
+    "cy": 106,
+    "w": 190,
+    "h": 122,
+    "rotate": 0
+   },
+   "emojis": [
+    "📞",
+    "🥰"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "speech bubble"
+  },
+  {
+   "file": "mango-11.webp",
+   "slot": "our_names",
+   "zone": {
+    "cx": 257,
+    "cy": 92,
+    "w": 400,
+    "h": 92,
+    "rotate": 0
+   },
+   "emojis": [
+    "💑",
+    "❤️"
+   ],
+   "ink": "#C23359",
+   "stroke": 0,
+   "surface": "wide banner"
+  },
+  {
+   "file": "mango-12.webp",
+   "slot": "name_only",
+   "zone": {
+    "cx": 240,
+    "cy": 330,
+    "w": 400,
+    "h": 214,
+    "rotate": 0
+   },
+   "emojis": [
+    "🐱",
+    "💖"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "big sign"
+  }
+ ]
+}

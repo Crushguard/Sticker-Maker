@@ -64,15 +64,6 @@
     <string name="theme_flirty">Flörtöz</string>
     <string name="theme_goodnight">İyi geceler</string>
     <string name="theme_distance">Uzak mesafe</string>
-    <string name="customize_title">Temalarınızı seçin</string>
-    <string name="customize_edit_title">Temalarınız</string>
-    <string name="customize_subtitle">Ana sayfada seçtiğiniz temalardan paketler gösterilir. Temaları istediğiniz zaman Ayarlar bölümünden değiştirebilirsiniz.</string>
-    <string name="customize_save">Kaydet</string>
-    <string name="customize_pick_one">En az bir tema seçin</string>
-    <plurals name="customize_continue">
-        <item quantity="one">Devam · %d tema</item>
-        <item quantity="other">Devam · %d tema</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">Çevrimdışısınız</string>
@@ -202,16 +193,11 @@
 
     <!-- Settings -->
     <string name="settings_title">Ayarlar</string>
-    <string name="settings_alerts_title">Yeni paket bildirimleri</string>
-    <string name="settings_alerts_on">Yalnızca yeni bir paket eklendiğinde.</string>
-    <string name="settings_alerts_off">Kapalı. Yeni paketlerden haberiniz olmaz.</string>
+    <string name="settings_alerts_title">Bildirimler</string>
+    <string name="settings_alerts_on">Love Stickers\'tan uyarılar ve güncellemeler.</string>
+    <string name="settings_alerts_off">Kapalı. Uyarı veya güncelleme almazsınız.</string>
     <string name="settings_section_preferences">TERCİHLER</string>
     <string name="settings_section_about">HAKKINDA</string>
-    <string name="settings_edit_themes">Temaları düzenle</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">%d tema</item>
-        <item quantity="other">%d tema</item>
-    </plurals>
     <string name="settings_language">Dil</string>
     <string name="settings_clear">İndirilen paketleri temizle</string>
     <string name="settings_storage_none">Yok</string>
@@ -223,14 +209,15 @@
     <string name="settings_privacy">Gizlilik politikası</string>
     <string name="settings_version">Sürüm</string>
     <string name="settings_free_card">Love Stickers ücretsizdir ve hep öyle kalacak. Reklam yok, hesap yok, takip yok. Fotoğraflarınız asla telefonunuzdan çıkmaz.</string>
-    <string name="settings_toast_alerts_on">Yeni paket bildirimleri açıldı</string>
-    <string name="settings_toast_alerts_off">Yeni paket bildirimleri kapatıldı</string>
+    <string name="settings_toast_alerts_on">Bildirimler açıldı</string>
+    <string name="settings_toast_alerts_off">Bildirimler kapatıldı</string>
     <string name="settings_toast_nothing_to_clear">Temizlenecek bir şey yok</string>
     <string name="settings_toast_cleared">İndirilenler temizlendi</string>
     <string name="settings_notif_title">Love Stickers uygulamasının bildirim göndermesine izin verilsin mi?</string>
-    <string name="settings_notif_body">Android bunu bir kez sorar. Yalnızca yeni bir paket eklendiğinde bildirim göndeririz. Asla kampanya bildirimi göndermeyiz.</string>
+    <string name="settings_notif_body">Android bunu bir kez sorar. Zaman zaman yeni paketler gibi uyarılar ve güncellemeler göndeririz.</string>
     <string name="settings_notif_deny">İzin verme</string>
     <string name="settings_notif_allow">İzin ver</string>
+    <string name="notification_channel_updates">Uyarılar ve güncellemeler</string>
     <string name="settings_clear_title">İndirilen paketler temizlensin mi?</string>
     <string name="settings_clear_body">Bu uygulamada saklanan kopyalar (%1$s) kaldırılır. Zaten WhatsApp\'ta olan paketler orada kalır.</string>
     <string name="settings_clear_keep">Kalsın</string>
@@ -290,4 +277,43 @@
     <string name="contact_email_label">E-posta · isteğe bağlı, yalnızca yanıt istiyorsanız</string>
     <string name="contact_attach_note">Uygulama sürümü ve Android sürümüyle birlikte gönderilir. Başka hiçbir şey eklenmez.</string>
     <string name="contact_send">Gönder</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">Bir sorun oluştu</string>
+    <string name="crash_message">Love Stickers beklenmeyen bir hatayla karşılaştı ve kapatılması gerekiyor. Bilgilendirildik ve bir düzeltme üzerinde çalışıyoruz.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">Uygulamanın ve çıkartmaların dilini değiştirir.</string>
+    <string name="namepack_you_title">Adınız ne?</string>
+    <string name="namepack_you_helper">Gönderdiğiniz çıkartmalarda görünür. Bu adımı atlayabilirsiniz.</string>
+    <string name="namepack_you_placeholder">Adınız</string>
+    <string name="namepack_pick_character">Kim söylüyor?</string>
+    <string name="namepack_love_title">Aşkınız kim?</string>
+    <string name="namepack_love_helper">Bu adla, sizin dilinizde 12 çıkartma yazıyoruz.</string>
+    <string name="namepack_love_placeholder">Onun adı</string>
+    <string name="namepack_sample_name">Elif</string>
+    <string name="namepack_continue">Devam</string>
+    <string name="namepack_make">Çıkartmalarımızı yap</string>
+    <string name="namepack_note_limit">Sınır bu kadar. Lakaplar da olur.</string>
+    <string name="namepack_note_emoji">Emoji yazılamaz. Yalnızca harfler.</string>
+    <string name="namepack_note_need_name">Paketi yapmak için bir ad ekleyin.</string>
+    <string name="namepack_preview_hint">Canlı önizleme. Yazdıkça yenilenir.</string>
+    <string name="namepack_preview_alt">Çıkartma önizlemesi: %1$s</string>
+    <string name="namepack_rel_girlfriend">Kız arkadaşım</string>
+    <string name="namepack_rel_boyfriend">Erkek arkadaşım</string>
+    <string name="namepack_rel_wife">Karım</string>
+    <string name="namepack_rel_husband">Kocam</string>
+    <string name="namepack_rel_crush">Hoşlandığım</string>
+    <string name="namepack_rel_partner">Partnerim</string>
+    <string name="namepack_rel_mom">Annem</string>
+    <string name="namepack_rel_friend">Arkadaşım</string>
+    <string name="namepack_building_title">12 çıkartma yazılıyor…</string>
+    <string name="namepack_building_sub">Bu telefonda yapıldı. Hiçbir şey yüklenmez.</string>
+    <string name="namepack_waiting_alt">%1$s çıkartmalarınızı bekliyor</string>
+    <string name="namepack_pack_for">%1$s için</string>
+    <string name="namepack_tone_sweet">Tatlı</string>
+    <string name="namepack_tone_flirty">Cilveli</string>
+    <string name="namepack_meta">12 çıkartma · %1$s</string>
+    <string name="namepack_add_failed">Bir sorun oluştu · Tekrar dene</string>
+    <string name="namepack_build_failed">Çıkartmalar yapılamadı. Tekrar deneyin.</string>
+    <!-- /Custom stickers -->
 </resources>

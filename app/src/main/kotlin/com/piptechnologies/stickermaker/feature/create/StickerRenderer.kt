@@ -274,13 +274,15 @@ object StickerRenderer {
     /**
      * Quality-loops a static sticker under [limitBytes] (WhatsApp's 100 KB).
      * Returns the first fit, or the smallest attempt when nothing fits.
+     * [qualities] is tried in order.
      */
     fun encodeStaticSticker(
         bitmap: Bitmap,
-        limitBytes: Int = CreateSpec.STATIC_LIMIT_BYTES
+        limitBytes: Int = CreateSpec.STATIC_LIMIT_BYTES,
+        qualities: IntArray = intArrayOf(95, 85, 75, 65, 55, 45, 35, 30)
     ): ByteArray {
         var best: ByteArray? = null
-        for (quality in intArrayOf(95, 85, 75, 65, 55, 45, 35, 30)) {
+        for (quality in qualities) {
             val bytes = encodeWebp(bitmap, quality)
             if (best == null || bytes.size < best.size) best = bytes
             if (bytes.size <= limitBytes) return bytes

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Overrides the layout the crash-reporting library's AAR ships (same resource name as this file)
+  so the crash screen carries Love Stickers' design (canvas, ink, rose CTA, Hanken Grotesk) instead of
+  the SDK's bare default. Same approach as the Status Saver and PIP apps' crash screens.
+
+  The library's crash activity (an AppCompatActivity) inflates THIS file and looks its views up by id, so
+  every id the SDK's own layout declares must still exist here, including the stacktrace controls we
+  never show: the stacktrace button lives inside a collapsed, gone FrameLayout rather than
+  being deleted. The SDK sets the title, message, image and colors from LoveStickersApp's
+  crash-reporting configuration; the button label is the app's translated "Close" (common_close).
+
+  Plain TextView/Button are used deliberately (AppCompat inflates them as AppCompat widgets, which
+  also apply app:fontFamily below API 26). This is a Compose app: the crash screen is its one View
+  hierarchy, and it ships no Material Components views dependency.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/crashguard_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/crash_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:ignore="UnusedResources,Overdraw">
+
+    <LinearLayout
+        android:id="@+id/crashguard_main_view"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp">
+
+        <ImageView
+            android:id="@+id/crashguard_image"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center_horizontal"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            tools:src="@drawable/ic_crash_error"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/crashguard_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/hg_extrabold"
+            android:gravity="center"
+            android:textColor="@color/crash_title"
+            android:textSize="22sp"
+            app:fontFamily="@font/hg_extrabold"
+            tools:text="@string/crash_title" />
+
+        <TextView
+            android:id="@+id/crashguard_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/hg_regular"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:textColor="@color/crash_body"
+            android:textSize="15sp"
+            app:fontFamily="@font/hg_regular"
+            tools:text="@string/crash_message" />
+
+        <!-- Required by the SDK's view lookup; never shown. -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/crashguard_stacktrace_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/crashguard_ok_button"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/bg_crash_button"
+            android:fontFamily="@font/hg_bold"
+            android:stateListAnimator="@null"
+            android:text="@string/common_close"
+            android:textAllCaps="false"
+            android:textColor="@color/crash_on_button"
+            android:textSize="16sp"
+            app:fontFamily="@font/hg_bold" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/crashguard_stacktrace_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/crashguard_stacktrace_ok_button">
+
+            <TextView
+                android:id="@+id/crashguard_stacktrace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="20dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/crash_body"
+                android:textSize="14sp" />
+        </ScrollView>
+
+        <Button
+            android:id="@+id/crashguard_stacktrace_ok_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/common_close" />
+    </RelativeLayout>
+</LinearLayout>

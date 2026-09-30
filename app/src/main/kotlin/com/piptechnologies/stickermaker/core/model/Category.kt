@@ -5,7 +5,7 @@ package com.piptechnologies.stickermaker.core.model
  *
  * @property name English name; [names] holds it in every app language (BCP 47 keys).
  * @property icon Lucide icon name as the design uses it (e.g. "heart-handshake").
- * @property hue Hue in degrees used to tint chips and theme tiles.
+ * @property hue Hue in degrees used to tint chips.
  * @property order Ascending display order in chips.
  * @property keywords Local search words by language ("saudade" finds Miss you).
  * @property packCount Live packs in it, counting packs that list it in alsoIn; 0 hides the chip.

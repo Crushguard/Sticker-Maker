@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="rose">#C23359</color>
     <color name="canvas">#FAFBFC</color>
+
+    <!-- Crash screen (its XML layout override in res/layout): a View screen, so the
+         design tokens it needs are repeated here. Canvas, ink, ink2, primary rose and its tint/line,
+         subtle for the artwork's shadow. -->
+    <color name="crash_bg">@color/canvas</color>
+    <color name="crash_title">#1E2128</color>
+    <color name="crash_body">#626873</color>
+    <color name="crash_button" tools:ignore="UnusedResources">@color/rose</color>
+    <color name="crash_on_button" tools:ignore="UnusedResources">#FFFFFF</color>
+    <color name="crash_art_disc_top">#FFCED5</color>
+    <color name="crash_art_disc_bottom">#FFEEF0</color>
+    <color name="crash_art_mark">@color/rose</color>
+    <color name="crash_art_shadow">#F3F5F8</color>
 </resources>

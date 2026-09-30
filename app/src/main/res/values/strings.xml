@@ -76,15 +76,6 @@
     <string name="theme_flirty">Flirty</string>
     <string name="theme_goodnight">Good night</string>
     <string name="theme_distance">Long distance</string>
-    <string name="customize_title">Pick your themes</string>
-    <string name="customize_edit_title">Your themes</string>
-    <string name="customize_subtitle">Home shows packs from the themes you choose. Change them anytime in Settings.</string>
-    <string name="customize_save">Save</string>
-    <string name="customize_pick_one">Pick at least one theme</string>
-    <plurals name="customize_continue">
-        <item quantity="one">Continue · %d theme</item>
-        <item quantity="other">Continue · %d themes</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">You\'re offline</string>
@@ -237,18 +228,13 @@
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
-    <string name="settings_alerts_title">New pack alerts</string>
-    <string name="settings_alerts_on">Only when a new pack is added.</string>
-    <string name="settings_alerts_off">Off. You won\'t hear about new packs.</string>
+    <string name="settings_alerts_title">Notifications</string>
+    <string name="settings_alerts_on">Alerts and updates from Love Stickers.</string>
+    <string name="settings_alerts_off">Off. You won\'t get alerts or updates.</string>
     <!-- Section eyebrow; upper case where the script has case. -->
     <string name="settings_section_preferences">PREFERENCES</string>
     <!-- Section eyebrow; upper case where the script has case. -->
     <string name="settings_section_about">ABOUT</string>
-    <string name="settings_edit_themes">Edit themes</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">%d theme</item>
-        <item quantity="other">%d themes</item>
-    </plurals>
     <string name="settings_language">Language</string>
     <string name="settings_clear">Clear downloaded packs</string>
     <!-- Clear downloaded packs row value when nothing is stored. -->
@@ -263,14 +249,15 @@
     <string name="settings_privacy">Privacy policy</string>
     <string name="settings_version">Version</string>
     <string name="settings_free_card">Love Stickers is free, and always will be. No ads, no account, no tracking. Your photos never leave your phone.</string>
-    <string name="settings_toast_alerts_on">New pack alerts on</string>
-    <string name="settings_toast_alerts_off">New pack alerts off</string>
+    <string name="settings_toast_alerts_on">Notifications on</string>
+    <string name="settings_toast_alerts_off">Notifications off</string>
     <string name="settings_toast_nothing_to_clear">Nothing to clear</string>
     <string name="settings_toast_cleared">Downloads cleared</string>
     <string name="settings_notif_title">Allow Love Stickers to send notifications?</string>
-    <string name="settings_notif_body">Android asks once. We only notify you when a new pack is added. No promotions, ever.</string>
+    <string name="settings_notif_body">Android asks once. We\'ll send occasional alerts and updates, like new packs.</string>
     <string name="settings_notif_deny">Don\'t allow</string>
     <string name="settings_notif_allow">Allow</string>
+    <string name="notification_channel_updates">Alerts and updates</string>
     <string name="settings_clear_title">Clear downloaded packs?</string>
     <!-- %1$s is the stored size, e.g. "12.4 MB". -->
     <string name="settings_clear_body">Removes the copies stored in this app (%1$s). Packs already in WhatsApp stay there.</string>
@@ -336,4 +323,59 @@
     <string name="contact_email_placeholder" translatable="false">you@example.com</string>
     <string name="contact_attach_note">Sent with the app version and Android version. Nothing else.</string>
     <string name="contact_send">Send</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">Something went wrong</string>
+    <string name="crash_message">Love Stickers ran into an unexpected error and has to close. We\'ve been notified and are working on a fix.</string>
+    <!-- Custom stickers (name pack) -->
+    <!-- Subtitle of the language sheet opened from the chip on the intro and name steps. -->
+    <string name="namepack_language_sub">Changes the app and the stickers.</string>
+    <string name="namepack_you_title">What\'s your name?</string>
+    <!-- Under "What's your name?"; the user's own name is optional. -->
+    <string name="namepack_you_helper">It goes on the stickers you send. You can skip this.</string>
+    <string name="namepack_you_placeholder">Your name</string>
+    <!-- Label above the four character tiles (Mango, Pinky, Bunny, Capy). -->
+    <string name="namepack_pick_character">Who says it?</string>
+    <string name="namepack_love_title">Who\'s your love?</string>
+    <string name="namepack_love_helper">We letter 12 stickers with this name, in your language.</string>
+    <!-- Placeholder of the name field for the person the pack is for. -->
+    <string name="namepack_love_placeholder">Their name</string>
+    <!-- A common first name in this language, lettered in the live preview until the user types one. Keep it short. -->
+    <string name="namepack_sample_name">Sara</string>
+    <string name="namepack_continue">Continue</string>
+    <string name="namepack_make">Make our stickers</string>
+    <!-- Shown when a name reaches 14 characters. -->
+    <string name="namepack_note_limit">That\'s the limit. Nicknames work too.</string>
+    <string name="namepack_note_emoji">Emoji can\'t be lettered. Letters only.</string>
+    <string name="namepack_note_need_name">Add a name to make the pack.</string>
+    <string name="namepack_preview_hint">Live preview. It re-letters as you type.</string>
+    <!-- Accessibility text of the live preview. %1$s is the lettered phrase. -->
+    <string name="namepack_preview_alt">Sticker preview: %1$s</string>
+    <string name="namepack_rel_girlfriend">Girlfriend</string>
+    <string name="namepack_rel_boyfriend">Boyfriend</string>
+    <string name="namepack_rel_wife">Wife</string>
+    <string name="namepack_rel_husband">Husband</string>
+    <!-- Relation chip: someone the user has a crush on. -->
+    <string name="namepack_rel_crush">Crush</string>
+    <string name="namepack_rel_partner">Partner</string>
+    <string name="namepack_rel_mom">Mom</string>
+    <!-- Relation chip; keep it neutral (not only male or only female) where the language allows. -->
+    <string name="namepack_rel_friend">Friend</string>
+    <!-- While the 12 stickers are lettered on the phone. -->
+    <string name="namepack_building_title">Lettering 12 stickers…</string>
+    <string name="namepack_building_sub">Made on this phone. Nothing is uploaded.</string>
+    <!-- Accessibility text of the waiting character. %1$s is the character's name (Mango, Pinky, Bunny or Capy). -->
+    <string name="namepack_waiting_alt">%1$s is waiting for your stickers</string>
+    <!-- Pack name when the user skipped their own name. %1$s is the loved one's name. Also shown in WhatsApp. -->
+    <string name="namepack_pack_for">For %1$s</string>
+    <!-- Tone chip on the reveal. -->
+    <string name="namepack_tone_sweet">Sweet</string>
+    <!-- Tone chip on the reveal. Flirty, never explicit. -->
+    <string name="namepack_tone_flirty">Flirty</string>
+    <!-- Reveal meta line. %1$s is the relation chip label in lower case (German keeps its capital). -->
+    <string name="namepack_meta">12 stickers · %1$s</string>
+    <!-- Add bar after saving or opening WhatsApp failed; a tap retries. -->
+    <string name="namepack_add_failed">Something went wrong · Retry</string>
+    <string name="namepack_build_failed">Couldn\'t letter the stickers. Try again.</string>
+    <!-- /Custom stickers -->
 </resources>

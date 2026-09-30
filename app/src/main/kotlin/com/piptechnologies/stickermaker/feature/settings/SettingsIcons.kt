@@ -49,22 +49,6 @@ internal object SettingsIcons {
         )
     }
 
-    /** "Edit themes" row (the prototype's `sliders-horizontal`). */
-    val SlidersHorizontal: ImageVector by lazy {
-        lucideIcon(
-            "sliders-horizontal",
-            "M21 4h-7",
-            "M10 4H3",
-            "M21 12h-9",
-            "M8 12H3",
-            "M21 20h-5",
-            "M12 20H3",
-            "M14 2v4",
-            "M8 10v4",
-            "M16 18v4"
-        )
-    }
-
     /** "Language" row. */
     val Languages: ImageVector by lazy {
         lucideIcon(

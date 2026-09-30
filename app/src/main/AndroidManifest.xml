@@ -23,6 +23,44 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoveStickers.Starting">
 
+        <!-- Firebase Analytics and Crashlytics collection: on, except in debug builds pointed at the
+             local Firebase emulators (-PfirebaseEmulatorHost, the CI screen tour), so their sessions and
+             crashes stay out of the production data. -->
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="${telemetryEnabled}" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="${telemetryEnabled}" />
+        <!-- One activity hosts every Compose screen: AppNavHost logs a screen_view per destination
+             instead of Analytics' automatic per-activity one. -->
+        <meta-data
+            android:name="google_analytics_automatic_screen_reporting_enabled"
+            android:value="false" />
+
+        <!-- Notifications: alerts and updates sent from the Firebase console. FCM stays off until
+             the Settings switch and Android both allow notifications (PushNotifications). -->
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="updates" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/rose" />
+
+        <service
+            android:name=".core.notifications.LoveMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <!-- Serves installed and own sticker packs to WhatsApp. -->
         <provider
             android:name=".whatsapp.StickerContentProvider"

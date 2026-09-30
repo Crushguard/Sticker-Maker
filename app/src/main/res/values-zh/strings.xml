@@ -63,14 +63,6 @@
     <string name="theme_flirty">撩人</string>
     <string name="theme_goodnight">晚安</string>
     <string name="theme_distance">异地恋</string>
-    <string name="customize_title">选择你的主题</string>
-    <string name="customize_edit_title">你的主题</string>
-    <string name="customize_subtitle">首页会显示你所选主题的贴图包。你可以随时在“设置”中更改。</string>
-    <string name="customize_save">保存</string>
-    <string name="customize_pick_one">请至少选择一个主题</string>
-    <plurals name="customize_continue">
-        <item quantity="other">继续 · %d 个主题</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">你已离线</string>
@@ -196,15 +188,11 @@
 
     <!-- Settings -->
     <string name="settings_title">设置</string>
-    <string name="settings_alerts_title">新贴图包提醒</string>
-    <string name="settings_alerts_on">仅在有新贴图包时通知你。</string>
-    <string name="settings_alerts_off">已关闭。你不会收到新贴图包的通知。</string>
+    <string name="settings_alerts_title">通知</string>
+    <string name="settings_alerts_on">来自 Love Stickers 的提醒和更新。</string>
+    <string name="settings_alerts_off">已关闭。你将不会收到提醒或更新。</string>
     <string name="settings_section_preferences">偏好设置</string>
     <string name="settings_section_about">关于</string>
-    <string name="settings_edit_themes">编辑主题</string>
-    <plurals name="settings_theme_count">
-        <item quantity="other">%d 个主题</item>
-    </plurals>
     <string name="settings_language">语言</string>
     <string name="settings_clear">清除已下载的贴图包</string>
     <string name="settings_storage_none">无</string>
@@ -216,14 +204,15 @@
     <string name="settings_privacy">隐私政策</string>
     <string name="settings_version">版本</string>
     <string name="settings_free_card">Love Stickers 现在免费，以后也永远免费。没有广告，无需账号，不做任何追踪。你的照片永远不会离开你的手机。</string>
-    <string name="settings_toast_alerts_on">已开启新贴图包提醒</string>
-    <string name="settings_toast_alerts_off">已关闭新贴图包提醒</string>
+    <string name="settings_toast_alerts_on">通知已开启</string>
+    <string name="settings_toast_alerts_off">通知已关闭</string>
     <string name="settings_toast_nothing_to_clear">没有可清除的内容</string>
     <string name="settings_toast_cleared">已清除下载内容</string>
     <string name="settings_notif_title">要允许 Love Stickers 发送通知吗？</string>
-    <string name="settings_notif_body">Android 只会询问一次。我们只在有新贴图包时通知你，绝不推送促销信息。</string>
+    <string name="settings_notif_body">Android 只会询问一次。我们会不时发送提醒和更新，例如新贴图包。</string>
     <string name="settings_notif_deny">不允许</string>
     <string name="settings_notif_allow">允许</string>
+    <string name="notification_channel_updates">提醒和更新</string>
     <string name="settings_clear_title">要清除已下载的贴图包吗？</string>
     <string name="settings_clear_body">这会移除本应用中存储的副本（%1$s）。已在 WhatsApp 中的贴图包不受影响。</string>
     <string name="settings_clear_keep">保留</string>
@@ -282,4 +271,43 @@
     <string name="contact_email_label">电子邮件 · 选填，仅在需要回复时填写</string>
     <string name="contact_attach_note">发送时会附带应用版本和 Android 版本，不含其他信息。</string>
     <string name="contact_send">发送</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">出了点问题</string>
+    <string name="crash_message">Love Stickers 遇到意外错误，需要关闭。我们已收到通知，正在修复。</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">同时更改应用和贴图的语言。</string>
+    <string name="namepack_you_title">你叫什么名字？</string>
+    <string name="namepack_you_helper">它会出现在你发送的贴图上。可以跳过这一步。</string>
+    <string name="namepack_you_placeholder">你的名字</string>
+    <string name="namepack_pick_character">谁来说？</string>
+    <string name="namepack_love_title">你爱的人是谁？</string>
+    <string name="namepack_love_helper">我们用这个名字，以你的语言制作 12 张贴图。</string>
+    <string name="namepack_love_placeholder">TA 的名字</string>
+    <string name="namepack_sample_name">小雨</string>
+    <string name="namepack_continue">继续</string>
+    <string name="namepack_make">制作我们的贴图</string>
+    <string name="namepack_note_limit">已达上限。昵称也可以。</string>
+    <string name="namepack_note_emoji">表情符号无法写成字。只能用文字。</string>
+    <string name="namepack_note_need_name">添加名字才能制作贴图包。</string>
+    <string name="namepack_preview_hint">实时预览。输入时即时更新。</string>
+    <string name="namepack_preview_alt">贴图预览：%1$s</string>
+    <string name="namepack_rel_girlfriend">女朋友</string>
+    <string name="namepack_rel_boyfriend">男朋友</string>
+    <string name="namepack_rel_wife">妻子</string>
+    <string name="namepack_rel_husband">丈夫</string>
+    <string name="namepack_rel_crush">暗恋对象</string>
+    <string name="namepack_rel_partner">伴侣</string>
+    <string name="namepack_rel_mom">妈妈</string>
+    <string name="namepack_rel_friend">朋友</string>
+    <string name="namepack_building_title">正在制作 12 张贴图…</string>
+    <string name="namepack_building_sub">在这部手机上制作。不会上传任何内容。</string>
+    <string name="namepack_waiting_alt">%1$s 正在等你的贴图</string>
+    <string name="namepack_pack_for">给 %1$s</string>
+    <string name="namepack_tone_sweet">甜蜜</string>
+    <string name="namepack_tone_flirty">撩人</string>
+    <string name="namepack_meta">12 张贴图 · %1$s</string>
+    <string name="namepack_add_failed">出了点问题 · 重试</string>
+    <string name="namepack_build_failed">无法制作贴图。请重试。</string>
+    <!-- /Custom stickers -->
 </resources>

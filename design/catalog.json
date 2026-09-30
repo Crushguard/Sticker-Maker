@@ -1,8 +1,8 @@
 {
   "publisher": "PIP Technologies",
-  "publisherEmail": "aymen@chikhaoui.me",
+  "publisherEmail": "support@piptechnologies.co",
   "publisherWebsite": "",
-  "privacyPolicyWebsite": "",
+  "privacyPolicyWebsite": "https://sites.google.com/view/ncd2fbbfb",
   "licenseAgreementWebsite": "",
   "categories": [
     { "id": "couples",   "name": "Couples",       "icon": "heart-handshake",      "hue": 10,  "order": 1 },

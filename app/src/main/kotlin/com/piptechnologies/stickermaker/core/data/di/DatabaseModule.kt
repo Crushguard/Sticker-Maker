@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.piptechnologies.stickermaker.core.data.db.InstalledPackDao
 import com.piptechnologies.stickermaker.core.data.db.LoveDb
-import com.piptechnologies.stickermaker.core.data.db.MIGRATION_1_2
 import com.piptechnologies.stickermaker.core.data.db.OwnPackDao
 import dagger.Module
 import dagger.Provides
@@ -22,7 +21,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): LoveDb =
         Room.databaseBuilder(context, LoveDb::class.java, "love.db")
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(LoveDb.MIGRATION_1_2)
             .build()
 
     @Provides

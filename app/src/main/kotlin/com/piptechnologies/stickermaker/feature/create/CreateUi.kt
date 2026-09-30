@@ -65,19 +65,21 @@ private tailrec fun Context.findComponentActivity(): ComponentActivity = when (t
 /**
  * The design's 52/14 filled-rose primary. Disabled reads at 45% opacity and
  * swallows taps, like the prototype's `opacity:.45;cursor:default` buttons.
+ * [dimmed] draws that look on its own, for a button that still answers a tap.
  */
 @Composable
 internal fun PrimaryButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    dimmed: Boolean = !enabled
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(52.dp)
-            .alpha(if (enabled) 1f else 0.45f)
+            .alpha(if (dimmed) 0.45f else 1f)
             .clip(LoveShapes.Medium)
             .background(Rose)
             .clickable(role = Role.Button, onClickLabel = label, enabled = enabled, onClick = onClick),

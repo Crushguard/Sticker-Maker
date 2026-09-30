@@ -64,15 +64,6 @@
     <string name="theme_flirty">Flirt</string>
     <string name="theme_goodnight">Bonne nuit</string>
     <string name="theme_distance">À distance</string>
-    <string name="customize_title">Choisissez vos thèmes</string>
-    <string name="customize_edit_title">Vos thèmes</string>
-    <string name="customize_subtitle">L\'onglet Accueil affiche les packs des thèmes que vous choisissez. Modifiez-les à tout moment dans Paramètres.</string>
-    <string name="customize_save">Enregistrer</string>
-    <string name="customize_pick_one">Choisissez au moins un thème</string>
-    <plurals name="customize_continue">
-        <item quantity="one">Continuer · %d thème</item>
-        <item quantity="other">Continuer · %d thèmes</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">Vous êtes hors ligne</string>
@@ -202,16 +193,11 @@
 
     <!-- Settings -->
     <string name="settings_title">Paramètres</string>
-    <string name="settings_alerts_title">Alertes de nouveaux packs</string>
-    <string name="settings_alerts_on">Uniquement quand un nouveau pack est ajouté.</string>
-    <string name="settings_alerts_off">Désactivées. Vous ne saurez pas quand de nouveaux packs arrivent.</string>
+    <string name="settings_alerts_title">Notifications</string>
+    <string name="settings_alerts_on">Alertes et nouveautés de Love Stickers.</string>
+    <string name="settings_alerts_off">Désactivées. Vous ne recevrez ni alertes ni nouveautés.</string>
     <string name="settings_section_preferences">PRÉFÉRENCES</string>
     <string name="settings_section_about">À PROPOS</string>
-    <string name="settings_edit_themes">Modifier les thèmes</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">%d thème</item>
-        <item quantity="other">%d thèmes</item>
-    </plurals>
     <string name="settings_language">Langue</string>
     <string name="settings_clear">Effacer les packs téléchargés</string>
     <string name="settings_storage_none">Aucun</string>
@@ -223,14 +209,15 @@
     <string name="settings_privacy">Politique de confidentialité</string>
     <string name="settings_version">Version</string>
     <string name="settings_free_card">Love Stickers est gratuit, et le restera toujours. Sans pub, sans compte, sans suivi. Vos photos ne quittent jamais votre téléphone.</string>
-    <string name="settings_toast_alerts_on">Alertes de nouveaux packs activées</string>
-    <string name="settings_toast_alerts_off">Alertes de nouveaux packs désactivées</string>
+    <string name="settings_toast_alerts_on">Notifications activées</string>
+    <string name="settings_toast_alerts_off">Notifications désactivées</string>
     <string name="settings_toast_nothing_to_clear">Rien à effacer</string>
     <string name="settings_toast_cleared">Téléchargements effacés</string>
     <string name="settings_notif_title">Autoriser Love Stickers à envoyer des notifications ?</string>
-    <string name="settings_notif_body">Android ne le demande qu\'une fois. Nous vous prévenons uniquement quand un nouveau pack est ajouté. Jamais de promotions.</string>
+    <string name="settings_notif_body">Android ne le demande qu\'une fois. Nous vous enverrons de temps en temps des alertes et des nouveautés, comme les nouveaux packs.</string>
     <string name="settings_notif_deny">Ne pas autoriser</string>
     <string name="settings_notif_allow">Autoriser</string>
+    <string name="notification_channel_updates">Alertes et nouveautés</string>
     <string name="settings_clear_title">Effacer les packs téléchargés ?</string>
     <string name="settings_clear_body">Supprime les copies stockées dans cette appli (%1$s). Les packs déjà dans WhatsApp y restent.</string>
     <string name="settings_clear_keep">Les garder</string>
@@ -290,4 +277,43 @@
     <string name="contact_email_label">E-mail · facultatif, seulement si vous souhaitez une réponse</string>
     <string name="contact_attach_note">Envoyé avec la version de l\'appli et celle d\'Android. Rien d\'autre.</string>
     <string name="contact_send">Envoyer</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">Une erreur est survenue</string>
+    <string name="crash_message">Love Stickers a rencontré une erreur inattendue et doit se fermer. Nous en avons été informés et travaillons à la corriger.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">Change l\'app et les stickers.</string>
+    <string name="namepack_you_title">Comment vous appelez-vous ?</string>
+    <string name="namepack_you_helper">Il apparaît sur les stickers que vous envoyez. Vous pouvez passer cette étape.</string>
+    <string name="namepack_you_placeholder">Votre prénom</string>
+    <string name="namepack_pick_character">Qui le dit ?</string>
+    <string name="namepack_love_title">Qui est votre amour ?</string>
+    <string name="namepack_love_helper">Nous écrivons 12 stickers avec ce prénom, dans votre langue.</string>
+    <string name="namepack_love_placeholder">Son prénom</string>
+    <string name="namepack_sample_name">Léa</string>
+    <string name="namepack_continue">Continuer</string>
+    <string name="namepack_make">Créer nos stickers</string>
+    <string name="namepack_note_limit">C\'est la limite. Les surnoms marchent aussi.</string>
+    <string name="namepack_note_emoji">Les emojis ne peuvent pas être écrits. Lettres uniquement.</string>
+    <string name="namepack_note_need_name">Ajoutez un prénom pour créer le pack.</string>
+    <string name="namepack_preview_hint">Aperçu en direct. Il se met à jour pendant la saisie.</string>
+    <string name="namepack_preview_alt">Aperçu du sticker : %1$s</string>
+    <string name="namepack_rel_girlfriend">Copine</string>
+    <string name="namepack_rel_boyfriend">Copain</string>
+    <string name="namepack_rel_wife">Épouse</string>
+    <string name="namepack_rel_husband">Époux</string>
+    <string name="namepack_rel_crush">Crush</string>
+    <string name="namepack_rel_partner">Partenaire</string>
+    <string name="namepack_rel_mom">Maman</string>
+    <string name="namepack_rel_friend">Ami·e</string>
+    <string name="namepack_building_title">Écriture de 12 stickers…</string>
+    <string name="namepack_building_sub">Fait sur ce téléphone. Rien n\'est envoyé.</string>
+    <string name="namepack_waiting_alt">%1$s attend vos stickers</string>
+    <string name="namepack_pack_for">Pour %1$s</string>
+    <string name="namepack_tone_sweet">Tendre</string>
+    <string name="namepack_tone_flirty">Coquin</string>
+    <string name="namepack_meta">12 stickers · %1$s</string>
+    <string name="namepack_add_failed">Un problème est survenu · Réessayer</string>
+    <string name="namepack_build_failed">Impossible de créer les stickers. Réessayez.</string>
+    <!-- /Custom stickers -->
 </resources>

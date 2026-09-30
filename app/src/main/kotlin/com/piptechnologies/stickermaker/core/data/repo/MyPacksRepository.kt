@@ -108,6 +108,43 @@ class MyPacksRepository @Inject constructor(
         id
     }
 
+    /**
+     * Registers or re-letters a name pack under its fixed [id]; the files must already be in
+     * [dir]. An existing pack keeps its whitelist flag and gets the next image data version so
+     * WhatsApp refreshes what it cached. The version is at least the minutes since the epoch at
+     * [now]: a pack made again after its row went (Clear data, reinstall) has the same id, and
+     * restarting at 1 would let WhatsApp keep the old images. Returns the version written.
+     */
+    suspend fun saveNamePack(
+        id: String,
+        name: String,
+        publisher: String,
+        stickers: List<Pair<String, List<String>>>,
+        dir: String,
+        trayFile: String,
+        now: Long = System.currentTimeMillis()
+    ): Int = withContext(ioDispatcher) {
+        val existing = ownPackDao.get(id)
+        val version = maxOf((existing?.imageDataVersion ?: 0) + 1, (now / 60_000L).toInt())
+        ownPackDao.replacePack(
+            OwnPackEntity(
+                id = id,
+                name = name,
+                publisher = publisher,
+                trayFile = trayFile,
+                animated = false,
+                createdAt = now,
+                dirPath = dir,
+                whitelisted = existing?.whitelisted ?: false,
+                imageDataVersion = version
+            ),
+            stickers.mapIndexed { index, (fileName, emojis) ->
+                OwnStickerEntity(packId = id, fileName = fileName, emojis = emojis.joinToString(","), indexInPack = index)
+            }
+        )
+        version
+    }
+
     /** Deletes an own pack: Room rows and its directory on disk. */
     suspend fun deleteOwnPack(id: String) {
         withContext(ioDispatcher) {

@@ -64,15 +64,6 @@
     <string name="theme_flirty">फ़्लर्टी</string>
     <string name="theme_goodnight">गुड नाइट</string>
     <string name="theme_distance">लॉन्ग डिस्टेंस</string>
-    <string name="customize_title">अपनी थीम चुनें</string>
-    <string name="customize_edit_title">आपकी थीम</string>
-    <string name="customize_subtitle">होम पर आपकी चुनी हुई थीम के पैक दिखते हैं। इन्हें कभी भी सेटिंग में बदलें।</string>
-    <string name="customize_save">सेव करें</string>
-    <string name="customize_pick_one">कम से कम एक थीम चुनें</string>
-    <plurals name="customize_continue">
-        <item quantity="one">जारी रखें · %d थीम</item>
-        <item quantity="other">जारी रखें · %d थीम</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">आप ऑफ़लाइन हैं</string>
@@ -202,16 +193,11 @@
 
     <!-- Settings -->
     <string name="settings_title">सेटिंग</string>
-    <string name="settings_alerts_title">नए पैक के अलर्ट</string>
-    <string name="settings_alerts_on">सिर्फ़ तब, जब कोई नया पैक जुड़े।</string>
-    <string name="settings_alerts_off">बंद। आपको नए पैक की ख़बर नहीं मिलेगी।</string>
+    <string name="settings_alerts_title">सूचनाएं</string>
+    <string name="settings_alerts_on">Love Stickers से अलर्ट और अपडेट।</string>
+    <string name="settings_alerts_off">बंद है। आपको अलर्ट या अपडेट नहीं मिलेंगे।</string>
     <string name="settings_section_preferences">प्राथमिकताएं</string>
     <string name="settings_section_about">ऐप के बारे में</string>
-    <string name="settings_edit_themes">थीम बदलें</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">%d थीम</item>
-        <item quantity="other">%d थीम</item>
-    </plurals>
     <string name="settings_language">भाषा</string>
     <string name="settings_clear">डाउनलोड किए गए पैक हटाएं</string>
     <string name="settings_storage_none">कुछ नहीं</string>
@@ -223,14 +209,15 @@
     <string name="settings_privacy">प्राइवेसी पॉलिसी</string>
     <string name="settings_version">वर्शन</string>
     <string name="settings_free_card">Love Stickers मुफ़्त है और हमेशा रहेगा। न विज्ञापन, न अकाउंट, न ट्रैकिंग। आपकी फ़ोटो कभी आपके फ़ोन से बाहर नहीं जातीं।</string>
-    <string name="settings_toast_alerts_on">नए पैक के अलर्ट चालू हैं</string>
-    <string name="settings_toast_alerts_off">नए पैक के अलर्ट बंद हैं</string>
+    <string name="settings_toast_alerts_on">सूचनाएं चालू हैं</string>
+    <string name="settings_toast_alerts_off">सूचनाएं बंद हैं</string>
     <string name="settings_toast_nothing_to_clear">हटाने के लिए कुछ नहीं है</string>
     <string name="settings_toast_cleared">डाउनलोड हटा दिए गए</string>
     <string name="settings_notif_title">Love Stickers को सूचनाएं भेजने की अनुमति दें?</string>
-    <string name="settings_notif_body">Android सिर्फ़ एक बार पूछता है। हम सूचना तभी भेजते हैं, जब कोई नया पैक जुड़ता है। कभी कोई प्रमोशन नहीं।</string>
+    <string name="settings_notif_body">Android सिर्फ़ एक बार पूछता है। हम कभी-कभी अलर्ट और अपडेट भेजेंगे, जैसे नए पैक।</string>
     <string name="settings_notif_deny">अनुमति न दें</string>
     <string name="settings_notif_allow">अनुमति दें</string>
+    <string name="notification_channel_updates">अलर्ट और अपडेट</string>
     <string name="settings_clear_title">डाउनलोड किए गए पैक हटाएं?</string>
     <string name="settings_clear_body">इस ऐप में सेव की गई कॉपियां (%1$s) हट जाएंगी। जो पैक पहले से WhatsApp में हैं, वे वहीं रहेंगे।</string>
     <string name="settings_clear_keep">रहने दें</string>
@@ -290,4 +277,43 @@
     <string name="contact_email_label">ईमेल · ज़रूरी नहीं, सिर्फ़ तब जब आपको जवाब चाहिए</string>
     <string name="contact_attach_note">मैसेज के साथ ऐप का वर्शन और Android वर्शन भेजा जाता है। और कुछ नहीं।</string>
     <string name="contact_send">भेजें</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">कुछ गलत हो गया</string>
+    <string name="crash_message">Love Stickers में एक अनपेक्षित त्रुटि आई और इसे बंद करना होगा. हमें सूचित कर दिया गया है और हम इसे ठीक कर रहे हैं.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">ऐप और स्टिकर दोनों की भाषा बदलती है।</string>
+    <string name="namepack_you_title">आपका नाम क्या है?</string>
+    <string name="namepack_you_helper">यह आपके भेजे स्टिकरों पर दिखेगा। आप इसे छोड़ सकते हैं।</string>
+    <string name="namepack_you_placeholder">आपका नाम</string>
+    <string name="namepack_pick_character">कौन कहेगा?</string>
+    <string name="namepack_love_title">आपका प्यार कौन है?</string>
+    <string name="namepack_love_helper">हम इस नाम से आपकी भाषा में 12 स्टिकर बनाते हैं।</string>
+    <string name="namepack_love_placeholder">उनका नाम</string>
+    <string name="namepack_sample_name">प्रिया</string>
+    <string name="namepack_continue">आगे बढ़ें</string>
+    <string name="namepack_make">हमारे स्टिकर बनाएं</string>
+    <string name="namepack_note_limit">बस इतना ही। प्यार के नाम भी चलेंगे।</string>
+    <string name="namepack_note_emoji">इमोजी नहीं लिखे जा सकते। सिर्फ़ अक्षर।</string>
+    <string name="namepack_note_need_name">पैक बनाने के लिए नाम डालें।</string>
+    <string name="namepack_preview_hint">लाइव प्रीव्यू। टाइप करते ही बदलता है।</string>
+    <string name="namepack_preview_alt">स्टिकर प्रीव्यू: %1$s</string>
+    <string name="namepack_rel_girlfriend">गर्लफ्रेंड</string>
+    <string name="namepack_rel_boyfriend">बॉयफ्रेंड</string>
+    <string name="namepack_rel_wife">पत्नी</string>
+    <string name="namepack_rel_husband">पति</string>
+    <string name="namepack_rel_crush">क्रश</string>
+    <string name="namepack_rel_partner">पार्टनर</string>
+    <string name="namepack_rel_mom">माँ</string>
+    <string name="namepack_rel_friend">दोस्त</string>
+    <string name="namepack_building_title">12 स्टिकर बन रहे हैं…</string>
+    <string name="namepack_building_sub">इसी फ़ोन पर बना। कुछ भी अपलोड नहीं होता।</string>
+    <string name="namepack_waiting_alt">%1$s आपके स्टिकरों का इंतज़ार कर रहा है</string>
+    <string name="namepack_pack_for">%1$s के लिए</string>
+    <string name="namepack_tone_sweet">मीठा</string>
+    <string name="namepack_tone_flirty">नटखट</string>
+    <string name="namepack_meta">12 स्टिकर · %1$s</string>
+    <string name="namepack_add_failed">कुछ गड़बड़ हुई · फिर कोशिश करें</string>
+    <string name="namepack_build_failed">स्टिकर नहीं बन पाए। फिर कोशिश करें।</string>
+    <!-- /Custom stickers -->
 </resources>

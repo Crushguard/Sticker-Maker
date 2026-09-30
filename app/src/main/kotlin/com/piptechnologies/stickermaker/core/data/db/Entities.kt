@@ -49,7 +49,7 @@ data class OwnPackEntity(
     val createdAt: Long,
     val dirPath: String,
     val whitelisted: Boolean = false,
-    /** WhatsApp's image_data_version; raised when the pack's files are rewritten. */
+    /** Bumped whenever the pack's images change, so WhatsApp re-reads them (name packs re-letter). */
     @ColumnInfo(defaultValue = "1") val imageDataVersion: Int = 1,
 )
 

@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.PersistentCacheSettings
 import com.piptechnologies.stickermaker.BuildConfig
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.catalog.CatalogStore
 import com.piptechnologies.stickermaker.core.data.catalog.FirestoreCatalogMetaSource
 import com.piptechnologies.stickermaker.core.data.catalog.HttpFetcher
@@ -37,14 +38,17 @@ annotation class IoDispatcher
 @InstallIn(SingletonComponent::class)
 object DataModule {
 
-    /** The app's own named database; the app only reads catalog/meta from it. */
-    const val FIRESTORE_DATABASE = "stickermaker"
-
-    /** Firestore with on-disk offline persistence. */
+    /**
+     * The app's own named Firestore database (config.xml's config_firestore_database), with
+     * on-disk offline persistence so the catalog pointer (catalog/meta) is there offline too.
+     */
     @Provides
     @Singleton
-    fun provideFirestore(): FirebaseFirestore =
-        FirebaseFirestore.getInstance(FirebaseApp.getInstance(), FIRESTORE_DATABASE).apply {
+    fun provideFirestore(@ApplicationContext context: Context): FirebaseFirestore =
+        FirebaseFirestore.getInstance(
+            FirebaseApp.getInstance(),
+            context.getString(R.string.config_firestore_database)
+        ).apply {
             emulatorHost()?.let { useEmulator(it, FIRESTORE_EMULATOR_PORT) }
             firestoreSettings = FirebaseFirestoreSettings.Builder()
                 .setLocalCacheSettings(PersistentCacheSettings.newBuilder().build())

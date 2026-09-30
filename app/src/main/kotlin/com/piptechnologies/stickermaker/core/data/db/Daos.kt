@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -89,4 +90,12 @@ interface OwnPackDao {
 
     @Query("UPDATE own_packs SET whitelisted = :whitelisted WHERE id = :id")
     suspend fun setWhitelisted(id: String, whitelisted: Boolean)
+
+    /** Replaces a pack and its sticker rows in one transaction (a re-lettered name pack). */
+    @Transaction
+    suspend fun replacePack(pack: OwnPackEntity, stickers: List<OwnStickerEntity>) {
+        deleteStickers(pack.id)
+        upsertPack(pack)
+        upsertStickers(stickers)
+    }
 }

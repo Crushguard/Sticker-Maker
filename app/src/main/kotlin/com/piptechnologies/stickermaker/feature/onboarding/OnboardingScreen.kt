@@ -27,7 +27,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,13 +65,14 @@ import com.piptechnologies.stickermaker.core.design.Muted
 import com.piptechnologies.stickermaker.core.design.Rose
 import com.piptechnologies.stickermaker.core.design.Surface
 import com.piptechnologies.stickermaker.core.design.components.HonestyLine
+import com.piptechnologies.stickermaker.feature.language.LanguageSheet
+import com.piptechnologies.stickermaker.feature.language.LanguageTopStrip
 import com.piptechnologies.stickermaker.core.design.Canvas as CanvasColor
 
 // Copy lives in res/values/strings.xml (onboarding_*).
 
 private val TitleInk = Color(0xFF171A20)
 private val BodyInk = Color(0xFF565C67)
-private val SkipInk = Color(0xFF626873)
 private val DotIdle = Color(0xFFD8DCE3)
 
 private val TitleText = TextStyle(
@@ -84,7 +88,6 @@ private val BodyText = TextStyle(
     fontSize = 15.sp,
     lineHeight = 23.sp
 )
-private val SkipText = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 13.5.sp)
 private val CtaText = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W600, fontSize = 16.sp)
 private val PhotoChipText = TextStyle(
     fontFamily = Mono,
@@ -96,8 +99,9 @@ private val PhotoChipText = TextStyle(
 /**
  * Two-slide onboarding (Prototype `is.onboarding`): sticker collage then the
  * photo-to-sticker composition, dot pager, one primary button ("Next" /
- * "Get started"), ghost Skip on the first slide only, honesty line under the
- * button. Both paths persist the onboarded flag before [onDone] fires.
+ * "Get started"), ghost Skip on both slides, language chip at the start of the
+ * top strip, honesty line under the button.
+ * Both paths hand over to the name flow through [onDone]; that flow writes the onboarded flag.
  */
 @Composable
 fun OnboardingScreen(
@@ -106,14 +110,15 @@ fun OnboardingScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     val latestOnDone by rememberUpdatedState(onDone)
-    LaunchedEffect(state.finished) {
-        if (state.finished) latestOnDone()
-    }
+    LaunchedEffect(Unit) { viewModel.done.collect { latestOnDone() } }
+    var languagesOpen by rememberSaveable { mutableStateOf(false) }
     OnboardingContent(
         page = state.page,
         onNext = viewModel::onNext,
-        onSkip = viewModel::onSkip
+        onSkip = viewModel::onSkip,
+        onLanguage = { languagesOpen = true }
     )
+    if (languagesOpen) LanguageSheet(onDismiss = { languagesOpen = false })
 }
 
 /** Stateless onboarding layout, previewable without Hilt. */
@@ -122,6 +127,7 @@ fun OnboardingContent(
     page: Int,
     onNext: () -> Unit,
     onSkip: () -> Unit,
+    onLanguage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -132,21 +138,8 @@ fun OnboardingContent(
             .navigationBarsPadding()
             .padding(start = 24.dp, top = 4.dp, end = 24.dp, bottom = 26.dp)
     ) {
-        // 40dp top strip; ghost Skip only on the first slide.
-        Box(Modifier.fillMaxWidth().height(40.dp), contentAlignment = Alignment.CenterEnd) {
-            if (page == 0) {
-                Box(
-                    modifier = Modifier
-                        .height(36.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .clickable(role = Role.Button, onClickLabel = stringResource(R.string.onboarding_skip), onClick = onSkip)
-                        .padding(horizontal = 12.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(stringResource(R.string.onboarding_skip), style = SkipText, color = SkipInk)
-                }
-            }
-        }
+        // 40dp top strip: language chip at the start, ghost Skip at the end (both slides).
+        LanguageTopStrip(onLanguage = onLanguage, onSkip = onSkip)
         Crossfade(targetState = page, label = "obPage", modifier = Modifier.weight(1f)) { p ->
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -318,11 +311,11 @@ private fun DashedArrow(modifier: Modifier = Modifier) {
 @Preview(showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
 private fun OnboardingSlideOnePreview() {
-    LoveStickersTheme { OnboardingContent(page = 0, onNext = {}, onSkip = {}) }
+    LoveStickersTheme { OnboardingContent(page = 0, onNext = {}, onSkip = {}, onLanguage = {}) }
 }
 
 @Preview(showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
 private fun OnboardingSlideTwoPreview() {
-    LoveStickersTheme { OnboardingContent(page = 1, onNext = {}, onSkip = {}) }
+    LoveStickersTheme { OnboardingContent(page = 1, onNext = {}, onSkip = {}, onLanguage = {}) }
 }

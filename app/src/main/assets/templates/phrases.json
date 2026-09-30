@@ -1,0 +1,677 @@
+{
+  "_": {
+    "placeholders": "{n} = your love's name · {a} = your name · ❤ is drawn as a vector heart, never a font glyph",
+    "rule": "no phrase reveals the sender's gender; recipient forms are neutral in writing",
+    "family": "family = phrase overrides used for Mom and Friend (Sweet only; Flirty is hidden for these relations). Slots not listed fall back to sweet.",
+    "languages": "en, ar, fr and hi from Claude Design; es, pt, pt-BR, id, tr, ur, de, ru, it, zh, fa, he, ps, ha and my written for the app, pending native review."
+  },
+  "en": {
+    "sweet": {
+      "love_you": "Love you, {n}",
+      "miss_you": "Miss you, {n}",
+      "good_morning": "Good morning, {n}",
+      "good_night": "Good night, {n}",
+      "kiss": "A kiss for {n}",
+      "hug": "Hugs, {n}",
+      "sorry": "Sorry, {n}",
+      "be_mine": "Be mine, {n}",
+      "for_you": "For {n}",
+      "call_me": "Call me, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Crazy about you, {n}",
+      "miss_you": "Come back to me, {n}",
+      "good_morning": "Morning, {n}. Miss me?",
+      "good_night": "Dream of me, {n}",
+      "kiss": "Kiss me, {n}",
+      "hug": "Come here, {n}",
+      "sorry": "Forgive me, {n}?",
+      "be_mine": "You're mine, {n}",
+      "for_you": "Yours, {n}",
+      "call_me": "Call me tonight, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Hey, {n}"
+    },
+    "family": {
+      "love_you": "Love you, {n}",
+      "kiss": "Big kiss, {n}",
+      "hug": "Big hug, {n}",
+      "be_mine": "You're the best, {n}",
+      "call_me": "Call me, {n}",
+      "for_you": "For {n}",
+      "name_only": "{n}"
+    }
+  },
+  "ar": {
+    "sweet": {
+      "love_you": "أحبك يا {n}",
+      "miss_you": "اشتقت لك يا {n}",
+      "good_morning": "صباح الخير يا {n}",
+      "good_night": "ليلة سعيدة يا {n}",
+      "kiss": "قبلة لك يا {n}",
+      "hug": "أحضان يا {n}",
+      "sorry": "أعتذر يا {n}",
+      "be_mine": "أنت لي يا {n}",
+      "for_you": "إلى {n}",
+      "call_me": "أنتظر مكالمتك يا {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "أذوب فيك يا {n}",
+      "miss_you": "وحشتني يا {n}",
+      "good_morning": "صباح الحب يا {n}",
+      "good_night": "أنت في أحلامي يا {n}",
+      "kiss": "بوسة يا {n}",
+      "hug": "أحتاج حضنك يا {n}",
+      "sorry": "زعلك يكسر قلبي يا {n}",
+      "be_mine": "أنت لي وحدي يا {n}",
+      "for_you": "كل شيء لك يا {n}",
+      "call_me": "مكالمة الليلة يا {n}؟",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "أهلًا يا {n}"
+    },
+    "family": {
+      "kiss": "قبلة كبيرة يا {n}",
+      "hug": "حضن كبير يا {n}",
+      "be_mine": "أنت الأفضل يا {n}"
+    }
+  },
+  "fr": {
+    "sweet": {
+      "love_you": "Je t'aime, {n}",
+      "miss_you": "Tu me manques, {n}",
+      "good_morning": "Bonjour, {n}",
+      "good_night": "Bonne nuit, {n}",
+      "kiss": "Un bisou pour {n}",
+      "hug": "Câlin, {n}",
+      "sorry": "Pardon, {n}",
+      "be_mine": "Sois à moi, {n}",
+      "for_you": "Pour {n}",
+      "call_me": "Appelle-moi, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Dingue de toi, {n}",
+      "miss_you": "Reviens-moi, {n}",
+      "good_morning": "Debout, {n}",
+      "good_night": "Rêve de moi, {n}",
+      "kiss": "Embrasse-moi, {n}",
+      "hug": "Viens là, {n}",
+      "sorry": "Pardonne-moi, {n} ?",
+      "be_mine": "T'es à moi, {n}",
+      "for_you": "Tout à toi, {n}",
+      "call_me": "Appelle-moi ce soir, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Hé, {n}"
+    },
+    "family": {
+      "kiss": "Gros bisou, {n}",
+      "hug": "Gros câlin, {n}",
+      "be_mine": "Personne n'est comme toi, {n}"
+    }
+  },
+  "hi": {
+    "sweet": {
+      "love_you": "प्यार है तुमसे, {n}",
+      "miss_you": "याद आती है, {n}",
+      "good_morning": "सुप्रभात, {n}",
+      "good_night": "शुभ रात्रि, {n}",
+      "kiss": "किस तुम्हारे लिए, {n}",
+      "hug": "जादू की झप्पी, {n}",
+      "sorry": "सॉरी, {n}",
+      "be_mine": "हमेशा साथ रहना, {n}",
+      "for_you": "{n} के लिए",
+      "call_me": "कॉल करो, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "तुम पर फ़िदा, {n}",
+      "miss_you": "वापस आओ, {n}",
+      "good_morning": "उठो ना, {n}",
+      "good_night": "सपनों में मिलो, {n}",
+      "kiss": "किस दो, {n}",
+      "hug": "इधर आओ, {n}",
+      "sorry": "माफ़ कर दो, {n}?",
+      "be_mine": "बस तुम और मैं, {n}",
+      "for_you": "सब तुम्हारा, {n}",
+      "call_me": "रात को कॉल करो, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "अरे, {n}"
+    },
+    "family": {
+      "kiss": "बड़ी वाली किस, {n}",
+      "hug": "बड़ी वाली झप्पी, {n}",
+      "be_mine": "सबसे बेस्ट, {n}"
+    }
+  },
+  "es": {
+    "sweet": {
+      "love_you": "Te quiero, {n}",
+      "miss_you": "Te extraño, {n}",
+      "good_morning": "Buenos días, {n}",
+      "good_night": "Buenas noches, {n}",
+      "kiss": "Un beso para {n}",
+      "hug": "Abrazos, {n}",
+      "sorry": "Perdón, {n}",
+      "be_mine": "Quédate conmigo, {n}",
+      "for_you": "Para {n}",
+      "call_me": "Llámame, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Me encantas, {n}",
+      "miss_you": "Vuelve conmigo, {n}",
+      "good_morning": "¿Me extrañas, {n}?",
+      "good_night": "Sueña conmigo, {n}",
+      "kiss": "Bésame, {n}",
+      "hug": "Ven aquí, {n}",
+      "sorry": "¿Me perdonas, {n}?",
+      "be_mine": "Te quiero para mí, {n}",
+      "for_you": "Todo es tuyo, {n}",
+      "call_me": "Llámame esta noche, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Oye, {n}"
+    },
+    "family": {
+      "kiss": "Un besote, {n}",
+      "hug": "Un abrazote, {n}",
+      "be_mine": "Eres lo mejor, {n}"
+    }
+  },
+  "pt": {
+    "sweet": {
+      "love_you": "Amo-te, {n}",
+      "miss_you": "Tenho saudades tuas, {n}",
+      "good_morning": "Bom dia, {n}",
+      "good_night": "Boa noite, {n}",
+      "kiss": "Um beijo para {n}",
+      "hug": "Abraços, {n}",
+      "sorry": "Desculpa, {n}",
+      "be_mine": "Fica comigo, {n}",
+      "for_you": "Para {n}",
+      "call_me": "Liga-me, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Adoro-te, {n}",
+      "miss_you": "Volta para mim, {n}",
+      "good_morning": "Tens saudades minhas, {n}?",
+      "good_night": "Sonha comigo, {n}",
+      "kiss": "Beija-me, {n}",
+      "hug": "Anda cá, {n}",
+      "sorry": "Perdoas-me, {n}?",
+      "be_mine": "Quero-te só para mim, {n}",
+      "for_you": "Tudo é teu, {n}",
+      "call_me": "Liga-me esta noite, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Olá, {n}"
+    },
+    "family": {
+      "kiss": "Um beijinho, {n}",
+      "hug": "Um abraço apertado, {n}",
+      "be_mine": "Ninguém é como tu, {n}"
+    }
+  },
+  "pt-BR": {
+    "sweet": {
+      "love_you": "Te amo, {n}",
+      "miss_you": "Saudade de você, {n}",
+      "good_morning": "Bom dia, {n}",
+      "good_night": "Boa noite, {n}",
+      "kiss": "Um beijo pra {n}",
+      "hug": "Abraços, {n}",
+      "sorry": "Desculpa, {n}",
+      "be_mine": "Fica comigo, {n}",
+      "for_you": "Para {n}",
+      "call_me": "Me liga, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Te adoro, {n}",
+      "miss_you": "Volta pra mim, {n}",
+      "good_morning": "Sentiu minha falta, {n}?",
+      "good_night": "Sonha comigo, {n}",
+      "kiss": "Me beija, {n}",
+      "hug": "Vem cá, {n}",
+      "sorry": "Me perdoa, {n}?",
+      "be_mine": "Te quero só pra mim, {n}",
+      "for_you": "Tudo é seu, {n}",
+      "call_me": "Me liga hoje à noite, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Oi, {n}"
+    },
+    "family": {
+      "kiss": "Um beijão, {n}",
+      "hug": "Um abração, {n}",
+      "be_mine": "Ninguém é como você, {n}"
+    }
+  },
+  "id": {
+    "sweet": {
+      "love_you": "Aku sayang kamu, {n}",
+      "miss_you": "Aku kangen kamu, {n}",
+      "good_morning": "Selamat pagi, {n}",
+      "good_night": "Selamat tidur, {n}",
+      "kiss": "Cium untuk {n}",
+      "hug": "Peluk, {n}",
+      "sorry": "Maaf, {n}",
+      "be_mine": "Jadilah milikku, {n}",
+      "for_you": "Untuk {n}",
+      "call_me": "Telepon aku, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Tergila-gila padamu, {n}",
+      "miss_you": "Kembalilah padaku, {n}",
+      "good_morning": "Kangen aku nggak, {n}?",
+      "good_night": "Mimpikan aku, {n}",
+      "kiss": "Cium aku, {n}",
+      "hug": "Sini peluk, {n}",
+      "sorry": "Maafin aku ya, {n}?",
+      "be_mine": "Kamu milikku, {n}",
+      "for_you": "Semua untukmu, {n}",
+      "call_me": "Telepon aku malam ini, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Hai, {n}"
+    },
+    "family": {
+      "kiss": "Muach, {n}",
+      "hug": "Peluk erat, {n}",
+      "be_mine": "Kamu yang terbaik, {n}"
+    }
+  },
+  "tr": {
+    "sweet": {
+      "love_you": "Seni seviyorum, {n}",
+      "miss_you": "Seni özledim, {n}",
+      "good_morning": "Günaydın, {n}",
+      "good_night": "İyi geceler, {n}",
+      "kiss": "{n} için bir öpücük",
+      "hug": "Sana sarılıyorum, {n}",
+      "sorry": "Özür dilerim, {n}",
+      "be_mine": "Benim ol, {n}",
+      "for_you": "{n} için",
+      "call_me": "Beni ara, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Sana bayılıyorum, {n}",
+      "miss_you": "Bana geri dön, {n}",
+      "good_morning": "Beni özledin mi, {n}?",
+      "good_night": "Rüyanda beni gör, {n}",
+      "kiss": "Öp beni, {n}",
+      "hug": "Gel buraya, {n}",
+      "sorry": "Affet beni, {n}",
+      "be_mine": "Sen benimsin, {n}",
+      "for_you": "Her şeyim senin, {n}",
+      "call_me": "Bu gece ara beni, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Selam, {n}"
+    },
+    "family": {
+      "kiss": "Kocaman öpücük, {n}",
+      "hug": "Kocaman sarılıyorum, {n}",
+      "be_mine": "En iyisi sensin, {n}"
+    }
+  },
+  "ur": {
+    "sweet": {
+      "love_you": "تم سے پیار ہے، {n}",
+      "miss_you": "تمہاری یاد آتی ہے، {n}",
+      "good_morning": "صبح بخیر، {n}",
+      "good_night": "شب بخیر، {n}",
+      "kiss": "تمہارے لیے بوسہ، {n}",
+      "hug": "جادو کی جپھی، {n}",
+      "sorry": "سوری، {n}",
+      "be_mine": "ہمیشہ ساتھ رہنا، {n}",
+      "for_you": "{n} کے لیے",
+      "call_me": "کال کرو، {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "تم پر فدا ہے دل، {n}",
+      "miss_you": "واپس آ جاؤ، {n}",
+      "good_morning": "اُٹھو نا، {n}",
+      "good_night": "خوابوں میں ملنا، {n}",
+      "kiss": "ایک بوسہ دو، {n}",
+      "hug": "اِدھر آؤ، {n}",
+      "sorry": "معاف کر دو نا، {n}؟",
+      "be_mine": "بس تم اور میں، {n}",
+      "for_you": "سب تمہارا، {n}",
+      "call_me": "رات کو کال کرنا، {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "ارے، {n}"
+    },
+    "family": {
+      "kiss": "بہت سا پیار، {n}",
+      "hug": "بڑی سی جپھی، {n}",
+      "be_mine": "سب سے بہترین، {n}"
+    }
+  },
+  "de": {
+    "sweet": {
+      "love_you": "Ich liebe dich, {n}",
+      "miss_you": "Ich vermisse dich, {n}",
+      "good_morning": "Guten Morgen, {n}",
+      "good_night": "Gute Nacht, {n}",
+      "kiss": "Ein Kuss für {n}",
+      "hug": "Fühl dich gedrückt, {n}",
+      "sorry": "Tut mir leid, {n}",
+      "be_mine": "Sei mein, {n}",
+      "for_you": "Für {n}",
+      "call_me": "Ruf mich an, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Verrückt nach dir, {n}",
+      "miss_you": "Komm zurück zu mir, {n}",
+      "good_morning": "Vermisst du mich, {n}?",
+      "good_night": "Träum von mir, {n}",
+      "kiss": "Küss mich, {n}",
+      "hug": "Komm her, {n}",
+      "sorry": "Verzeihst du mir, {n}?",
+      "be_mine": "Du gehörst mir, {n}",
+      "for_you": "Ganz dein, {n}",
+      "call_me": "Ruf mich heute Abend an, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Hallo, {n}"
+    },
+    "family": {
+      "kiss": "Dicker Kuss, {n}",
+      "hug": "Ganz fest gedrückt, {n}",
+      "be_mine": "Niemand ist wie du, {n}"
+    }
+  },
+  "ru": {
+    "sweet": {
+      "love_you": "Люблю тебя, {n}",
+      "miss_you": "Скучаю по тебе, {n}",
+      "good_morning": "Доброе утро, {n}",
+      "good_night": "Спокойной ночи, {n}",
+      "kiss": "Целую, {n}",
+      "hug": "Обнимаю, {n}",
+      "sorry": "Прости, {n}",
+      "be_mine": "Будь со мной, {n}",
+      "for_you": "Это тебе, {n}",
+      "call_me": "Позвони мне, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Схожу по тебе с ума, {n}",
+      "miss_you": "Вернись ко мне, {n}",
+      "good_morning": "Скучаешь по мне, {n}?",
+      "good_night": "Мечтай обо мне, {n}",
+      "kiss": "Поцелуй меня, {n}",
+      "hug": "Иди ко мне, {n}",
+      "sorry": "Простишь меня, {n}?",
+      "be_mine": "Никому тебя не отдам, {n}",
+      "for_you": "Всё для тебя, {n}",
+      "call_me": "Позвони мне вечером, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Привет, {n}"
+    },
+    "family": {
+      "kiss": "Крепко целую, {n}",
+      "hug": "Крепко обнимаю, {n}",
+      "be_mine": "Ты лучше всех, {n}"
+    }
+  },
+  "it": {
+    "sweet": {
+      "love_you": "Ti amo, {n}",
+      "miss_you": "Mi manchi, {n}",
+      "good_morning": "Buongiorno, {n}",
+      "good_night": "Buonanotte, {n}",
+      "kiss": "Un bacio per {n}",
+      "hug": "Un abbraccio, {n}",
+      "sorry": "Scusa, {n}",
+      "be_mine": "Resta con me, {n}",
+      "for_you": "Per {n}",
+      "call_me": "Chiamami, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Mi fai impazzire, {n}",
+      "miss_you": "Torna da me, {n}",
+      "good_morning": "Ti manco, {n}?",
+      "good_night": "Sognami, {n}",
+      "kiss": "Baciami, {n}",
+      "hug": "Vieni qui, {n}",
+      "sorry": "Mi perdoni, {n}?",
+      "be_mine": "Ti voglio solo per me, {n}",
+      "for_you": "Tutto per te, {n}",
+      "call_me": "Chiamami stasera, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Ehi, {n}"
+    },
+    "family": {
+      "kiss": "Un bacione, {n}",
+      "hug": "Un abbraccione, {n}",
+      "be_mine": "Nessuno è come te, {n}"
+    }
+  },
+  "zh": {
+    "sweet": {
+      "love_you": "{n}，我爱你",
+      "miss_you": "{n}，我想你",
+      "good_morning": "{n}，早安",
+      "good_night": "{n}，晚安",
+      "kiss": "亲亲{n}",
+      "hug": "抱抱{n}",
+      "sorry": "{n}，对不起",
+      "be_mine": "{n}，和我在一起吧",
+      "for_you": "送给{n}",
+      "call_me": "{n}，给我打电话",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "{n}，我为你着迷",
+      "miss_you": "{n}，快回到我身边",
+      "good_morning": "{n}，有没有想我？",
+      "good_night": "{n}，梦里见",
+      "kiss": "{n}，亲我一下",
+      "hug": "{n}，过来抱抱",
+      "sorry": "{n}，原谅我好吗？",
+      "be_mine": "{n}，你是我的",
+      "for_you": "{n}，全都给你",
+      "call_me": "{n}，今晚打给我",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "嘿，{n}"
+    },
+    "family": {
+      "kiss": "大大的亲亲，{n}",
+      "hug": "大大的拥抱，{n}",
+      "be_mine": "{n}，你最棒"
+    }
+  },
+  "fa": {
+    "sweet": {
+      "love_you": "دوستت دارم، {n}",
+      "miss_you": "دلتنگتم، {n}",
+      "good_morning": "صبح بخیر، {n}",
+      "good_night": "شب بخیر، {n}",
+      "kiss": "یه بوس برای {n}",
+      "hug": "یه بغل گرم، {n}",
+      "sorry": "ببخشید، {n}",
+      "be_mine": "مال من باش، {n}",
+      "for_you": "برای {n}",
+      "call_me": "بهم زنگ بزن، {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "دیوونتم، {n}",
+      "miss_you": "برگرد پیشم، {n}",
+      "good_morning": "دلت برام تنگ شده، {n}؟",
+      "good_night": "خواب منو ببین، {n}",
+      "kiss": "ببوسم، {n}",
+      "hug": "بیا بغلم، {n}",
+      "sorry": "منو می‌بخشی، {n}؟",
+      "be_mine": "تو مال منی، {n}",
+      "for_you": "همه‌چیزم مال تو، {n}",
+      "call_me": "امشب زنگ بزن، {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "سلام، {n}"
+    },
+    "family": {
+      "kiss": "یه بوس گنده، {n}",
+      "hug": "یه بغل گنده، {n}",
+      "be_mine": "تو بهترینی، {n}"
+    }
+  },
+  "he": {
+    "sweet": {
+      "love_you": "אהבה שלי, {n}",
+      "miss_you": "געגועים, {n}",
+      "good_morning": "בוקר טוב, {n}",
+      "good_night": "לילה טוב, {n}",
+      "kiss": "נשיקה בשבילך, {n}",
+      "hug": "חיבוק, {n}",
+      "sorry": "סליחה, {n}",
+      "be_mine": "ביחד לתמיד, {n}",
+      "for_you": "בשביל {n}",
+      "call_me": "מחכה לשיחה ממך, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "כל כולי שלך, {n}",
+      "miss_you": "הגעגועים הורגים, {n}",
+      "good_morning": "חלמת עליי, {n}?",
+      "good_night": "חלומות מתוקים, {n}",
+      "kiss": "נשיקה ממני, {n}",
+      "hug": "חיבוק חזק, {n}",
+      "sorry": "סולחים לי, {n}?",
+      "be_mine": "שלי ורק שלי, {n}",
+      "for_you": "הכול בשבילך, {n}",
+      "call_me": "שיחה הלילה, {n}?",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "היי, {n}"
+    },
+    "family": {
+      "kiss": "נשיקה גדולה, {n}",
+      "hug": "חיבוק גדול, {n}",
+      "be_mine": "אין כמוך, {n}"
+    }
+  },
+  "ps": {
+    "sweet": {
+      "love_you": "زه تا سره مینه لرم، {n}",
+      "miss_you": "ستا یاد راځي، {n}",
+      "good_morning": "سهار مو پخیر، {n}",
+      "good_night": "شپه مو پخیر، {n}",
+      "kiss": "یو ښکل ستا لپاره، {n}",
+      "hug": "یوه ګرمه غېږ، {n}",
+      "sorry": "بخښنه غواړم، {n}",
+      "be_mine": "زما شه، {n}",
+      "for_you": "د {n} لپاره",
+      "call_me": "ماته زنګ ووهه، {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "زړه مې ستا دی، {n}",
+      "miss_you": "بېرته راشه، {n}",
+      "good_morning": "سهار مو په مینه، {n}",
+      "good_night": "خوبونو کې مې ووینه، {n}",
+      "kiss": "ښکل مې کړه، {n}",
+      "hug": "دلته راشه، {n}",
+      "sorry": "ما وبخښه، {n}؟",
+      "be_mine": "ته یوازې زما یې، {n}",
+      "for_you": "هر څه ستا دي، {n}",
+      "call_me": "نن شپه زنګ ووهه، {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "سلام، {n}"
+    },
+    "family": {
+      "kiss": "ډېر ښکلونه، {n}",
+      "hug": "لویه غېږ، {n}",
+      "be_mine": "ته تر ټولو ښه یې، {n}"
+    }
+  },
+  "ha": {
+    "sweet": {
+      "love_you": "Soyayyata, {n}",
+      "miss_you": "Kewa ta dame ni, {n}",
+      "good_morning": "Barka da safiya, {n}",
+      "good_night": "Mu kwana lafiya, {n}",
+      "kiss": "Sumba daga gare ni, {n}",
+      "hug": "Runguma, {n}",
+      "sorry": "A yi haƙuri, {n}",
+      "be_mine": "Mu zauna tare, {n}",
+      "for_you": "Don {n}",
+      "call_me": "Kira ni, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "Hankalina ya tafi, {n}",
+      "miss_you": "Dawo gare ni, {n}",
+      "good_morning": "Tashi mana, {n}",
+      "good_night": "Yi mafarkina, {n}",
+      "kiss": "Sumbace ni, {n}",
+      "hug": "Zo nan, {n}",
+      "sorry": "Yafe mini, {n}?",
+      "be_mine": "Mu biyu kawai, {n}",
+      "for_you": "Duk don soyayya, {n}",
+      "call_me": "Kira ni yau da dare, {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "Sannu, {n}"
+    },
+    "family": {
+      "kiss": "Sumba mai yawa, {n}",
+      "hug": "Babbar runguma, {n}",
+      "be_mine": "Na gode da komai, {n}"
+    }
+  },
+  "my": {
+    "sweet": {
+      "love_you": "ချစ်တယ်၊ {n}",
+      "miss_you": "လွမ်းတယ်၊ {n}",
+      "good_morning": "မင်္ဂလာနံနက်ခင်းပါ၊ {n}",
+      "good_night": "ကောင်းသောညပါ၊ {n}",
+      "kiss": "{n} အတွက် အနမ်းတွေ",
+      "hug": "ပွေ့ဖက်ချင်တယ်၊ {n}",
+      "sorry": "တောင်းပန်ပါတယ်၊ {n}",
+      "be_mine": "အတူရှိနေပါ၊ {n}",
+      "for_you": "{n} အတွက်",
+      "call_me": "ဖုန်းဆက်ပါ၊ {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "{n}"
+    },
+    "flirty": {
+      "love_you": "အရူးအမူးချစ်တယ်၊ {n}",
+      "miss_you": "ပြန်လာခဲ့ပါ၊ {n}",
+      "good_morning": "လွမ်းနေလား၊ {n}",
+      "good_night": "အိပ်မက်ထဲ တွေ့ကြမယ်၊ {n}",
+      "kiss": "နမ်းပါ၊ {n}",
+      "hug": "ဒီကိုလာ၊ {n}",
+      "sorry": "ခွင့်လွှတ်ပါနော်၊ {n}",
+      "be_mine": "ငါ့အတွက်ပဲ၊ {n}",
+      "for_you": "အားလုံး မင်းအတွက်၊ {n}",
+      "call_me": "ဒီည ဖုန်းဆက်နော်၊ {n}",
+      "our_names": "{a} ❤ {n}",
+      "name_only": "ဟေး၊ {n}"
+    },
+    "family": {
+      "kiss": "အနမ်းများစွာ၊ {n}",
+      "hug": "ပွေ့ဖက်မှုကြီးကြီး၊ {n}",
+      "be_mine": "အကောင်းဆုံးပဲ၊ {n}"
+    }
+  }
+}

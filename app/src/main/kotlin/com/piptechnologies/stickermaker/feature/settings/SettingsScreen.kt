@@ -1,14 +1,18 @@
 package com.piptechnologies.stickermaker.feature.settings
 
 import android.Manifest
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -34,6 +38,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,7 +53,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
@@ -58,7 +62,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.piptechnologies.stickermaker.BuildConfig
 import com.piptechnologies.stickermaker.R
@@ -80,22 +88,11 @@ import com.piptechnologies.stickermaker.core.design.components.ConfirmSheet
 import com.piptechnologies.stickermaker.core.design.components.LoveTopBar
 import com.piptechnologies.stickermaker.core.design.components.ToastHost
 import com.piptechnologies.stickermaker.core.design.components.showToast
-import com.piptechnologies.stickermaker.feature.contact.deviceInfoBlock
-import com.piptechnologies.stickermaker.feature.contact.mailtoUri
+import com.piptechnologies.stickermaker.core.notifications.PushNotifications
+import com.piptechnologies.stickermaker.core.telemetry.AppAnalytics
 import com.piptechnologies.stickermaker.feature.language.AppLanguages
+import com.piptechnologies.stickermaker.feature.rating.RatingPromptController
 import kotlinx.coroutines.launch
-
-/** PLACEHOLDER URL — swap for the real published policy before release. */
-const val PRIVACY_POLICY_URL = "https://piptechnologies.example/privacy"
-
-// Subject line for the low-star feedback mail (mail needs one; not designed).
-// It stays in English: the team reads it, like the device details below it.
-private const val FEEDBACK_MAIL_SUBJECT = "Love Stickers · Feedback"
-
-// ---- External destinations ---- //
-private const val MORE_APPS_URL = "https://play.google.com/store/apps/developer?id=PIP+Technologies"
-private val PLAY_MARKET_URI = "market://details?id=${BuildConfig.APPLICATION_ID}"
-private val PLAY_LISTING_URL = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
 
 // ---- Off-token colors from the prototype's settings screen ---- //
 private val CardBorder = Color(0xFFEEF0F4)
@@ -120,7 +117,7 @@ private val AdBadgeStyle = TextStyle(fontFamily = Mono, fontWeight = FontWeight.
 private val FreeCardStyle = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W400, fontSize = 12.5.sp, lineHeight = 19.sp)
 
 /**
- * Settings, straight from the design: back header, the "New pack alerts" hero
+ * Settings, straight from the design: back header, the Notifications hero
  * card, PREFERENCES and ABOUT groups, and the free-forever card. Rating,
  * the notification pre-ask and clear-downloads run as bottom sheets on top.
  */
@@ -129,7 +126,6 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onLanguage: () -> Unit,
     onContact: () -> Unit,
-    onEditThemes: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -145,6 +141,17 @@ fun SettingsScreen(
 
     val showToast: (String) -> Unit = { message ->
         scope.launch { toastHost.showToast(message) }
+    }
+
+    // The Notifications switch follows what Android allows, which the user may
+    // change in system settings while away.
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) viewModel.onResume()
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     LaunchedEffect(viewModel) {
@@ -182,14 +189,27 @@ fun SettingsScreen(
                         viewModel.setAlertsEnabled(false)
                         showToast(context.getString(R.string.settings_toast_alerts_off))
                     }
-                    needsNotificationsPermission(context) -> notifPromptVisible = true
+                    needsNotificationsPermission(context) ->
+                        if (state.notificationsAsked && !canAskForNotifications(context)) {
+                            // Android no longer shows its question: the answer lives in
+                            // system settings now.
+                            viewModel.setAlertsEnabled(true)
+                            openNotificationSettings(context)
+                        } else {
+                            notifPromptVisible = true
+                        }
+                    // Allowed to ask no longer applies, but notifications are switched
+                    // off for the app in system settings.
+                    !PushNotifications.systemAllows(context) -> {
+                        viewModel.setAlertsEnabled(true)
+                        openNotificationSettings(context)
+                    }
                     else -> {
                         viewModel.setAlertsEnabled(true)
                         showToast(context.getString(R.string.settings_toast_alerts_on))
                     }
                 }
             },
-            onEditThemes = onEditThemes,
             onLanguage = onLanguage,
             onClear = {
                 if (state.hasDownloads) clearConfirmVisible = true
@@ -197,8 +217,8 @@ fun SettingsScreen(
             },
             onRate = { rateSheetVisible = true },
             onContact = onContact,
-            onMoreApps = { if (!openLink(context, MORE_APPS_URL)) showToast(context.getString(R.string.toast_link_failed)) },
-            onPrivacy = { if (!openLink(context, PRIVACY_POLICY_URL)) showToast(context.getString(R.string.toast_link_failed)) },
+            onMoreApps = { if (!openConfigLink(context, R.string.config_more_apps_url)) showToast(context.getString(R.string.toast_link_failed)) },
+            onPrivacy = { if (!openConfigLink(context, R.string.config_privacy_policy_url)) showToast(context.getString(R.string.toast_link_failed)) },
             modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars)
         )
         ToastHost(
@@ -220,6 +240,7 @@ fun SettingsScreen(
             icon = LoveIcons.Bell,
             onConfirm = {
                 notifPromptVisible = false
+                viewModel.onNotificationsAsked()
                 permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             },
             onDismiss = { notifPromptVisible = false }
@@ -241,19 +262,27 @@ fun SettingsScreen(
         )
     }
 
+    // Settings › Rate us: asked for, so no prompt rules apply; a rating or a note still
+    // tells the rating prompt never to ask again.
     if (rateSheetVisible) {
         RateSheet(
             onDismiss = { rateSheetVisible = false },
             onOpenStore = {
-                if (!openPlayListing(context)) showToast(context.getString(R.string.toast_link_failed))
+                if (openPlayListing(context)) {
+                    AppAnalytics.logRating(outcome = "store", source = "settings")
+                    RatingPromptController.onRated(context)
+                } else {
+                    showToast(context.getString(R.string.toast_link_failed))
+                }
             },
             onSendFeedback = { text ->
-                val sent = openMail(
-                    context = context,
-                    subject = FEEDBACK_MAIL_SUBJECT,
-                    body = text.trim() + deviceInfoBlock()
-                )
-                if (!sent) showToast(context.getString(R.string.toast_no_email_app))
+                val sent = sendFeedbackMail(context, text)
+                if (sent) {
+                    AppAnalytics.logRating(outcome = "feedback", source = "settings")
+                    RatingPromptController.onRated(context)
+                } else {
+                    showToast(context.getString(R.string.toast_no_email_app))
+                }
                 sent
             }
         )
@@ -270,7 +299,6 @@ private fun SettingsContent(
     languageTag: String,
     onBack: () -> Unit,
     onToggleAlerts: (Boolean) -> Unit,
-    onEditThemes: () -> Unit,
     onLanguage: () -> Unit,
     onClear: () -> Unit,
     onRate: () -> Unit,
@@ -293,13 +321,6 @@ private fun SettingsContent(
             Column {
                 SectionLabel(stringResource(R.string.settings_section_preferences))
                 SettingsCard {
-                    SettingsRow(
-                        icon = SettingsIcons.SlidersHorizontal,
-                        label = stringResource(R.string.settings_edit_themes),
-                        value = pluralStringResource(R.plurals.settings_theme_count, state.themesCount, state.themesCount),
-                        onClick = onEditThemes
-                    )
-                    RowDividerLine()
                     SettingsRow(
                         icon = SettingsIcons.Languages,
                         label = stringResource(R.string.settings_language),
@@ -528,6 +549,33 @@ private fun storageLabel(state: SettingsUiState): String =
 private fun sizeLabel(bytes: Long): String =
     stringResource(R.string.settings_size_mb, (bytes / (1024.0 * 1024.0)).coerceAtLeast(0.1))
 
+/** Whether Android would still show its notification question (false once refused for good). */
+private fun canAskForNotifications(context: Context): Boolean {
+    val activity = context.findActivity() ?: return true
+    return ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.POST_NOTIFICATIONS)
+}
+
+/** The app's page in Android's notification settings (the app details page before API 26). */
+private fun openNotificationSettings(context: Context) {
+    val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+    } else {
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", context.packageName, null))
+    }
+    try {
+        context.startActivity(intent)
+    } catch (_: ActivityNotFoundException) {
+        // No settings screen to open: the switch simply stays off.
+    }
+}
+
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
+}
+
 /** True on API 33+ while POST_NOTIFICATIONS still needs the system ask. */
 private fun needsNotificationsPermission(context: Context): Boolean =
     Build.VERSION.SDK_INT >= 33 &&
@@ -536,23 +584,9 @@ private fun needsNotificationsPermission(context: Context): Boolean =
             Manifest.permission.POST_NOTIFICATIONS
         ) != PackageManager.PERMISSION_GRANTED
 
-private fun openLink(context: Context, url: String): Boolean = try {
-    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-    true
-} catch (_: ActivityNotFoundException) {
-    false
-}
-
-/** Play listing of this app: the market: intent, then the https fallback. */
-private fun openPlayListing(context: Context): Boolean =
-    openLink(context, PLAY_MARKET_URI) || openLink(context, PLAY_LISTING_URL)
-
-private fun openMail(context: Context, subject: String, body: String): Boolean = try {
-    context.startActivity(Intent(Intent.ACTION_SENDTO, mailtoUri(subject, body)))
-    true
-} catch (_: ActivityNotFoundException) {
-    false
-}
+/** Opens the config.xml link [urlRes] (the publisher's privacy policy, developer page). */
+private fun openConfigLink(context: Context, @StringRes urlRes: Int): Boolean =
+    openLink(context, context.getString(urlRes))
 
 // ------------------------------------------------------------------ //
 // Previews
@@ -566,14 +600,12 @@ private fun SettingsScreenPreview() {
             SettingsContent(
                 state = SettingsUiState(
                     alertsEnabled = true,
-                    themesCount = 6,
                     downloadedBytes = 13_002_342L,
                     hasDownloads = true
                 ),
                 languageTag = "en",
                 onBack = {},
                 onToggleAlerts = {},
-                onEditThemes = {},
                 onLanguage = {},
                 onClear = {},
                 onRate = {},
@@ -593,14 +625,12 @@ private fun SettingsScreenFreshPreview() {
             SettingsContent(
                 state = SettingsUiState(
                     alertsEnabled = false,
-                    themesCount = 3,
                     downloadedBytes = 0L,
                     hasDownloads = false
                 ),
                 languageTag = AppLanguages.SYSTEM,
                 onBack = {},
                 onToggleAlerts = {},
-                onEditThemes = {},
                 onLanguage = {},
                 onClear = {},
                 onRate = {},

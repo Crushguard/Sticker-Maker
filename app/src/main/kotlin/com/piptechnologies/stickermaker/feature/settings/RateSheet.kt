@@ -101,12 +101,16 @@ internal enum class RateStage { Stars, Store, Feedback, Thanks }
  * @param onOpenStore Opens the Play listing; the sheet closes right after.
  * @param onSendFeedback Hands the note off (mail composer). Return true when
  * it launched, so the sheet can advance to the thanks stage.
+ * @param onLater "Maybe later" / "Not now": the sheet closes. Separate from
+ * [onDismiss] (swipe-away, Cancel, Done) so the rating prompt can back off
+ * less after a polite "later".
  */
 @Composable
 internal fun RateSheet(
     onDismiss: () -> Unit,
     onOpenStore: () -> Unit,
-    onSendFeedback: (String) -> Boolean
+    onSendFeedback: (String) -> Boolean,
+    onLater: () -> Unit = onDismiss
 ) {
     var stage by rememberSaveable { mutableStateOf(RateStage.Stars) }
     var rating by rememberSaveable { mutableIntStateOf(0) }
@@ -130,14 +134,14 @@ internal fun RateSheet(
                 RateStage.Stars -> RateStarsStage(
                     rating = rating,
                     onPick = { rating = it },
-                    onLater = onDismiss
+                    onLater = onLater
                 )
                 RateStage.Store -> RateStoreStage(
                     onStore = {
                         onOpenStore()
                         onDismiss()
                     },
-                    onNotNow = onDismiss
+                    onNotNow = onLater
                 )
                 RateStage.Feedback -> RateFeedbackStage(
                     text = feedback,

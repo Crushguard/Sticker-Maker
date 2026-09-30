@@ -1,5 +1,6 @@
 package com.piptechnologies.stickermaker.feature.create
 
+import android.content.Intent
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.ImageBitmap
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
@@ -79,8 +80,11 @@ data class CreateUiState(
 sealed interface CreateEvent {
     data class ShowToast(val message: UiText, val check: Boolean = false) : CreateEvent
 
-    /** Export finished and the pack is saved; fire the WhatsApp add intent. */
-    data class LaunchAddToWhatsApp(val identifier: String, val packName: String) : CreateEvent
+    /** Export finished and the pack is saved; fire WhatsApp's add [intent] (resolved off the main thread). */
+    data class LaunchAddToWhatsApp(val intent: Intent) : CreateEvent
+
+    /** WhatsApp went away since Add was tapped: show the install sheet. */
+    data object ShowNoWhatsApp : CreateEvent
 
     /** The flow is done (added or saved); navigate away. */
     data object ExportComplete : CreateEvent

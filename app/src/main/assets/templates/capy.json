@@ -1,0 +1,228 @@
+{
+ "character": "capy",
+ "canvas": 512,
+ "generated": "2026-09-29",
+ "notes": "zone is the lettering area in 512-px coordinates (centre, size, rotation in degrees). ink = text fill; stroke = white outline width in px at 512 (0 = none). The app draws the die-cut white outline around art + lettering after lettering. No letters or numbers exist in the art.",
+ "stickers": [
+  {
+   "file": "capy-1.webp",
+   "slot": "love_you",
+   "zone": {
+    "cx": 310,
+    "cy": 330,
+    "w": 230,
+    "h": 126,
+    "rotate": 0
+   },
+   "emojis": [
+    "❤️",
+    "😻"
+   ],
+   "ink": "#FFFFFF",
+   "stroke": 0,
+   "surface": "red heart"
+  },
+  {
+   "file": "capy-2.webp",
+   "slot": "miss_you",
+   "zone": {
+    "cx": 253,
+    "cy": 108,
+    "w": 280,
+    "h": 130,
+    "rotate": 0
+   },
+   "emojis": [
+    "🥺",
+    "💔"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "speech bubble"
+  },
+  {
+   "file": "capy-3.webp",
+   "slot": "good_morning",
+   "zone": {
+    "cx": 256,
+    "cy": 88,
+    "w": 360,
+    "h": 68,
+    "rotate": 0
+   },
+   "emojis": [
+    "☀️",
+    "☕"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "ribbon banner"
+  },
+  {
+   "file": "capy-4.webp",
+   "slot": "good_night",
+   "zone": {
+    "cx": 256,
+    "cy": 84,
+    "w": 440,
+    "h": 130,
+    "rotate": 0
+   },
+   "emojis": [
+    "🌙",
+    "😴"
+   ],
+   "ink": "#C23359",
+   "stroke": 5,
+   "strokeColor": "#FFFFFF",
+   "surface": "open space above"
+  },
+  {
+   "file": "capy-5.webp",
+   "slot": "kiss",
+   "zone": {
+    "cx": 256,
+    "cy": 440,
+    "w": 440,
+    "h": 118,
+    "rotate": 0
+   },
+   "emojis": [
+    "😘",
+    "💋"
+   ],
+   "ink": "#C23359",
+   "stroke": 5,
+   "strokeColor": "#FFFFFF",
+   "surface": "open space below"
+  },
+  {
+   "file": "capy-6.webp",
+   "slot": "hug",
+   "zone": {
+    "cx": 256,
+    "cy": 84,
+    "w": 440,
+    "h": 130,
+    "rotate": 0
+   },
+   "emojis": [
+    "🤗",
+    "🫂"
+   ],
+   "ink": "#C23359",
+   "stroke": 5,
+   "strokeColor": "#FFFFFF",
+   "surface": "open space above"
+  },
+  {
+   "file": "capy-7.webp",
+   "slot": "sorry",
+   "zone": {
+    "cx": 318,
+    "cy": 342,
+    "w": 260,
+    "h": 180,
+    "rotate": 0
+   },
+   "emojis": [
+    "🥀",
+    "🙏"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "held sign"
+  },
+  {
+   "file": "capy-8.webp",
+   "slot": "be_mine",
+   "zone": {
+    "cx": 363,
+    "cy": 108,
+    "w": 220,
+    "h": 130,
+    "rotate": 3
+   },
+   "emojis": [
+    "💘",
+    "😏"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "sign on a stick"
+  },
+  {
+   "file": "capy-9.webp",
+   "slot": "for_you",
+   "zone": {
+    "cx": 272,
+    "cy": 356,
+    "w": 190,
+    "h": 90,
+    "rotate": 0
+   },
+   "emojis": [
+    "🎁",
+    "💝"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "gift label"
+  },
+  {
+   "file": "capy-10.webp",
+   "slot": "call_me",
+   "zone": {
+    "cx": 374,
+    "cy": 118,
+    "w": 210,
+    "h": 150,
+    "rotate": 0
+   },
+   "emojis": [
+    "📞",
+    "🥰"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "speech bubble"
+  },
+  {
+   "file": "capy-11.webp",
+   "slot": "our_names",
+   "zone": {
+    "cx": 250,
+    "cy": 98,
+    "w": 420,
+    "h": 100,
+    "rotate": 0
+   },
+   "emojis": [
+    "💑",
+    "❤️"
+   ],
+   "ink": "#C23359",
+   "stroke": 0,
+   "surface": "wide banner"
+  },
+  {
+   "file": "capy-12.webp",
+   "slot": "name_only",
+   "zone": {
+    "cx": 250,
+    "cy": 305,
+    "w": 420,
+    "h": 260,
+    "rotate": 0
+   },
+   "emojis": [
+    "🐱",
+    "💖"
+   ],
+   "ink": "#3B2114",
+   "stroke": 0,
+   "surface": "big sign"
+  }
+ ],
+ "title": "Capy · from No Thoughts, Just Us"
+}

@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import com.piptechnologies.stickermaker.BuildConfig
+import com.piptechnologies.stickermaker.R
 import com.piptechnologies.stickermaker.core.data.db.InstalledPackEntity
 import com.piptechnologies.stickermaker.core.data.db.LoveDb
 import com.piptechnologies.stickermaker.core.data.db.OwnPackEntity
@@ -150,6 +151,10 @@ class StickerContentProvider : ContentProvider() {
     }
 
     private fun getStickerPackInfo(uri: Uri, stickerPackList: List<ProviderPack>): Cursor {
+        // Every pack names the publisher's contact points from config.xml, own packs included.
+        val resources = checkNotNull(context).resources
+        val publisherEmail = resources.getString(R.string.config_support_email)
+        val privacyPolicyWebsite = resources.getString(R.string.config_privacy_policy_url)
         val cursor = MatrixCursor(
             arrayOf(
                 STICKER_PACK_IDENTIFIER_IN_QUERY,
@@ -175,9 +180,9 @@ class StickerContentProvider : ContentProvider() {
                 .add(stickerPack.trayImageFile)
                 .add(ANDROID_PLAY_STORE_LINK)
                 .add(IOS_APP_STORE_LINK)
-                .add(PUBLISHER_EMAIL_VALUE)
+                .add(publisherEmail)
                 .add(PUBLISHER_WEBSITE_VALUE)
-                .add(PRIVACY_POLICY_WEBSITE_VALUE)
+                .add(privacyPolicyWebsite)
                 .add(LICENSE_AGREEMENT_WEBSITE_VALUE)
                 .add(stickerPack.imageDataVersion.toString())
                 .add(if (AVOID_CACHE_VALUE) 1 else 0)
@@ -224,23 +229,29 @@ class StickerContentProvider : ContentProvider() {
         // Making sure the file that is trying to be fetched is in the list of stickers.
         val stickerPack = getPack(identifier) ?: return null
         if (fileName == stickerPack.trayImageFile) {
-            return fetchFile(uri, stickerPack.dirPath, fileName)
+            return fetchFile(uri, identifier, stickerPack.dirPath, fileName)
         }
         for (sticker in getStickers(identifier)) {
             if (fileName == sticker.fileName) {
-                return fetchFile(uri, stickerPack.dirPath, fileName)
+                return fetchFile(uri, identifier, stickerPack.dirPath, fileName)
             }
         }
         return null
     }
 
-    private fun fetchFile(uri: Uri, dirPath: String, fileName: String): AssetFileDescriptor? {
+    private fun fetchFile(uri: Uri, identifier: String, dirPath: String, fileName: String): AssetFileDescriptor? {
         val file = File(dirPath, fileName)
         return try {
             val pfd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
             AssetFileDescriptor(pfd, 0, file.length())
         } catch (e: FileNotFoundException) {
-            Log.e(TAG, "FileNotFoundException when getting asset file, uri:$uri", e)
+            if (identifier.startsWith(OWN_PACK_PREFIX)) {
+                // A name pack's id and folder are a hash of the names typed in the app: log the file
+                // name only, without the URI or the exception (its message holds the folder).
+                Log.e(TAG, "FileNotFoundException when getting own pack file $fileName")
+            } else {
+                Log.e(TAG, "FileNotFoundException when getting asset file, uri:$uri", e)
+            }
             null
         }
     }
@@ -272,6 +283,7 @@ class StickerContentProvider : ContentProvider() {
         val trayImageFile: String,
         val animatedStickerPack: Boolean,
         val dirPath: String,
+        /** WhatsApp's image_data_version, from Room: a catalog pack's version, or an own pack's own counter. */
         val imageDataVersion: Int,
     )
 
@@ -279,6 +291,9 @@ class StickerContentProvider : ContentProvider() {
 
     companion object {
         private const val TAG = "StickerContentProvider"
+
+        /** Packs made in the app (own_packs), name packs included. */
+        private const val OWN_PACK_PREFIX = "own-"
 
         /** Appended to the application id to form the provider authority. */
         const val CONTENT_PROVIDER_AUTHORITY_SUFFIX = ".stickercontentprovider"
@@ -310,14 +325,19 @@ class StickerContentProvider : ContentProvider() {
         const val STICKER_FILE_ACCESSIBILITY_TEXT_IN_QUERY = "sticker_accessibility_text"
 
         /**
-         * Values for the metadata columns Room does not store. All are optional for WhatsApp;
-         * empty means absent. The image data version comes from Room (the catalog version).
+         * This app's Play listing, sent with every pack: someone who receives one of these
+         * stickers in WhatsApp can tap it to get the app.
          */
-        private const val ANDROID_PLAY_STORE_LINK = ""
+        const val ANDROID_PLAY_STORE_LINK =
+            "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID
+
+        /**
+         * Values for the other metadata columns Room does not store (the publisher email and
+         * privacy policy come from config.xml). All are optional for WhatsApp; empty means
+         * absent.
+         */
         private const val IOS_APP_STORE_LINK = ""
-        private const val PUBLISHER_EMAIL_VALUE = ""
         private const val PUBLISHER_WEBSITE_VALUE = ""
-        private const val PRIVACY_POLICY_WEBSITE_VALUE = ""
         private const val LICENSE_AGREEMENT_WEBSITE_VALUE = ""
         private const val AVOID_CACHE_VALUE = false
 

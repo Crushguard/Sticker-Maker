@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Solid CTA fill for the crash screen's Close button: the Compose primary button
+     (rose, 14dp corners). A plain shape rather than a Material button style: the app ships no
+     Material Components views dependency. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:shape="rectangle"
+    tools:ignore="UnusedResources">
+    <solid android:color="@color/crash_button" />
+    <corners android:radius="14dp" />
+</shape>

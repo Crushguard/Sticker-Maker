@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Crash-screen artwork: a warning mark on a soft disc, the same art as the other
+     PIP apps' crash screens, tinted to Love Stickers' rose through the crash_art_* colors. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="169dp"
+    android:height="163dp"
+    android:viewportWidth="169"
+    android:viewportHeight="163"
+    tools:ignore="VectorPath">
+
+    <!-- Disc behind the mark. -->
+    <path android:pathData="M100.439,68.5608m-68.5608,0a68.5608,68.5608 0,1 1,137.1216 0a68.5608,68.5608 0,1 1,-137.1216 0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="100.439"
+                android:endY="137.122"
+                android:startX="100.439"
+                android:startY="0"
+                android:type="linear">
+                <item
+                    android:color="@color/crash_art_disc_top"
+                    android:offset="0" />
+                <item
+                    android:color="@color/crash_art_disc_bottom"
+                    android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Warning triangle. -->
+    <path
+        android:fillColor="@color/crash_art_mark"
+        android:pathData="M125.521 93.3478L82.0787 18.1021C74.983 5.67171 57.0394 5.67171 49.9691 18.1021L6.5012 93.3478C-0.594564 105.778 8.23685 121.22 22.556 121.22H109.313C123.632 121.22 132.617 105.625 125.521 93.3478ZM65.9984 104.527C62.2208 104.527 59.0813 101.388 59.0813 97.6103C59.0813 93.8327 62.2208 90.6933 65.9984 90.6933C69.776 90.6933 72.9155 93.8327 72.7624 97.789C72.941 101.388 69.6229 104.527 65.9984 104.527ZM72.3029 59.8088C71.9966 65.1689 71.6648 70.5035 71.3585 75.8636C71.2054 77.5993 71.2054 79.1818 71.2054 80.8919C71.0522 83.7251 68.8316 85.9202 65.9984 85.9202C63.1652 85.9202 60.9701 83.8783 60.7914 81.0451C60.332 72.6986 59.847 64.5053 59.3876 56.1588C59.2345 53.9637 59.0813 51.7431 58.9026 49.548C58.9026 45.9236 60.9446 42.9372 64.2628 41.9928C67.5809 41.2016 70.8736 42.7841 72.3029 45.9236C72.7879 47.0211 72.941 48.1187 72.941 49.3949C72.7879 52.8917 72.4561 56.363 72.3029 59.8088Z" />
+
+    <!-- Grounding shadow. -->
+    <path
+        android:fillColor="@color/crash_art_shadow"
+        android:pathData="M0,159.015a84.5,3.45685 0,1 0,169 0a84.5,3.45685 0,1 0,-169 0z" />
+</vector>

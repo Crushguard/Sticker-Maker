@@ -65,16 +65,6 @@
     <string name="theme_flirty">פלרטוט</string>
     <string name="theme_goodnight">לילה טוב</string>
     <string name="theme_distance">אהבה מרחוק</string>
-    <string name="customize_title">בחירת נושאים</string>
-    <string name="customize_edit_title">הנושאים שלך</string>
-    <string name="customize_subtitle">בדף הבית מוצגות חבילות מהנושאים שבחרת. אפשר לשנות אותם בכל עת בהגדרות.</string>
-    <string name="customize_save">שמירה</string>
-    <string name="customize_pick_one">יש לבחור לפחות נושא אחד</string>
-    <plurals name="customize_continue">
-        <item quantity="one">המשך · נושא אחד</item>
-        <item quantity="two">המשך · שני נושאים</item>
-        <item quantity="other">המשך · %d נושאים</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">אין חיבור לאינטרנט</string>
@@ -208,17 +198,11 @@
 
     <!-- Settings -->
     <string name="settings_title">הגדרות</string>
-    <string name="settings_alerts_title">התראות על חבילות חדשות</string>
-    <string name="settings_alerts_on">רק כשנוספת חבילה חדשה.</string>
-    <string name="settings_alerts_off">כבוי. לא יגיעו עדכונים על חבילות חדשות.</string>
+    <string name="settings_alerts_title">התראות</string>
+    <string name="settings_alerts_on">התראות ועדכונים מ-Love Stickers.</string>
+    <string name="settings_alerts_off">כבויות. לא יישלחו אליך התראות או עדכונים.</string>
     <string name="settings_section_preferences">העדפות</string>
     <string name="settings_section_about">אודות</string>
-    <string name="settings_edit_themes">עריכת נושאים</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">נושא אחד</item>
-        <item quantity="two">שני נושאים</item>
-        <item quantity="other">%d נושאים</item>
-    </plurals>
     <string name="settings_language">שפה</string>
     <string name="settings_clear">ניקוי חבילות שהורדו</string>
     <string name="settings_storage_none">אין</string>
@@ -230,14 +214,15 @@
     <string name="settings_privacy">מדיניות פרטיות</string>
     <string name="settings_version">גרסה</string>
     <string name="settings_free_card">אפליקציית Love Stickers חינמית, ותמיד תהיה. בלי פרסומות, בלי חשבון, בלי מעקב. התמונות שלך אף פעם לא יוצאות מהטלפון.</string>
-    <string name="settings_toast_alerts_on">ההתראות על חבילות חדשות הופעלו</string>
-    <string name="settings_toast_alerts_off">ההתראות על חבילות חדשות כובו</string>
+    <string name="settings_toast_alerts_on">ההתראות הופעלו</string>
+    <string name="settings_toast_alerts_off">ההתראות כובו</string>
     <string name="settings_toast_nothing_to_clear">אין מה לנקות</string>
     <string name="settings_toast_cleared">ההורדות נוקו</string>
     <string name="settings_notif_title">לאפשר ל-Love Stickers לשלוח התראות?</string>
-    <string name="settings_notif_body">מערכת Android שואלת פעם אחת בלבד. נשלח התראה רק כשנוספת חבילה חדשה. בלי תוכן שיווקי, אף פעם.</string>
+    <string name="settings_notif_body">מערכת Android שואלת פעם אחת בלבד. מדי פעם נשלח התראות ועדכונים, למשל על חבילות חדשות.</string>
     <string name="settings_notif_deny">לא לאפשר</string>
     <string name="settings_notif_allow">לאפשר</string>
+    <string name="notification_channel_updates">התראות ועדכונים</string>
     <string name="settings_clear_title">לנקות את החבילות שהורדו?</string>
     <string name="settings_clear_body">העותקים השמורים באפליקציה (%1$s) יימחקו. חבילות שכבר נמצאות ב-WhatsApp יישארו שם.</string>
     <string name="settings_clear_keep">להשאיר אותן</string>
@@ -298,4 +283,43 @@
     <string name="contact_email_label">אימייל · לא חובה, רק אם רוצים תשובה</string>
     <string name="contact_attach_note">ההודעה נשלחת עם גרסת האפליקציה וגרסת Android. זה הכול.</string>
     <string name="contact_send">שליחה</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">משהו השתבש</string>
+    <string name="crash_message">ב־Love Stickers אירעה שגיאה בלתי צפויה והאפליקציה צריכה להיסגר. קיבלנו על כך דיווח ואנחנו עובדים על תיקון.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">משנה את השפה של האפליקציה ושל הסטיקרים.</string>
+    <string name="namepack_you_title">מה השם שלך?</string>
+    <string name="namepack_you_helper">הוא יופיע על הסטיקרים שנשלחים ממך. אפשר לדלג על השלב הזה.</string>
+    <string name="namepack_you_placeholder">השם שלך</string>
+    <string name="namepack_pick_character">מי אומר את זה?</string>
+    <string name="namepack_love_title">מי האהבה שלך?</string>
+    <string name="namepack_love_helper">נכתוב 12 סטיקרים עם השם הזה, בשפה שלך.</string>
+    <string name="namepack_love_placeholder">השם של האהבה</string>
+    <string name="namepack_sample_name">נועה</string>
+    <string name="namepack_continue">המשך</string>
+    <string name="namepack_make">ליצור את הסטיקרים שלנו</string>
+    <string name="namepack_note_limit">זה המקסימום. גם כינויים מתאימים.</string>
+    <string name="namepack_note_emoji">אי אפשר לכתוב אימוג׳י. רק אותיות.</string>
+    <string name="namepack_note_need_name">צריך להוסיף שם כדי ליצור את החבילה.</string>
+    <string name="namepack_preview_hint">תצוגה מקדימה חיה. מתעדכנת תוך כדי הקלדה.</string>
+    <string name="namepack_preview_alt">תצוגה מקדימה של הסטיקר: %1$s</string>
+    <string name="namepack_rel_girlfriend">חברה</string>
+    <string name="namepack_rel_boyfriend">חבר</string>
+    <string name="namepack_rel_wife">אשתי</string>
+    <string name="namepack_rel_husband">בעלי</string>
+    <string name="namepack_rel_crush">קראש</string>
+    <string name="namepack_rel_partner">בן/בת זוג</string>
+    <string name="namepack_rel_mom">אמא</string>
+    <string name="namepack_rel_friend">ידיד/ה</string>
+    <string name="namepack_building_title">כותבים 12 סטיקרים…</string>
+    <string name="namepack_building_sub">נוצר בטלפון הזה. שום דבר לא עולה לרשת.</string>
+    <string name="namepack_waiting_alt">&#x200F;%1$s מחכה לסטיקרים שלך</string>
+    <string name="namepack_pack_for">בשביל %1$s</string>
+    <string name="namepack_tone_sweet">מתוק</string>
+    <string name="namepack_tone_flirty">שובב</string>
+    <string name="namepack_meta">12 סטיקרים · %1$s</string>
+    <string name="namepack_add_failed">משהו השתבש · לנסות שוב</string>
+    <string name="namepack_build_failed">לא הצלחנו ליצור את הסטיקרים. אפשר לנסות שוב.</string>
+    <!-- /Custom stickers -->
 </resources>

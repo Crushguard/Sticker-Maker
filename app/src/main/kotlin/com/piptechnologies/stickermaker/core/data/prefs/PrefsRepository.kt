@@ -20,9 +20,9 @@ import kotlinx.coroutines.flow.map
 private val Context.loveDataStore: DataStore<Preferences> by preferencesDataStore(name = "love_prefs")
 
 /**
- * Small user preferences in DataStore ("love_prefs"): onboarding flag,
- * selected theme (category) ids, hearts counter, new-pack alerts toggle
- * and clear-downloads bookkeeping. The app language lives with AppCompat's
+ * Small user preferences in DataStore ("love_prefs"): the onboarding flag,
+ * hearted pack ids, the notifications switch and whether Android's
+ * notification permission was asked. The app language lives with AppCompat's
  * per-app locale instead (see AppLanguages).
  *
  * Read failures fall back to defaults instead of failing screens.
@@ -41,24 +41,23 @@ class PrefsRepository @Inject constructor(
     val onboarded: Flow<Boolean> =
         data.map { it[KEY_ONBOARDED] ?: false }.distinctUntilChanged()
 
-    /** Category ids picked on the customization screen. */
-    val selectedThemes: Flow<Set<String>> =
-        data.map { it[KEY_SELECTED_THEMES] ?: emptySet() }.distinctUntilChanged()
-
     /** Ids of packs the user hearted (the Saved screen and the ♥ Saved chip). */
     val favoritePackIds: Flow<Set<String>> =
         data.map { it[KEY_FAVORITE_PACK_IDS] ?: emptySet() }.distinctUntilChanged()
 
-    /** New-pack alerts toggle from Settings. */
+    /** Settings' Notifications switch (alerts and updates). */
     val alertsEnabled: Flow<Boolean> =
         data.map { it[KEY_ALERTS_ENABLED] ?: true }.distinctUntilChanged()
 
+    /**
+     * Whether Android's notification permission was ever requested. Once it was and Android stops
+     * showing the question, the switch has to send the user to system settings instead.
+     */
+    val notificationsAsked: Flow<Boolean> =
+        data.map { it[KEY_NOTIFICATIONS_ASKED] ?: false }.distinctUntilChanged()
+
     suspend fun setOnboarded(value: Boolean) {
         dataStore.edit { it[KEY_ONBOARDED] = value }
-    }
-
-    suspend fun setSelectedThemes(themeIds: Set<String>) {
-        dataStore.edit { it[KEY_SELECTED_THEMES] = themeIds }
     }
 
     /** Hearts [packId], or un-hearts it when it is already in the set. */
@@ -74,10 +73,14 @@ class PrefsRepository @Inject constructor(
         dataStore.edit { it[KEY_ALERTS_ENABLED] = value }
     }
 
+    suspend fun setNotificationsAsked() {
+        dataStore.edit { it[KEY_NOTIFICATIONS_ASKED] = true }
+    }
+
     companion object {
         private val KEY_ONBOARDED = booleanPreferencesKey("onboarded")
-        private val KEY_SELECTED_THEMES = stringSetPreferencesKey("selected_themes")
         private val KEY_FAVORITE_PACK_IDS = stringSetPreferencesKey("favorite_pack_ids")
         private val KEY_ALERTS_ENABLED = booleanPreferencesKey("alerts_enabled")
+        private val KEY_NOTIFICATIONS_ASKED = booleanPreferencesKey("notifications_asked")
     }
 }

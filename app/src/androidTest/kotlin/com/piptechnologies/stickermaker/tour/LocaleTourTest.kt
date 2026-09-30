@@ -71,7 +71,7 @@ class LocaleTourTest {
         shot(language, "my-packs", "My Packs")
 
         compose.tap(hasClickLabel(text(tag, R.string.home_settings)))
-        compose.waitFor(hasClickLabel(text(tag, R.string.settings_edit_themes)))
+        compose.waitFor(hasClickLabel(text(tag, R.string.settings_language)))
         shot(language, "settings", "Settings")
         back()
 
@@ -146,7 +146,7 @@ class LocaleTourTest {
     }
 
     companion object {
-        /** A catalog pack every theme selection from the main tour shows on Home. */
+        /** A catalog pack Home shows in every language. */
         private const val PACK = "Clingy Mango"
 
         @BeforeClass

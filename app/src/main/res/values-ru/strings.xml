@@ -66,17 +66,6 @@
     <string name="theme_flirty">Флирт</string>
     <string name="theme_goodnight">Спокойной ночи</string>
     <string name="theme_distance">На расстоянии</string>
-    <string name="customize_title">Выберите темы</string>
-    <string name="customize_edit_title">Ваши темы</string>
-    <string name="customize_subtitle">На Главной показываются наборы по выбранным темам. Изменить темы можно в любой момент в Настройках.</string>
-    <string name="customize_save">Сохранить</string>
-    <string name="customize_pick_one">Выберите хотя бы одну тему</string>
-    <plurals name="customize_continue">
-        <item quantity="one">Продолжить · %d тема</item>
-        <item quantity="few">Продолжить · %d темы</item>
-        <item quantity="many">Продолжить · %d тем</item>
-        <item quantity="other">Продолжить · %d темы</item>
-    </plurals>
 
     <!-- Shared states: offline, WhatsApp missing, confirmations -->
     <string name="offline_title">Вы не в сети</string>
@@ -214,18 +203,11 @@
 
     <!-- Settings -->
     <string name="settings_title">Настройки</string>
-    <string name="settings_alerts_title">Уведомления о новых наборах</string>
-    <string name="settings_alerts_on">Только когда появляется новый набор.</string>
-    <string name="settings_alerts_off">Выключены. Вы не узнаете о новых наборах.</string>
+    <string name="settings_alerts_title">Уведомления</string>
+    <string name="settings_alerts_on">Оповещения и новости Love Stickers.</string>
+    <string name="settings_alerts_off">Выключены. Оповещения и новости приходить не будут.</string>
     <string name="settings_section_preferences">ПАРАМЕТРЫ</string>
     <string name="settings_section_about">О ПРИЛОЖЕНИИ</string>
-    <string name="settings_edit_themes">Изменить темы</string>
-    <plurals name="settings_theme_count">
-        <item quantity="one">%d тема</item>
-        <item quantity="few">%d темы</item>
-        <item quantity="many">%d тем</item>
-        <item quantity="other">%d темы</item>
-    </plurals>
     <string name="settings_language">Язык</string>
     <string name="settings_clear">Удалить загруженные наборы</string>
     <string name="settings_storage_none">Пусто</string>
@@ -237,14 +219,15 @@
     <string name="settings_privacy">Политика конфиденциальности</string>
     <string name="settings_version">Версия</string>
     <string name="settings_free_card">Love Stickers — бесплатное приложение, и так будет всегда. Без рекламы, без аккаунта, без отслеживания. Ваши фото никогда не покидают телефон.</string>
-    <string name="settings_toast_alerts_on">Уведомления о новых наборах включены</string>
-    <string name="settings_toast_alerts_off">Уведомления о новых наборах выключены</string>
+    <string name="settings_toast_alerts_on">Уведомления включены</string>
+    <string name="settings_toast_alerts_off">Уведомления выключены</string>
     <string name="settings_toast_nothing_to_clear">Нечего удалять</string>
     <string name="settings_toast_cleared">Загруженные наборы удалены</string>
     <string name="settings_notif_title">Разрешить приложению Love Stickers отправлять уведомления?</string>
-    <string name="settings_notif_body">Android спросит один раз. Мы сообщаем только о новых наборах. Никакой рекламы — никогда.</string>
+    <string name="settings_notif_body">Android спросит один раз. Иногда мы будем присылать оповещения и новости, например о новых наборах.</string>
     <string name="settings_notif_deny">Не разрешать</string>
     <string name="settings_notif_allow">Разрешить</string>
+    <string name="notification_channel_updates">Оповещения и новости</string>
     <string name="settings_clear_title">Удалить загруженные наборы?</string>
     <string name="settings_clear_body">Копии, сохранённые в приложении (%1$s), будут удалены. Наборы, уже добавленные в WhatsApp, останутся там.</string>
     <string name="settings_clear_keep">Оставить</string>
@@ -306,4 +289,43 @@
     <string name="contact_email_label">Эл. почта · необязательно, только если нужен ответ</string>
     <string name="contact_attach_note">Вместе с сообщением отправятся версия приложения и версия Android. Больше ничего.</string>
     <string name="contact_send">Отправить</string>
+
+    <!-- Crash screen -->
+    <string name="crash_title">Что-то пошло не так</string>
+    <string name="crash_message">В Love Stickers произошла непредвиденная ошибка, и приложение будет закрыто. Мы уже знаем о проблеме и работаем над её устранением.</string>
+    <!-- Custom stickers (name pack) -->
+    <string name="namepack_language_sub">Меняет язык приложения и стикеров.</string>
+    <string name="namepack_you_title">Как вас зовут?</string>
+    <string name="namepack_you_helper">Имя появится на стикерах, которые вы отправляете. Этот шаг можно пропустить.</string>
+    <string name="namepack_you_placeholder">Ваше имя</string>
+    <string name="namepack_pick_character">Кто говорит?</string>
+    <string name="namepack_love_title">Кто ваша любовь?</string>
+    <string name="namepack_love_helper">Мы подпишем 12 стикеров этим именем на вашем языке.</string>
+    <string name="namepack_love_placeholder">Имя любимого человека</string>
+    <string name="namepack_sample_name">Саша</string>
+    <string name="namepack_continue">Продолжить</string>
+    <string name="namepack_make">Сделать наши стикеры</string>
+    <string name="namepack_note_limit">Это предел. Подойдут и ласковые прозвища.</string>
+    <string name="namepack_note_emoji">Эмодзи нельзя написать. Только буквы.</string>
+    <string name="namepack_note_need_name">Добавьте имя, чтобы сделать набор.</string>
+    <string name="namepack_preview_hint">Живой предпросмотр. Меняется, пока вы печатаете.</string>
+    <string name="namepack_preview_alt">Предпросмотр стикера: %1$s</string>
+    <string name="namepack_rel_girlfriend">Девушка</string>
+    <string name="namepack_rel_boyfriend">Парень</string>
+    <string name="namepack_rel_wife">Жена</string>
+    <string name="namepack_rel_husband">Муж</string>
+    <string name="namepack_rel_crush">Краш</string>
+    <string name="namepack_rel_partner">Партнёр</string>
+    <string name="namepack_rel_mom">Мама</string>
+    <string name="namepack_rel_friend">Друг</string>
+    <string name="namepack_building_title">Подписываем 12 стикеров…</string>
+    <string name="namepack_building_sub">Сделано на этом телефоне. Ничего не загружается.</string>
+    <string name="namepack_waiting_alt">%1$s ждёт ваши стикеры</string>
+    <string name="namepack_pack_for">Тебе, %1$s</string>
+    <string name="namepack_tone_sweet">Нежно</string>
+    <string name="namepack_tone_flirty">Игриво</string>
+    <string name="namepack_meta">12 стикеров · %1$s</string>
+    <string name="namepack_add_failed">Что-то пошло не так · Повторить</string>
+    <string name="namepack_build_failed">Не удалось сделать стикеры. Попробуйте ещё раз.</string>
+    <!-- /Custom stickers -->
 </resources>
