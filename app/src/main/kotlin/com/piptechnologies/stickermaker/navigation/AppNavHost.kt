@@ -27,6 +27,7 @@ import com.piptechnologies.stickermaker.feature.namepack.blockTaps
 import com.piptechnologies.stickermaker.feature.onboarding.OnboardingScreen
 import com.piptechnologies.stickermaker.feature.rating.RatingPromptHost
 import com.piptechnologies.stickermaker.feature.saved.SavedScreen
+import com.piptechnologies.stickermaker.feature.settings.LicencesScreen
 import com.piptechnologies.stickermaker.feature.settings.SettingsScreen
 import com.piptechnologies.stickermaker.feature.splash.SplashScreen
 
@@ -45,6 +46,7 @@ object Routes {
     const val SETTINGS = "settings"
     const val LANGUAGE = "language"
     const val CONTACT = "contact"
+    const val LICENCES = "licences"
 
     const val ARG_PACK_ID = "packId"
 
@@ -182,7 +184,8 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             SettingsScreen(
                 onBack = { navController.popBackStack() },
                 onLanguage = { navController.navigate(Routes.LANGUAGE) },
-                onContact = { navController.navigate(Routes.CONTACT) }
+                onContact = { navController.navigate(Routes.CONTACT) },
+                onLicences = { navController.navigate(Routes.LICENCES) }
             )
         }
 
@@ -192,6 +195,10 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
 
         composable(Routes.CONTACT) {
             ContactScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Routes.LICENCES) {
+            LicencesScreen(onBack = { navController.popBackStack() })
         }
     }
 }

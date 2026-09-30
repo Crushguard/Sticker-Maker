@@ -430,7 +430,8 @@ private fun InfoCard(count: Int, animated: Boolean) {
             pluralStringResource(R.plurals.sticker_count, count, count),
             stringResource(if (animated) R.string.create_kind_animated else R.string.create_kind_static)
         )
-        val body = stringResource(R.string.create_info_body)
+        // An animated pack's stickers may weigh 500 KB each, a still pack's 100 KB.
+        val body = stringResource(if (animated) R.string.create_info_body_animated else R.string.create_info_body)
         Text(
             buildAnnotatedString {
                 withStyle(

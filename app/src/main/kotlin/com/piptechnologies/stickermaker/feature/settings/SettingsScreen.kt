@@ -95,8 +95,10 @@ import com.piptechnologies.stickermaker.feature.rating.RatingPromptController
 import kotlinx.coroutines.launch
 
 // ---- Off-token colors from the prototype's settings screen ---- //
-private val CardBorder = Color(0xFFEEF0F4)
-private val RowDivider = Color(0xFFF2F4F7)
+/** The hairline around a settings card; the Licences card has it too. */
+internal val CardBorder = Color(0xFFEEF0F4)
+/** The rule between two rows of a settings card. */
+internal val RowDivider = Color(0xFFF2F4F7)
 private val RowIconTint = Color(0xFF565C67)
 private val ChevronTint = Color(0xFFB4BAC4)
 
@@ -119,13 +121,15 @@ private val FreeCardStyle = TextStyle(fontFamily = Hanken, fontWeight = FontWeig
 /**
  * Settings, straight from the design: back header, the Notifications hero
  * card, PREFERENCES and ABOUT groups, and the free-forever card. Rating,
- * the notification pre-ask and clear-downloads run as bottom sheets on top.
+ * the notification pre-ask and clear-downloads run as bottom sheets on top;
+ * Language, Contact us and Licences open screens of their own.
  */
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
     onLanguage: () -> Unit,
     onContact: () -> Unit,
+    onLicences: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -218,6 +222,7 @@ fun SettingsScreen(
             onRate = { rateSheetVisible = true },
             onContact = onContact,
             onMoreApps = { if (!openConfigLink(context, R.string.config_more_apps_url)) showToast(context.getString(R.string.toast_link_failed)) },
+            onLicences = onLicences,
             onPrivacy = { if (!openConfigLink(context, R.string.config_privacy_policy_url)) showToast(context.getString(R.string.toast_link_failed)) },
             modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars)
         )
@@ -304,6 +309,7 @@ private fun SettingsContent(
     onRate: () -> Unit,
     onContact: () -> Unit,
     onMoreApps: () -> Unit,
+    onLicences: () -> Unit,
     onPrivacy: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -358,6 +364,12 @@ private fun SettingsContent(
                         showAdBadge = true,
                         trailingIcon = SettingsIcons.ArrowUpRight,
                         onClick = onMoreApps
+                    )
+                    RowDividerLine()
+                    SettingsRow(
+                        icon = LoveIcons.Scale,
+                        label = stringResource(R.string.settings_licences),
+                        onClick = onLicences
                     )
                     RowDividerLine()
                     SettingsRow(
@@ -611,6 +623,7 @@ private fun SettingsScreenPreview() {
                 onRate = {},
                 onContact = {},
                 onMoreApps = {},
+                onLicences = {},
                 onPrivacy = {}
             )
         }
@@ -636,6 +649,7 @@ private fun SettingsScreenFreshPreview() {
                 onRate = {},
                 onContact = {},
                 onMoreApps = {},
+                onLicences = {},
                 onPrivacy = {}
             )
         }
