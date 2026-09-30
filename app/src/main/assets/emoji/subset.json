@@ -1,0 +1,2246 @@
+{
+ "source": "Microsoft Fluent Emoji, 3D style, MIT licence. https://github.com/microsoft/fluentui-emoji",
+ "bundled": 327,
+ "note": "Every file listed here ships in the app (assets/emoji/, converted to WebP). Display order = array order; Love first. skinTones: true means the piece has Fluent Light/Medium-Light/Medium/Medium-Dark/Dark variants (folder <Name>/<Tone>/3D), fetched on demand and shown in the long-press popover; the bundled file is the Default tone. Everything outside this list downloads on demand from the same repository layout.",
+ "skinToneModifiers": [
+  "1F3FB",
+  "1F3FC",
+  "1F3FD",
+  "1F3FE",
+  "1F3FF"
+ ],
+ "tabs": [
+  {
+   "id": "love",
+   "label": "Love",
+   "items": [
+    {
+     "name": "Red heart",
+     "cp": "2764-FE0F",
+     "glyph": "❤️",
+     "file": "red_heart.webp"
+    },
+    {
+     "name": "Pink heart",
+     "cp": "1FA77",
+     "glyph": "🩷",
+     "file": "pink_heart.webp"
+    },
+    {
+     "name": "Sparkling heart",
+     "cp": "1F496",
+     "glyph": "💖",
+     "file": "sparkling_heart.webp"
+    },
+    {
+     "name": "Two hearts",
+     "cp": "1F495",
+     "glyph": "💕",
+     "file": "two_hearts.webp"
+    },
+    {
+     "name": "Heart with arrow",
+     "cp": "1F498",
+     "glyph": "💘",
+     "file": "heart_with_arrow.webp"
+    },
+    {
+     "name": "Revolving hearts",
+     "cp": "1F49E",
+     "glyph": "💞",
+     "file": "revolving_hearts.webp"
+    },
+    {
+     "name": "Growing heart",
+     "cp": "1F497",
+     "glyph": "💗",
+     "file": "growing_heart.webp"
+    },
+    {
+     "name": "Beating heart",
+     "cp": "1F493",
+     "glyph": "💓",
+     "file": "beating_heart.webp"
+    },
+    {
+     "name": "Heart on fire",
+     "cp": "2764-FE0F-200D-1F525",
+     "glyph": "❤️‍🔥",
+     "file": "heart_on_fire.webp"
+    },
+    {
+     "name": "Mending heart",
+     "cp": "2764-FE0F-200D-1FA79",
+     "glyph": "❤️‍🩹",
+     "file": "mending_heart.webp"
+    },
+    {
+     "name": "Heart exclamation",
+     "cp": "2763-FE0F",
+     "glyph": "❣️",
+     "file": "heart_exclamation.webp"
+    },
+    {
+     "name": "Kiss mark",
+     "cp": "1F48B",
+     "glyph": "💋",
+     "file": "kiss_mark.webp"
+    },
+    {
+     "name": "Love letter",
+     "cp": "1F48C",
+     "glyph": "💌",
+     "file": "love_letter.webp"
+    },
+    {
+     "name": "Smiling face with hearts",
+     "cp": "1F970",
+     "glyph": "🥰",
+     "file": "smiling_face_with_hearts.webp"
+    },
+    {
+     "name": "Face blowing a kiss",
+     "cp": "1F618",
+     "glyph": "😘",
+     "file": "face_blowing_a_kiss.webp"
+    },
+    {
+     "name": "Smiling face with heart-eyes",
+     "cp": "1F60D",
+     "glyph": "😍",
+     "file": "heart_eyes.webp"
+    },
+    {
+     "name": "Kissing face with closed eyes",
+     "cp": "1F61A",
+     "glyph": "😚",
+     "file": "kissing_closed_eyes.webp"
+    },
+    {
+     "name": "Kissing face",
+     "cp": "1F617",
+     "glyph": "😗",
+     "file": "kissing_face.webp"
+    },
+    {
+     "name": "Kissing face with smiling eyes",
+     "cp": "1F619",
+     "glyph": "😙",
+     "file": "kissing_face_with_smiling_eyes.webp"
+    },
+    {
+     "name": "Ring",
+     "cp": "1F48D",
+     "glyph": "💍",
+     "file": "ring.webp"
+    },
+    {
+     "name": "Rose",
+     "cp": "1F339",
+     "glyph": "🌹",
+     "file": "rose.webp"
+    },
+    {
+     "name": "Bouquet",
+     "cp": "1F490",
+     "glyph": "💐",
+     "file": "bouquet.webp"
+    }
+   ]
+  },
+  {
+   "id": "smileys",
+   "label": "Smileys",
+   "items": [
+    {
+     "name": "Grinning face",
+     "cp": "1F600",
+     "glyph": "😀",
+     "file": "grinning_face.webp"
+    },
+    {
+     "name": "Grinning face with big eyes",
+     "cp": "1F603",
+     "glyph": "😃",
+     "file": "grinning_face_with_big_eyes.webp"
+    },
+    {
+     "name": "Grinning face with smiling eyes",
+     "cp": "1F604",
+     "glyph": "😄",
+     "file": "grinning_face_with_smiling_eyes.webp"
+    },
+    {
+     "name": "Beaming face with smiling eyes",
+     "cp": "1F601",
+     "glyph": "😁",
+     "file": "beaming_face_with_smiling_eyes.webp"
+    },
+    {
+     "name": "Grinning squinting face",
+     "cp": "1F606",
+     "glyph": "😆",
+     "file": "grinning_squinting_face.webp"
+    },
+    {
+     "name": "Grinning face with sweat",
+     "cp": "1F605",
+     "glyph": "😅",
+     "file": "grinning_face_with_sweat.webp"
+    },
+    {
+     "name": "Rolling on the floor laughing",
+     "cp": "1F923",
+     "glyph": "🤣",
+     "file": "rolling_on_the_floor_laughing.webp"
+    },
+    {
+     "name": "Face with tears of joy",
+     "cp": "1F602",
+     "glyph": "😂",
+     "file": "tears_of_joy.webp"
+    },
+    {
+     "name": "Slightly smiling face",
+     "cp": "1F642",
+     "glyph": "🙂",
+     "file": "slightly_smiling_face.webp"
+    },
+    {
+     "name": "Upside-down face",
+     "cp": "1F643",
+     "glyph": "🙃",
+     "file": "upside-down_face.webp"
+    },
+    {
+     "name": "Melting face",
+     "cp": "1FAE0",
+     "glyph": "🫠",
+     "file": "melting_face.webp"
+    },
+    {
+     "name": "Winking face",
+     "cp": "1F609",
+     "glyph": "😉",
+     "file": "winking_face.webp"
+    },
+    {
+     "name": "Smiling face with smiling eyes",
+     "cp": "1F60A",
+     "glyph": "😊",
+     "file": "smiling_eyes.webp"
+    },
+    {
+     "name": "Smiling face with halo",
+     "cp": "1F607",
+     "glyph": "😇",
+     "file": "smiling_face_with_halo.webp"
+    },
+    {
+     "name": "Star-struck",
+     "cp": "1F929",
+     "glyph": "🤩",
+     "file": "star_struck.webp"
+    },
+    {
+     "name": "Face savoring food",
+     "cp": "1F60B",
+     "glyph": "😋",
+     "file": "face_savoring_food.webp"
+    },
+    {
+     "name": "Face with tongue",
+     "cp": "1F61B",
+     "glyph": "😛",
+     "file": "face_with_tongue.webp"
+    },
+    {
+     "name": "Winking face with tongue",
+     "cp": "1F61C",
+     "glyph": "😜",
+     "file": "winking_face_with_tongue.webp"
+    },
+    {
+     "name": "Zany face",
+     "cp": "1F92A",
+     "glyph": "🤪",
+     "file": "zany_face.webp"
+    },
+    {
+     "name": "Squinting face with tongue",
+     "cp": "1F61D",
+     "glyph": "😝",
+     "file": "squinting_face_with_tongue.webp"
+    },
+    {
+     "name": "Money-mouth face",
+     "cp": "1F911",
+     "glyph": "🤑",
+     "file": "money-mouth_face.webp"
+    },
+    {
+     "name": "Hugging face",
+     "cp": "1F917",
+     "glyph": "🤗",
+     "file": "hugging_face.webp"
+    },
+    {
+     "name": "Face with hand over mouth",
+     "cp": "1F92D",
+     "glyph": "🤭",
+     "file": "face_with_hand_over_mouth.webp"
+    },
+    {
+     "name": "Face with open eyes and hand over mouth",
+     "cp": "1FAE2",
+     "glyph": "🫢",
+     "file": "face_with_open_eyes_and_hand_over_mouth.webp"
+    },
+    {
+     "name": "Face with peeking eye",
+     "cp": "1FAE3",
+     "glyph": "🫣",
+     "file": "face_with_peeking_eye.webp"
+    },
+    {
+     "name": "Shushing face",
+     "cp": "1F92B",
+     "glyph": "🤫",
+     "file": "shushing_face.webp"
+    },
+    {
+     "name": "Thinking face",
+     "cp": "1F914",
+     "glyph": "🤔",
+     "file": "thinking_face.webp"
+    },
+    {
+     "name": "Saluting face",
+     "cp": "1FAE1",
+     "glyph": "🫡",
+     "file": "saluting_face.webp"
+    },
+    {
+     "name": "Zipper-mouth face",
+     "cp": "1F910",
+     "glyph": "🤐",
+     "file": "zipper-mouth_face.webp"
+    },
+    {
+     "name": "Face with raised eyebrow",
+     "cp": "1F928",
+     "glyph": "🤨",
+     "file": "face_with_raised_eyebrow.webp"
+    },
+    {
+     "name": "Neutral face",
+     "cp": "1F610",
+     "glyph": "😐",
+     "file": "neutral_face.webp"
+    },
+    {
+     "name": "Smirking face",
+     "cp": "1F60F",
+     "glyph": "😏",
+     "file": "smirking_face.webp"
+    },
+    {
+     "name": "Unamused face",
+     "cp": "1F612",
+     "glyph": "😒",
+     "file": "unamused_face.webp"
+    },
+    {
+     "name": "Face with rolling eyes",
+     "cp": "1F644",
+     "glyph": "🙄",
+     "file": "face_with_rolling_eyes.webp"
+    },
+    {
+     "name": "Grimacing face",
+     "cp": "1F62C",
+     "glyph": "😬",
+     "file": "grimacing_face.webp"
+    },
+    {
+     "name": "Relieved face",
+     "cp": "1F60C",
+     "glyph": "😌",
+     "file": "relieved_face.webp"
+    },
+    {
+     "name": "Pensive face",
+     "cp": "1F614",
+     "glyph": "😔",
+     "file": "pensive_face.webp"
+    },
+    {
+     "name": "Sleepy face",
+     "cp": "1F62A",
+     "glyph": "😪",
+     "file": "sleepy_face.webp"
+    },
+    {
+     "name": "Drooling face",
+     "cp": "1F924",
+     "glyph": "🤤",
+     "file": "drooling_face.webp"
+    },
+    {
+     "name": "Sleeping face",
+     "cp": "1F634",
+     "glyph": "😴",
+     "file": "sleeping_face.webp"
+    },
+    {
+     "name": "Hot face",
+     "cp": "1F975",
+     "glyph": "🥵",
+     "file": "hot_face.webp"
+    },
+    {
+     "name": "Cold face",
+     "cp": "1F976",
+     "glyph": "🥶",
+     "file": "cold_face.webp"
+    },
+    {
+     "name": "Woozy face",
+     "cp": "1F974",
+     "glyph": "🥴",
+     "file": "woozy_face.webp"
+    },
+    {
+     "name": "Face with spiral eyes",
+     "cp": "1F635-200D-1F4AB",
+     "glyph": "😵‍💫",
+     "file": "face_with_spiral_eyes.webp"
+    },
+    {
+     "name": "Exploding head",
+     "cp": "1F92F",
+     "glyph": "🤯",
+     "file": "exploding_head.webp"
+    },
+    {
+     "name": "Cowboy hat face",
+     "cp": "1F920",
+     "glyph": "🤠",
+     "file": "cowboy_hat_face.webp"
+    },
+    {
+     "name": "Partying face",
+     "cp": "1F973",
+     "glyph": "🥳",
+     "file": "partying_face.webp"
+    },
+    {
+     "name": "Disguised face",
+     "cp": "1F978",
+     "glyph": "🥸",
+     "file": "disguised_face.webp"
+    },
+    {
+     "name": "Smiling face with sunglasses",
+     "cp": "1F60E",
+     "glyph": "😎",
+     "file": "smiling_face_with_sunglasses.webp"
+    },
+    {
+     "name": "Nerd face",
+     "cp": "1F913",
+     "glyph": "🤓",
+     "file": "nerd_face.webp"
+    },
+    {
+     "name": "Face with monocle",
+     "cp": "1F9D0",
+     "glyph": "🧐",
+     "file": "face_with_monocle.webp"
+    },
+    {
+     "name": "Confused face",
+     "cp": "1F615",
+     "glyph": "😕",
+     "file": "confused_face.webp"
+    },
+    {
+     "name": "Worried face",
+     "cp": "1F61F",
+     "glyph": "😟",
+     "file": "worried_face.webp"
+    },
+    {
+     "name": "Slightly frowning face",
+     "cp": "1F641",
+     "glyph": "🙁",
+     "file": "slightly_frowning_face.webp"
+    },
+    {
+     "name": "Face with open mouth",
+     "cp": "1F62E",
+     "glyph": "😮",
+     "file": "face_with_open_mouth.webp"
+    },
+    {
+     "name": "Astonished face",
+     "cp": "1F632",
+     "glyph": "😲",
+     "file": "astonished_face.webp"
+    },
+    {
+     "name": "Flushed face",
+     "cp": "1F633",
+     "glyph": "😳",
+     "file": "flushed_face.webp"
+    },
+    {
+     "name": "Pleading face",
+     "cp": "1F97A",
+     "glyph": "🥺",
+     "file": "pleading_face.webp"
+    },
+    {
+     "name": "Face holding back tears",
+     "cp": "1F979",
+     "glyph": "🥹",
+     "file": "face_holding_back_tears.webp"
+    },
+    {
+     "name": "Anguished face",
+     "cp": "1F627",
+     "glyph": "😧",
+     "file": "anguished_face.webp"
+    },
+    {
+     "name": "Fearful face",
+     "cp": "1F628",
+     "glyph": "😨",
+     "file": "fearful_face.webp"
+    },
+    {
+     "name": "Anxious face with sweat",
+     "cp": "1F630",
+     "glyph": "😰",
+     "file": "anxious_face_with_sweat.webp"
+    },
+    {
+     "name": "Crying face",
+     "cp": "1F622",
+     "glyph": "😢",
+     "file": "crying_face.webp"
+    },
+    {
+     "name": "Loudly crying face",
+     "cp": "1F62D",
+     "glyph": "😭",
+     "file": "loudly_crying_face.webp"
+    },
+    {
+     "name": "Face screaming in fear",
+     "cp": "1F631",
+     "glyph": "😱",
+     "file": "face_screaming_in_fear.webp"
+    },
+    {
+     "name": "Confounded face",
+     "cp": "1F616",
+     "glyph": "😖",
+     "file": "confounded_face.webp"
+    },
+    {
+     "name": "Weary face",
+     "cp": "1F629",
+     "glyph": "😩",
+     "file": "weary_face.webp"
+    },
+    {
+     "name": "Yawning face",
+     "cp": "1F971",
+     "glyph": "🥱",
+     "file": "yawning_face.webp"
+    },
+    {
+     "name": "Face with steam from nose",
+     "cp": "1F624",
+     "glyph": "😤",
+     "file": "face_with_steam_from_nose.webp"
+    },
+    {
+     "name": "Angry face",
+     "cp": "1F620",
+     "glyph": "😠",
+     "file": "angry_face.webp"
+    },
+    {
+     "name": "Smiling face with horns",
+     "cp": "1F608",
+     "glyph": "😈",
+     "file": "smiling_face_with_horns.webp"
+    },
+    {
+     "name": "Skull",
+     "cp": "1F480",
+     "glyph": "💀",
+     "file": "skull.webp"
+    },
+    {
+     "name": "Clown face",
+     "cp": "1F921",
+     "glyph": "🤡",
+     "file": "clown_face.webp"
+    },
+    {
+     "name": "Ghost",
+     "cp": "1F47B",
+     "glyph": "👻",
+     "file": "ghost.webp"
+    },
+    {
+     "name": "Alien",
+     "cp": "1F47D",
+     "glyph": "👽",
+     "file": "alien.webp"
+    },
+    {
+     "name": "Robot",
+     "cp": "1F916",
+     "glyph": "🤖",
+     "file": "robot.webp"
+    },
+    {
+     "name": "Grinning cat",
+     "cp": "1F63A",
+     "glyph": "😺",
+     "file": "grinning_cat.webp"
+    },
+    {
+     "name": "Cat with tears of joy",
+     "cp": "1F639",
+     "glyph": "😹",
+     "file": "cat_with_tears_of_joy.webp"
+    },
+    {
+     "name": "Smiling cat with heart-eyes",
+     "cp": "1F63B",
+     "glyph": "😻",
+     "file": "smiling_cat_with_heart-eyes.webp"
+    },
+    {
+     "name": "Kissing cat",
+     "cp": "1F63D",
+     "glyph": "😽",
+     "file": "kissing_cat.webp"
+    },
+    {
+     "name": "Crying cat",
+     "cp": "1F63F",
+     "glyph": "😿",
+     "file": "crying_cat.webp"
+    },
+    {
+     "name": "Pouting cat",
+     "cp": "1F63E",
+     "glyph": "😾",
+     "file": "pouting_cat.webp"
+    },
+    {
+     "name": "See-no-evil monkey",
+     "cp": "1F648",
+     "glyph": "🙈",
+     "file": "see-no-evil_monkey.webp"
+    },
+    {
+     "name": "Speak-no-evil monkey",
+     "cp": "1F64A",
+     "glyph": "🙊",
+     "file": "speak-no-evil_monkey.webp"
+    }
+   ]
+  },
+  {
+   "id": "hearts",
+   "label": "Hearts",
+   "items": [
+    {
+     "name": "Red heart",
+     "cp": "2764-FE0F",
+     "glyph": "❤️",
+     "file": "red_heart.webp"
+    },
+    {
+     "name": "Pink heart",
+     "cp": "1FA77",
+     "glyph": "🩷",
+     "file": "pink_heart.webp"
+    },
+    {
+     "name": "Sparkling heart",
+     "cp": "1F496",
+     "glyph": "💖",
+     "file": "sparkling_heart.webp"
+    },
+    {
+     "name": "Two hearts",
+     "cp": "1F495",
+     "glyph": "💕",
+     "file": "two_hearts.webp"
+    },
+    {
+     "name": "Heart with arrow",
+     "cp": "1F498",
+     "glyph": "💘",
+     "file": "heart_with_arrow.webp"
+    },
+    {
+     "name": "Revolving hearts",
+     "cp": "1F49E",
+     "glyph": "💞",
+     "file": "revolving_hearts.webp"
+    },
+    {
+     "name": "Growing heart",
+     "cp": "1F497",
+     "glyph": "💗",
+     "file": "growing_heart.webp"
+    },
+    {
+     "name": "Beating heart",
+     "cp": "1F493",
+     "glyph": "💓",
+     "file": "beating_heart.webp"
+    },
+    {
+     "name": "Heart on fire",
+     "cp": "2764-FE0F-200D-1F525",
+     "glyph": "❤️‍🔥",
+     "file": "heart_on_fire.webp"
+    },
+    {
+     "name": "Mending heart",
+     "cp": "2764-FE0F-200D-1FA79",
+     "glyph": "❤️‍🩹",
+     "file": "mending_heart.webp"
+    },
+    {
+     "name": "Heart exclamation",
+     "cp": "2763-FE0F",
+     "glyph": "❣️",
+     "file": "heart_exclamation.webp"
+    },
+    {
+     "name": "Heart decoration",
+     "cp": "1F49F",
+     "glyph": "💟",
+     "file": "heart_decoration.webp"
+    },
+    {
+     "name": "Kiss mark",
+     "cp": "1F48B",
+     "glyph": "💋",
+     "file": "kiss_mark.webp"
+    },
+    {
+     "name": "Love letter",
+     "cp": "1F48C",
+     "glyph": "💌",
+     "file": "love_letter.webp"
+    },
+    {
+     "name": "Ring",
+     "cp": "1F48D",
+     "glyph": "💍",
+     "file": "ring.webp"
+    },
+    {
+     "name": "Gem stone",
+     "cp": "1F48E",
+     "glyph": "💎",
+     "file": "gem_stone.webp"
+    },
+    {
+     "name": "Rose",
+     "cp": "1F339",
+     "glyph": "🌹",
+     "file": "rose.webp"
+    },
+    {
+     "name": "Bouquet",
+     "cp": "1F490",
+     "glyph": "💐",
+     "file": "bouquet.webp"
+    },
+    {
+     "name": "Cherry blossom",
+     "cp": "1F338",
+     "glyph": "🌸",
+     "file": "cherry_blossom.webp"
+    },
+    {
+     "name": "Sparkles",
+     "cp": "2728",
+     "glyph": "✨",
+     "file": "sparkles.webp"
+    },
+    {
+     "name": "Glowing star",
+     "cp": "1F31F",
+     "glyph": "🌟",
+     "file": "glowing_star.webp"
+    },
+    {
+     "name": "Dizzy",
+     "cp": "1F4AB",
+     "glyph": "💫",
+     "file": "dizzy.webp"
+    },
+    {
+     "name": "Fire",
+     "cp": "1F525",
+     "glyph": "🔥",
+     "file": "fire.webp"
+    },
+    {
+     "name": "Rainbow",
+     "cp": "1F308",
+     "glyph": "🌈",
+     "file": "rainbow.webp"
+    }
+   ]
+  },
+  {
+   "id": "hands",
+   "label": "Hands",
+   "items": [
+    {
+     "name": "Waving hand",
+     "cp": "1F44B",
+     "glyph": "👋",
+     "file": "waving_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Raised back of hand",
+     "cp": "1F91A",
+     "glyph": "🤚",
+     "file": "raised_back_of_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Hand with fingers splayed",
+     "cp": "1F590-FE0F",
+     "glyph": "🖐️",
+     "file": "hand_with_fingers_splayed.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Raised hand",
+     "cp": "270B",
+     "glyph": "✋",
+     "file": "raised_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Vulcan salute",
+     "cp": "1F596",
+     "glyph": "🖖",
+     "file": "vulcan_salute.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Rightwards hand",
+     "cp": "1FAF1",
+     "glyph": "🫱",
+     "file": "rightwards_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Leftwards hand",
+     "cp": "1FAF2",
+     "glyph": "🫲",
+     "file": "leftwards_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Palm down hand",
+     "cp": "1FAF3",
+     "glyph": "🫳",
+     "file": "palm_down_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Palm up hand",
+     "cp": "1FAF4",
+     "glyph": "🫴",
+     "file": "palm_up_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Ok hand",
+     "cp": "1F44C",
+     "glyph": "👌",
+     "file": "ok_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Pinched fingers",
+     "cp": "1F90C",
+     "glyph": "🤌",
+     "file": "pinched_fingers.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Pinching hand",
+     "cp": "1F90F",
+     "glyph": "🤏",
+     "file": "pinching_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Victory hand",
+     "cp": "270C-FE0F",
+     "glyph": "✌️",
+     "file": "victory_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Crossed fingers",
+     "cp": "1F91E",
+     "glyph": "🤞",
+     "file": "crossed_fingers.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Hand with index finger and thumb crossed",
+     "cp": "1FAF0",
+     "glyph": "🫰",
+     "file": "hand_with_index_finger_and_thumb_crossed.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Love-you gesture",
+     "cp": "1F91F",
+     "glyph": "🤟",
+     "file": "love_you_gesture.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Sign of the horns",
+     "cp": "1F918",
+     "glyph": "🤘",
+     "file": "sign_of_the_horns.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Call me hand",
+     "cp": "1F919",
+     "glyph": "🤙",
+     "file": "call_me_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Backhand index pointing left",
+     "cp": "1F448",
+     "glyph": "👈",
+     "file": "backhand_index_pointing_left.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Backhand index pointing right",
+     "cp": "1F449",
+     "glyph": "👉",
+     "file": "backhand_index_pointing_right.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Backhand index pointing up",
+     "cp": "1F446",
+     "glyph": "👆",
+     "file": "backhand_index_pointing_up.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Backhand index pointing down",
+     "cp": "1F447",
+     "glyph": "👇",
+     "file": "backhand_index_pointing_down.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Index pointing up",
+     "cp": "261D-FE0F",
+     "glyph": "☝️",
+     "file": "index_pointing_up.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Index pointing at the viewer",
+     "cp": "1FAF5",
+     "glyph": "🫵",
+     "file": "index_pointing_at_the_viewer.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Thumbs up",
+     "cp": "1F44D",
+     "glyph": "👍",
+     "file": "thumbs_up.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Thumbs down",
+     "cp": "1F44E",
+     "glyph": "👎",
+     "file": "thumbs_down.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Raised fist",
+     "cp": "270A",
+     "glyph": "✊",
+     "file": "raised_fist.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Oncoming fist",
+     "cp": "1F44A",
+     "glyph": "👊",
+     "file": "oncoming_fist.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Left-facing fist",
+     "cp": "1F91B",
+     "glyph": "🤛",
+     "file": "left-facing_fist.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Right-facing fist",
+     "cp": "1F91C",
+     "glyph": "🤜",
+     "file": "right-facing_fist.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Clapping hands",
+     "cp": "1F44F",
+     "glyph": "👏",
+     "file": "clapping_hands.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Raising hands",
+     "cp": "1F64C",
+     "glyph": "🙌",
+     "file": "raising_hands.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Heart hands",
+     "cp": "1FAF6",
+     "glyph": "🫶",
+     "file": "heart_hands.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Open hands",
+     "cp": "1F450",
+     "glyph": "👐",
+     "file": "open_hands.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Palms up together",
+     "cp": "1F932",
+     "glyph": "🤲",
+     "file": "palms_up_together.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Handshake",
+     "cp": "1F91D",
+     "glyph": "🤝",
+     "file": "handshake.webp"
+    },
+    {
+     "name": "Folded hands",
+     "cp": "1F64F",
+     "glyph": "🙏",
+     "file": "folded_hands.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Writing hand",
+     "cp": "270D-FE0F",
+     "glyph": "✍️",
+     "file": "writing_hand.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Nail polish",
+     "cp": "1F485",
+     "glyph": "💅",
+     "file": "nail_polish.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Selfie",
+     "cp": "1F933",
+     "glyph": "🤳",
+     "file": "selfie.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Flexed biceps",
+     "cp": "1F4AA",
+     "glyph": "💪",
+     "file": "flexed_biceps.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Ear",
+     "cp": "1F442",
+     "glyph": "👂",
+     "file": "ear.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Nose",
+     "cp": "1F443",
+     "glyph": "👃",
+     "file": "nose.webp",
+     "skinTones": true
+    },
+    {
+     "name": "Eyes",
+     "cp": "1F440",
+     "glyph": "👀",
+     "file": "eyes.webp"
+    },
+    {
+     "name": "Eye",
+     "cp": "1F441-FE0F",
+     "glyph": "👁️",
+     "file": "eye.webp"
+    },
+    {
+     "name": "Tongue",
+     "cp": "1F445",
+     "glyph": "👅",
+     "file": "tongue.webp"
+    },
+    {
+     "name": "Mouth",
+     "cp": "1F444",
+     "glyph": "👄",
+     "file": "mouth.webp"
+    },
+    {
+     "name": "Biting lip",
+     "cp": "1FAE6",
+     "glyph": "🫦",
+     "file": "biting_lip.webp"
+    }
+   ]
+  },
+  {
+   "id": "animals",
+   "label": "Animals",
+   "items": [
+    {
+     "name": "Dog face",
+     "cp": "1F436",
+     "glyph": "🐶",
+     "file": "dog_face.webp"
+    },
+    {
+     "name": "Cat face",
+     "cp": "1F431",
+     "glyph": "🐱",
+     "file": "cat_face.webp"
+    },
+    {
+     "name": "Mouse face",
+     "cp": "1F42D",
+     "glyph": "🐭",
+     "file": "mouse_face.webp"
+    },
+    {
+     "name": "Hamster",
+     "cp": "1F439",
+     "glyph": "🐹",
+     "file": "hamster.webp"
+    },
+    {
+     "name": "Rabbit face",
+     "cp": "1F430",
+     "glyph": "🐰",
+     "file": "rabbit_face.webp"
+    },
+    {
+     "name": "Fox",
+     "cp": "1F98A",
+     "glyph": "🦊",
+     "file": "fox.webp"
+    },
+    {
+     "name": "Bear",
+     "cp": "1F43B",
+     "glyph": "🐻",
+     "file": "bear.webp"
+    },
+    {
+     "name": "Panda",
+     "cp": "1F43C",
+     "glyph": "🐼",
+     "file": "panda.webp"
+    },
+    {
+     "name": "Koala",
+     "cp": "1F428",
+     "glyph": "🐨",
+     "file": "koala.webp"
+    },
+    {
+     "name": "Tiger face",
+     "cp": "1F42F",
+     "glyph": "🐯",
+     "file": "tiger_face.webp"
+    },
+    {
+     "name": "Lion",
+     "cp": "1F981",
+     "glyph": "🦁",
+     "file": "lion.webp"
+    },
+    {
+     "name": "Cow face",
+     "cp": "1F42E",
+     "glyph": "🐮",
+     "file": "cow_face.webp"
+    },
+    {
+     "name": "Pig face",
+     "cp": "1F437",
+     "glyph": "🐷",
+     "file": "pig_face.webp"
+    },
+    {
+     "name": "Frog",
+     "cp": "1F438",
+     "glyph": "🐸",
+     "file": "frog.webp"
+    },
+    {
+     "name": "Monkey face",
+     "cp": "1F435",
+     "glyph": "🐵",
+     "file": "monkey_face.webp"
+    },
+    {
+     "name": "Chicken",
+     "cp": "1F414",
+     "glyph": "🐔",
+     "file": "chicken.webp"
+    },
+    {
+     "name": "Penguin",
+     "cp": "1F427",
+     "glyph": "🐧",
+     "file": "penguin.webp"
+    },
+    {
+     "name": "Bird",
+     "cp": "1F426",
+     "glyph": "🐦",
+     "file": "bird.webp"
+    },
+    {
+     "name": "Baby chick",
+     "cp": "1F424",
+     "glyph": "🐤",
+     "file": "baby_chick.webp"
+    },
+    {
+     "name": "Duck",
+     "cp": "1F986",
+     "glyph": "🦆",
+     "file": "duck.webp"
+    },
+    {
+     "name": "Owl",
+     "cp": "1F989",
+     "glyph": "🦉",
+     "file": "owl.webp"
+    },
+    {
+     "name": "Bat",
+     "cp": "1F987",
+     "glyph": "🦇",
+     "file": "bat.webp"
+    },
+    {
+     "name": "Wolf",
+     "cp": "1F43A",
+     "glyph": "🐺",
+     "file": "wolf.webp"
+    },
+    {
+     "name": "Horse face",
+     "cp": "1F434",
+     "glyph": "🐴",
+     "file": "horse_face.webp"
+    },
+    {
+     "name": "Unicorn",
+     "cp": "1F984",
+     "glyph": "🦄",
+     "file": "unicorn.webp"
+    },
+    {
+     "name": "Honeybee",
+     "cp": "1F41D",
+     "glyph": "🐝",
+     "file": "honeybee.webp"
+    },
+    {
+     "name": "Butterfly",
+     "cp": "1F98B",
+     "glyph": "🦋",
+     "file": "butterfly.webp"
+    },
+    {
+     "name": "Snail",
+     "cp": "1F40C",
+     "glyph": "🐌",
+     "file": "snail.webp"
+    },
+    {
+     "name": "Lady beetle",
+     "cp": "1F41E",
+     "glyph": "🐞",
+     "file": "lady_beetle.webp"
+    },
+    {
+     "name": "Turtle",
+     "cp": "1F422",
+     "glyph": "🐢",
+     "file": "turtle.webp"
+    },
+    {
+     "name": "Octopus",
+     "cp": "1F419",
+     "glyph": "🐙",
+     "file": "octopus.webp"
+    },
+    {
+     "name": "Tropical fish",
+     "cp": "1F420",
+     "glyph": "🐠",
+     "file": "tropical_fish.webp"
+    },
+    {
+     "name": "Dolphin",
+     "cp": "1F42C",
+     "glyph": "🐬",
+     "file": "dolphin.webp"
+    },
+    {
+     "name": "Whale",
+     "cp": "1F40B",
+     "glyph": "🐋",
+     "file": "whale.webp"
+    },
+    {
+     "name": "Crab",
+     "cp": "1F980",
+     "glyph": "🦀",
+     "file": "crab.webp"
+    },
+    {
+     "name": "Lobster",
+     "cp": "1F99E",
+     "glyph": "🦞",
+     "file": "lobster.webp"
+    },
+    {
+     "name": "Sloth",
+     "cp": "1F9A5",
+     "glyph": "🦥",
+     "file": "sloth.webp"
+    },
+    {
+     "name": "Otter",
+     "cp": "1F9A6",
+     "glyph": "🦦",
+     "file": "otter.webp"
+    },
+    {
+     "name": "Flamingo",
+     "cp": "1F9A9",
+     "glyph": "🦩",
+     "file": "flamingo.webp"
+    },
+    {
+     "name": "Dog",
+     "cp": "1F415",
+     "glyph": "🐕",
+     "file": "dog.webp"
+    },
+    {
+     "name": "Cat",
+     "cp": "1F408",
+     "glyph": "🐈",
+     "file": "cat.webp"
+    },
+    {
+     "name": "Tulip",
+     "cp": "1F337",
+     "glyph": "🌷",
+     "file": "tulip.webp"
+    },
+    {
+     "name": "Rose",
+     "cp": "1F339",
+     "glyph": "🌹",
+     "file": "rose.webp"
+    },
+    {
+     "name": "Hibiscus",
+     "cp": "1F33A",
+     "glyph": "🌺",
+     "file": "hibiscus.webp"
+    },
+    {
+     "name": "Sunflower",
+     "cp": "1F33B",
+     "glyph": "🌻",
+     "file": "sunflower.webp"
+    },
+    {
+     "name": "Blossom",
+     "cp": "1F33C",
+     "glyph": "🌼",
+     "file": "blossom.webp"
+    },
+    {
+     "name": "Cherry blossom",
+     "cp": "1F338",
+     "glyph": "🌸",
+     "file": "cherry_blossom.webp"
+    },
+    {
+     "name": "Bouquet",
+     "cp": "1F490",
+     "glyph": "💐",
+     "file": "bouquet.webp"
+    },
+    {
+     "name": "Four leaf clover",
+     "cp": "1F340",
+     "glyph": "🍀",
+     "file": "four_leaf_clover.webp"
+    },
+    {
+     "name": "Maple leaf",
+     "cp": "1F341",
+     "glyph": "🍁",
+     "file": "maple_leaf.webp"
+    },
+    {
+     "name": "Seedling",
+     "cp": "1F331",
+     "glyph": "🌱",
+     "file": "seedling.webp"
+    },
+    {
+     "name": "Palm tree",
+     "cp": "1F334",
+     "glyph": "🌴",
+     "file": "palm_tree.webp"
+    },
+    {
+     "name": "Cactus",
+     "cp": "1F335",
+     "glyph": "🌵",
+     "file": "cactus.webp"
+    },
+    {
+     "name": "Mushroom",
+     "cp": "1F344",
+     "glyph": "🍄",
+     "file": "mushroom.webp"
+    }
+   ]
+  },
+  {
+   "id": "food",
+   "label": "Food",
+   "items": [
+    {
+     "name": "Strawberry",
+     "cp": "1F353",
+     "glyph": "🍓",
+     "file": "strawberry.webp"
+    },
+    {
+     "name": "Cherries",
+     "cp": "1F352",
+     "glyph": "🍒",
+     "file": "cherries.webp"
+    },
+    {
+     "name": "Peach",
+     "cp": "1F351",
+     "glyph": "🍑",
+     "file": "peach.webp"
+    },
+    {
+     "name": "Red apple",
+     "cp": "1F34E",
+     "glyph": "🍎",
+     "file": "red_apple.webp"
+    },
+    {
+     "name": "Watermelon",
+     "cp": "1F349",
+     "glyph": "🍉",
+     "file": "watermelon.webp"
+    },
+    {
+     "name": "Grapes",
+     "cp": "1F347",
+     "glyph": "🍇",
+     "file": "grapes.webp"
+    },
+    {
+     "name": "Banana",
+     "cp": "1F34C",
+     "glyph": "🍌",
+     "file": "banana.webp"
+    },
+    {
+     "name": "Tangerine",
+     "cp": "1F34A",
+     "glyph": "🍊",
+     "file": "tangerine.webp"
+    },
+    {
+     "name": "Pineapple",
+     "cp": "1F34D",
+     "glyph": "🍍",
+     "file": "pineapple.webp"
+    },
+    {
+     "name": "Kiwi fruit",
+     "cp": "1F95D",
+     "glyph": "🥝",
+     "file": "kiwi_fruit.webp"
+    },
+    {
+     "name": "Avocado",
+     "cp": "1F951",
+     "glyph": "🥑",
+     "file": "avocado.webp"
+    },
+    {
+     "name": "Chocolate bar",
+     "cp": "1F36B",
+     "glyph": "🍫",
+     "file": "chocolate_bar.webp"
+    },
+    {
+     "name": "Candy",
+     "cp": "1F36C",
+     "glyph": "🍬",
+     "file": "candy.webp"
+    },
+    {
+     "name": "Lollipop",
+     "cp": "1F36D",
+     "glyph": "🍭",
+     "file": "lollipop.webp"
+    },
+    {
+     "name": "Cookie",
+     "cp": "1F36A",
+     "glyph": "🍪",
+     "file": "cookie.webp"
+    },
+    {
+     "name": "Birthday cake",
+     "cp": "1F382",
+     "glyph": "🎂",
+     "file": "birthday_cake.webp"
+    },
+    {
+     "name": "Shortcake",
+     "cp": "1F370",
+     "glyph": "🍰",
+     "file": "shortcake.webp"
+    },
+    {
+     "name": "Cupcake",
+     "cp": "1F9C1",
+     "glyph": "🧁",
+     "file": "cupcake.webp"
+    },
+    {
+     "name": "Pie",
+     "cp": "1F967",
+     "glyph": "🥧",
+     "file": "pie.webp"
+    },
+    {
+     "name": "Ice cream",
+     "cp": "1F368",
+     "glyph": "🍨",
+     "file": "ice_cream.webp"
+    },
+    {
+     "name": "Soft ice cream",
+     "cp": "1F366",
+     "glyph": "🍦",
+     "file": "soft_ice_cream.webp"
+    },
+    {
+     "name": "Doughnut",
+     "cp": "1F369",
+     "glyph": "🍩",
+     "file": "doughnut.webp"
+    },
+    {
+     "name": "Honey pot",
+     "cp": "1F36F",
+     "glyph": "🍯",
+     "file": "honey_pot.webp"
+    },
+    {
+     "name": "Pizza",
+     "cp": "1F355",
+     "glyph": "🍕",
+     "file": "pizza.webp"
+    },
+    {
+     "name": "Hamburger",
+     "cp": "1F354",
+     "glyph": "🍔",
+     "file": "hamburger.webp"
+    },
+    {
+     "name": "French fries",
+     "cp": "1F35F",
+     "glyph": "🍟",
+     "file": "french_fries.webp"
+    },
+    {
+     "name": "Hot dog",
+     "cp": "1F32D",
+     "glyph": "🌭",
+     "file": "hot_dog.webp"
+    },
+    {
+     "name": "Taco",
+     "cp": "1F32E",
+     "glyph": "🌮",
+     "file": "taco.webp"
+    },
+    {
+     "name": "Sushi",
+     "cp": "1F363",
+     "glyph": "🍣",
+     "file": "sushi.webp"
+    },
+    {
+     "name": "Steaming bowl",
+     "cp": "1F35C",
+     "glyph": "🍜",
+     "file": "steaming_bowl.webp"
+    },
+    {
+     "name": "Spaghetti",
+     "cp": "1F35D",
+     "glyph": "🍝",
+     "file": "spaghetti.webp"
+    },
+    {
+     "name": "Popcorn",
+     "cp": "1F37F",
+     "glyph": "🍿",
+     "file": "popcorn.webp"
+    },
+    {
+     "name": "Croissant",
+     "cp": "1F950",
+     "glyph": "🥐",
+     "file": "croissant.webp"
+    },
+    {
+     "name": "Pretzel",
+     "cp": "1F968",
+     "glyph": "🥨",
+     "file": "pretzel.webp"
+    },
+    {
+     "name": "Bottle with popping cork",
+     "cp": "1F37E",
+     "glyph": "🍾",
+     "file": "bottle_with_popping_cork.webp"
+    },
+    {
+     "name": "Wine glass",
+     "cp": "1F377",
+     "glyph": "🍷",
+     "file": "wine_glass.webp"
+    },
+    {
+     "name": "Cocktail glass",
+     "cp": "1F378",
+     "glyph": "🍸",
+     "file": "cocktail_glass.webp"
+    },
+    {
+     "name": "Tropical drink",
+     "cp": "1F379",
+     "glyph": "🍹",
+     "file": "tropical_drink.webp"
+    },
+    {
+     "name": "Clinking beer mugs",
+     "cp": "1F37B",
+     "glyph": "🍻",
+     "file": "clinking_beer_mugs.webp"
+    },
+    {
+     "name": "Beer mug",
+     "cp": "1F37A",
+     "glyph": "🍺",
+     "file": "beer_mug.webp"
+    },
+    {
+     "name": "Clinking glasses",
+     "cp": "1F942",
+     "glyph": "🥂",
+     "file": "clinking_glasses.webp"
+    },
+    {
+     "name": "Hot beverage",
+     "cp": "2615",
+     "glyph": "☕",
+     "file": "hot_beverage.webp"
+    },
+    {
+     "name": "Teacup without handle",
+     "cp": "1F375",
+     "glyph": "🍵",
+     "file": "teacup_without_handle.webp"
+    },
+    {
+     "name": "Bubble tea",
+     "cp": "1F9CB",
+     "glyph": "🧋",
+     "file": "bubble_tea.webp"
+    },
+    {
+     "name": "Cup with straw",
+     "cp": "1F964",
+     "glyph": "🥤",
+     "file": "cup_with_straw.webp"
+    },
+    {
+     "name": "Glass of milk",
+     "cp": "1F95B",
+     "glyph": "🥛",
+     "file": "glass_of_milk.webp"
+    }
+   ]
+  },
+  {
+   "id": "symbols",
+   "label": "Symbols",
+   "items": [
+    {
+     "name": "Ring",
+     "cp": "1F48D",
+     "glyph": "💍",
+     "file": "ring.webp"
+    },
+    {
+     "name": "Gem stone",
+     "cp": "1F48E",
+     "glyph": "💎",
+     "file": "gem_stone.webp"
+    },
+    {
+     "name": "Crown",
+     "cp": "1F451",
+     "glyph": "👑",
+     "file": "crown.webp"
+    },
+    {
+     "name": "Top hat",
+     "cp": "1F3A9",
+     "glyph": "🎩",
+     "file": "top_hat.webp"
+    },
+    {
+     "name": "Lipstick",
+     "cp": "1F484",
+     "glyph": "💄",
+     "file": "lipstick.webp"
+    },
+    {
+     "name": "Kiss mark",
+     "cp": "1F48B",
+     "glyph": "💋",
+     "file": "kiss_mark.webp"
+    },
+    {
+     "name": "High-heeled shoe",
+     "cp": "1F460",
+     "glyph": "👠",
+     "file": "high-heeled_shoe.webp"
+    },
+    {
+     "name": "Dress",
+     "cp": "1F457",
+     "glyph": "👗",
+     "file": "dress.webp"
+    },
+    {
+     "name": "Handbag",
+     "cp": "1F45C",
+     "glyph": "👜",
+     "file": "handbag.webp"
+    },
+    {
+     "name": "Wrapped gift",
+     "cp": "1F381",
+     "glyph": "🎁",
+     "file": "wrapped_gift.webp"
+    },
+    {
+     "name": "Ribbon",
+     "cp": "1F380",
+     "glyph": "🎀",
+     "file": "ribbon.webp"
+    },
+    {
+     "name": "Balloon",
+     "cp": "1F388",
+     "glyph": "🎈",
+     "file": "balloon.webp"
+    },
+    {
+     "name": "Party popper",
+     "cp": "1F389",
+     "glyph": "🎉",
+     "file": "party_popper.webp"
+    },
+    {
+     "name": "Confetti ball",
+     "cp": "1F38A",
+     "glyph": "🎊",
+     "file": "confetti_ball.webp"
+    },
+    {
+     "name": "Musical note",
+     "cp": "1F3B5",
+     "glyph": "🎵",
+     "file": "musical_note.webp"
+    },
+    {
+     "name": "Musical notes",
+     "cp": "1F3B6",
+     "glyph": "🎶",
+     "file": "musical_notes.webp"
+    },
+    {
+     "name": "Microphone",
+     "cp": "1F3A4",
+     "glyph": "🎤",
+     "file": "microphone.webp"
+    },
+    {
+     "name": "Headphone",
+     "cp": "1F3A7",
+     "glyph": "🎧",
+     "file": "headphone.webp"
+    },
+    {
+     "name": "Camera",
+     "cp": "1F4F7",
+     "glyph": "📷",
+     "file": "camera.webp"
+    },
+    {
+     "name": "Camera with flash",
+     "cp": "1F4F8",
+     "glyph": "📸",
+     "file": "camera_with_flash.webp"
+    },
+    {
+     "name": "Mobile phone",
+     "cp": "1F4F1",
+     "glyph": "📱",
+     "file": "mobile_phone.webp"
+    },
+    {
+     "name": "Telephone receiver",
+     "cp": "1F4DE",
+     "glyph": "📞",
+     "file": "telephone_receiver.webp"
+    },
+    {
+     "name": "Love letter",
+     "cp": "1F48C",
+     "glyph": "💌",
+     "file": "love_letter.webp"
+    },
+    {
+     "name": "Memo",
+     "cp": "1F4DD",
+     "glyph": "📝",
+     "file": "memo.webp"
+    },
+    {
+     "name": "Open book",
+     "cp": "1F4D6",
+     "glyph": "📖",
+     "file": "open_book.webp"
+    },
+    {
+     "name": "Teddy bear",
+     "cp": "1F9F8",
+     "glyph": "🧸",
+     "file": "teddy_bear.webp"
+    },
+    {
+     "name": "Video game",
+     "cp": "1F3AE",
+     "glyph": "🎮",
+     "file": "video_game.webp"
+    },
+    {
+     "name": "Game die",
+     "cp": "1F3B2",
+     "glyph": "🎲",
+     "file": "game_die.webp"
+    },
+    {
+     "name": "Bullseye",
+     "cp": "1F3AF",
+     "glyph": "🎯",
+     "file": "bullseye.webp"
+    },
+    {
+     "name": "Trophy",
+     "cp": "1F3C6",
+     "glyph": "🏆",
+     "file": "trophy.webp"
+    },
+    {
+     "name": "1st place medal",
+     "cp": "1F947",
+     "glyph": "🥇",
+     "file": "1st_place_medal.webp"
+    },
+    {
+     "name": "Airplane",
+     "cp": "2708-FE0F",
+     "glyph": "✈️",
+     "file": "airplane.webp"
+    },
+    {
+     "name": "Automobile",
+     "cp": "1F697",
+     "glyph": "🚗",
+     "file": "automobile.webp"
+    },
+    {
+     "name": "House",
+     "cp": "1F3E0",
+     "glyph": "🏠",
+     "file": "house.webp"
+    },
+    {
+     "name": "House with garden",
+     "cp": "1F3E1",
+     "glyph": "🏡",
+     "file": "house_with_garden.webp"
+    },
+    {
+     "name": "Beach with umbrella",
+     "cp": "1F3D6-FE0F",
+     "glyph": "🏖️",
+     "file": "beach_with_umbrella.webp"
+    },
+    {
+     "name": "Sunrise",
+     "cp": "1F305",
+     "glyph": "🌅",
+     "file": "sunrise.webp"
+    },
+    {
+     "name": "Sunset",
+     "cp": "1F307",
+     "glyph": "🌇",
+     "file": "sunset.webp"
+    },
+    {
+     "name": "Watch",
+     "cp": "231A",
+     "glyph": "⌚",
+     "file": "watch.webp"
+    },
+    {
+     "name": "Alarm clock",
+     "cp": "23F0",
+     "glyph": "⏰",
+     "file": "alarm_clock.webp"
+    },
+    {
+     "name": "Money bag",
+     "cp": "1F4B0",
+     "glyph": "💰",
+     "file": "money_bag.webp"
+    },
+    {
+     "name": "Light bulb",
+     "cp": "1F4A1",
+     "glyph": "💡",
+     "file": "light_bulb.webp"
+    },
+    {
+     "name": "Candle",
+     "cp": "1F56F-FE0F",
+     "glyph": "🕯️",
+     "file": "candle.webp"
+    },
+    {
+     "name": "Crystal ball",
+     "cp": "1F52E",
+     "glyph": "🔮",
+     "file": "crystal_ball.webp"
+    },
+    {
+     "name": "Key",
+     "cp": "1F511",
+     "glyph": "🔑",
+     "file": "key.webp"
+    },
+    {
+     "name": "Locked",
+     "cp": "1F512",
+     "glyph": "🔒",
+     "file": "locked.webp"
+    },
+    {
+     "name": "Framed picture",
+     "cp": "1F5BC-FE0F",
+     "glyph": "🖼️",
+     "file": "framed_picture.webp"
+    },
+    {
+     "name": "Artist palette",
+     "cp": "1F3A8",
+     "glyph": "🎨",
+     "file": "artist_palette.webp"
+    },
+    {
+     "name": "Sparkles",
+     "cp": "2728",
+     "glyph": "✨",
+     "file": "sparkles.webp"
+    },
+    {
+     "name": "Glowing star",
+     "cp": "1F31F",
+     "glyph": "🌟",
+     "file": "glowing_star.webp"
+    },
+    {
+     "name": "Dizzy",
+     "cp": "1F4AB",
+     "glyph": "💫",
+     "file": "dizzy.webp"
+    },
+    {
+     "name": "Star",
+     "cp": "2B50",
+     "glyph": "⭐",
+     "file": "star.webp"
+    },
+    {
+     "name": "Shooting star",
+     "cp": "1F320",
+     "glyph": "🌠",
+     "file": "shooting_star.webp"
+    },
+    {
+     "name": "Fire",
+     "cp": "1F525",
+     "glyph": "🔥",
+     "file": "fire.webp"
+    },
+    {
+     "name": "Rainbow",
+     "cp": "1F308",
+     "glyph": "🌈",
+     "file": "rainbow.webp"
+    },
+    {
+     "name": "Crescent moon",
+     "cp": "1F319",
+     "glyph": "🌙",
+     "file": "crescent_moon.webp"
+    },
+    {
+     "name": "Sun",
+     "cp": "2600-FE0F",
+     "glyph": "☀️",
+     "file": "sun.webp"
+    },
+    {
+     "name": "High voltage",
+     "cp": "26A1",
+     "glyph": "⚡",
+     "file": "high_voltage.webp"
+    },
+    {
+     "name": "Snowflake",
+     "cp": "2744-FE0F",
+     "glyph": "❄️",
+     "file": "snowflake.webp"
+    },
+    {
+     "name": "Cloud",
+     "cp": "2601-FE0F",
+     "glyph": "☁️",
+     "file": "cloud.webp"
+    },
+    {
+     "name": "Umbrella with rain drops",
+     "cp": "2614",
+     "glyph": "☔",
+     "file": "umbrella_with_rain_drops.webp"
+    },
+    {
+     "name": "Water wave",
+     "cp": "1F30A",
+     "glyph": "🌊",
+     "file": "water_wave.webp"
+    },
+    {
+     "name": "Hundred points",
+     "cp": "1F4AF",
+     "glyph": "💯",
+     "file": "hundred_points.webp"
+    },
+    {
+     "name": "Check mark button",
+     "cp": "2705",
+     "glyph": "✅",
+     "file": "check_mark_button.webp"
+    },
+    {
+     "name": "Cross mark",
+     "cp": "274C",
+     "glyph": "❌",
+     "file": "cross_mark.webp"
+    },
+    {
+     "name": "Anger symbol",
+     "cp": "1F4A2",
+     "glyph": "💢",
+     "file": "anger_symbol.webp"
+    },
+    {
+     "name": "Zzz",
+     "cp": "1F4A4",
+     "glyph": "💤",
+     "file": "zzz.webp"
+    },
+    {
+     "name": "Dashing away",
+     "cp": "1F4A8",
+     "glyph": "💨",
+     "file": "dashing_away.webp"
+    },
+    {
+     "name": "Speech balloon",
+     "cp": "1F4AC",
+     "glyph": "💬",
+     "file": "speech_balloon.webp"
+    },
+    {
+     "name": "Thought balloon",
+     "cp": "1F4AD",
+     "glyph": "💭",
+     "file": "thought_balloon.webp"
+    },
+    {
+     "name": "Red exclamation mark",
+     "cp": "2757",
+     "glyph": "❗",
+     "file": "red_exclamation_mark.webp"
+    },
+    {
+     "name": "Red question mark",
+     "cp": "2753",
+     "glyph": "❓",
+     "file": "red_question_mark.webp"
+    },
+    {
+     "name": "Double exclamation mark",
+     "cp": "203C-FE0F",
+     "glyph": "‼️",
+     "file": "double_exclamation_mark.webp"
+    },
+    {
+     "name": "Exclamation question mark",
+     "cp": "2049-FE0F",
+     "glyph": "⁉️",
+     "file": "exclamation_question_mark.webp"
+    },
+    {
+     "name": "Heart exclamation",
+     "cp": "2763-FE0F",
+     "glyph": "❣️",
+     "file": "heart_exclamation.webp"
+    },
+    {
+     "name": "Heart decoration",
+     "cp": "1F49F",
+     "glyph": "💟",
+     "file": "heart_decoration.webp"
+    },
+    {
+     "name": "Infinity",
+     "cp": "267E-FE0F",
+     "glyph": "♾️",
+     "file": "infinity.webp"
+    },
+    {
+     "name": "Sparkle",
+     "cp": "2747-FE0F",
+     "glyph": "❇️",
+     "file": "sparkle.webp"
+    },
+    {
+     "name": "Eight-pointed star",
+     "cp": "2734-FE0F",
+     "glyph": "✴️",
+     "file": "eight-pointed_star.webp"
+    },
+    {
+     "name": "Cherry blossom",
+     "cp": "1F338",
+     "glyph": "🌸",
+     "file": "cherry_blossom.webp"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,549 @@
+{
+ "set_note": "Marker-style decoration art, drawn for Love Stickers (own IP). Trimmed, transparent, longest side <= 512 px, <= 60 KB. anchor: center drops at the canvas centre; head-top drops onto the top edge of the cut-out. defaultWidth is a fraction of the 512 canvas. emojis become WhatsApp tags.",
+ "sets": {
+  "doodles": "Doodles · 30",
+  "props": "Props · 24"
+ },
+ "pieces": [
+  {
+   "file": "doodles-1.webp",
+   "set": "doodles",
+   "label": "Crown",
+   "anchor": "head-top",
+   "defaultWidth": 0.34,
+   "emojis": [
+    "👑"
+   ]
+  },
+  {
+   "file": "doodles-2.webp",
+   "set": "doodles",
+   "label": "Halo",
+   "anchor": "head-top",
+   "defaultWidth": 0.34,
+   "emojis": [
+    "😇"
+   ]
+  },
+  {
+   "file": "doodles-3.webp",
+   "set": "doodles",
+   "label": "Devil horns",
+   "anchor": "head-top",
+   "defaultWidth": 0.36,
+   "emojis": [
+    "😈"
+   ]
+  },
+  {
+   "file": "doodles-4.webp",
+   "set": "doodles",
+   "label": "Cat ears",
+   "anchor": "head-top",
+   "defaultWidth": 0.38,
+   "emojis": [
+    "🐱"
+   ]
+  },
+  {
+   "file": "doodles-5.webp",
+   "set": "doodles",
+   "label": "Bunny ears",
+   "anchor": "head-top",
+   "defaultWidth": 0.34,
+   "emojis": [
+    "🐰"
+   ]
+  },
+  {
+   "file": "doodles-6.webp",
+   "set": "doodles",
+   "label": "Heart cluster",
+   "anchor": "center",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "💕"
+   ]
+  },
+  {
+   "file": "doodles-7.webp",
+   "set": "doodles",
+   "label": "Sparkle burst",
+   "anchor": "center",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "✨"
+   ]
+  },
+  {
+   "file": "doodles-8.webp",
+   "set": "doodles",
+   "label": "Blush marks",
+   "anchor": "center",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "😊"
+   ]
+  },
+  {
+   "file": "doodles-9.webp",
+   "set": "doodles",
+   "label": "Tears",
+   "anchor": "center",
+   "defaultWidth": 0.22,
+   "emojis": [
+    "😢"
+   ]
+  },
+  {
+   "file": "doodles-10.webp",
+   "set": "doodles",
+   "label": "Sweat drop",
+   "anchor": "center",
+   "defaultWidth": 0.16,
+   "emojis": [
+    "😅"
+   ]
+  },
+  {
+   "file": "doodles-11.webp",
+   "set": "doodles",
+   "label": "Anger mark",
+   "anchor": "center",
+   "defaultWidth": 0.22,
+   "emojis": [
+    "💢"
+   ]
+  },
+  {
+   "file": "doodles-12.webp",
+   "set": "doodles",
+   "label": "Dizzy stars",
+   "anchor": "head-top",
+   "defaultWidth": 0.34,
+   "emojis": [
+    "💫"
+   ]
+  },
+  {
+   "file": "doodles-13.webp",
+   "set": "doodles",
+   "label": "Zzz",
+   "anchor": "center",
+   "defaultWidth": 0.26,
+   "emojis": [
+    "😴"
+   ]
+  },
+  {
+   "file": "doodles-14.webp",
+   "set": "doodles",
+   "label": "Motion lines",
+   "anchor": "center",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "💨"
+   ]
+  },
+  {
+   "file": "doodles-15.webp",
+   "set": "doodles",
+   "label": "Arrow",
+   "anchor": "center",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "➡️"
+   ]
+  },
+  {
+   "file": "doodles-16.webp",
+   "set": "doodles",
+   "label": "Double exclamation",
+   "anchor": "center",
+   "defaultWidth": 0.22,
+   "emojis": [
+    "‼️"
+   ]
+  },
+  {
+   "file": "doodles-17.webp",
+   "set": "doodles",
+   "label": "Question mark",
+   "anchor": "center",
+   "defaultWidth": 0.2,
+   "emojis": [
+    "❓"
+   ]
+  },
+  {
+   "file": "doodles-18.webp",
+   "set": "doodles",
+   "label": "Music notes",
+   "anchor": "center",
+   "defaultWidth": 0.26,
+   "emojis": [
+    "🎵"
+   ]
+  },
+  {
+   "file": "props-1.webp",
+   "set": "props",
+   "label": "Speech bubble",
+   "anchor": "center",
+   "defaultWidth": 0.46,
+   "emojis": [
+    "💬"
+   ]
+  },
+  {
+   "file": "props-2.webp",
+   "set": "props",
+   "label": "Thought bubble",
+   "anchor": "center",
+   "defaultWidth": 0.48,
+   "emojis": [
+    "💭"
+   ]
+  },
+  {
+   "file": "props-3.webp",
+   "set": "props",
+   "label": "Heart glasses",
+   "anchor": "center",
+   "defaultWidth": 0.4,
+   "emojis": [
+    "😍"
+   ]
+  },
+  {
+   "file": "props-4.webp",
+   "set": "props",
+   "label": "Flower crown",
+   "anchor": "head-top",
+   "defaultWidth": 0.44,
+   "emojis": [
+    "🌸"
+   ]
+  },
+  {
+   "file": "props-5.webp",
+   "set": "props",
+   "label": "Ribbon banner",
+   "anchor": "center",
+   "defaultWidth": 0.6,
+   "emojis": [
+    "🎀"
+   ]
+  },
+  {
+   "file": "props-6.webp",
+   "set": "props",
+   "label": "Heart frame",
+   "anchor": "center",
+   "defaultWidth": 0.8,
+   "emojis": [
+    "❤️"
+   ]
+  },
+  {
+   "file": "props-7.webp",
+   "set": "props",
+   "label": "Cupid's arrow",
+   "anchor": "center",
+   "defaultWidth": 0.5,
+   "emojis": [
+    "💘"
+   ]
+  },
+  {
+   "file": "props-8.webp",
+   "set": "props",
+   "label": "Party hat",
+   "anchor": "head-top",
+   "defaultWidth": 0.26,
+   "emojis": [
+    "🥳"
+   ]
+  },
+  {
+   "file": "props-9.webp",
+   "set": "props",
+   "label": "Bow tie",
+   "anchor": "center",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "🎩"
+   ]
+  },
+  {
+   "file": "props-10.webp",
+   "set": "props",
+   "label": "Sunglasses",
+   "anchor": "center",
+   "defaultWidth": 0.38,
+   "emojis": [
+    "😎"
+   ]
+  },
+  {
+   "file": "props-11.webp",
+   "set": "props",
+   "label": "Angel wings",
+   "anchor": "center",
+   "defaultWidth": 0.46,
+   "emojis": [
+    "😇"
+   ]
+  },
+  {
+   "file": "props-12.webp",
+   "set": "props",
+   "label": "Lightning bolt",
+   "anchor": "center",
+   "defaultWidth": 0.2,
+   "emojis": [
+    "⚡"
+   ]
+  },
+  {
+   "file": "doodles-19.webp",
+   "set": "doodles",
+   "label": "Heart trail",
+   "anchor": "center",
+   "defaultWidth": 0.4,
+   "emojis": [
+    "💕"
+   ]
+  },
+  {
+   "file": "doodles-20.webp",
+   "set": "doodles",
+   "label": "Confetti",
+   "anchor": "center",
+   "defaultWidth": 0.5,
+   "emojis": [
+    "🎊"
+   ]
+  },
+  {
+   "file": "doodles-21.webp",
+   "set": "doodles",
+   "label": "Impact lines",
+   "anchor": "center",
+   "defaultWidth": 0.5,
+   "emojis": [
+    "💥"
+   ]
+  },
+  {
+   "file": "doodles-22.webp",
+   "set": "doodles",
+   "label": "Storm cloud",
+   "anchor": "head-top",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "⛈️"
+   ]
+  },
+  {
+   "file": "doodles-23.webp",
+   "set": "doodles",
+   "label": "Sun",
+   "anchor": "center",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "☀️"
+   ]
+  },
+  {
+   "file": "doodles-24.webp",
+   "set": "doodles",
+   "label": "Rainbow",
+   "anchor": "head-top",
+   "defaultWidth": 0.46,
+   "emojis": [
+    "🌈"
+   ]
+  },
+  {
+   "file": "doodles-25.webp",
+   "set": "doodles",
+   "label": "Heart eyes",
+   "anchor": "center",
+   "defaultWidth": 0.34,
+   "emojis": [
+    "😍"
+   ]
+  },
+  {
+   "file": "doodles-26.webp",
+   "set": "doodles",
+   "label": "Circle scribble",
+   "anchor": "center",
+   "defaultWidth": 0.5,
+   "emojis": [
+    "⭕"
+   ]
+  },
+  {
+   "file": "doodles-27.webp",
+   "set": "doodles",
+   "label": "Underline swoosh",
+   "anchor": "center",
+   "defaultWidth": 0.5,
+   "emojis": [
+    "✍️"
+   ]
+  },
+  {
+   "file": "doodles-28.webp",
+   "set": "doodles",
+   "label": "Cross-out",
+   "anchor": "center",
+   "defaultWidth": 0.4,
+   "emojis": [
+    "❌"
+   ]
+  },
+  {
+   "file": "doodles-29.webp",
+   "set": "doodles",
+   "label": "Arrow down",
+   "anchor": "center",
+   "defaultWidth": 0.22,
+   "emojis": [
+    "⬇️"
+   ]
+  },
+  {
+   "file": "doodles-30.webp",
+   "set": "doodles",
+   "label": "Laughing tears",
+   "anchor": "center",
+   "defaultWidth": 0.34,
+   "emojis": [
+    "😂"
+   ]
+  },
+  {
+   "file": "props-13.webp",
+   "set": "props",
+   "label": "Heart balloon",
+   "anchor": "center",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "🎈"
+   ]
+  },
+  {
+   "file": "props-14.webp",
+   "set": "props",
+   "label": "Tiara",
+   "anchor": "head-top",
+   "defaultWidth": 0.4,
+   "emojis": [
+    "👸"
+   ]
+  },
+  {
+   "file": "props-15.webp",
+   "set": "props",
+   "label": "Round glasses",
+   "anchor": "center",
+   "defaultWidth": 0.4,
+   "emojis": [
+    "🤓"
+   ]
+  },
+  {
+   "file": "props-16.webp",
+   "set": "props",
+   "label": "Cat whiskers",
+   "anchor": "center",
+   "defaultWidth": 0.34,
+   "emojis": [
+    "🐱"
+   ]
+  },
+  {
+   "file": "props-17.webp",
+   "set": "props",
+   "label": "Bridal veil",
+   "anchor": "head-top",
+   "defaultWidth": 0.5,
+   "emojis": [
+    "👰"
+   ]
+  },
+  {
+   "file": "props-18.webp",
+   "set": "props",
+   "label": "Top hat",
+   "anchor": "head-top",
+   "defaultWidth": 0.36,
+   "emojis": [
+    "🎩"
+   ]
+  },
+  {
+   "file": "props-19.webp",
+   "set": "props",
+   "label": "Plasters",
+   "anchor": "center",
+   "defaultWidth": 0.3,
+   "emojis": [
+    "🩹"
+   ]
+  },
+  {
+   "file": "props-20.webp",
+   "set": "props",
+   "label": "Headphones",
+   "anchor": "head-top",
+   "defaultWidth": 0.46,
+   "emojis": [
+    "🎧"
+   ]
+  },
+  {
+   "file": "props-21.webp",
+   "set": "props",
+   "label": "Dots bubble",
+   "anchor": "center",
+   "defaultWidth": 0.36,
+   "emojis": [
+    "💬"
+   ]
+  },
+  {
+   "file": "props-22.webp",
+   "set": "props",
+   "label": "Name tag",
+   "anchor": "center",
+   "defaultWidth": 0.5,
+   "emojis": [
+    "🏷️"
+   ]
+  },
+  {
+   "file": "props-23.webp",
+   "set": "props",
+   "label": "Photo frame",
+   "anchor": "center",
+   "defaultWidth": 0.7,
+   "emojis": [
+    "📷"
+   ]
+  },
+  {
+   "file": "props-24.webp",
+   "set": "props",
+   "label": "Hair bow",
+   "anchor": "head-top",
+   "defaultWidth": 0.34,
+   "emojis": [
+    "🎀"
+   ]
+  }
+ ]
+}

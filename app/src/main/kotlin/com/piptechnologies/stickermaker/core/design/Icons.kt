@@ -374,4 +374,103 @@ object LoveIcons {
             "m2 2 20 20"
         )
     }
+
+    // Create › Cut out: Add, Draw, Animate, the zoom button, the layer actions and Settings › Licences.
+
+    val SmilePlus: ImageVector by lazy {
+        lucideIcon(
+            "smile-plus",
+            "M13.267 2.08a10 10 0 108.653 8.653",
+            "M15 10V9",
+            "M16 5h6",
+            "M16.472 15a6 6 0 01-8.943 0",
+            "M19 2v6",
+            "M9 10V9"
+        )
+    }
+
+    val PenLine: ImageVector by lazy {
+        lucideIcon(
+            "pen-line",
+            "M13 21h8",
+            "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+        )
+    }
+
+    val CirclePlay: ImageVector by lazy {
+        lucideIcon(
+            "circle-play",
+            "M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z",
+            "M2 12a10 10 0 1 0 20 0a10 10 0 1 0 -20 0"
+        )
+    }
+
+    val ZoomOut: ImageVector by lazy {
+        lucideIcon(
+            "zoom-out",
+            "M3 11a8 8 0 1 0 16 0a8 8 0 1 0 -16 0",
+            "M21 21 16.65 16.65",
+            "M8 11 14 11"
+        )
+    }
+
+    val Copy: ImageVector by lazy {
+        lucideIcon(
+            "copy",
+            "M10 8h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2z",
+            "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+        )
+    }
+
+    val FlipHorizontal: ImageVector by lazy {
+        lucideIcon(
+            "flip-horizontal",
+            "M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h3",
+            "M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3",
+            "M12 20v2",
+            "M12 14v2",
+            "M12 8v2",
+            "M12 2v2"
+        )
+    }
+
+    val SendToBack: ImageVector by lazy {
+        lucideIcon(
+            "send-to-back",
+            "M16 14h4a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2v-4a2 2 0 0 1 2 -2z",
+            "M4 2h4a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2v-4a2 2 0 0 1 2 -2z",
+            "M7 14v1a2 2 0 0 0 2 2h1",
+            "M14 7h1a2 2 0 0 1 2 2v1"
+        )
+    }
+
+    val BringToFront: ImageVector by lazy {
+        lucideIcon(
+            "bring-to-front",
+            "M10 8h4a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2v-4a2 2 0 0 1 2 -2z",
+            "M4 10a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2",
+            "M14 20a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2"
+        )
+    }
+
+    val Scaling: ImageVector by lazy {
+        lucideIcon(
+            "scaling",
+            "M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7",
+            "M14 15H9v-5",
+            "M16 3h5v5",
+            "M21 3 9 15"
+        )
+    }
+
+    val Scale: ImageVector by lazy {
+        lucideIcon(
+            "scale",
+            "M12 3v18",
+            "m19 8 3 8a5 5 0 0 1-6 0zV7",
+            "M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1",
+            "m5 8 3 8a5 5 0 0 1-6 0zV7",
+            "M7 21h10"
+        )
+    }
 }
