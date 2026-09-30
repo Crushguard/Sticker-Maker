@@ -26,6 +26,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -93,8 +95,8 @@ fun SegmentedControl(
         )
         Row(horizontalArrangement = Arrangement.spacedBy(gap)) {
             options.forEachIndexed { index, label ->
-                val selected = index == selectedIndex
-                val fg = if (selected) Ink else idleColor
+                val isSelected = index == selectedIndex
+                val fg = if (isSelected) Ink else idleColor
                 Row(
                     modifier = Modifier
                         .width(segmentWidth)
@@ -103,7 +105,9 @@ fun SegmentedControl(
                         .clickable(
                             role = Role.Tab,
                             onClickLabel = label
-                        ) { onSelect(index) },
+                        ) { onSelect(index) }
+                        // TalkBack says which tab is on.
+                        .semantics { selected = isSelected },
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

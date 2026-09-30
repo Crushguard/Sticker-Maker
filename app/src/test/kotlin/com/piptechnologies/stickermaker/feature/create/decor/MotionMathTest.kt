@@ -67,11 +67,12 @@ class MotionMathTest {
         // Bounce at t = 0.35 lifts the bottom-centre pivot by 7 % of the canvas, then base-scales about the centre.
         val lifted = MotionMath.transform(bounce, 0.35f).map(256f, 512f)
         assertEquals(256f + 0.86f * ((512f - 0.07f * 512f) - 256f), lifted[1], 1e-2f)
-        // Bounce bottom-left after scaleX/scaleY
+        // Bounce's top-left corner (0, 0) at t = 0.35: scaled 0.96 × 1.04 about the bottom-centre pivot,
+        // lifted 7 %, then base-scaled about the centre.
         val bleft = MotionMath.transform(bounce, 0.35f).map(0f, 0f)
         assertEquals(44.65f, bleft[0], 1e-2f)
         assertEquals(-12.60f, bleft[1], 1e-2f)
-        // Shake at t=0.2 with dx=-0.03, scaleX=0.96
+        // Shake at t = 0.2: dx = -0.03 of the canvas (no scale of its own), then the 0.9 base scale about the centre.
         val shaken = MotionMath.transform(shake, 0.2f).map(256f, 256f)
         assertEquals(242.176f, shaken[0], 1e-2f)
         assertEquals(256f, shaken[1], 1e-2f)

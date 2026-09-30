@@ -263,9 +263,9 @@ private fun SizeCell(size: MarkerSize, selected: Boolean, width: Dp, onClick: ()
  * The Animate strip and its note (spec §8): one 56 dp tile per preset, each playing a 44 dp mini of the
  * sticker ([thumb], the decorated still) in its motion on one shared frame clock, with the preset's name
  * under it; [selected] is the sticker's preset. While not [enabled] (a [clip], which already moves, or
- * a sticker not ready for layer tools) the strip is at 40% and its tiles ignore taps. With reduced
- * motion the tiles show frame 0 and the note says how to play. [renderer] draws the particle presets'
- * hearts and stars.
+ * a sticker not ready for layer tools) the strip is at 40%, its tiles ignore taps and hold frame 0.
+ * With reduced motion the tiles show frame 0 too and the note says how to play. [renderer] draws the
+ * particle presets' hearts and stars.
  */
 @Composable
 internal fun AnimateStrip(
@@ -280,8 +280,12 @@ internal fun AnimateStrip(
 ) {
     val reduceMotion = rememberReduceMotion()
     val clock = remember { mutableLongStateOf(0L) }
-    LaunchedEffect(reduceMotion) {
-        if (reduceMotion) return@LaunchedEffect
+    // No clock while the tiles are still: reduced motion, or a strip that is off (they hold frame 0).
+    LaunchedEffect(reduceMotion, enabled) {
+        if (reduceMotion || !enabled) {
+            clock.longValue = 0L
+            return@LaunchedEffect
+        }
         val start = withFrameMillis { it }
         while (true) withFrameMillis { clock.longValue = it - start }
     }

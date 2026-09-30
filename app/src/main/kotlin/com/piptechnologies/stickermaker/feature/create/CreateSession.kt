@@ -139,6 +139,11 @@ data class CreateUiState(
     /** Recently picked emoji files, most recent first. */
     val recents: List<String> = emptyList(),
     val skinPopover: SkinPopoverUi? = null,
+    /**
+     * Bumped when the edit handle or a double tap opens a caption: the Text field then takes the keyboard.
+     * 0 while the sheet is closed, so opening it from the Add tool doesn't.
+     */
+    val captionFocus: Int = 0,
     /** The Text field: the selected text layer's text, else empty (typing then adds a layer). */
     val textValue: String = "",
     /** The selected text layer's style, colour and font, else those the next text layer gets. */

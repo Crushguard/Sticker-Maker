@@ -81,6 +81,22 @@ class TextLayerPainterTest {
     }
 
     @Test
+    fun aFaceThatFailsToLoadGivesWayToTheSystemBold() {
+        val loads = mutableListOf<FontFile>()
+        val fonts = DecorFonts(
+            book,
+            DecorFonts.orDefault { file ->
+                loads += file
+                if (file == FontFile.LILITA) throw IllegalStateException("no such file") else DecorTestFonts.load(file)
+            }
+        )
+        assertSame(Typeface.DEFAULT_BOLD, fonts.face(FontFile.LILITA).typeface)
+        assertSame(Typeface.DEFAULT_BOLD, fonts.forText("love", uiFont = false, mood = FontMood.Display).typeface)
+        assertSame(fonts.face(FontFile.CAVEAT), fonts.forText("love", uiFont = false, mood = FontMood.Hand))
+        assertEquals("asked once, then kept", listOf(FontFile.LILITA, FontFile.CAVEAT), loads)
+    }
+
+    @Test
     fun fontCoverageReadsTheCmap() {
         val sample = (0x20..0x24F) + (0x400..0x4FF) + (0x590..0x6FF) + (0x900..0x97F) + listOf(0x4F60, 0x1F600)
         // Every Hand and Display font (their coverage decides the fallback); Kalam has a format 12 subtable.

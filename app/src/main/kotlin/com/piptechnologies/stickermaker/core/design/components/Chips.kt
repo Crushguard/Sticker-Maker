@@ -24,6 +24,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -92,6 +94,8 @@ fun CategoryChip(
             .background(bg)
             .border(1.dp, line, LoveShapes.Pill)
             .clickable(role = Role.Button, onClickLabel = label, onClick = onClick)
+            // TalkBack says which chip is on.
+            .semantics { this.selected = selected }
             .padding(horizontal = 15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

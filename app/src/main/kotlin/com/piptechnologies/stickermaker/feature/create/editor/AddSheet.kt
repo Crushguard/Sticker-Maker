@@ -63,6 +63,7 @@ import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -90,6 +91,11 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
@@ -163,13 +169,14 @@ import com.piptechnologies.stickermaker.feature.create.decor.TextStyleBook
 import com.piptechnologies.stickermaker.feature.create.decor.TextStyleId
 import kotlin.math.max
 import kotlin.math.roundToInt
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // The Add sheet (spec §9): Text, Emoji and Stickers, in an overlay pinned to the bottom of the editor.
 
 /** Coil's models for the bundled emoji and decoration art. */
-private const val EMOJI_ASSETS = "file:///android_asset/emoji/"
 private const val DECOR_ASSETS = "file:///android_asset/decor/"
 
 private const val OPEN_MS = 280
@@ -296,6 +303,7 @@ internal fun AddSheet(
                 when (tab) {
                     AddTab.Text -> TextTab(
                         text = state.textValue,
+                        focusRequest = state.captionFocus,
                         style = state.textStyle,
                         colour = state.textColour,
                         font = state.textFont,
@@ -442,12 +450,14 @@ private fun SheetHandle(drag: MutableFloatState, onClose: () -> Unit) {
 /**
  * Add › Text (spec §9): the field with its counter, the quick [phrases] and, while the keyboard is
  * down, the four style chips with a live "Aa" each, the eight [colours] and the three font moods.
- * [text], [style], [colour] and [font] are the selected text layer's, or what the next one gets.
+ * [text], [style], [colour] and [font] are the selected text layer's, or what the next one gets; a new
+ * [focusRequest] hands the field the keyboard.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TextTab(
     text: String,
+    focusRequest: Int,
     style: TextStyleId,
     colour: Int,
     font: FontMood,
@@ -463,7 +473,7 @@ private fun TextTab(
     val keyboardUp = WindowInsets.isImeVisible
     // It scrolls where a short screen or large text leaves it too little room.
     Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        LayerTextField(text, onText)
+        LayerTextField(text, focusRequest, onText)
         LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             items(phrases, key = { it }) { phrase -> PhraseChip(phrase) { onText(phrase) } }
         }
@@ -515,11 +525,13 @@ internal object EndsApart : Arrangement.Horizontal {
 /**
  * The text field: 46 dp or more, a Rose edge while it has the keyboard, the `type` icon, 15 sp input on
  * up to two lines and the mono counter. [value] is the layer's text and the truth: what a quick phrase,
- * another layer or a refused keystroke makes of it replaces what was typed, the caret at its end.
- * Done closes the keyboard; the sheet stays.
+ * another layer or a refused keystroke makes of it replaces what was typed, the caret at its end. An
+ * edit past the 30 characters is refused where it is typed, so the caret stays put. Done, and a
+ * hardware Enter, close the keyboard; the sheet stays. A new [focusRequest] (the edit handle, a double
+ * tap) gives the field the keyboard.
  */
 @Composable
-private fun LayerTextField(value: String, onValue: (String) -> Unit) {
+private fun LayerTextField(value: String, focusRequest: Int, onValue: (String) -> Unit) {
     var typed by remember { mutableStateOf(TextFieldValue(value, TextRange(value.length))) }
     val shown = if (typed.text == value) typed else TextFieldValue(value, TextRange(value.length))
     // What was typed gives way for good, so no old caret or composing span comes back with the same text.
@@ -528,6 +540,12 @@ private fun LayerTextField(value: String, onValue: (String) -> Unit) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
+    LaunchedEffect(focusRequest) {
+        if (focusRequest > 0) {
+            focusRequester.requestFocus()
+            keyboard?.show()
+        }
+    }
     Row(
         Modifier
             .fillMaxWidth()
@@ -550,8 +568,10 @@ private fun LayerTextField(value: String, onValue: (String) -> Unit) {
         BasicTextField(
             value = shown,
             onValueChange = { next ->
-                // A layer is lettered on lines of its own choosing: a typed line break is a space.
+                // A layer is lettered on lines of its own choosing: a pasted line break is a space.
                 val text = next.text.replace('\n', ' ').replace('\r', ' ')
+                // Past the limit the edit is refused whole: the text and the caret stay as they were.
+                if (text.length > DecorSpec.TEXT_MAX_CHARS) return@BasicTextField
                 typed = if (text == next.text) next else next.copy(text = text)
                 if (text != value) onValue(text)
             },
@@ -563,7 +583,13 @@ private fun LayerTextField(value: String, onValue: (String) -> Unit) {
             modifier = Modifier
                 .weight(1f)
                 .focusRequester(focusRequester)
-                .onFocusChanged { focused = it.isFocused },
+                .onFocusChanged { focused = it.isFocused }
+                .onPreviewKeyEvent { event ->
+                    // A hardware Enter is Done: the keyboard goes and nothing is typed.
+                    val enter = event.key == Key.Enter || event.key == Key.NumPadEnter
+                    if (enter && event.type == KeyEventType.KeyDown) focusManager.clearFocus()
+                    enter
+                },
             decorationBox = { inner ->
                 Box(contentAlignment = Alignment.CenterStart) {
                     if (shown.text.isEmpty()) {
@@ -618,12 +644,12 @@ private fun StyleChips(
 ) {
     val sample = stringResource(R.string.create_text_style_sample)
     val density = LocalDensity.current
-    // Four small bitmaps, lettered again only when the colour or the font changes.
-    val samples = remember(painter, sample, colour, font, density) {
-        if (painter == null) {
-            emptyMap()
-        } else {
-            val scale = with(density) { SampleSize.toPx() } / TextStyleBook.DEFAULT_TEXT_PX
+    // Four small bitmaps, lettered off the main thread (the chips are empty until they arrive, and keep
+    // the last ones while new ones come), again only when the colour or the font changes.
+    val samples by produceState(emptyMap<TextStyleId, ImageBitmap>(), painter, sample, colour, font, density) {
+        if (painter == null) return@produceState
+        val scale = with(density) { SampleSize.toPx() } / TextStyleBook.DEFAULT_TEXT_PX
+        value = withContext(Dispatchers.Default) {
             TextStyleId.entries.associateWith { style ->
                 val fit = if (style == TextStyleId.Bubble) BUBBLE_SAMPLE_SCALE else 1f
                 painter.render(LayerContent.Text(sample, style, colour, font), scale * fit).asImageBitmap()
@@ -827,7 +853,7 @@ private fun EmojiCell(
             .padding(padding)
     ) {
         AsyncImage(
-            model = EMOJI_ASSETS + item.file,
+            model = EmojiCatalog.ASSET_URL + item.file,
             contentDescription = item.glyph,
             modifier = Modifier.fillMaxSize()
         )
@@ -853,14 +879,19 @@ private fun SkinPopover(
     val pressed by remember(gridState, popover.file) {
         derivedStateOf {
             val layout = gridState.layoutInfo
-            val item = layout.visibleItemsInfo.firstOrNull { it.key == popover.file }
+            val shown = layout.visibleItemsInfo
+            val item = shown.firstOrNull { it.key == popover.file }
             PressedEmoji(
                 centre = item?.let { it.offset.x + it.size.width / 2f } ?: 0f,
                 top = item?.offset?.y ?: 0,
-                room = layout.viewportSize.width.toFloat()
+                room = layout.viewportSize.width.toFloat(),
+                gone = shown.isNotEmpty() && item == null
             )
         }
     }
+    // Its emoji left the grid's view (another chip's grid, Recent changed): nothing to point at.
+    val closeNow = rememberUpdatedState(onClose)
+    LaunchedEffect(pressed.gone) { if (pressed.gone) closeNow.value() }
     val room = pressed.room
     val width = with(density) { PopoverWidth.toPx() }
     // The emoji's centre from the grid's start edge; the grid's own positions are from its left.
@@ -893,8 +924,11 @@ private fun SkinPopover(
     }
 }
 
-/** The pressed emoji in its grid, in px: its [centre] from the grid's left, its [top], the grid's width ([room]). */
-private data class PressedEmoji(val centre: Float, val top: Int, val room: Float)
+/**
+ * The pressed emoji in its grid, in px: its [centre] from the grid's left, its [top], the grid's width
+ * ([room]); [gone] when the grid shows items but not this one.
+ */
+private data class PressedEmoji(val centre: Float, val top: Int, val room: Float, val gone: Boolean)
 
 /**
  * Puts the popover's window so that its card ([margin] inside the window on every side) starts

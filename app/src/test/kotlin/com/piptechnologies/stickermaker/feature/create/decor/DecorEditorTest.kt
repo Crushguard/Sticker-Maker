@@ -485,11 +485,49 @@ class DecorEditorTest {
     }
 
     @Test
-    fun textWithTrailingEmojiDropsSurrogate() {
-        val textContent = "a".repeat(29) + "😍"
-        editor.setText(textContent)
+    fun anEditPastTheLimitIsRefusedWhole() {
+        // 31 UTF-16 units: refused, and no caption is made of a part of it.
+        assertTrue(editor.setText("a".repeat(29) + "😍"))
+        assertTrue(editor.state.layers.isEmpty())
+        assertTrue(editor.setText("a".repeat(30)))
         val id = editor.selectedId!!
-        val actualText = (editor.state.layer(id)!!.content as LayerContent.Text).text
-        assertEquals("a".repeat(29), actualText)
+        fun text() = (editor.state.layer(id)!!.content as LayerContent.Text).text
+        assertEquals(30, text().length)
+        // Typed mid-text at the limit: the whole edit is refused, the last letter stays.
+        assertTrue(editor.setText("a".repeat(15) + "b" + "a".repeat(15)))
+        assertEquals("a".repeat(30), text())
+        assertTrue(editor.setText("a".repeat(29) + "😍"))
+        assertEquals("a".repeat(30), text())
+        // Within the limit it edits as ever.
+        assertTrue(editor.setText("a".repeat(28) + "😍"))
+        assertEquals("a".repeat(28) + "😍", text())
+    }
+
+    @Test
+    fun anEmptiedCaptionMakesRoomForAnEighthLayer() {
+        repeat(7) { assertNotNull(editor.add(decor())) }
+        assertTrue(editor.setText("hi"))
+        assertTrue(editor.setText(""))
+        assertEquals("the emptied caption is still there, mid-session", 8, editor.state.layers.size)
+        assertNotNull("it goes first, so the emoji fits", editor.add(emoji()))
+        assertEquals(8, editor.state.layers.size)
+        assertTrue(editor.state.layers.none { it.content is LayerContent.Text })
+    }
+
+    @Test
+    fun deletingAnEmptiedCaptionOfThisSessionLeavesNoUndoStep() {
+        assertTrue(editor.setText("h"))
+        val id = editor.selectedId!!
+        assertTrue(editor.setText(""))
+        editor.delete(id)
+        assertTrue(editor.state.layers.isEmpty())
+        assertFalse(editor.canUndo)
+        // The same for the other edits: nothing is recorded for a layer that went with the session.
+        assertTrue(editor.setText("h"))
+        val other = editor.selectedId!!
+        assertTrue(editor.setText(""))
+        editor.flip(other)
+        assertNull(editor.duplicate(other))
+        assertFalse(editor.canUndo)
     }
 }

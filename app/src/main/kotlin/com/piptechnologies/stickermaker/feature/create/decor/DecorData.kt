@@ -91,6 +91,8 @@ class EmojiCatalog(val tabs: Map<String, List<EmojiItem>>) {
     companion object {
         const val LOVE = "love"
         val CATEGORIES = listOf("smileys", "hearts", "hands", "animals", "food", "symbols")
+        /** Coil's model for a bundled emoji file (the Default skin tone): this, then the file name. */
+        const val ASSET_URL = "file:///android_asset/emoji/"
         private const val FLUENT = "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/"
 
         fun parse(json: String): EmojiCatalog {

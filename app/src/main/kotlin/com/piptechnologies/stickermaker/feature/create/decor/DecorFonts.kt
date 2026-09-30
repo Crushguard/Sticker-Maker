@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.os.Build
 import androidx.core.content.res.ResourcesCompat
 import com.piptechnologies.stickermaker.R
+import com.piptechnologies.stickermaker.core.telemetry.CrashReporting
 import com.piptechnologies.stickermaker.feature.namepack.engine.LetteringFont
 import com.piptechnologies.stickermaker.feature.namepack.engine.LetteringFonts
 import java.io.InputStream
@@ -93,11 +94,12 @@ class DecorFonts(private val book: TextStyleBook, private val load: (FontFile) -
 
         /**
          * Production fonts: `res/font` resources, Caveat from assets at weight 700, the system bold.
-         * The Hand and Display files also have their coverage read from the file.
+         * The Hand and Display files also have their coverage read from the file. A file that can't be
+         * loaded gives the system bold instead, so the editor still opens.
          */
         fun android(context: Context, book: TextStyleBook): DecorFonts {
             val app = context.applicationContext
-            return DecorFonts(book) { file ->
+            return DecorFonts(book, orDefault { file ->
                 when (file) {
                     FontFile.SYSTEM_BOLD -> FontFace(Typeface.DEFAULT_BOLD)
                     FontFile.CAVEAT -> caveat(app)
@@ -108,6 +110,19 @@ class DecorFonts(private val book: TextStyleBook, private val load: (FontFile) -
                         else FontFace(typeface, coverage = coverageOf { app.resources.openRawResource(id) })
                     }
                 }
+            })
+        }
+
+        /**
+         * [load], with every face it fails to load (a missing or broken file) replaced by the system bold,
+         * the failure recorded: text still letters, the editor still opens.
+         */
+        fun orDefault(load: (FontFile) -> FontFace): (FontFile) -> FontFace = { file ->
+            try {
+                load(file)
+            } catch (e: Exception) {
+                CrashReporting.record(e, "decor_font")
+                FontFace(Typeface.DEFAULT_BOLD)
             }
         }
 
@@ -116,7 +131,7 @@ class DecorFonts(private val book: TextStyleBook, private val load: (FontFile) -
             val coverage = coverageOf { context.assets.open(CAVEAT_ASSET) }
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val builder = Typeface.Builder(context.assets, CAVEAT_ASSET).setFontVariationSettings("'wght' 700")
-                FontFace(builder.build(), coverage = coverage)
+                FontFace(builder.build() ?: Typeface.DEFAULT_BOLD, coverage = coverage)
             } else {
                 FontFace(Typeface.createFromAsset(context.assets, CAVEAT_ASSET), fakeBold = true, coverage = coverage)
             }

@@ -83,9 +83,6 @@ private val DEFAULT_EMOJIS = listOf("❤️", "😊")
 /** A burst of decor edits settles this long before the rail thumbnail is rendered again. */
 private const val THUMB_DEBOUNCE_MS = 150L
 
-/** Coil's model for a bundled emoji (the Default skin tone). */
-private const val EMOJI_ASSET_URL = "file:///android_asset/emoji/"
-
 /**
  * The one Create session shared by Import, Cut out and Pack details, exactly
  * like the prototype's single `create` state object: picked media, per-sticker
@@ -163,14 +160,14 @@ class CreatePackViewModel @Inject constructor(
             animated = editor.state.animated
         )
 
+        /**
+         * Lets go of the bitmaps without recycling them: a derived or undo job may still be drawing one,
+         * and keeps it until it is done; the garbage collector frees them.
+         */
         fun recycleBitmaps() {
-            source?.recycle()
-            autoMask?.recycle()
-            mask?.recycle()
             source = null
             autoMask = null
             mask = null
-            // A render still in flight may hold these; the garbage collector frees them.
             subject = null
             silhouette = null
         }
@@ -199,6 +196,13 @@ class CreatePackViewModel @Inject constructor(
     private var gestureStart: DecorState? = null
     /** The layer-limit toast already showed in this text session (typing keeps being refused). */
     private var limitToastShown = false
+    /** The layer-limit toast already showed in this Draw session (every touch-down keeps being refused). */
+    private var drawLimitToastShown = false
+    /**
+     * Bumped when the edit handle or a double tap opens a caption, so the field takes the keyboard; 0 once
+     * the sheet closes.
+     */
+    private var captionFocus = 0
     private var trayIndex = 0
     private var packName = ""
     private var tick = 0
@@ -295,6 +299,7 @@ class CreatePackViewModel @Inject constructor(
             emojiTab = emojiTab,
             recents = recents,
             skinPopover = skinPopover,
+            captionFocus = captionFocus,
             drawColour = drawColour,
             drawSize = drawSize,
             trayIndex = trayIndex.coerceIn(0, max(0, selected.size - 1)),
@@ -490,7 +495,11 @@ class CreatePackViewModel @Inject constructor(
             if (tool == EditorTool.Draw && newTool != EditorTool.Draw) flushDrawing(item)
             if (tool == EditorTool.Add && newTool != EditorTool.Add) endTextSession(item)
         }
-        if (newTool != EditorTool.Add) skinPopover = null
+        if (newTool != EditorTool.Add) {
+            skinPopover = null
+            captionFocus = 0
+        }
+        if (newTool == EditorTool.Draw && tool != EditorTool.Draw) drawLimitToastShown = false
         tool = newTool
     }
 
@@ -693,7 +702,7 @@ class CreatePackViewModel @Inject constructor(
 
     fun toggleBehindSelected() = editDecor(editableItem()) { editor -> editor.selectedId?.let(editor::toggleBehind) }
 
-    /** The edit handle or a double tap: opens Add › Text on text layer [id]. */
+    /** The edit handle or a double tap: opens Add › Text on text layer [id], and the field takes the keyboard. */
     fun editTextLayer(id: Long) {
         val item = editableItem() ?: return
         if (item.editor.state.layer(id)?.content !is LayerContent.Text) return
@@ -702,6 +711,7 @@ class CreatePackViewModel @Inject constructor(
         addTab = AddTab.Text
         item.editor.editText(id)
         limitToastShown = false
+        captionFocus++
         afterEdit(item, before)
     }
 
@@ -791,7 +801,7 @@ class CreatePackViewModel @Inject constructor(
         val seq = ++skinSeq
         val cells = SkinTone.entries.map { tone ->
             when {
-                tone == SkinTone.Default -> ToneCellUi(tone, ToneState.Ready, EMOJI_ASSET_URL + file)
+                tone == SkinTone.Default -> ToneCellUi(tone, ToneState.Ready, EmojiCatalog.ASSET_URL + file)
                 else -> tones.cached(emoji, tone)?.let { ToneCellUi(tone, ToneState.Ready, it) }
                     ?: ToneCellUi(tone, ToneState.Loading, null)
             }
@@ -852,13 +862,16 @@ class CreatePackViewModel @Inject constructor(
 
     /**
      * A Draw stroke starts (canvas px, kept inside the canvas, so a flushed drawing never needs shrinking);
-     * refused with a toast when the sticker already holds 8 layers.
+     * refused when the sticker already holds 8 layers, with a toast once per Draw session.
      */
     fun beginMarker(x: Float, y: Float) {
         val item = editableItem() ?: return
         if (tool != EditorTool.Draw || decor == null || !x.isFinite() || !y.isFinite()) return
         if (!item.editor.beginStroke(onCanvas(x), onCanvas(y), drawColour, drawSize)) {
-            toastLayerLimit()
+            if (!drawLimitToastShown) {
+                drawLimitToastShown = true
+                toastLayerLimit()
+            }
             return
         }
         tick++
@@ -1138,6 +1151,11 @@ class CreatePackViewModel @Inject constructor(
             } catch (ce: CancellationException) {
                 throw ce
             } catch (e: Exception) {
+                CrashReporting.record(e, "pack_export")
+                exportState = AddVisualState.Failed
+                push()
+            } catch (e: OutOfMemoryError) {
+                // A clip's frames or a big pack ran out of memory: Failed, not a crash.
                 CrashReporting.record(e, "pack_export")
                 exportState = AddVisualState.Failed
                 push()
@@ -1594,6 +1612,8 @@ class CreatePackViewModel @Inject constructor(
         liveLayerId = null
         gestureStart = null
         limitToastShown = false
+        drawLimitToastShown = false
+        captionFocus = 0
         trayIndex = 0
         packName = ""
         tick = 0

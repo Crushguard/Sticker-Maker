@@ -180,6 +180,46 @@ class CreatePackViewModelLayerToolsTest {
     }
 
     @Test
+    fun theLayerLimitToastShowsOncePerDrawSession() {
+        val toasts = collectToasts()
+        cutOut(1)
+        repeat(DecorSpec.MAX_LAYERS) { vm.addEmoji("red_heart.webp") }
+        vm.selectTool(EditorTool.Draw)
+        repeat(3) {
+            vm.beginMarker(100f, 100f)
+            vm.endMarker()
+        }
+        idle()
+        assertEquals(1, toasts.count { it == limitToast })
+        vm.selectTool(EditorTool.Auto)
+        vm.selectTool(EditorTool.Draw)
+        vm.beginMarker(100f, 100f)
+        idle()
+        assertEquals("a new Draw session may say it again", 2, toasts.count { it == limitToast })
+    }
+
+    @Test
+    fun theEditHandleGivesTheFieldTheKeyboardAndTheAddToolDoesNot() {
+        cutOut(1)
+        assertEquals(0, state.captionFocus)
+        vm.selectTool(EditorTool.Add)
+        assertEquals("opened from the tool: no focus request", 0, state.captionFocus)
+        vm.setText("hi")
+        val caption = checkNotNull(state.selectedLayerId)
+        vm.closeAddSheet()
+        vm.editTextLayer(caption)
+        assertEquals(EditorTool.Add, state.tool)
+        assertEquals(AddTab.Text, state.addTab)
+        assertEquals(1, state.captionFocus)
+        vm.editTextLayer(caption)
+        assertEquals("every handle tap asks again", 2, state.captionFocus)
+        vm.closeAddSheet()
+        assertEquals("cleared with the sheet", 0, state.captionFocus)
+        vm.selectTool(EditorTool.Add)
+        assertEquals(0, state.captionFocus)
+    }
+
+    @Test
     fun aSkinToneThatIsNotOnDiskAddsNothing() {
         cutOut(1)
         vm.addEmoji("waving_hand.webp", SkinTone.Dark)

@@ -98,10 +98,10 @@ class DecorEditor(
 
     // ---------------------------------------------------------------- adding
 
-    /** Adds a layer at its spec position and selects it; null when 8 layers exist. */
+    /** Adds a layer at its spec position and selects it; null when 8 layers exist (an emptied caption goes first). */
     fun add(content: LayerContent, headTop: Boolean = false): Long? {
-        if (state.layers.size >= DecorSpec.MAX_LAYERS) return null
         endTextSession()
+        if (state.layers.size >= DecorSpec.MAX_LAYERS) return null
         val before = state
         val id = place(content, headTop)
         history.push(EditStep.Decor(before))
@@ -127,10 +127,11 @@ class DecorEditor(
 
     // ------------------------------------------------------------ layer edits
 
+    /** A copy of layer [id], offset and selected; null when it is gone or 8 layers exist (an emptied caption went). */
     fun duplicate(id: Long): Long? {
+        endTextSession()
         val src = state.layer(id) ?: return null
         if (state.layers.size >= DecorSpec.MAX_LAYERS) return null
-        endTextSession()
         val before = state
         val off = DecorSpec.DUPLICATE_OFFSET * DecorSpec.CANVAS
         val copy = src.copy(id = newId(), cx = (src.cx + off).coerceIn(0f, DecorSpec.CANVAS), cy = (src.cy + off).coerceIn(0f, DecorSpec.CANVAS))
@@ -143,9 +144,10 @@ class DecorEditor(
     fun flip(id: Long) = change(id) { it.copy(flipped = !it.flipped) }
     fun toggleBehind(id: Long) = change(id) { it.copy(behind = !it.behind) }
 
+    /** Removes layer [id]; an emptied caption goes with the text session first, and then there is nothing to record. */
     fun delete(id: Long) {
-        if (state.layer(id) == null) return
         endTextSession()
+        if (state.layer(id) == null) return
         history.push(EditStep.Decor(state))
         state = state.copy(layers = state.layers.filterNot { it.id == id })
         if (selectedId == id) selectedId = null
@@ -153,8 +155,8 @@ class DecorEditor(
     }
 
     private fun change(id: Long, f: (Layer) -> Layer) {
-        if (state.layer(id) == null) return
         endTextSession()
+        if (state.layer(id) == null) return
         history.push(EditStep.Decor(state))
         update(id, f)
     }
@@ -249,9 +251,13 @@ class DecorEditor(
 
     // ------------------------------------------------------------------ text
 
-    /** Edits the selected text layer, or creates one on the first character. False when 8 layers exist. */
+    /**
+     * Edits the selected text layer, or creates one on the first character; an edit past the 30 characters
+     * is refused whole, so the text and its caret stay as they were. False when 8 layers exist.
+     */
     fun setText(text: String): Boolean {
-        val t = dropHighSurrogateAtEnd(text.take(DecorSpec.TEXT_MAX_CHARS))
+        if (text.length > DecorSpec.TEXT_MAX_CHARS) return true
+        val t = dropHighSurrogateAtEnd(text)
         val sel = selectedText()
         if (sel != null) {
             beginTextSession(sel.id)

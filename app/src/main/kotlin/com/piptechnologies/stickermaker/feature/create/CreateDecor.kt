@@ -2,16 +2,19 @@ package com.piptechnologies.stickermaker.feature.create
 
 import android.content.Context
 import android.util.LruCache
+import com.piptechnologies.stickermaker.core.ui.inAppLanguage
 import com.piptechnologies.stickermaker.feature.create.decor.DecorAssets
 import com.piptechnologies.stickermaker.feature.create.decor.DecorData
 import com.piptechnologies.stickermaker.feature.create.decor.DecorFonts
 import com.piptechnologies.stickermaker.feature.create.decor.EmojiTones
 import com.piptechnologies.stickermaker.feature.create.decor.FontFile
+import com.piptechnologies.stickermaker.feature.create.decor.FontMood
 import com.piptechnologies.stickermaker.feature.create.decor.LayerContent
 import com.piptechnologies.stickermaker.feature.create.decor.LayerRenderCache
 import com.piptechnologies.stickermaker.feature.create.decor.SceneRenderer
 import com.piptechnologies.stickermaker.feature.create.decor.Size2
 import com.piptechnologies.stickermaker.feature.create.decor.TextLayerPainter
+import com.piptechnologies.stickermaker.feature.create.editor.fontMoodLabel
 
 /**
  * The Create session's decor engine (spec §2, §5): the catalogs, the skin-tone downloads, the fonts
@@ -51,8 +54,13 @@ internal class CreateDecor(
             val app = context.applicationContext
             val data = DecorData.load(app.assets)
             val fonts = DecorFonts.android(app, data.styles)
-            // The faces of a first caption (Sticker style, Rounded, any script): typing it loads no font file.
+            // The faces of a first caption (Sticker style, Rounded, any script) and of the Add sheet's font
+            // chips in the app language: neither typing nor opening the sheet loads a font file.
             listOf(FontFile.BALOO, FontFile.BALOO_BHAIJAAN, FontFile.RUBIK).forEach { fonts.face(it) }
+            val words = app.inAppLanguage()
+            FontMood.entries.forEach { mood ->
+                fonts.forText(words.getString(fontMoodLabel(mood)), uiFont = false, mood = mood)
+            }
             val painter = TextLayerPainter(fonts, data.styles, rtlLanguage)
             val assets = DecorAssets.android(app)
             val cache = LayerRenderCache(assets, painter, data)
