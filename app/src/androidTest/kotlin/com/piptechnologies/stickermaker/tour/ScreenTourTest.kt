@@ -17,6 +17,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.espresso.Espresso
@@ -352,10 +353,16 @@ class ScreenTourTest {
             shot(Frame.CREATE_EDITOR_BRUSH, "Brush tool with two dabs restoring edges; brush size row shows.")
         }
         step("Caption") {
-            compose.tap(hasClickLabel("Text"))
+            compose.tap(hasClickLabel("Add"))
+            compose.waitFor(hasText("Add a word or two"))
             compose.onNode(hasSetTextAction()).performTextInput("miss u")
             Espresso.closeSoftKeyboard()
-            extra("x02", "Cut out · caption", "editor", "Text tool: the design's \"miss u\" caption on the first sticker.")
+            extra("x02", "Cut out · caption", "editor", "Add › Text: the design's \"miss u\" caption, a layer on the first sticker.")
+            // Add again closes the sheet, which covers the footer's Next. On a short screen it covers
+            // the tool bar too, which scrolls up above it.
+            compose.onAllNodes(hasClickLabel("Add")).onFirst().performScrollTo()
+            compose.tap(hasClickLabel("Add"))
+            compose.waitGone(hasSetTextAction())
         }
         step("Pack details") {
             compose.tap(hasClickLabel("Next · 4 stickers"))
