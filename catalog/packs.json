@@ -1,7 +1,7 @@
 {
   "_about": "The reviewed metadata of every catalog pack, by pack id (= its folder name). scripts/library/prepare.js writes each into its folder's pack.json. Tags: category ids first (they decide the Home categories), then what the pack shows and is for; every tag has search words in library/_tags.json.",
   "generated": "2026-09-30",
-  "source": "Claude Design: the Stickers page manifest (packs.json: theme, lang, adult), Pack Ideas (moods, characters, sticker lines) and the WhatsApp export of 2026-09-30 (120 folders; animated variants are packs of their own).",
+  "source": "Claude Design: the Stickers page manifest (packs.json: theme, lang, adult), Pack Ideas (moods, characters, sticker lines) and the WhatsApp export of 2026-09-30 (120 folders; animated variants are packs of their own), plus the handoff of 2026-10-01 (Too Hot, Forbidden Fruit: designed as After Dark, listed for everyone at the owner's request).",
   "packs": {
     "clingy-mango": {
       "name": "Clingy Mango",
@@ -4991,6 +4991,263 @@
         "❤️"
       ],
       "adult": true
+    },
+    "too-hot": {
+      "name": "Too Hot",
+      "lang": [
+        "none"
+      ],
+      "tags": [
+        "flirty",
+        "flirt",
+        "tease",
+        "kiss",
+        "sweets",
+        "heart",
+        "wordless"
+      ],
+      "emojis": [
+        "🥵",
+        "🔥"
+      ],
+      "keywords": [
+        "hot",
+        "too hot",
+        "spicy",
+        "sexy",
+        "naughty",
+        "steamy",
+        "thirsty",
+        "lick",
+        "lip bite",
+        "tongue",
+        "peach",
+        "cherries",
+        "banana",
+        "chili",
+        "handcuffs",
+        "whipped cream",
+        "devil"
+      ],
+      "order": 117,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "😛",
+            "👅",
+            "💋"
+          ],
+          "text": "Glossy red lips sticking out a pink tongue"
+        },
+        "02.webp": {
+          "emojis": [
+            "🍑",
+            "🔥"
+          ],
+          "text": "A peach seen from behind in a red lace thong, with a small heart"
+        },
+        "03.webp": {
+          "emojis": [
+            "🍦",
+            "👅"
+          ],
+          "text": "Soft-serve ice cream with strawberry drizzle, licked by a pink tongue"
+        },
+        "04.webp": {
+          "emojis": [
+            "🍭",
+            "👅",
+            "❤️"
+          ],
+          "text": "A red heart lollipop being licked"
+        },
+        "05.webp": {
+          "emojis": [
+            "🫦",
+            "😏"
+          ],
+          "text": "Red lips biting the lower lip, with a small heart"
+        },
+        "06.webp": {
+          "emojis": [
+            "💦",
+            "💗"
+          ],
+          "text": "Three glossy water drops with a tiny pink heart"
+        },
+        "07.webp": {
+          "emojis": [
+            "🍒",
+            "😏"
+          ],
+          "text": "Two red cherries with their stems tied in a knot"
+        },
+        "08.webp": {
+          "emojis": [
+            "🍌",
+            "😏"
+          ],
+          "text": "A half-peeled banana with a smirking, blushing face"
+        },
+        "09.webp": {
+          "emojis": [
+            "😈",
+            "🔒"
+          ],
+          "text": "Fluffy pink handcuffs joined by a red heart lock"
+        },
+        "10.webp": {
+          "emojis": [
+            "😋",
+            "🍒"
+          ],
+          "text": "A can of whipped cream spraying a swirl topped with a cherry"
+        },
+        "11.webp": {
+          "emojis": [
+            "😈",
+            "❤️"
+          ],
+          "text": "A red heart with a smirking devil face, horns and a tail"
+        },
+        "12.webp": {
+          "emojis": [
+            "🌶️",
+            "🔥",
+            "😉"
+          ],
+          "text": "A winking red chili pepper with small flames"
+        }
+      }
+    },
+    "forbidden-fruit": {
+      "name": "Forbidden Fruit",
+      "lang": [
+        "none"
+      ],
+      "tags": [
+        "flirty",
+        "flirt",
+        "tease",
+        "date",
+        "kiss",
+        "sweets",
+        "heart",
+        "wordless"
+      ],
+      "emojis": [
+        "🍎",
+        "😈"
+      ],
+      "keywords": [
+        "forbidden",
+        "forbidden fruit",
+        "temptation",
+        "tempting",
+        "sexy",
+        "naughty",
+        "spicy",
+        "hot",
+        "eggplant",
+        "melons",
+        "oyster",
+        "apple",
+        "blindfold",
+        "champagne",
+        "chocolate strawberry",
+        "heart eyes",
+        "rose"
+      ],
+      "order": 118,
+      "stickers": {
+        "01.webp": {
+          "emojis": [
+            "🍆",
+            "😉"
+          ],
+          "text": "A winking eggplant in red heart-print boxer shorts"
+        },
+        "02.webp": {
+          "emojis": [
+            "🍈",
+            "😏"
+          ],
+          "text": "Two round melons in a red lace bra, with a heart"
+        },
+        "03.webp": {
+          "emojis": [
+            "🦪",
+            "👅"
+          ],
+          "text": "An open oyster with a pearl, licked by a pink tongue"
+        },
+        "04.webp": {
+          "emojis": [
+            "🍎",
+            "😈",
+            "🐍"
+          ],
+          "text": "A bitten red apple with devil horns and a snake tail"
+        },
+        "05.webp": {
+          "emojis": [
+            "🚪",
+            "🤫"
+          ],
+          "text": "A red lace bra hanging on a doorknob"
+        },
+        "06.webp": {
+          "emojis": [
+            "🙈",
+            "😈"
+          ],
+          "text": "A red silk blindfold tied in a bow"
+        },
+        "07.webp": {
+          "emojis": [
+            "👅",
+            "😋"
+          ],
+          "text": "A melting red popsicle being licked"
+        },
+        "08.webp": {
+          "emojis": [
+            "🍾",
+            "💦"
+          ],
+          "text": "A champagne bottle popping its cork, with foam and hearts"
+        },
+        "09.webp": {
+          "emojis": [
+            "🍓",
+            "🍫",
+            "😋"
+          ],
+          "text": "A bitten strawberry dipped in dark chocolate"
+        },
+        "10.webp": {
+          "emojis": [
+            "👀",
+            "😍"
+          ],
+          "text": "Wide eyes with heart-shaped pupils glancing sideways"
+        },
+        "11.webp": {
+          "emojis": [
+            "🌡️",
+            "🥵",
+            "🔥"
+          ],
+          "text": "A thermometer bursting at the top, with flames and hearts"
+        },
+        "12.webp": {
+          "emojis": [
+            "🌹",
+            "💋"
+          ],
+          "text": "Red lips holding a rose between the teeth"
+        }
+      }
     },
     "say-it-loud-ad": {
       "name": "Say It Loud · After Dark",
