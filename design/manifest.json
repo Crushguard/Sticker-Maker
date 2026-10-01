@@ -1,0 +1,497 @@
+[
+  {
+    "n": 1,
+    "section": "00 Launch",
+    "title": "Loading screen",
+    "props": {
+      "screen": "splash",
+      "hold": true,
+      "embedded": true
+    },
+    "file": "01-launch-loading-screen.png"
+  },
+  {
+    "n": 2,
+    "section": "01 Onboarding",
+    "title": "Slide 1 · Curated packs, one tap to WhatsApp",
+    "props": {
+      "screen": "onboarding",
+      "embedded": true
+    },
+    "file": "02-onboarding-slide-1-curated-packs-one-tap-to-whatsapp.png"
+  },
+  {
+    "n": 3,
+    "section": "01 Onboarding",
+    "title": "Slide 2 · Make your own, animated too",
+    "props": {
+      "screen": "onboarding",
+      "slide": 1,
+      "embedded": true
+    },
+    "file": "03-onboarding-slide-2-make-your-own-animated-too.png"
+  },
+  {
+    "n": 4,
+    "section": "02 Customization",
+    "title": "First run",
+    "props": {
+      "screen": "customize",
+      "embedded": true
+    },
+    "file": "04-customization-first-run.png"
+  },
+  {
+    "n": 5,
+    "section": "02 Customization",
+    "title": "From Settings · Edit themes",
+    "props": {
+      "screen": "customize",
+      "edit": true,
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "05-customization-from-settings-edit-themes.png"
+  },
+  {
+    "n": 6,
+    "section": "03 Home",
+    "title": "Home · Trending",
+    "props": {
+      "screen": "home",
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "06-home-home-trending.png"
+  },
+  {
+    "n": 7,
+    "section": "03 Home",
+    "title": "Home · Animated",
+    "props": {
+      "screen": "home",
+      "preset": "active",
+      "chip": "animated",
+      "embedded": true
+    },
+    "file": "07-home-home-animated.png"
+  },
+  {
+    "n": 8,
+    "section": "03 Home",
+    "title": "Home › Search",
+    "props": {
+      "screen": "home",
+      "preset": "active",
+      "query": "night",
+      "embedded": true
+    },
+    "file": "08-home-home-search.png"
+  },
+  {
+    "n": 9,
+    "section": "04 Stickers",
+    "title": "Clingy Mango · 18 stickers",
+    "props": {
+      "screen": "detail",
+      "packId": "clingy-mango",
+      "preset": "browsing",
+      "embedded": true
+    },
+    "file": "09-stickers-clingy-mango-18-stickers.png"
+  },
+  {
+    "n": 10,
+    "section": "04 Stickers",
+    "title": "Mango Moves · animated",
+    "props": {
+      "screen": "detail",
+      "packId": "mango-moves",
+      "preset": "browsing",
+      "embedded": true
+    },
+    "file": "10-stickers-mango-moves-animated.png"
+  },
+  {
+    "n": 11,
+    "section": "04 Stickers",
+    "title": "Big Words · 18 stickers",
+    "props": {
+      "screen": "detail",
+      "packId": "big-words",
+      "preset": "browsing",
+      "embedded": true
+    },
+    "file": "11-stickers-big-words-18-stickers.png"
+  },
+  {
+    "n": 12,
+    "section": "05 Add states",
+    "title": "1 · Idle",
+    "props": {
+      "screen": "detail",
+      "packId": "sorry-love",
+      "preset": "browsing",
+      "addState": "idle",
+      "embedded": true
+    },
+    "file": "12-add-states-1-idle.png"
+  },
+  {
+    "n": 13,
+    "section": "05 Add states",
+    "title": "2 · Downloading",
+    "props": {
+      "screen": "detail",
+      "packId": "sorry-love",
+      "preset": "browsing",
+      "addState": "downloading",
+      "embedded": true
+    },
+    "file": "13-add-states-2-downloading.png"
+  },
+  {
+    "n": 14,
+    "section": "05 Add states",
+    "title": "3 · Sent to WhatsApp",
+    "props": {
+      "screen": "detail",
+      "packId": "sorry-love",
+      "preset": "browsing",
+      "addState": "sent",
+      "embedded": true
+    },
+    "file": "14-add-states-3-sent-to-whatsapp.png"
+  },
+  {
+    "n": 15,
+    "section": "05 Add states",
+    "title": "4 · Added",
+    "props": {
+      "screen": "detail",
+      "packId": "sorry-love",
+      "preset": "browsing",
+      "addState": "added",
+      "embedded": true
+    },
+    "file": "15-add-states-4-added.png"
+  },
+  {
+    "n": 16,
+    "section": "05 Add states",
+    "title": "Retry · download failed",
+    "props": {
+      "screen": "detail",
+      "packId": "sorry-love",
+      "preset": "browsing",
+      "addState": "failed",
+      "scenario": "download-fails",
+      "embedded": true
+    },
+    "file": "16-add-states-retry-download-failed.png"
+  },
+  {
+    "n": 17,
+    "section": "05 Add states",
+    "title": "Card pill · same states, small",
+    "props": {
+      "screen": "home",
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "17-add-states-card-pill-same-states-small.png"
+  },
+  {
+    "n": 18,
+    "section": "06 Create",
+    "title": "Import",
+    "props": {
+      "screen": "create",
+      "embedded": true
+    },
+    "file": "18-create-import.png"
+  },
+  {
+    "n": 19,
+    "section": "06 Create",
+    "title": "Cut out · auto result",
+    "props": {
+      "screen": "editor",
+      "embedded": true
+    },
+    "file": "19-create-cut-out-auto-result.png"
+  },
+  {
+    "n": 20,
+    "section": "06 Create",
+    "title": "Cut out · fixing edges",
+    "props": {
+      "screen": "editor",
+      "tool": "brush",
+      "embedded": true
+    },
+    "file": "20-create-cut-out-fixing-edges.png"
+  },
+  {
+    "n": 21,
+    "section": "06 Create",
+    "title": "Pack details",
+    "props": {
+      "screen": "packDetails",
+      "embedded": true
+    },
+    "file": "21-create-pack-details.png"
+  },
+  {
+    "n": 22,
+    "section": "06 Create",
+    "title": "Made by you · Us, always",
+    "props": {
+      "screen": "detail",
+      "packId": "own-1",
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "22-create-made-by-you-us-always.png"
+  },
+  {
+    "n": 23,
+    "section": "06 Create",
+    "title": "Made by you · Just Us",
+    "props": {
+      "screen": "detail",
+      "packId": "own-2",
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "23-create-made-by-you-just-us.png"
+  },
+  {
+    "n": 24,
+    "section": "07 My Packs and Saved",
+    "title": "My Packs",
+    "props": {
+      "screen": "myPacks",
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "24-my-packs-and-saved-my-packs.png"
+  },
+  {
+    "n": 25,
+    "section": "07 My Packs and Saved",
+    "title": "My Packs › Saved",
+    "props": {
+      "screen": "saved",
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "25-my-packs-and-saved-my-packs-saved.png"
+  },
+  {
+    "n": 26,
+    "section": "07 My Packs and Saved",
+    "title": "Card menu",
+    "props": {
+      "screen": "myPacks",
+      "preset": "active",
+      "menu": "clingy-mango",
+      "embedded": true
+    },
+    "file": "26-my-packs-and-saved-card-menu.png"
+  },
+  {
+    "n": 27,
+    "section": "07 My Packs and Saved",
+    "title": "Confirm · remove from app",
+    "props": {
+      "screen": "myPacks",
+      "preset": "active",
+      "dialog": "remove",
+      "packId": "clingy-mango",
+      "embedded": true
+    },
+    "file": "27-my-packs-and-saved-confirm-remove-from-app.png"
+  },
+  {
+    "n": 28,
+    "section": "07 My Packs and Saved",
+    "title": "Confirm · delete your pack",
+    "props": {
+      "screen": "myPacks",
+      "preset": "active",
+      "dialog": "delete-own",
+      "packId": "own-1",
+      "embedded": true
+    },
+    "file": "28-my-packs-and-saved-confirm-delete-your-pack.png"
+  },
+  {
+    "n": 29,
+    "section": "07 My Packs and Saved",
+    "title": "Home · ♥ Saved",
+    "props": {
+      "screen": "home",
+      "preset": "active",
+      "chip": "saved",
+      "embedded": true
+    },
+    "file": "29-my-packs-and-saved-home-saved.png"
+  },
+  {
+    "n": 30,
+    "section": "08 Settings",
+    "title": "Settings",
+    "props": {
+      "screen": "settings",
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "30-settings-settings.png"
+  },
+  {
+    "n": 31,
+    "section": "08 Settings",
+    "title": "Rate · pick a star",
+    "props": {
+      "screen": "settings",
+      "preset": "active",
+      "dialog": "rate",
+      "embedded": true
+    },
+    "file": "31-settings-rate-pick-a-star.png"
+  },
+  {
+    "n": 32,
+    "section": "08 Settings",
+    "title": "Rate · 5 stars → Google Play",
+    "props": {
+      "screen": "settings",
+      "preset": "active",
+      "dialog": "rate",
+      "rateStage": "store",
+      "embedded": true
+    },
+    "file": "32-settings-rate-5-stars-google-play.png"
+  },
+  {
+    "n": 33,
+    "section": "08 Settings",
+    "title": "Rate · 1 to 4 stars → feedback",
+    "props": {
+      "screen": "settings",
+      "preset": "active",
+      "dialog": "rate",
+      "rateStage": "feedback",
+      "embedded": true
+    },
+    "file": "33-settings-rate-1-to-4-stars-feedback.png"
+  },
+  {
+    "n": 34,
+    "section": "08 Settings",
+    "title": "Rate · thanks",
+    "props": {
+      "screen": "settings",
+      "preset": "active",
+      "dialog": "rate",
+      "rateStage": "thanks",
+      "embedded": true
+    },
+    "file": "34-settings-rate-thanks.png"
+  },
+  {
+    "n": 35,
+    "section": "08 Settings",
+    "title": "Contact us",
+    "props": {
+      "screen": "contact",
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "35-settings-contact-us.png"
+  },
+  {
+    "n": 36,
+    "section": "08 Settings",
+    "title": "Language",
+    "props": {
+      "screen": "language",
+      "preset": "active",
+      "embedded": true
+    },
+    "file": "36-settings-language.png"
+  },
+  {
+    "n": 37,
+    "section": "08 Settings",
+    "title": "New pack alerts · permission",
+    "props": {
+      "screen": "settings",
+      "preset": "browsing",
+      "dialog": "notif-perm",
+      "embedded": true
+    },
+    "file": "37-settings-new-pack-alerts-permission.png"
+  },
+  {
+    "n": 38,
+    "section": "08 Settings",
+    "title": "Confirm · clear downloads",
+    "props": {
+      "screen": "settings",
+      "preset": "active",
+      "dialog": "clear",
+      "embedded": true
+    },
+    "file": "38-settings-confirm-clear-downloads.png"
+  },
+  {
+    "n": 39,
+    "section": "09 Errors and empty states",
+    "title": "No internet",
+    "props": {
+      "screen": "home",
+      "preset": "active",
+      "scenario": "offline",
+      "embedded": true
+    },
+    "file": "39-errors-and-empty-states-no-internet.png"
+  },
+  {
+    "n": 40,
+    "section": "09 Errors and empty states",
+    "title": "WhatsApp not installed",
+    "props": {
+      "screen": "detail",
+      "packId": "flirty-shy",
+      "preset": "browsing",
+      "dialog": "no-whatsapp",
+      "scenario": "no-whatsapp",
+      "embedded": true
+    },
+    "file": "40-errors-and-empty-states-whatsapp-not-installed.png"
+  },
+  {
+    "n": 41,
+    "section": "09 Errors and empty states",
+    "title": "My Packs · empty",
+    "props": {
+      "screen": "myPacks",
+      "empty": true,
+      "embedded": true
+    },
+    "file": "41-errors-and-empty-states-my-packs-empty.png"
+  },
+  {
+    "n": 42,
+    "section": "09 Errors and empty states",
+    "title": "Saved · empty",
+    "props": {
+      "screen": "saved",
+      "empty": true,
+      "embedded": true
+    },
+    "file": "42-errors-and-empty-states-saved-empty.png"
+  }
+]
