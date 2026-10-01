@@ -1,0 +1,453 @@
+{
+ "fps": 12,
+ "canvas": 512,
+ "note": "Frame 0 is the rest pose with the full sticker visible. Loops are seamless: the last keyframe equals the first. baseScale is applied to the whole sticker (subject + layers + outline) before the keyframe transform; pivot is in canvas fractions. easing: linear | ease-in-out | ease-out.",
+ "presets": [
+  {
+   "id": "none",
+   "label": "None",
+   "durationMs": 0,
+   "frames": 1,
+   "baseScale": 1,
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "keyframes": [
+    {
+     "t": 0,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    }
+   ]
+  },
+  {
+   "id": "heartbeat",
+   "label": "Heartbeat",
+   "durationMs": 1000,
+   "frames": 12,
+   "baseScale": 0.88,
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "keyframes": [
+    {
+     "t": 0,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 0.14,
+     "scaleX": 1.12,
+     "scaleY": 1.12,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 0.28,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 0.42,
+     "scaleX": 1.08,
+     "scaleY": 1.08,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 0.6,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "linear"
+    },
+    {
+     "t": 1,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    }
+   ]
+  },
+  {
+   "id": "wiggle",
+   "label": "Wiggle",
+   "durationMs": 900,
+   "frames": 12,
+   "baseScale": 0.9,
+   "pivot": {
+    "x": 0.5,
+    "y": 0.8
+   },
+   "keyframes": [
+    {
+     "t": 0,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 0.25,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": -5,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 0.75,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 5,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 1,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    }
+   ]
+  },
+  {
+   "id": "bounce",
+   "label": "Bounce",
+   "durationMs": 1000,
+   "frames": 12,
+   "baseScale": 0.86,
+   "pivot": {
+    "x": 0.5,
+    "y": 1
+   },
+   "keyframes": [
+    {
+     "t": 0,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-out"
+    },
+    {
+     "t": 0.35,
+     "scaleX": 0.96,
+     "scaleY": 1.04,
+     "rotate": 0,
+     "dx": 0,
+     "dy": -0.07,
+     "easing": "ease-in"
+    },
+    {
+     "t": 0.7,
+     "scaleX": 1.06,
+     "scaleY": 0.94,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-out"
+    },
+    {
+     "t": 1,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    }
+   ]
+  },
+  {
+   "id": "float",
+   "label": "Float",
+   "durationMs": 2000,
+   "frames": 16,
+   "baseScale": 0.9,
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "keyframes": [
+    {
+     "t": 0,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 0.5,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 2,
+     "dx": 0,
+     "dy": -0.035,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 1,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    }
+   ]
+  },
+  {
+   "id": "jelly",
+   "label": "Jelly",
+   "durationMs": 900,
+   "frames": 12,
+   "baseScale": 0.88,
+   "pivot": {
+    "x": 0.5,
+    "y": 1
+   },
+   "keyframes": [
+    {
+     "t": 0,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 0.3,
+     "scaleX": 1.1,
+     "scaleY": 0.9,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 0.6,
+     "scaleX": 0.94,
+     "scaleY": 1.06,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "ease-in-out"
+    },
+    {
+     "t": 1,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    }
+   ]
+  },
+  {
+   "id": "shake",
+   "label": "Shake",
+   "durationMs": 800,
+   "frames": 12,
+   "baseScale": 0.9,
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "keyframes": [
+    {
+     "t": 0,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0,
+     "easing": "linear"
+    },
+    {
+     "t": 0.2,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": -1.5,
+     "dx": -0.03,
+     "dy": 0,
+     "easing": "linear"
+    },
+    {
+     "t": 0.4,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 1.5,
+     "dx": 0.03,
+     "dy": 0,
+     "easing": "linear"
+    },
+    {
+     "t": 0.6,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": -1,
+     "dx": -0.02,
+     "dy": 0,
+     "easing": "linear"
+    },
+    {
+     "t": 0.8,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 1,
+     "dx": 0.02,
+     "dy": 0,
+     "easing": "linear"
+    },
+    {
+     "t": 1,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    }
+   ]
+  },
+  {
+   "id": "hearts",
+   "label": "Hearts",
+   "durationMs": 1800,
+   "frames": 16,
+   "baseScale": 0.9,
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "keyframes": [
+    {
+     "t": 0,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    },
+    {
+     "t": 1,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    }
+   ],
+   "particles": {
+    "shape": "app-heart",
+    "count": 6,
+    "colour": "#C23359",
+    "size": [
+     0.06,
+     0.1
+    ],
+    "spawn": {
+     "x": [
+      0.15,
+      0.85
+     ],
+     "y": [
+      0.7,
+      0.95
+     ]
+    },
+    "path": {
+     "dy": -0.55,
+     "sway": 0.04
+    },
+    "fade": "in 15% · out from 60%",
+    "lifetimeMs": 1800,
+    "stagger": "lifetime / count"
+   }
+  },
+  {
+   "id": "sparkle",
+   "label": "Sparkle",
+   "durationMs": 1500,
+   "frames": 16,
+   "baseScale": 0.9,
+   "pivot": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "keyframes": [
+    {
+     "t": 0,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    },
+    {
+     "t": 1,
+     "scaleX": 1,
+     "scaleY": 1,
+     "rotate": 0,
+     "dx": 0,
+     "dy": 0
+    }
+   ],
+   "particles": {
+    "shape": "four-point-star",
+    "count": 6,
+    "colour": "#F5C542 with #fff core",
+    "size": [
+     0.05,
+     0.09
+    ],
+    "spawn": {
+     "x": [
+      0.08,
+      0.92
+     ],
+     "y": [
+      0.08,
+      0.92
+     ],
+     "rule": "on or just outside the subject silhouette"
+    },
+    "path": {
+     "dy": 0,
+     "twinkle": "scale 0 → 1 → 0, rotate 0 → 45"
+    },
+    "lifetimeMs": 700,
+    "stagger": "random 0–800 ms, fixed seed"
+   }
+  }
+ ]
+}

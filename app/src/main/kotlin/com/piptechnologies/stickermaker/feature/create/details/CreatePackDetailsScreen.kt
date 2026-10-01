@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -114,6 +115,10 @@ fun CreatePackDetailsScreen(
     val context = LocalContext.current
     var showNoWhatsApp by remember { mutableStateOf(false) }
 
+    // An export in flight is neither left nor lost: Back waits for it (the top bar's arrow too).
+    val busy = state.exportState.isBusy()
+    BackHandler(enabled = busy) {}
+
     val addLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -146,7 +151,7 @@ fun CreatePackDetailsScreen(
     CreatePackDetailsContent(
         state = state,
         toaster = toaster,
-        onBack = onBack,
+        onBack = { if (!busy) onBack() },
         onSelectTray = viewModel::selectTray,
         onNameChange = viewModel::setPackName,
         onAdd = {
@@ -430,7 +435,8 @@ private fun InfoCard(count: Int, animated: Boolean) {
             pluralStringResource(R.plurals.sticker_count, count, count),
             stringResource(if (animated) R.string.create_kind_animated else R.string.create_kind_static)
         )
-        val body = stringResource(R.string.create_info_body)
+        // An animated pack's stickers may weigh 500 KB each, a still pack's 100 KB.
+        val body = stringResource(if (animated) R.string.create_info_body_animated else R.string.create_info_body)
         Text(
             buildAnnotatedString {
                 withStyle(

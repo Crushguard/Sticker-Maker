@@ -185,7 +185,6 @@
     <string name="create_tool_auto">Auto</string>
     <string name="create_tool_brush">Brush</string>
     <string name="create_tool_erase">Erase</string>
-    <string name="create_tool_text">Text</string>
     <string name="create_tool_zoom">Zoom</string>
     <!-- "Zoom" is the tool button, create_tool_zoom. -->
     <string name="create_hint_zoomed">Tap Zoom again to fit</string>
@@ -194,15 +193,12 @@
     <string name="create_hint_auto_done">Cut out on this phone. Nothing was uploaded.</string>
     <string name="create_hint_brush">Tap the picture to bring parts back</string>
     <string name="create_hint_erase">Tap leftovers to erase them</string>
-    <string name="create_hint_text">Type a word below</string>
-    <string name="create_hint_default">Zoom in to fix edges</string>
     <string name="create_cutting_out_on_phone">Cutting out on this phone…</string>
     <string name="create_cutting_out">Cutting out…</string>
     <string name="create_brush_size">Brush size</string>
     <string name="create_eraser_size">Eraser size</string>
-    <string name="create_caption_placeholder">Add a word</string>
-    <string name="create_outline_title">White outline</string>
-    <string name="create_outline_body">Reads on any chat background. WhatsApp recommends it.</string>
+    <string name="create_outline_title">Outline</string>
+    <string name="create_outline_body">Reads on any chat background. WhatsApp recommends white.</string>
     <string name="create_edit_sticker">Edit this sticker</string>
 
     <!-- Create a pack: details -->
@@ -378,4 +374,90 @@
     <string name="namepack_add_failed">Something went wrong · Retry</string>
     <string name="namepack_build_failed">Couldn\'t letter the stickers. Try again.</string>
     <!-- /Custom stickers -->
+
+    <!-- Create › Cut out: Add, Draw, Animate; Settings › Licences -->
+    <string name="create_tool_add">Add</string>
+    <string name="create_tool_draw">Draw</string>
+    <string name="create_tool_animate">Animate</string>
+    <string name="create_hint_add">Text, emoji and stickers become layers you can move</string>
+    <string name="create_hint_draw">Draw with one finger. Undo removes the last stroke.</string>
+    <string name="create_hint_animate">Pick how the whole sticker moves</string>
+    <string name="create_hint_animate_clip">Clips already move</string>
+    <string name="create_action_duplicate">Duplicate</string>
+    <string name="create_action_flip">Flip</string>
+    <string name="create_action_behind">Behind</string>
+    <string name="create_action_in_front">In front</string>
+    <string name="create_action_delete">Delete</string>
+    <string name="create_handle_edit">Edit text</string>
+    <string name="create_handle_transform">Resize and rotate</string>
+    <!-- %1$d is always 8. -->
+    <string name="create_toast_layer_limit">%1$d is the most a sticker can hold</string>
+    <string name="create_add_tab_text">Text</string>
+    <string name="create_add_tab_emoji">Emoji</string>
+    <string name="create_add_tab_stickers">Stickers</string>
+    <string name="create_text_placeholder">Add a word or two</string>
+    <string name="create_text_style_classic">Classic</string>
+    <string name="create_text_style_sticker">Sticker</string>
+    <string name="create_text_style_stroke">Bold stroke</string>
+    <string name="create_text_style_bubble">Bubble</string>
+    <string name="create_text_font_round">Rounded</string>
+    <string name="create_text_font_hand">Hand</string>
+    <string name="create_text_font_display">Display</string>
+    <string name="create_colour_white">White</string>
+    <string name="create_colour_ink">Ink</string>
+    <string name="create_colour_rose">Rose</string>
+    <string name="create_colour_peach">Peach</string>
+    <string name="create_colour_gold">Gold</string>
+    <string name="create_colour_mint">Mint</string>
+    <string name="create_colour_sky">Sky</string>
+    <string name="create_colour_violet">Violet</string>
+    <string name="create_emoji_love">Love</string>
+    <string name="create_emoji_tab_smileys">Smileys</string>
+    <string name="create_emoji_tab_hearts">Hearts</string>
+    <string name="create_emoji_tab_hands">Hands</string>
+    <string name="create_emoji_tab_animals">Animals</string>
+    <string name="create_emoji_tab_food">Food</string>
+    <string name="create_emoji_tab_symbols">Symbols</string>
+    <string name="create_emoji_tab_recent">Recent</string>
+    <string name="create_skin_default">Default skin tone</string>
+    <string name="create_skin_light">Light skin tone</string>
+    <string name="create_skin_medium_light">Medium-light skin tone</string>
+    <string name="create_skin_medium">Medium skin tone</string>
+    <string name="create_skin_medium_dark">Medium-dark skin tone</string>
+    <string name="create_skin_dark">Dark skin tone</string>
+    <string name="create_toast_skin_failed">Couldn\'t load skin tones. Check your connection.</string>
+    <string name="create_decor_doodles">Doodles</string>
+    <string name="create_decor_props">Props</string>
+    <string name="create_draw_small">Small</string>
+    <string name="create_draw_medium">Medium</string>
+    <string name="create_draw_large">Large</string>
+    <string name="create_animate_note">One moving sticker makes this an animated pack; WhatsApp doesn\'t mix still and moving. Still stickers stay still.</string>
+    <string name="create_animate_note_clip">Clips already move, so presets are off here. Text, emoji and stickers still work.</string>
+    <string name="create_animate_note_reduced">Motion is reduced on this phone: tap the picture to play.</string>
+    <string name="create_preset_none">None</string>
+    <string name="create_preset_heartbeat">Heartbeat</string>
+    <string name="create_preset_wiggle">Wiggle</string>
+    <string name="create_preset_bounce">Bounce</string>
+    <string name="create_preset_float">Float</string>
+    <string name="create_preset_jelly">Jelly</string>
+    <string name="create_preset_shake">Shake</string>
+    <string name="create_preset_hearts">Hearts</string>
+    <string name="create_preset_sparkle">Sparkle</string>
+    <string name="create_outline_thin">Thin</string>
+    <string name="create_outline_medium">Medium</string>
+    <string name="create_outline_thick">Thick</string>
+    <string name="create_info_body_animated">under 500 KB each, made on this phone. Nothing is uploaded.</string>
+    <string name="settings_licences">Licences</string>
+    <string name="licences_intro">Love Stickers is built with these open-source works. Thank you to their makers.</string>
+    <string name="licences_fluent_sub">Microsoft · the emoji in Add › Emoji</string>
+    <string name="licences_fonts_sub">The lettering fonts</string>
+    <string name="licences_lucide_sub">The icons</string>
+    <string name="create_rail_anim" translatable="false">ANIM</string>
+    <string name="create_text_style_sample" translatable="false">Aa</string>
+    <string name="licences_fluent_name" translatable="false">Fluent Emoji</string>
+    <string name="licences_fonts_name" translatable="false">Baloo 2 · Baloo Bhaijaan 2 · Rubik · Caveat · Lilita One · Mirza · Kalam · Amatic SC · Lalezar · Yatra One · Ruslan Display · Karantina · Hanken Grotesk · JetBrains Mono</string>
+    <string name="licences_lucide_name" translatable="false">Lucide</string>
+    <string name="licences_tag_mit" translatable="false">MIT</string>
+    <string name="licences_tag_ofl" translatable="false">SIL OFL 1.1</string>
+    <string name="licences_tag_isc" translatable="false">ISC</string>
 </resources>

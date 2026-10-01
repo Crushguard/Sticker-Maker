@@ -9,7 +9,7 @@ import android.graphics.PointF
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.PorterDuffXfermode
-import android.graphics.Typeface
+import com.piptechnologies.stickermaker.feature.create.decor.Box
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import kotlin.math.cos
@@ -28,8 +28,9 @@ class MaskStroke(
 /**
  * All bitmap math of the cut-out editor and the exporter:
  * segmentation-confidence → alpha mask, Porter-Duff stroke painting, the
- * alpha-dilated white outline, the composite (outline + masked subject +
- * caption) and the WebP/PNG size-capped encoders.
+ * masked subject, the alpha-dilated outline, the 460 export fit and the
+ * WebP/PNG size-capped encoders. The decorated sticker itself is drawn by
+ * [com.piptechnologies.stickermaker.feature.create.decor.SceneRenderer].
  *
  * Masks are ARGB_8888 bitmaps that are white where the subject is kept, with
  * the confidence in the alpha channel; the subject is applied with DST_IN.
@@ -37,12 +38,6 @@ class MaskStroke(
 object StickerRenderer {
 
     private const val SIZE = CreateSpec.CANVAS_SIZE
-
-    // Caption metrics at 512 (the prototype draws 28px text on a 296px canvas).
-    private const val TEXT_SIZE = 48f
-    private const val TEXT_BOTTOM_PADDING = 28f
-    private const val TEXT_MAX_WIDTH = SIZE - 32f
-    private const val TEXT_SHADOW_DROP = 4f
 
     private val bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
 
@@ -135,8 +130,8 @@ object StickerRenderer {
     // -------------------------------------------------------------- outline
 
     /**
-     * The white die-cut outline: the mask alpha dilated by [radiusPx] and
-     * painted solid white (drawn beneath the subject). Dilation is a ring of
+     * The die-cut outline: the mask alpha dilated by [radiusPx] and painted
+     * solid white (drawn beneath the subject, tinted to the outline colour). Dilation is a ring of
      * offset draws — the raster version of the prototype's stacked
      * drop-shadow trick.
      */
@@ -167,44 +162,59 @@ object StickerRenderer {
         return out
     }
 
-    // ------------------------------------------------------------ composite
+    // -------------------------------------------------------------- subject
 
     /**
-     * Draws the full sticker (optional outline, masked subject, optional
-     * caption) onto [canvas] in 512-space. Shared by the live editor canvas
-     * and the exporter so what you see is what exports.
+     * The cut-out subject: [source] with [mask] applied through DST_IN, in a new [SIZE] px
+     * bitmap (the scene renderer draws it between the layers).
      */
-    fun drawComposite(
-        canvas: Canvas,
-        source: Bitmap,
-        mask: Bitmap,
-        outline: Bitmap?,
-        text: String,
-        typeface: Typeface?
-    ) {
-        if (outline != null) {
-            canvas.drawBitmap(outline, 0f, 0f, bitmapPaint)
-        }
-        val checkpoint = canvas.saveLayer(0f, 0f, SIZE.toFloat(), SIZE.toFloat(), null)
+    fun maskedSubject(source: Bitmap, mask: Bitmap): Bitmap {
+        val out = Bitmap.createBitmap(SIZE, SIZE, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(out)
         canvas.drawBitmap(source, 0f, 0f, bitmapPaint)
         canvas.drawBitmap(mask, 0f, 0f, dstInPaint)
-        canvas.restoreToCount(checkpoint)
-        if (text.isNotBlank()) {
-            drawCaption(canvas, text.trim(), typeface)
-        }
+        return out
     }
 
-    /** Renders the composite into a fresh transparent 512 bitmap. */
-    fun renderComposite(
-        source: Bitmap,
-        mask: Bitmap,
-        outline: Bitmap?,
-        text: String,
-        typeface: Typeface?
-    ): Bitmap {
-        val out = Bitmap.createBitmap(SIZE, SIZE, Bitmap.Config.ARGB_8888)
-        drawComposite(Canvas(out), source, mask, outline, text, typeface)
-        return out
+    /**
+     * Redraws the part of [subject] (a [maskedSubject] of [source]) that a mask stroke segment from
+     * [from] to [to] with [radiusPx] just changed, so a stroke shows while the finger moves.
+     */
+    fun patchSubject(subject: Bitmap, source: Bitmap, mask: Bitmap, from: PointF, to: PointF, radiusPx: Float) {
+        val pad = radiusPx + 2f
+        val canvas = Canvas(subject)
+        canvas.clipRect(
+            minOf(from.x, to.x) - pad, minOf(from.y, to.y) - pad,
+            maxOf(from.x, to.x) + pad, maxOf(from.y, to.y) + pad
+        )
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+        canvas.drawBitmap(source, 0f, 0f, bitmapPaint)
+        canvas.drawBitmap(mask, 0f, 0f, dstInPaint)
+    }
+
+    /** The box of the subject a mask keeps (alpha above one half), in canvas px; null when it keeps nothing. */
+    fun maskBounds(mask: Bitmap): Box? {
+        val w = mask.width
+        val h = mask.height
+        val pixels = IntArray(w * h)
+        mask.getPixels(pixels, 0, w, 0, 0, w, h)
+        var left = w
+        var top = h
+        var right = -1
+        var bottom = -1
+        for (y in 0 until h) {
+            val row = y * w
+            for (x in 0 until w) {
+                if (pixels[row + x] ushr 24 > 128) {
+                    if (x < left) left = x
+                    if (x > right) right = x
+                    if (y < top) top = y
+                    bottom = y
+                }
+            }
+        }
+        if (right < 0) return null
+        return Box(left.toFloat(), top.toFloat(), right + 1f, bottom + 1f)
     }
 
     /**
@@ -225,27 +235,7 @@ object StickerRenderer {
         return out
     }
 
-    /** Bold white caption with a hard dark drop and a soft glow, like the design. */
-    private fun drawCaption(canvas: Canvas, text: String, typeface: Typeface?) {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            this.typeface = typeface ?: Typeface.DEFAULT_BOLD
-            textAlign = Paint.Align.CENTER
-            textSize = TEXT_SIZE
-        }
-        while (paint.measureText(text) > TEXT_MAX_WIDTH && paint.textSize > 20f) {
-            paint.textSize = paint.textSize - 2f
-        }
-        val x = SIZE / 2f
-        val y = SIZE - TEXT_BOTTOM_PADDING - paint.fontMetrics.descent
-        paint.color = Color.parseColor("#1E2128")
-        paint.setShadowLayer(14f, 0f, 0f, 0x59000000)
-        canvas.drawText(text, x, y + TEXT_SHADOW_DROP, paint)
-        paint.clearShadowLayer()
-        paint.color = Color.WHITE
-        canvas.drawText(text, x, y, paint)
-    }
-
-    /** Small [size] px preview of a composite for the rails and the tray box. */
+    /** Small [size] px preview of a sticker for the rails and the tray box. */
     fun thumbOf(composite: Bitmap, size: Int = CreateSpec.TRAY_SIZE): Bitmap {
         val out = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(out)

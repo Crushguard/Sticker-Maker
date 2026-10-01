@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -21,9 +22,10 @@ private val Context.loveDataStore: DataStore<Preferences> by preferencesDataStor
 
 /**
  * Small user preferences in DataStore ("love_prefs"): the onboarding flag,
- * hearted pack ids, the notifications switch and whether Android's
- * notification permission was asked. The app language lives with AppCompat's
- * per-app locale instead (see AppLanguages).
+ * hearted pack ids, the notifications switch, whether Android's
+ * notification permission was asked and the Create editor's recent emoji.
+ * The app language lives with AppCompat's per-app locale instead (see
+ * AppLanguages).
  *
  * Read failures fall back to defaults instead of failing screens.
  */
@@ -56,6 +58,10 @@ class PrefsRepository @Inject constructor(
     val notificationsAsked: Flow<Boolean> =
         data.map { it[KEY_NOTIFICATIONS_ASKED] ?: false }.distinctUntilChanged()
 
+    /** Emoji files picked in Create › Add › Emoji, most recent first, at most [MAX_EMOJI_RECENTS]. */
+    val emojiRecents: Flow<List<String>> =
+        data.map { recentsOf(it[KEY_EMOJI_RECENTS]) }.distinctUntilChanged()
+
     suspend fun setOnboarded(value: Boolean) {
         dataStore.edit { it[KEY_ONBOARDED] = value }
     }
@@ -77,10 +83,28 @@ class PrefsRepository @Inject constructor(
         dataStore.edit { it[KEY_NOTIFICATIONS_ASKED] = true }
     }
 
+    /** Puts the emoji [file] first in [emojiRecents] (moved up when it is already there). */
+    suspend fun pushEmojiRecent(file: String) {
+        if (file.isEmpty() || '\n' in file) return
+        dataStore.edit { it[KEY_EMOJI_RECENTS] = withRecent(it[KEY_EMOJI_RECENTS], file) }
+    }
+
     companion object {
         private val KEY_ONBOARDED = booleanPreferencesKey("onboarded")
         private val KEY_FAVORITE_PACK_IDS = stringSetPreferencesKey("favorite_pack_ids")
         private val KEY_ALERTS_ENABLED = booleanPreferencesKey("alerts_enabled")
         private val KEY_NOTIFICATIONS_ASKED = booleanPreferencesKey("notifications_asked")
+        private val KEY_EMOJI_RECENTS = stringPreferencesKey("emoji_recents")
+
+        /** How many recent emoji Create keeps (spec §13.10). */
+        const val MAX_EMOJI_RECENTS = 18
+
+        /** The stored recents (`\n`-joined), most recent first. */
+        internal fun recentsOf(stored: String?): List<String> =
+            stored?.split('\n')?.filter { it.isNotEmpty() }.orEmpty()
+
+        /** [stored] with [file] first and no second copy of it, cut to [MAX_EMOJI_RECENTS], `\n`-joined. */
+        internal fun withRecent(stored: String?, file: String): String =
+            (listOf(file) + recentsOf(stored).filterNot { it == file }).take(MAX_EMOJI_RECENTS).joinToString("\n")
     }
 }

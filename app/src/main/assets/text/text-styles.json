@@ -1,0 +1,190 @@
+{
+ "canvas": 512,
+ "note": "Text layer styles. Sizes are in px at 512; the default caption is 52 px and auto-fits to 30 characters / 2 lines. paintOrder stroke-first everywhere. The die-cut outline (see outline styles) wraps text and subject together afterwards.",
+ "styles": [
+  {
+   "id": "classic",
+   "label": "Classic",
+   "fill": "{colour}",
+   "strokeWidth": 0,
+   "shadow": {
+    "dx": 0,
+    "dy": 3,
+    "blur": 0,
+    "colour": "#1E2128"
+   },
+   "shadow2": {
+    "dx": 0,
+    "dy": 0,
+    "blur": 12,
+    "colour": "rgba(0,0,0,.35)"
+   },
+   "font": "ui"
+  },
+  {
+   "id": "sticker",
+   "label": "Sticker",
+   "fill": "{colour}",
+   "strokeWidth": 0.16,
+   "strokeUnit": "em",
+   "strokeColour": "#FFFFFF",
+   "shadow": {
+    "dx": 0,
+    "dy": 3,
+    "blur": 3,
+    "colour": "rgba(0,0,0,.18)"
+   },
+   "font": "lettering"
+  },
+  {
+   "id": "stroke",
+   "label": "Bold stroke",
+   "fill": "#FFFFFF",
+   "strokeWidth": 0.2,
+   "strokeUnit": "em",
+   "strokeColour": "{colour}",
+   "shadow": null,
+   "font": "lettering"
+  },
+  {
+   "id": "bubble",
+   "label": "Bubble",
+   "fill": "#1E2128",
+   "strokeWidth": 0,
+   "bubble": {
+    "fill": "#FFFFFF",
+    "border": 5,
+    "borderColour": "#1E2128",
+    "radius": 28,
+    "padding": [
+     12,
+     22
+    ],
+    "tail": {
+     "w": 26,
+     "h": 20,
+     "side": "bottom-start"
+    }
+   },
+   "font": "lettering"
+  }
+ ],
+ "colours": [
+  {
+   "id": "white",
+   "hex": "#FFFFFF"
+  },
+  {
+   "id": "ink",
+   "hex": "#1E2128"
+  },
+  {
+   "id": "rose",
+   "hex": "#C23359"
+  },
+  {
+   "id": "peach",
+   "hex": "#F2865E"
+  },
+  {
+   "id": "gold",
+   "hex": "#E0A526"
+  },
+  {
+   "id": "mint",
+   "hex": "#2E9E6B"
+  },
+  {
+   "id": "sky",
+   "hex": "#3C8DDE"
+  },
+  {
+   "id": "violet",
+   "hex": "#7E5BD6"
+  }
+ ],
+ "fonts": {
+  "note": "All SIL OFL 1.1, Google Fonts. Picked per string script, not per UI language. Weights: static single weight each.",
+  "moods": [
+   {
+    "id": "round",
+    "label": "Rounded",
+    "default": true,
+    "byScript": {
+     "latin": "Baloo 2 800",
+     "cyrillic": "Rubik 800",
+     "arabic": "Baloo Bhaijaan 2 800",
+     "devanagari": "Baloo 2 800",
+     "hebrew": "Rubik 800"
+    }
+   },
+   {
+    "id": "hand",
+    "label": "Hand",
+    "byScript": {
+     "latin": "Caveat 700",
+     "cyrillic": "Caveat 700",
+     "arabic": "Mirza 700",
+     "devanagari": "Kalam 700",
+     "hebrew": "Amatic SC 700"
+    }
+   },
+   {
+    "id": "display",
+    "label": "Display",
+    "byScript": {
+     "latin": "Lilita One 400",
+     "cyrillic": "Ruslan Display 400",
+     "arabic": "Lalezar 400",
+     "devanagari": "Yatra One 400",
+     "hebrew": "Karantina 700"
+    }
+   }
+  ]
+ },
+ "outline": {
+  "thickness": {
+   "thin": 5,
+   "medium": 8,
+   "thick": 12
+  },
+  "colours": [
+   {
+    "id": "white",
+    "hex": "#FFFFFF",
+    "default": true
+   },
+   {
+    "id": "ink",
+    "hex": "#1E2128"
+   },
+   {
+    "id": "rose",
+    "hex": "#C23359"
+   },
+   {
+    "id": "gold",
+    "hex": "#F5C542"
+   },
+   {
+    "id": "sky",
+    "hex": "#7CC4F5"
+   }
+  ],
+  "note": "Thickness in px at 512; wraps subject + layers as one shape; applied to every frame of an animated sticker."
+ },
+ "marker": {
+  "widths": {
+   "s": 8,
+   "m": 14,
+   "l": 22
+  },
+  "edge": {
+   "colour": "#1E2128",
+   "extra": 3,
+   "note": "a thin ink edge under every stroke so white strokes read against the white outline"
+  },
+  "cap": "round",
+  "join": "round"
+ }
+}

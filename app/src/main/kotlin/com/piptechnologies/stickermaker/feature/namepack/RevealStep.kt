@@ -64,6 +64,7 @@ import com.piptechnologies.stickermaker.core.design.RoseTint
 import com.piptechnologies.stickermaker.core.design.Surface
 import com.piptechnologies.stickermaker.core.design.components.AddBar
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
+import com.piptechnologies.stickermaker.core.ui.rememberReduceMotion
 import com.piptechnologies.stickermaker.feature.namepack.engine.Character
 import com.piptechnologies.stickermaker.feature.namepack.engine.Relation
 import com.piptechnologies.stickermaker.feature.namepack.engine.Tone

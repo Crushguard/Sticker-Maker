@@ -48,6 +48,7 @@ import com.piptechnologies.stickermaker.core.design.Canvas
 import com.piptechnologies.stickermaker.core.design.Hanken
 import com.piptechnologies.stickermaker.core.design.Ink2
 import com.piptechnologies.stickermaker.core.design.Rose
+import com.piptechnologies.stickermaker.core.ui.rememberReduceMotion
 import com.piptechnologies.stickermaker.feature.namepack.engine.Character
 
 private val BuildingTitle = TextStyle(fontFamily = Hanken, fontWeight = FontWeight.W800, fontSize = 22.sp, letterSpacing = (-0.02).em)

@@ -5,6 +5,14 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.ImageBitmap
 import com.piptechnologies.stickermaker.core.design.components.AddVisualState
 import com.piptechnologies.stickermaker.core.ui.UiText
+import com.piptechnologies.stickermaker.feature.create.decor.DecorSpec
+import com.piptechnologies.stickermaker.feature.create.decor.EmojiCatalog
+import com.piptechnologies.stickermaker.feature.create.decor.FontMood
+import com.piptechnologies.stickermaker.feature.create.decor.MarkerSize
+import com.piptechnologies.stickermaker.feature.create.decor.MotionPreset
+import com.piptechnologies.stickermaker.feature.create.decor.OutlineStyle
+import com.piptechnologies.stickermaker.feature.create.decor.SkinTone
+import com.piptechnologies.stickermaker.feature.create.decor.TextStyleId
 
 /**
  * Shared types for the Create flow (Import → Cut out → Pack details).
@@ -18,11 +26,47 @@ import com.piptechnologies.stickermaker.core.ui.UiText
 enum class ImportSource { Photos, Camera, Video }
 
 /**
- * Editor tools from the dark tool bar. Zoom is not listed because the
- * prototype treats it as an orthogonal toggle: activating Zoom never changes
- * the current tool, it only scales the canvas.
+ * Editor tools from the dark tool bar (spec §8). Zoom is not listed: it is a
+ * button on the canvas card that never changes the current tool, it only
+ * scales the canvas.
  */
-enum class EditorTool { Auto, Brush, Erase, Text }
+enum class EditorTool { Auto, Brush, Erase, Add, Draw, Animate }
+
+/** The Add sheet's tabs (spec §9). */
+enum class AddTab { Text, Emoji, Stickers }
+
+/** What a layer shows, as the overlay needs it (only text layers get the edit handle). */
+enum class LayerKind { Text, Emoji, Decor, Drawing }
+
+/** A skin-tone cell: its art is there ([Ready]), downloading ([Loading]) or couldn't be fetched ([Failed]). */
+enum class ToneState { Ready, Loading, Failed }
+
+/**
+ * One layer of the active sticker for the overlay, in 512 canvas px: its centre, its rendered
+ * size (base size × [scale]), its [scale] (the corner handle resizes from it), its rotation in
+ * degrees clockwise, and whether it is mirrored or drawn behind the cut-out.
+ */
+@Immutable
+data class LayerUi(
+    val id: Long,
+    val kind: LayerKind,
+    val cx: Float,
+    val cy: Float,
+    val width: Float,
+    val height: Float,
+    val scale: Float,
+    val rotation: Float,
+    val flipped: Boolean,
+    val behind: Boolean
+)
+
+/** One cell of the skin-tone popover; [model] is what Coil loads (an asset URL or the downloaded file). */
+@Immutable
+data class ToneCellUi(val tone: SkinTone, val state: ToneState, val model: Any?)
+
+/** The skin-tone popover over the emoji [file]: the bundled Default first, then the five downloadable tones. */
+@Immutable
+data class SkinPopoverUi(val file: String, val cells: List<ToneCellUi>)
 
 /** Per-sticker cut-out progress: untouched → spinner → editable. */
 enum class CutStatus { None, Pending, Done }
@@ -39,9 +83,11 @@ data class CreateItemUi(
     val pickerModel: Any?,
     /** Raw preview for items Coil cannot load (video first frame). */
     val frameThumb: ImageBitmap?,
-    /** Small composite preview (outline + cut subject + caption) once cut. */
+    /** Small preview of the decorated sticker (outline, layers and cut subject) once cut. */
     val stickerThumb: ImageBitmap?,
-    val cut: CutStatus
+    val cut: CutStatus,
+    /** Whether a motion preset moves this sticker (the rail's ANIM badge; clips move anyway). */
+    val animated: Boolean = false
 )
 
 /** Whole-session UI state observed by all three screens. */
@@ -57,17 +103,60 @@ data class CreateUiState(
     val tool: EditorTool = EditorTool.Auto,
     val zoomed: Boolean = false,
     val brush: Int = 2,
-    val activeText: String = "",
-    val activeOutlineOn: Boolean = true,
     val activeCut: CutStatus = CutStatus.None,
     val activeDurationLabel: String? = null,
+    /** The active sticker is a clip: presets are off (spec §7). */
+    val activeIsVideo: Boolean = false,
+    /** The active sticker's undo stack has a step (spec §4). */
     val canUndo: Boolean = false,
     val anyPending: Boolean = false,
-    /** Bumped whenever an editor bitmap changed; invalidates the live canvas. */
+    /** Bumped whenever something the canvas draws changed; invalidates the live canvas. */
     val editorTick: Int = 0,
+    /** The decor data and renderer are loaded: layers can be added and the scene drawn. */
+    val dataReady: Boolean = false,
+    /**
+     * The decor data has loaded and the active sticker's cut-out is done, so Add, Draw and Animate can
+     * open (the tool bar dims them otherwise; the view model refuses them, and a rail switch onto a
+     * sticker still being cut returns to Auto).
+     */
+    val layerToolsEnabled: Boolean = false,
+    // Decor of the active sticker (spec §3-§8)
+    val layers: List<LayerUi> = emptyList(),
+    val selectedLayerId: Long? = null,
+    /** The layer a drag, pinch or handle gesture is moving; the canvas draws it from its nearest cached size. */
+    val liveLayerId: Long? = null,
+    /** The centre snap guides: vertical (x = 256) and horizontal (y = 256). */
+    val guideX: Boolean = false,
+    val guideY: Boolean = false,
+    val outline: OutlineStyle = OutlineStyle(),
+    val preset: String = MotionPreset.NONE,
+    /** With reduced motion, the canvas plays one loop of the preset while this is set. */
+    val playing: Boolean = false,
+    // Add sheet (spec §9)
+    val addTab: AddTab = AddTab.Text,
+    /** The Emoji tab's category chip: a category id, or `recent`. */
+    val emojiTab: String = EmojiCatalog.CATEGORIES.first(),
+    /** Recently picked emoji files, most recent first. */
+    val recents: List<String> = emptyList(),
+    val skinPopover: SkinPopoverUi? = null,
+    /**
+     * Bumped when the edit handle or a double tap opens a caption: the Text field then takes the keyboard.
+     * 0 while the sheet is closed, so opening it from the Add tool doesn't.
+     */
+    val captionFocus: Int = 0,
+    /** The Text field: the selected text layer's text, else empty (typing then adds a layer). */
+    val textValue: String = "",
+    /** The selected text layer's style, colour and font, else those the next text layer gets. */
+    val textStyle: TextStyleId = TextStyleId.Sticker,
+    val textColour: Int = DecorSpec.ROSE,
+    val textFont: FontMood = FontMood.Round,
+    // Draw
+    val drawColour: Int = DecorSpec.ROSE,
+    val drawSize: MarkerSize = MarkerSize.M,
     // Pack details
     val trayIndex: Int = 0,
     val packName: String = "",
+    /** Any sticker is a clip or has a motion preset: the pack is animated (spec §7 pack kind). */
     val animatedPack: Boolean = false,
     val exportState: AddVisualState = AddVisualState.Idle,
     val exportProgress: Float = 0f
@@ -89,13 +178,6 @@ sealed interface CreateEvent {
     /** The flow is done (added or saved); navigate away. */
     data object ExportComplete : CreateEvent
 }
-
-/** Bitmaps the editor canvas draws for the active sticker. Never mutate them. */
-class ActiveCanvas(
-    val source: android.graphics.Bitmap?,
-    val mask: android.graphics.Bitmap?,
-    val outline: android.graphics.Bitmap?
-)
 
 /** Geometry and limit constants shared by the editor and the exporter. */
 object CreateSpec {
@@ -120,7 +202,6 @@ object CreateSpec {
     const val VIDEO_MAX_DURATION_MS = 3_000L
     const val VIDEO_MAX_FRAMES = 12
 
-    const val TEXT_MAX_CHARS = 16
     const val NAME_MAX_CHARS = 30
 
     /** Brush slider position (1..3) → stroke diameter as a fraction of the canvas. */
